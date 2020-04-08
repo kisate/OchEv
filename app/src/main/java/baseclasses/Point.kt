@@ -1,4 +1,4 @@
 package baseclasses
 
-data class Point(var x: Float = 0f, var y: Float = 0f, val time: Long = 0)
+data class Point(var x: Int = 0, var y: Int = 0, val time: Long = 0)
 
