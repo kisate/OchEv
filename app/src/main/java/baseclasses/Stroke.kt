@@ -3,7 +3,7 @@ package baseclasses
 import baseclasses.edgefigures.Line
 
 class Stroke(
-    private val _points: MutableList<Point> = MutableList<Point>(0, { it -> Point() })
+    private val _points: MutableList<Point> = ArrayList()
 ) {
     val points: List<Point>
         get() = _points.toList()

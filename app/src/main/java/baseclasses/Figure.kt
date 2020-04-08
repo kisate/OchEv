@@ -3,7 +3,7 @@ package baseclasses
 
 // Base object of our scheme
 
-abstract class Figure(protected val in_text: MutableList<Char> = MutableList(0) { ' ' }) {
+abstract class Figure(protected val in_text: MutableList<Char> = ArrayList()) {
 
     val text: List<Char>
         get() = in_text.toList()
