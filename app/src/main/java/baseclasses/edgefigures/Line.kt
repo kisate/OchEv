@@ -1,3 +1,3 @@
 package baseclasses.edgefigures
 
-class Line() {}
+class Line()
