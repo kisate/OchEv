@@ -1,6 +1,5 @@
 package baseclasses
 
-
 // Base object of our scheme
 
 abstract class Figure(val figureText: MutableList<Char> = ArrayList())
@@ -16,4 +15,6 @@ class FigureInteractor {
     }
 
 }
+
+
 
