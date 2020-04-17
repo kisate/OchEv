@@ -1,3 +1,8 @@
 package baseclasses.edgefigures
 
-class Line()
+import baseclasses.EdgeFigure
+
+class Line(
+    figureText: MutableList<Char> = ArrayList(),
+    texturePath: String = ""
+) : EdgeFigure(figureText, texturePath)
