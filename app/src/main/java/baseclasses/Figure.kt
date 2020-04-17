@@ -5,12 +5,15 @@ package baseclasses
 
 abstract class Figure(val figureText: MutableList<Char> = ArrayList())
 
+class FigureInteractor {
 
-fun Figure.addSymbolToText(symbolToAdd: Char) {
-    figureText.add(symbolToAdd)
-}
+    fun addSymbolToText(figure: Figure, symbolToAdd: Char) {
+        figure.figureText.add(symbolToAdd)
+    }
 
-fun Figure.removeLastSymbolFromText() {
-    if (!figureText.isEmpty()) figureText.removeAt(figureText.lastIndex)
+    fun removeLastSymbolFromText(figure: Figure) {
+        if (!figure.figureText.isEmpty()) figure.figureText.removeAt(figure.figureText.lastIndex)
+    }
+
 }
 

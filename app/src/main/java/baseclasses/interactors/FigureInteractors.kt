@@ -1,4 +1,0 @@
-package baseclasses.interactors
-
-class FigureResizer
-class FigureMover

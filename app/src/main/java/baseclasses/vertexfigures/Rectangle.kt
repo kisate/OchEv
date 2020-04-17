@@ -1,10 +1,10 @@
 package baseclasses.vertexfigures
 
+import baseclasses.FigureInteractor
 import baseclasses.VertexFigure
 import baseclasses.dataclasses.Point
+import baseclasses.dataclasses.Stroke
 import baseclasses.dataclasses.Vector
-import baseclasses.interactors.FigureMover
-import baseclasses.interactors.FigureResizer
 
 class Rectangle(
     text: MutableList<Char> = ArrayList(),
@@ -14,11 +14,11 @@ class Rectangle(
     var width: Int = 0
 ) : VertexFigure(text, texturePath)
 
-fun FigureResizer.resizeByTwoPoints(rectangle: Rectangle, a: Point, b: Point) {
+fun FigureInteractor.changeSize(rectangle: Rectangle, a: Stroke, b: Stroke) {
     TODO()
 }
 
-fun FigureMover.moveByVector(rectangle: Rectangle, direction: Vector) {
+fun FigureInteractor.moveByVector(rectangle: Rectangle, direction: Vector) {
     rectangle.leftUpCorner.x += direction.x
     rectangle.leftUpCorner.y += direction.y
 }

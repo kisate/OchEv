@@ -8,10 +8,12 @@ data class Graph(
     val edges: MutableList<EdgeFigure> = ArrayList()
 )
 
-fun Graph.addEdge(edgeToAdd: EdgeFigure) {
-    edges.add(edgeToAdd)
-}
+class graphInteractor {
+    fun addEdge(graph: Graph, edgeFigure: EdgeFigure) {
+        graph.edges.add(edgeFigure)
+    }
 
-fun Graph.addVertex(vertexToAdd: VertexFigure) {
-    vertexes.add(vertexToAdd)
+    fun addVertex(graph: Graph, vertexFigure: VertexFigure) {
+        graph.vertexes.add(vertexFigure)
+    }
 }
