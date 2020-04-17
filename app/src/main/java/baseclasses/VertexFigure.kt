@@ -1,26 +1,41 @@
 package baseclasses
 
+import baseclasses.dataclasses.Stroke
+import baseclasses.dataclasses.StrokeInteractor
+import baseclasses.vertexfigures.normalizeCircle
+import baseclasses.vertexfigures.normalizeRectangle
+
 /*
 A figure, that represents an information block in our scheme
  */
 
 abstract class VertexFigure(
-    text: MutableList<Char> = ArrayList()
-    , _texture_path: String = ""
-) : Figure(text) {
-    abstract val spots: List<ConnectingSpot>
+    figureText: MutableList<Char> = ArrayList(),
+    var texturePath: String = ""
+) : Figure(figureText)
 
-    var texture_path: String = _texture_path
-        protected set(value) {
-            field = value
+
+class VertexFigureNormalizer {
+    fun getStrokesRestrictions(strokes: MutableList<Stroke>): List<Int> {
+        val strokeInteractor = StrokeInteractor()
+        var maxX = 0
+        var minX = Int.MAX_VALUE
+        var maxY = 0
+        var minY = Int.MAX_VALUE
+        for (stroke in strokes) {
+            maxX = Integer.max(maxX, strokeInteractor.maxX(stroke))
+            maxY = Integer.max(maxY, strokeInteractor.maxY(stroke))
+            minX = Math.min(minX, strokeInteractor.minX(stroke))
+            minY = Math.min(minY, strokeInteractor.minY(stroke))
         }
-
-    fun changeTexture(new_path: String) {
-        texture_path = new_path
+        return listOf(maxX, maxY, minX, minY)
     }
 
-    abstract fun changeSize(factor: Double)
-    abstract fun moveByVector(direction: Vector)
-    abstract fun getSpotY(id: Int): Int
-    abstract fun getSpotX(id: Int): Int
+    fun normalizeFigure(strokes: MutableList<Stroke>, tag: String): VertexFigure? {
+        when (tag) {
+            "Rectanlge" -> return normalizeRectangle(strokes)
+            "Circle" -> return normalizeCircle(strokes)
+        }
+        return null
+    }
 }

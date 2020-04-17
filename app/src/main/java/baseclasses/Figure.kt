@@ -1,18 +1,20 @@
 package baseclasses
 
-
 // Base object of our scheme
 
-abstract class Figure(protected val in_text: MutableList<Char> = ArrayList()) {
+abstract class Figure(val figureText: MutableList<Char> = ArrayList())
 
-    val text: List<Char>
-        get() = in_text.toList()
+class FigureInteractor {
 
-    fun addSymbol(symbol_to_add: Char) {
-        in_text.add(symbol_to_add)
+    fun addSymbolToText(figure: Figure, symbolToAdd: Char) {
+        figure.figureText.add(symbolToAdd)
     }
 
-    fun removeLastSymbol() {
-        if (!(in_text.isEmpty())) in_text.removeAt(in_text.lastIndex)
+    fun removeLastSymbolFromText(figure: Figure) {
+        if (!figure.figureText.isEmpty()) figure.figureText.removeAt(figure.figureText.lastIndex)
     }
+
 }
+
+
+

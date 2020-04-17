@@ -1,36 +1,35 @@
 package baseclasses.vertexfigures
 
-import baseclasses.ConnectingSpot
-import baseclasses.Point
-import baseclasses.Vector
+import baseclasses.FigureInteractor
 import baseclasses.VertexFigure
-import java.lang.Integer.max
+import baseclasses.VertexFigureNormalizer
+import baseclasses.dataclasses.Point
+import baseclasses.dataclasses.Stroke
+import baseclasses.dataclasses.Vector
 
 class Rectangle(
     text: MutableList<Char> = ArrayList(),
-    texture_path: String = "",
-    private var left_corner: Point = Point(),
-    private var height: Int = 0,
-    private var width: Int = 0
-) : VertexFigure(text, texture_path) {
-    // rectangle has 8 connecting spots
-    override val spots: List<ConnectingSpot> = List(8) { ConnectingSpot(it, this) }
+    texturePath: String = "",
+    var leftDownCorner: Point = Point(),
+    var rightUpCorner: Point = Point()
+) : VertexFigure(text, texturePath)
 
-    override fun changeSize(factor: Double) {
-        height = max((height * factor).toInt(), 1)
-        width = max((width * factor).toInt(), 1)
-    }
-
-    override fun moveByVector(direction: Vector) {
-        left_corner.x += direction.x
-        left_corner.y += direction.y
-    }
-
-    override fun getSpotY(id: Int): Int {
-        TODO("Not yet implemented")
-    }
-
-    override fun getSpotX(id: Int): Int {
-        TODO("Not yet implemented")
-    }
+fun FigureInteractor.changeSize(rectangle: Rectangle, a: Stroke, b: Stroke) {
+    TODO()
 }
+
+fun FigureInteractor.moveByVector(rectangle: Rectangle, direction: Vector) {
+    rectangle.leftDownCorner.x += direction.x
+    rectangle.leftDownCorner.y += direction.y
+    rectangle.rightUpCorner.x += direction.x
+    rectangle.rightUpCorner.y = direction.y
+}
+
+fun VertexFigureNormalizer.normalizeRectangle(strokes: MutableList<Stroke>): Rectangle {
+    val (maxX, maxY, minX, minY) = getStrokesRestrictions(strokes)
+    return Rectangle(
+        leftDownCorner = Point(minX, minY),
+        rightUpCorner = Point(maxX, maxY)
+    )
+}
+
