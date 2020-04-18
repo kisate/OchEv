@@ -1,8 +1,5 @@
 package baseclasses.dataclasses
 
-import java.lang.Integer.max
-import java.lang.Math.min
-
 data class Stroke(val points: MutableList<Point> = ArrayList())
 
 class StrokeInteractor {
@@ -11,35 +8,27 @@ class StrokeInteractor {
     }
 
     fun maxX(stroke: Stroke): Int {
-        var value = 0
-        for (point in stroke.points) {
-            value = max(value, point.x)
-        }
-        return value
+        return stroke.points.maxBy { it.x }!!.x
     }
 
     fun maxY(stroke: Stroke): Int {
-        var value = 0
-        for (point in stroke.points) {
-            value = max(value, point.y)
-        }
-        return value
+        return stroke.points.maxBy { it.y }!!.y
     }
 
     fun minX(stroke: Stroke): Int {
-        var value = Int.MAX_VALUE
-        for (point in stroke.points) {
-            value = min(value, point.x)
-        }
-        return value
+        return stroke.points.minBy { it.x }!!.x
     }
 
     fun minY(stroke: Stroke): Int {
-        var value = Int.MAX_VALUE
-        for (point in stroke.points) {
-            value = min(value, point.y)
-        }
-        return value
+        return stroke.points.minBy { it.y }!!.y
+    }
+
+    fun getStrokesRestrictions(strokes: MutableList<Stroke>): List<Int> {
+        val maxX = strokes.maxBy { maxX(it) }!!.let { maxX(it) }
+        val minX = strokes.maxBy { minX(it) }!!.let { minX(it) }
+        val maxY = strokes.maxBy { maxY(it) }!!.let { maxY(it) }
+        val minY = strokes.maxBy { minY(it) }!!.let { minY(it) }
+        return listOf(maxX, maxY, minX, minY)
     }
 
 }
