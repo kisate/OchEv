@@ -25,9 +25,9 @@ class StrokeInteractor {
 
     fun getStrokesRestrictions(strokes: MutableList<Stroke>): List<Int> {
         val maxX = strokes.maxBy { maxX(it) }!!.let { maxX(it) }
-        val minX = strokes.maxBy { minX(it) }!!.let { minX(it) }
+        val minX = strokes.minBy { minX(it) }!!.let { minX(it) }
         val maxY = strokes.maxBy { maxY(it) }!!.let { maxY(it) }
-        val minY = strokes.maxBy { minY(it) }!!.let { minY(it) }
+        val minY = strokes.minBy { minY(it) }!!.let { minY(it) }
         return listOf(maxX, maxY, minX, minY)
     }
 

@@ -5,7 +5,6 @@ import baseclasses.VertexFigure
 
 class Line(
     figureText: MutableList<Char> = ArrayList(),
-    texturePath: String = "",
     val beginFigure: VertexFigure,
     val endFigure: VertexFigure
-) : EdgeFigure(figureText, texturePath)
+) : EdgeFigure(figureText)
