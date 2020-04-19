@@ -31,4 +31,13 @@ class StrokeInteractor {
         return listOf(maxX, maxY, minX, minY)
     }
 
+    fun toFloatArray(stroke: Stroke): FloatArray {
+        val result: MutableList<Float> = ArrayList()
+        for (point in stroke.points) {
+            result.add(point.x.toFloat())
+            result.add(point.y.toFloat())
+        }
+        return result.toFloatArray()
+    }
+
 }
