@@ -1,16 +1,16 @@
 package com.example.ochev
 
-import android.app.ActionBar
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.view.ViewGroup
+import android.view.View
 import android.widget.RelativeLayout
+import androidx.appcompat.app.AppCompatActivity
 import kotlinx.android.synthetic.main.activity_main.*
 import viewclasses.DrawStrokeInteractor
-import viewclasses.DrawStrokeView
 import viewclasses.StrokeInputView
 
 class MainActivity : AppCompatActivity() {
+
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -19,12 +19,12 @@ class MainActivity : AppCompatActivity() {
         val strokeInput = StrokeInputView(this, null, drawOutputId)
         strokeInput.alpha = 0F
 
-        addContentView(strokeInput,
-            RelativeLayout.LayoutParams(
-                RelativeLayout.LayoutParams.MATCH_PARENT,
-                RelativeLayout.LayoutParams.MATCH_PARENT
-            )
+        val layoutParams =  RelativeLayout.LayoutParams(
+            RelativeLayout.LayoutParams.MATCH_PARENT,
+            RelativeLayout.LayoutParams.MATCH_PARENT
         )
+
+        relativeId.addView(strokeInput, layoutParams)
 
         loadButtonId.setOnClickListener {
             strokeInput.inputHandler.loadStrokes("config.txt")
@@ -40,6 +40,7 @@ class MainActivity : AppCompatActivity() {
         }
 
     }
+
 
 
 }

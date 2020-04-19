@@ -47,7 +47,7 @@ class DrawStrokeInteractor {
     }
 
     fun clear(drawStrokeView: DrawStrokeView) {
-        drawStrokeView.path.close()
+        drawStrokeView.path = Path()
         drawStrokeView.invalidate()
         lastId = 0
     }

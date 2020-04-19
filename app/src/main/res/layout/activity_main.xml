@@ -9,7 +9,7 @@
         android:id="@+id/loadButtonId"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Загрузить" />
+        android:text="Сохранить" />
 
     <Button
         android:id="@+id/clearButtonId"
@@ -18,8 +18,15 @@
         android:layout_alignParentBottom="true"
         android:text="Удалить" />
 
-    <viewclasses.DrawStrokeView
-        android:id="@+id/drawOutputId"
+    <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent" />
+        android:id="@+id/relativeId"
+        android:layout_height="match_parent">
+        <viewclasses.DrawStrokeView
+            android:id="@+id/drawOutputId"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" />
+
+    </RelativeLayout>
+
 </RelativeLayout>

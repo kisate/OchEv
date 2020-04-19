@@ -80,7 +80,6 @@ class InputHandler(
             }
             outputData += "\n"
         }
-        clear()
         try {
             val outputStreamWriter = OutputStreamWriter(
                 context!!.openFileOutput(
