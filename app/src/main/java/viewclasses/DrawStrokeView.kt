@@ -22,23 +22,34 @@ class DrawStrokeView(
     var path = Path()
 
     override fun onDraw(canvas: Canvas?) {
+        if (path.isEmpty) {
+            canvas?.drawColor(Color.WHITE)
+        }
         canvas?.drawPath(path, paint)
     }
 }
 
 class DrawStrokeInteractor {
 
+    private var lastId = 0
+
     fun set(drawStrokeView: DrawStrokeView, stroke: Stroke) {
-        for (point in stroke.points) {
+        for (id in lastId..stroke.points.size - 1) {
             drawStrokeView.path.addCircle(
-                point.x.toFloat(),
-                point.y.toFloat(),
+                stroke.points[id].x.toFloat(),
+                stroke.points[id].y.toFloat(),
                 1f,
                 Path.Direction.CCW
             )
         }
         drawStrokeView.invalidate()
+        lastId = stroke.points.size
+    }
 
+    fun clear(drawStrokeView: DrawStrokeView) {
+        drawStrokeView.path.close()
+        drawStrokeView.invalidate()
+        lastId = 0
     }
 
 }

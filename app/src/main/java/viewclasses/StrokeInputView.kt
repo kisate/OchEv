@@ -67,28 +67,25 @@ class InputHandler(
 
     lateinit var lastPoint: Point
 
-    fun loadStrokes(path: String) {
-        var outputData = ""
-        var pointCnt = 0
-        strokes.forEach {
-            it.points.forEach {
-                Log.println(
-                    DEBUG,
-                    "dbg",
-                    it.x.toString() + " " + it.y.toString() + " " + it.time.toString()
-                )
-                outputData += " " + it.x.toString() + " " + it.y.toString() + " " + it.time.toString()
-                pointCnt++
-            }
-        }
-        outputData = pointCnt.toString() + outputData
+    fun clear(){
         currentTime = 0
         strokes.clear()
+    }
+
+    fun loadStrokes(path: String) {
+        var outputData = ""
+        strokes.forEach {
+            it.points.forEach {
+                outputData += " " + it.x.toString() + "," + it.y.toString() + "," + it.time.toString()
+            }
+            outputData += "\n"
+        }
+        clear()
         try {
             val outputStreamWriter = OutputStreamWriter(
                 context!!.openFileOutput(
                     path,
-                    Context.MODE_PRIVATE
+                    Context.MODE_APPEND
                 )
             )
             outputStreamWriter.write(data)
@@ -125,6 +122,7 @@ class InputHandler(
         lastPoint = point
         modifyLastStroke(point)
     }
+
 
 
 }
