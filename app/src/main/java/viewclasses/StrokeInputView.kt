@@ -23,12 +23,13 @@ import java.io.OutputStreamWriter
 
 class StrokeInputView(
     context: Context?,
-    attrs: AttributeSet? = null
+    attrs: AttributeSet? = null,
+    drawStrokeView: DrawStrokeView
 ) :
     View(context, attrs) {
 
     // public <-> ML
-    val inputHandler = InputHandler(context, attrs)
+    val inputHandler = InputHandler(context, attrs, drawStrokeView)
 
     @SuppressLint("ClickableViewAccessibility")
     override fun onTouchEvent(event: MotionEvent): Boolean {
@@ -54,10 +55,9 @@ class StrokeInputView(
 
 class InputHandler(
     private val context: Context?,
-    private val attrs: AttributeSet? = null
+    private val attrs: AttributeSet? = null,
+    val drawStrokeView: DrawStrokeView
 ) {
-
-    private var drawOutputView = DrawStrokeView(context, attrs)
 
     private var drawStrokeInteractor = DrawStrokeInteractor()
 
@@ -108,7 +108,7 @@ class InputHandler(
             interactor.addPoint(strokes.last(), it)
             Log.println(Log.DEBUG, "dbg", calls.toString() + ": " + it.toString())
         }
-        drawStrokeInteractor.set(drawOutputView, strokes.last())
+        drawStrokeInteractor.set(drawStrokeView, strokes.last())
     }
 
     fun touchMove(point: Point) {

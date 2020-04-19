@@ -6,6 +6,7 @@ import android.graphics.Color
 import android.graphics.Paint
 import android.graphics.Path
 import android.util.AttributeSet
+import android.util.Log
 import android.view.View
 import baseclasses.dataclasses.Point
 import baseclasses.dataclasses.Stroke
@@ -21,14 +22,9 @@ class DrawStrokeView(
     var path = Path()
 
     override fun onDraw(canvas: Canvas?) {
-        super.onDraw(canvas)
-        if (canvas != null) {
-            canvas.save()
-            canvas.drawPath(path, paint)
-        }
+        canvas?.drawPath(path, paint)
     }
 }
-
 
 class DrawStrokeInteractor {
 
@@ -42,6 +38,7 @@ class DrawStrokeInteractor {
             )
         }
         drawStrokeView.invalidate()
+
     }
 
 }
