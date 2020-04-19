@@ -13,7 +13,6 @@ class MainActivity : AppCompatActivity() {
 
         val strokeInput: StrokeInputView = strokeInputId
 
-
         loadButtonId.setOnClickListener {
             strokeInput.inputHandler.loadStrokes("config.txt")
         }

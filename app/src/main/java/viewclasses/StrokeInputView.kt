@@ -9,6 +9,7 @@ import android.util.Log.DEBUG
 import android.view.MotionEvent
 import android.view.View
 import baseclasses.dataclasses.Point
+import baseclasses.dataclasses.PointInteractor
 import baseclasses.dataclasses.Stroke
 import baseclasses.dataclasses.StrokeInteractor
 import java.io.IOException
@@ -27,24 +28,22 @@ class StrokeInputView(
     View(context, attrs) {
 
     // public <-> ML
-    val inputHandler = InputHandler(context)
+    val inputHandler = InputHandler(context, attrs)
 
     @SuppressLint("ClickableViewAccessibility")
     override fun onTouchEvent(event: MotionEvent): Boolean {
-        val x = event.x
-        val y = event.y
-        inputHandler.currentTime++
+        val point = Point(event.x.toInt(), event.y.toInt(), inputHandler.currentTime++)
         when (event.action) {
             MotionEvent.ACTION_DOWN -> {
-                inputHandler.touchStart(x, y)
+                inputHandler.touchStart(point)
                 invalidate()
             }
             MotionEvent.ACTION_MOVE -> {
-                inputHandler.touchMove(x, y)
+                inputHandler.touchMove(point)
                 invalidate()
             }
             MotionEvent.ACTION_UP -> {
-                inputHandler.touchUp(x, y)
+                inputHandler.touchUp(point)
                 invalidate()
             }
         }
@@ -54,12 +53,19 @@ class StrokeInputView(
 }
 
 class InputHandler(
-    private val context: Context?
+    private val context: Context?,
+    private val attrs: AttributeSet? = null
 ) {
+
+    private var drawOutputView = DrawStrokeView(context, attrs)
+
+    private var drawStrokeInteractor = DrawStrokeInteractor()
 
     var strokes: MutableList<Stroke> = ArrayList()
 
     var currentTime: Long = 0
+
+    lateinit var lastPoint: Point
 
     fun loadStrokes(path: String) {
         var outputData = ""
@@ -92,41 +98,32 @@ class InputHandler(
         }
     }
 
-    private fun getPointsAround(x: Float, y: Float, width: Int = 1): MutableList<Point> {
-        val points: MutableList<Point> = ArrayList()
-        for (newX in x.toInt() - width..x.toInt() + width) {
-            for (newY in y.toInt() - width..y.toInt() + width) {
-                if ((newX - x) * (newX - x) + (newY - y) * (newY - y) <= width * width) {
-                    Log.println(DEBUG, "dbg", newX.toString() + " " + newY.toString())
-                    points.add(Point(newX, newY, currentTime))
-                }
-            }
-        }
-        return points
-    }
+    private var calls = 0
 
-    private fun modifyLastStroke(x: Float, y: Float) {
-        val points = getPointsAround(x, y)
+    private fun modifyLastStroke(point: Point) {
+        calls++
+        val pointInteractor = PointInteractor()
         val interactor = StrokeInteractor()
-        points.forEach {
+        pointInteractor.getPointsAroundLine(lastPoint, point, 1.2f).forEach {
             interactor.addPoint(strokes.last(), it)
+            Log.println(Log.DEBUG, "dbg", calls.toString() + ": " + it.toString())
         }
+        drawStrokeInteractor.set(drawOutputView, strokes.last())
     }
 
-    fun touchMove(x: Float, y: Float) {
-        Log.println(DEBUG, "dbg", "touching! x: " + x.toString() + " y: " + y.toString())
-        modifyLastStroke(x, y)
+    fun touchMove(point: Point) {
+        modifyLastStroke(point)
+        lastPoint = point
     }
 
-    fun touchUp(x: Float, y: Float) {
-        Log.println(DEBUG, "dbg", "touch ended! x: " + x.toString() + " y: " + y.toString())
-        modifyLastStroke(x, y)
+    fun touchUp(point: Point) {
+        modifyLastStroke(point)
     }
 
-    fun touchStart(x: Float, y: Float) {
-        Log.println(DEBUG, "dbg", "touch started! x: " + x.toString() + " y: " + y.toString())
+    fun touchStart(point: Point) {
         strokes.add(Stroke())
-        modifyLastStroke(x, y)
+        lastPoint = point
+        modifyLastStroke(point)
     }
 
 
