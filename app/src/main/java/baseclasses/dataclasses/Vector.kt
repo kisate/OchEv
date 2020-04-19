@@ -10,6 +10,6 @@ class VectorInteractor {
     }
 
     fun getLength(vector: Vector): Float {
-        return sqrt((vector.x * vector.x + vector.y + vector.y).toFloat())
+        return sqrt((vector.x * vector.x + vector.y * vector.y).toFloat())
     }
 }
