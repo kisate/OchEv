@@ -2,10 +2,8 @@ package com.example.ochev
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.os.storage.StorageManager
-import android.widget.Button
 import kotlinx.android.synthetic.main.activity_main.*
-import viewclasses.StrokeInput
+import viewclasses.StrokeInputView
 
 class MainActivity : AppCompatActivity() {
 
@@ -13,17 +11,17 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        val strokeInput: StrokeInput = strokeInputId
+        val strokeInput: StrokeInputView = strokeInputId
 
 
         loadButtonId.setOnClickListener {
-            strokeInput.loadStrokes("config.txt")
+            strokeInput.inputHandler.loadStrokes("config.txt")
         }
 
         clearButtonId.setOnClickListener {
-            val id = strokeInput.strokes.lastIndex
+            val id = strokeInput.inputHandler.strokes.lastIndex
             if (id > 0) {
-                strokeInput.strokes.removeAt(id)
+                strokeInput.inputHandler.strokes.removeAt(id)
             }
         }
 

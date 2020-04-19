@@ -20,16 +20,46 @@ import java.io.OutputStreamWriter
 
  */
 
-
-class StrokeInput(
+class StrokeInputView(
     context: Context?,
     attrs: AttributeSet? = null
 ) :
     View(context, attrs) {
 
+    // public <-> ML
+    val inputHandler = InputHandler(context)
+
+    @SuppressLint("ClickableViewAccessibility")
+    override fun onTouchEvent(event: MotionEvent): Boolean {
+        val x = event.x
+        val y = event.y
+        inputHandler.currentTime++
+        when (event.action) {
+            MotionEvent.ACTION_DOWN -> {
+                inputHandler.touchStart(x, y)
+                invalidate()
+            }
+            MotionEvent.ACTION_MOVE -> {
+                inputHandler.touchMove(x, y)
+                invalidate()
+            }
+            MotionEvent.ACTION_UP -> {
+                inputHandler.touchUp(x, y)
+                invalidate()
+            }
+        }
+        return true
+    }
+
+}
+
+class InputHandler(
+    private val context: Context?
+) {
+
     var strokes: MutableList<Stroke> = ArrayList()
 
-    private var currentTime: Long = 0
+    var currentTime: Long = 0
 
     fun loadStrokes(path: String) {
         var outputData = ""
@@ -50,7 +80,7 @@ class StrokeInput(
         strokes.clear()
         try {
             val outputStreamWriter = OutputStreamWriter(
-                context.openFileOutput(
+                context!!.openFileOutput(
                     path,
                     Context.MODE_PRIVATE
                 )
@@ -83,42 +113,21 @@ class StrokeInput(
         }
     }
 
-    @SuppressLint("ClickableViewAccessibility")
-    override fun onTouchEvent(event: MotionEvent): Boolean {
-        val x = event.x
-        val y = event.y
-        currentTime++
-        when (event.action) {
-            MotionEvent.ACTION_DOWN -> {
-                touchStart(x, y)
-                invalidate()
-            }
-            MotionEvent.ACTION_MOVE -> {
-                touchMove(x, y)
-                invalidate()
-            }
-            MotionEvent.ACTION_UP -> {
-                touchUp(x, y)
-                invalidate()
-            }
-        }
-        return true
-    }
-
-    private fun touchMove(x: Float, y: Float) {
+    fun touchMove(x: Float, y: Float) {
         Log.println(DEBUG, "dbg", "touching! x: " + x.toString() + " y: " + y.toString())
         modifyLastStroke(x, y)
     }
 
-    private fun touchUp(x: Float, y: Float) {
+    fun touchUp(x: Float, y: Float) {
         Log.println(DEBUG, "dbg", "touch ended! x: " + x.toString() + " y: " + y.toString())
         modifyLastStroke(x, y)
     }
 
-    private fun touchStart(x: Float, y: Float) {
+    fun touchStart(x: Float, y: Float) {
         Log.println(DEBUG, "dbg", "touch started! x: " + x.toString() + " y: " + y.toString())
         strokes.add(Stroke())
         modifyLastStroke(x, y)
     }
+
 
 }
