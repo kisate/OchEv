@@ -104,7 +104,7 @@ class InputHandler(
         calls++
         val pointInteractor = PointInteractor()
         val interactor = StrokeInteractor()
-        pointInteractor.getPointsAroundLine(lastPoint, point, 1.2f).forEach {
+        pointInteractor.getPointsAroundLine(lastPoint, point, 3f).forEach {
             interactor.addPoint(strokes.last(), it)
             Log.println(Log.DEBUG, "dbg", calls.toString() + ": " + it.toString())
         }

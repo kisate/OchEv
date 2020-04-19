@@ -33,7 +33,7 @@ class DrawStrokeInteractor {
             drawStrokeView.path.addCircle(
                 point.x.toFloat(),
                 point.y.toFloat(),
-                3f,
+                1f,
                 Path.Direction.CCW
             )
         }
