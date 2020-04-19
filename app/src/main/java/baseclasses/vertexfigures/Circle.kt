@@ -5,6 +5,7 @@ import baseclasses.VertexFigure
 import baseclasses.VertexFigureNormalizer
 import baseclasses.dataclasses.Point
 import baseclasses.dataclasses.Stroke
+import baseclasses.dataclasses.StrokeInteractor
 import baseclasses.dataclasses.Vector
 
 class Circle(
@@ -25,7 +26,8 @@ fun FigureInteractor.moveByVector(circle: Circle, direction: Vector) {
 }
 
 fun VertexFigureNormalizer.normalizeCircle(strokes: MutableList<Stroke>): Circle {
-    val (maxX, maxY, minX, minY) = getStrokesRestrictions(strokes)
+    val strokeInteractor = StrokeInteractor()
+    val (maxX, maxY, minX, minY) = strokeInteractor.getStrokesRestrictions(strokes)
     return Circle(
         center = Point((maxX + minX) / 2, (maxY + minY) / 2),
         radius = ((maxX - minX) + (maxY - minY)) / 4
