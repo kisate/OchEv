@@ -2,14 +2,18 @@ package baseclasses.dataclasses
 
 import kotlin.math.sqrt
 
-data class Point(var x: Int = 0, var y: Int = 0, val time: Long = 0)
+data class Point(var x: Int = 0, var y: Int = 0, val time: Long = 0) {}
 
 
 class PointInteractor {
-    fun getDistanceBetweenTwoPoints(firstPoint: Point, secondPoint: Point): Double {
+    fun toString(point: Point): String {
+        return "x: ${point.x}\ny: ${point.y}\ntime: ${point.time}\n"
+    }
+
+    fun getDistanceBetweenTwoPoints(firstPoint: Point, secondPoint: Point): Float {
         return sqrt(
             (firstPoint.x - secondPoint.x) * (firstPoint.x - secondPoint.x) +
-                    (firstPoint.y - secondPoint.y) * (firstPoint.y - secondPoint.y).toDouble()
+                    (firstPoint.y - secondPoint.y) * (firstPoint.y - secondPoint.y).toFloat()
         )
     }
 
@@ -37,7 +41,7 @@ class PointInteractor {
     }
 
 
-    fun getPointsAroundPoint(startPoint: Point, radius: Double): MutableList<Point> {
+    fun getPointsAroundPoint(startPoint: Point, radius: Float): MutableList<Point> {
         val result: MutableList<Point> = ArrayList()
         val deltas = listOf(Vector(1, 0), Vector(-1, 0), Vector(0, 1), Vector(0, -1))
         val used: HashMap<Point, Boolean> = HashMap()
@@ -48,7 +52,23 @@ class PointInteractor {
         return result
     }
 
-    fun getPointsAroundLine(startPoint: Point, endPoint: Point, radius: Double) {
-        val result: Set<Point>
+    fun getPointsAroundLine(startPoint: Point, endPoint: Point, radius: Float): MutableList<Point> {
+        val vectorInteractor = VectorInteractor()
+        val result: HashMap<Point, Boolean> = HashMap()
+        val vector = vectorInteractor.getVectorByTwoPoints(startPoint, endPoint)
+        val length = vectorInteractor.getLength(vector)
+
+        for (i in 0..length.toInt()) {
+            val newPoint = startPoint.copy()
+            moveByVector(
+                newPoint,
+                Vector((vector.x * i / length).toInt(), (vector.y * i / length).toInt())
+            )
+            for (point in getPointsAroundPoint(newPoint, radius)) {
+                result[point] = true
+            }
+        }
+
+        return result.keys.toMutableList()
     }
 }
