@@ -22,9 +22,7 @@ class DrawStrokeView(
     var path = Path()
 
     override fun onDraw(canvas: Canvas?) {
-        if (path.isEmpty) {
-            canvas?.drawColor(Color.WHITE)
-        }
+        canvas?.drawColor(Color.WHITE)
         canvas?.drawPath(path, paint)
     }
 }
@@ -39,10 +37,11 @@ class DrawStrokeInteractor {
                 stroke.points[id].x.toFloat(),
                 stroke.points[id].y.toFloat(),
                 1f,
-                Path.Direction.CCW
+                Path.Direction.CW
             )
         }
         drawStrokeView.invalidate()
+        drawStrokeView.path
         lastId = stroke.points.size
     }
 

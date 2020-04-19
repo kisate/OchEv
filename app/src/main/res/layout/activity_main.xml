@@ -18,6 +18,14 @@
         android:layout_alignParentBottom="true"
         android:text="Удалить" />
 
+    <Button
+        android:id="@+id/fileClearId"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentBottom="true"
+        android:text="Очистить файл" />
+
     <RelativeLayout
         android:layout_width="match_parent"
         android:id="@+id/relativeId"
@@ -26,6 +34,8 @@
             android:id="@+id/drawOutputId"
             android:layout_width="match_parent"
             android:layout_height="match_parent" />
+
+
 
     </RelativeLayout>
 

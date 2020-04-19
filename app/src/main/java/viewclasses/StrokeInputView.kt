@@ -67,18 +67,18 @@ class InputHandler(
 
     lateinit var lastPoint: Point
 
-    fun clear(){
+    fun clear() {
         currentTime = 0
         strokes.clear()
     }
 
     fun loadStrokes(path: String) {
-        var outputData = ""
+        val outputData = ""
         strokes.forEach {
             it.points.forEach {
-                outputData += " " + it.x.toString() + "," + it.y.toString() + "," + it.time.toString()
+                outputData.plus(" " + it.x.toString() + "," + it.y.toString() + "," + it.time.toString())
             }
-            outputData += "\n"
+            outputData.plus("\n")
         }
         try {
             val outputStreamWriter = OutputStreamWriter(
@@ -87,7 +87,7 @@ class InputHandler(
                     Context.MODE_APPEND
                 )
             )
-            outputStreamWriter.write(data)
+            outputStreamWriter.write(outputData)
             outputStreamWriter.close()
         } catch (e: IOException) {
             Log.e("Exception", "File write failed: " + e.toString())
@@ -121,7 +121,6 @@ class InputHandler(
         lastPoint = point
         modifyLastStroke(point)
     }
-
 
 
 }
