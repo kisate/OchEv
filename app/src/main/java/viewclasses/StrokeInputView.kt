@@ -74,6 +74,7 @@ class InputHandler(
 
     fun loadStrokes(path: String) {
         val outputData = ""
+        Log.println(Log.DEBUG, "dbgFile", strokes.toString())
         strokes.forEach {
             it.points.forEach {
                 outputData.plus(" " + it.x.toString() + "," + it.y.toString() + "," + it.time.toString())

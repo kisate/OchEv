@@ -32,14 +32,12 @@ class MainActivity : AppCompatActivity() {
 
         loadButtonId.setOnClickListener {
             strokeInput.inputHandler.loadStrokes("strokes.txt")
+            strokeInput.inputHandler.clear()
             DrawStrokeInteractor().clear(drawOutputId)
         }
 
         clearButtonId.setOnClickListener {
-            val id = strokeInput.inputHandler.strokes.lastIndex
-            if (id > 0) {
-                strokeInput.inputHandler.strokes.removeAt(id)
-            }
+            strokeInput.inputHandler.clear()
             DrawStrokeInteractor().clear(drawOutputId)
         }
 
