@@ -1,9 +1,11 @@
 package baseclasses.vertexfigures
 
-import baseclasses.FigureInteractor
 import baseclasses.VertexFigure
 import baseclasses.VertexFigureNormalizer
-import baseclasses.dataclasses.*
+import baseclasses.dataclasses.Point
+import baseclasses.dataclasses.PointInteractor
+import baseclasses.dataclasses.Stroke
+import baseclasses.dataclasses.Vector
 
 class Triangle(
     figureText: MutableList<Char> = ArrayList(),
@@ -11,74 +13,39 @@ class Triangle(
     var pointA: Point = Point(),
     var pointB: Point = Point(),
     var pointC: Point = Point()
-) : VertexFigure(figureText, texturePath)
+) : VertexFigure(figureText, texturePath) {
+    override val center: Point
+        get() = Point(
+            x = (pointA.x + pointB.x + pointC.x) / 3,
+            y = (pointA.y + pointB.y + pointC.y) / 3
+        )
 
+    override fun moveByVector(vector: Vector) {
+        pointA.moveByVector(vector)
+        pointB.moveByVector(vector)
+        pointC.moveByVector(vector)
+    }
 
-fun FigureInteractor.changeSize(triangle: Triangle) {
-    TODO()
-}
+    override fun getDistanceToPoint(point: Point): Float {
+        // if the triangle has points ABC, we check dist till line segment AB,BC,CA and take min
 
-fun FigureInteractor.moveByVector(triangle: Triangle, direction: Vector) {
-    triangle.pointA.x += direction.x
-    triangle.pointA.y += direction.y
-    triangle.pointB.x += direction.x
-    triangle.pointB.y += direction.y
-    triangle.pointC.x += direction.x
-    triangle.pointC.y += direction.y
-}
+        // A -> B
+        val tillAB = point.getDistanceToLineSegment(pointA, pointB)
+        // B -> C
+        val tillBC = point.getDistanceToLineSegment(pointB, pointC)
+        // C -> A
+        val tillAC = point.getDistanceToLineSegment(pointC, pointA)
 
-fun FigureInteractor.getCenter(triangle: Triangle): Point {
-    return Point(
-        x = (triangle.pointA.x + triangle.pointB.x + triangle.pointC.x) / 3,
-        y = (triangle.pointA.y + triangle.pointB.y + triangle.pointC.y) / 3
-    )
-}
-
-fun FigureInteractor.getDistanceBetweenFigureAndPoint(triangle: Triangle, point: Point): Float {
-    val pointInteractor = PointInteractor()
-
-    // we have triangle ABC
-    // check distance till line segments AB,BC,AC, take min
-
-    // AB
-
-    val tillFirstLine = pointInteractor.getDistanceBetweenPointAndLineSegment(
-        point,
-        triangle.pointA,
-        triangle.pointB
-    )
-
-    // BC
-
-    val tillSecondLine = pointInteractor.getDistanceBetweenPointAndLineSegment(
-        point,
-        triangle.pointB,
-        triangle.pointC
-    )
-
-    // AC
-
-    val tillThirdLine = pointInteractor.getDistanceBetweenPointAndLineSegment(
-        point,
-        triangle.pointC,
-        triangle.pointA
-    )
-
-    return listOf(
-        tillFirstLine,
-        tillSecondLine,
-        tillThirdLine
-    ).min()!!
-
+        return listOf(tillAB, tillAC, tillBC).min()!!
+    }
 }
 
 fun VertexFigureNormalizer.normalizeTriangle(strokes: MutableList<Stroke>): Triangle {
-    val strokeInteractor = StrokeInteractor()
     val pointInteractor = PointInteractor()
 
     // first point , it is on the top of the triangle
     val pointWithMaxY =
-        strokes.maxBy { strokeInteractor.maxY(it) }!!.let { it.points.maxBy { it.y }!! }
+        strokes.maxBy { it.maxY() }!!.let { it.points.maxBy { it.y }!! }
 
     // second point is the most distanced from the first
     val mostDistancedPoint =

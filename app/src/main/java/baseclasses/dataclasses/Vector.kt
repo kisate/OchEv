@@ -2,17 +2,17 @@ package baseclasses.dataclasses
 
 import kotlin.math.sqrt
 
-data class Vector(var x: Int = 0, var y: Int = 0)
+data class Vector(var x: Int = 0, var y: Int = 0) {
+    val length: Float
+        get() = sqrt(((x * x) + (y * y)).toFloat())
+
+    constructor(beginPoint: Point, endPoint: Point) : this() {
+        x = endPoint.x - beginPoint.x
+        y = endPoint.y - beginPoint.y
+    }
+}
 
 class VectorInteractor {
-    fun getVectorByTwoPoints(beginPoint: Point, endPoint: Point): Vector {
-        return Vector(endPoint.x - beginPoint.x, endPoint.y - beginPoint.y)
-    }
-
-    fun getLength(vector: Vector): Float {
-        return sqrt((vector.x * vector.x + vector.y * vector.y).toFloat())
-    }
-
     fun scalarProduct(firstVector: Vector, secondVector: Vector): Int {
         return firstVector.x * secondVector.x + firstVector.y * secondVector.y
     }

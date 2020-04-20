@@ -1,6 +1,5 @@
 package baseclasses.vertexfigures
 
-import baseclasses.FigureInteractor
 import baseclasses.VertexFigure
 import baseclasses.VertexFigureNormalizer
 import baseclasses.dataclasses.*
@@ -9,30 +8,21 @@ import kotlin.math.abs
 class Circle(
     figureText: MutableList<Char> = ArrayList(),
     texturePath: String = "",
-    var center: Point = Point(),
-    var radius: Int = 0
-) : VertexFigure(figureText, texturePath)
+    override val center: Point = Point(),
+    val radius: Int = 0
+) : VertexFigure(figureText, texturePath) {
+    override fun getDistanceToPoint(point: Point): Float {
+        val pointInteractor = PointInteractor()
+        return abs(
+            pointInteractor.getDistanceBetweenTwoPoints(center, point)
+                    - radius
+        )
+    }
 
-
-fun FigureInteractor.changeSize(circle: Circle, a: Point, b: Point) {
-    TODO()
-}
-
-fun FigureInteractor.moveByVector(circle: Circle, direction: Vector) {
-    circle.center.x += direction.x
-    circle.center.y += direction.y
-}
-
-fun FigureInteractor.getCenter(circle: Circle): Point {
-    return circle.center
-}
-
-fun FigureInteractor.getDistanceBetweenFigureAndPoint(circle: Circle, point: Point): Float {
-    val pointInteractor = PointInteractor()
-    return abs(
-        pointInteractor.getDistanceBetweenTwoPoints(getCenter(circle), point)
-                - circle.radius
-    )
+    override fun moveByVector(vector: Vector) {
+        center.x += vector.x
+        center.y += vector.y
+    }
 }
 
 fun VertexFigureNormalizer.normalizeCircle(strokes: MutableList<Stroke>): Circle {

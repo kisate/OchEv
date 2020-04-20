@@ -6,16 +6,16 @@ import baseclasses.VertexFigure
 data class Graph(
     val vertexes: MutableList<VertexFigure> = ArrayList(),
     val edges: MutableList<EdgeFigure> = ArrayList()
-)
-
-class graphInteractor {
-    fun addEdge(graph: Graph, edgeFigure: EdgeFigure) {
-        graph.edges.add(edgeFigure)
+) {
+    fun addEdge(edgeFigure: EdgeFigure) {
+        edges.add(edgeFigure)
     }
 
-    fun addVertex(graph: Graph, vertexFigure: VertexFigure) {
-        graph.vertexes.add(vertexFigure)
+    fun addVertex(vertexFigure: VertexFigure) {
+        vertexes.add(vertexFigure)
     }
 
-
+    fun getClosestToPointVertexFigureOrNull(point: Point): VertexFigure? {
+        return vertexes.minBy { it.getDistanceToPoint(point) }
+    }
 }
