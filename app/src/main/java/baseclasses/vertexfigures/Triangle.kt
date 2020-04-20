@@ -27,6 +27,13 @@ fun FigureInteractor.moveByVector(triangle: Triangle, direction: Vector) {
     triangle.pointC.y += direction.y
 }
 
+fun FigureInteractor.getCenter(triangle: Triangle): Point {
+    return Point(
+        x = (triangle.pointA.x + triangle.pointB.x + triangle.pointC.x) / 3,
+        y = (triangle.pointA.y + triangle.pointB.y + triangle.pointC.y) / 3
+    )
+}
+
 fun VertexFigureNormalizer.normalizeTriangle(strokes: MutableList<Stroke>): Triangle {
     val strokeInteractor = StrokeInteractor()
     val pointInteractor = PointInteractor()

@@ -71,4 +71,17 @@ class PointInteractor {
 
         return result.keys.toMutableList()
     }
+
+
+    fun getDistanceBetweenPointAndLineSegment(
+        pointC: Point,
+        linePointA: Point,
+        linePointB: Point
+    ) {
+        // we have triange on 3 vertexes : A,B lies on line segment, C is alone
+        val vectorInteractor = VectorInteractor()
+        val directionFromAToC = Vector(pointC.x - linePointA.x, pointC.y - linePointA.x)
+        val directionFromAToB = Vector(linePointB.x - linePointA.x, linePointB.y - linePointA.y)
+
+    }
 }
