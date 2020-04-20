@@ -3,7 +3,7 @@ package baseclasses.dataclasses
 import java.lang.Float.min
 import kotlin.math.sqrt
 
-data class Point(var x: Int = 0, var y: Int = 0, val time: Long = 0) {}
+data class Point(var x: Int = 0, var y: Int = 0)
 
 
 class PointInteractor {
@@ -90,7 +90,11 @@ class PointInteractor {
         val signOfCosAngleCBA =
             if (vectorInteractor.scalarProduct(vectorFromBToA, vectorFromBToC) >= 0) 1 else -1
 
+
         if (signOfCosAngleCAB == 1 && signOfCosAngleCBA == 1) {
+
+            // the shortest path is perpendicular
+
             val cosAngleCAB = vectorInteractor.scalarProduct(vectorFromAToB, vectorFromAToC) /
                     (vectorInteractor.getLength(vectorFromAToB) *
                             vectorInteractor.getLength(vectorFromAToC))
