@@ -38,6 +38,29 @@ class Triangle(
 
         return listOf(tillAB, tillAC, tillBC).min()!!
     }
+
+    override fun checkIfPointIsInside(point: Point): Boolean {
+
+        // we have triangle ABC, A = (0,0), P is checking point in new coordinates
+        var vectorB = Vector(pointA, pointB)
+        var vectorC = Vector(pointA, pointC)
+        val vectorP = Vector(pointA, point)
+
+        if (vectorB.y == 0) vectorB = vectorC.also { vectorC = vectorB }
+
+        val cordAlongVectorC =
+            (vectorP.x - vectorB.x * vectorP.y / vectorB.y.toFloat()) /
+                    (vectorC.x - vectorC.y * vectorB.x / vectorB.y.toFloat())
+
+        val cordAlongVectorB =
+            (vectorP.y - cordAlongVectorC * vectorC.y) / vectorC.y.toFloat()
+
+        return cordAlongVectorB >= 0 &&
+                cordAlongVectorC >= 0 &&
+                cordAlongVectorB + cordAlongVectorC <= 1
+
+
+    }
 }
 
 fun VertexFigureNormalizer.normalizeTriangle(strokes: MutableList<Stroke>): Triangle {

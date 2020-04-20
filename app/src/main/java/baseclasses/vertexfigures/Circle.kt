@@ -23,6 +23,11 @@ class Circle(
         center.x += vector.x
         center.y += vector.y
     }
+
+    override fun checkIfPointIsInside(point: Point): Boolean {
+        val pointInteractor = PointInteractor()
+        return pointInteractor.getDistanceBetweenTwoPoints(point, center) <= radius
+    }
 }
 
 fun VertexFigureNormalizer.normalizeCircle(strokes: MutableList<Stroke>): Circle {
