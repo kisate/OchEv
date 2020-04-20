@@ -26,6 +26,13 @@ fun FigureInteractor.moveByVector(rectangle: Rectangle, direction: Vector) {
     rectangle.rightUpCorner.y = direction.y
 }
 
+fun FigureInteractor.getCenter(rectangle: Rectangle): Point {
+    return Point(
+        x = (rectangle.leftDownCorner.x + rectangle.rightUpCorner.x) / 2,
+        y = (rectangle.leftDownCorner.y + rectangle.rightUpCorner.y) / 2
+    )
+}
+
 fun VertexFigureNormalizer.normalizeRectangle(strokes: MutableList<Stroke>): Rectangle {
     val strokeInteractor = StrokeInteractor()
     val (maxX, maxY, minX, minY) = strokeInteractor.getStrokesRestrictions(strokes)

@@ -12,4 +12,8 @@ class VectorInteractor {
     fun getLength(vector: Vector): Float {
         return sqrt((vector.x * vector.x + vector.y * vector.y).toFloat())
     }
+
+    fun scalarProduct(firstVector: Vector, secondVector: Vector): Int {
+        return firstVector.x * secondVector.x + firstVector.y * secondVector.y
+    }
 }

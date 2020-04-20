@@ -16,4 +16,6 @@ class graphInteractor {
     fun addVertex(graph: Graph, vertexFigure: VertexFigure) {
         graph.vertexes.add(vertexFigure)
     }
+
+
 }

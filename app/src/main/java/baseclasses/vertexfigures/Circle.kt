@@ -25,6 +25,10 @@ fun FigureInteractor.moveByVector(circle: Circle, direction: Vector) {
     circle.center.y += direction.y
 }
 
+fun FigureInteractor.getCenter(circle: Circle): Point {
+    return circle.center
+}
+
 fun VertexFigureNormalizer.normalizeCircle(strokes: MutableList<Stroke>): Circle {
     val strokeInteractor = StrokeInteractor()
     val (maxX, maxY, minX, minY) = strokeInteractor.getStrokesRestrictions(strokes)
