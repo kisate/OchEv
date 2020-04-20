@@ -45,11 +45,6 @@ data class Point(var x: Int = 0, var y: Int = 0) {
         )
     }
 
-    fun getDistanceToPoint(point: Point): Float {
-        return sqrt(
-            ((x - point.x) * (x - point.x) + (y - point.y) * (y - point.y)).toFloat()
-        )
-    }
 }
 
 
