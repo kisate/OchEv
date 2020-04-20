@@ -1,4 +1,4 @@
-package viewclasses
+package com.example.ochev.viewclasses
 
 import android.annotation.SuppressLint
 import android.content.Context

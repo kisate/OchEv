@@ -1,4 +1,4 @@
-package viewclasses
+package com.example.ochev.viewclasses
 
 import android.content.Context
 import android.graphics.Canvas
