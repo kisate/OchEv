@@ -23,6 +23,7 @@ class DrawStrokeView(
 
     init {
         paint.setStyle(Paint.Style.STROKE)
+        paint.strokeWidth = 10f
     }
 
     override fun onDraw(canvas: Canvas?) {

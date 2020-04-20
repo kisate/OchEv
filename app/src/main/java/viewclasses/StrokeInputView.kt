@@ -98,7 +98,6 @@ class InputHandler(
     }
 
     private fun modifyLastStroke(point: Point) {
-        val pointInteractor = PointInteractor()
         val interactor = StrokeInteractor()
         interactor.addPoint(strokes.last(), point)
         drawStrokeInteractor.set(drawStrokeView, strokes.last())
