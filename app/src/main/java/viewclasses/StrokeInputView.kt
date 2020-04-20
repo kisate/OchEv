@@ -73,14 +73,16 @@ class InputHandler(
     }
 
     fun loadStrokes(path: String) {
-        val outputData = ""
+        var outputData: String = ""
         Log.println(Log.DEBUG, "dbgFile", strokes.toString())
         strokes.forEach {
             it.points.forEach {
-                outputData.plus(" " + it.x.toString() + "," + it.y.toString() + "," + it.time.toString())
+                Log.println(Log.DEBUG, "dbgFileString", it.toString())
+                outputData += " " + it.x.toString() + "," + it.y.toString() + "," + it.time.toString()
             }
-            outputData.plus("\n")
+            outputData += "\n"
         }
+        Log.println(Log.DEBUG, "dbgFileString", outputData)
         try {
             val file = File(context!!.getExternalFilesDir(null), path)
             val fileOutput = FileOutputStream(file)
