@@ -48,7 +48,7 @@ class StrokeInputView(
 
 class InputHandler(
     private val context: Context?,
-    private val attrs: AttributeSet? = null,
+    attrs: AttributeSet? = null,
     val drawStrokeView: DrawStrokeView
 ) {
 
@@ -88,9 +88,8 @@ class InputHandler(
     }
 
     private fun modifyLastStroke(point: Point) {
-        val interactor = StrokeInteractor()
-        interactor.addPoint(strokes.last(), point)
-        drawStrokeInteractor.set(drawStrokeView, strokes.last())
+        strokes.last().addPoint(point)
+        drawStrokeInteractor.add(drawStrokeView, strokes.last())
     }
 
     fun touchMove(point: Point) {

@@ -36,14 +36,13 @@ class DrawStrokeInteractor {
 
     private var lastId = 0
 
-    fun set(drawStrokeView: DrawStrokeView, stroke: Stroke) {
+    fun add(drawStrokeView: DrawStrokeView, stroke: Stroke) {
         for (id in lastId..stroke.points.size - 1) {
             drawStrokeView.path.lineTo(
                 stroke.points[id].x.toFloat(),
                 stroke.points[id].y.toFloat()
             )
         }
-
         drawStrokeView.invalidate()
         lastId = stroke.points.size
     }
