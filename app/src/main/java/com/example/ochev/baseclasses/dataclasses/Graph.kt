@@ -1,7 +1,7 @@
-package baseclasses.dataclasses
+package com.example.ochev.baseclasses.dataclasses
 
-import baseclasses.EdgeFigure
-import baseclasses.VertexFigure
+import com.example.ochev.baseclasses.EdgeFigure
+import com.example.ochev.baseclasses.VertexFigure
 
 data class Graph(
     val vertexes: MutableList<VertexFigure> = ArrayList(),

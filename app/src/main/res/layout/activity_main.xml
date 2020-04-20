@@ -30,7 +30,7 @@
         android:layout_width="match_parent"
         android:id="@+id/relativeId"
         android:layout_height="match_parent">
-        <viewclasses.DrawStrokeView
+        <com.example.ochev.viewclasses.DrawStrokeView
             android:id="@+id/drawOutputId"
             android:layout_width="match_parent"
             android:layout_height="match_parent" />

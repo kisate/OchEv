@@ -3,12 +3,11 @@ package com.example.ochev
 import android.content.Context
 import android.os.Bundle
 import android.util.Log
-import android.view.View
 import android.widget.RelativeLayout
 import androidx.appcompat.app.AppCompatActivity
 import kotlinx.android.synthetic.main.activity_main.*
-import viewclasses.DrawStrokeInteractor
-import viewclasses.StrokeInputView
+import com.example.ochev.viewclasses.DrawStrokeInteractor
+import com.example.ochev.viewclasses.StrokeInputView
 import java.io.IOException
 import java.io.OutputStreamWriter
 

@@ -1,11 +1,11 @@
-package baseclasses
+package com.example.ochev.baseclasses
 
-import baseclasses.dataclasses.Point
-import baseclasses.dataclasses.Stroke
-import baseclasses.dataclasses.Vector
-import baseclasses.vertexfigures.normalizeCircle
-import baseclasses.vertexfigures.normalizeRectangle
-import baseclasses.vertexfigures.normalizeTriangle
+import com.example.ochev.baseclasses.dataclasses.Point
+import com.example.ochev.baseclasses.dataclasses.Stroke
+import com.example.ochev.baseclasses.dataclasses.Vector
+import com.example.ochev.baseclasses.vertexfigures.normalizeCircle
+import com.example.ochev.baseclasses.vertexfigures.normalizeRectangle
+import com.example.ochev.baseclasses.vertexfigures.normalizeTriangle
 
 /*
 A figure, that represents an information block in our scheme

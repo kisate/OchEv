@@ -1,4 +1,4 @@
-package viewclasses
+package com.example.ochev.viewclasses
 
 import android.annotation.SuppressLint
 import android.content.Context
@@ -6,9 +6,8 @@ import android.util.AttributeSet
 import android.util.Log
 import android.view.MotionEvent
 import android.view.View
-import baseclasses.dataclasses.Point
-import baseclasses.dataclasses.Stroke
-import baseclasses.dataclasses.StrokeInteractor
+import com.example.ochev.baseclasses.dataclasses.Point
+import com.example.ochev.baseclasses.dataclasses.Stroke
 import java.io.File
 import java.io.FileOutputStream
 import java.io.IOException
@@ -22,7 +21,7 @@ class StrokeInputView(
     View(context, attrs) {
 
     // public <-> ML
-    val inputHandler = InputHandler(context, attrs, drawStrokeView)
+    val inputHandler = InputHandler(context, drawStrokeView)
 
     @SuppressLint("ClickableViewAccessibility")
     override fun onTouchEvent(event: MotionEvent): Boolean {
@@ -48,22 +47,21 @@ class StrokeInputView(
 
 class InputHandler(
     private val context: Context?,
-    attrs: AttributeSet? = null,
-    val drawStrokeView: DrawStrokeView
+    private val drawStrokeView: DrawStrokeView
 ) {
 
     private var drawStrokeInteractor = DrawStrokeInteractor()
 
-    var strokes: MutableList<Stroke> = ArrayList()
+    private var strokes: MutableList<Stroke> = ArrayList()
 
-    lateinit var lastPoint: Point
+    private lateinit var lastPoint: Point
 
     fun clear() {
         strokes.clear()
     }
 
     fun loadStrokes(path: String) {
-        var outputData: String = ""
+        var outputData = ""
         Log.println(Log.DEBUG, "dbgFile", strokes.toString())
         var cnt = 0
         strokes.forEach {

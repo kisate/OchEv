@@ -1,11 +1,11 @@
-package baseclasses.vertexfigures
+package com.example.ochev.baseclasses.vertexfigures
 
-import baseclasses.VertexFigure
-import baseclasses.VertexFigureNormalizer
-import baseclasses.dataclasses.Point
-import baseclasses.dataclasses.Stroke
-import baseclasses.dataclasses.StrokeInteractor
-import baseclasses.dataclasses.Vector
+import com.example.ochev.baseclasses.VertexFigure
+import com.example.ochev.baseclasses.VertexFigureNormalizer
+import com.example.ochev.baseclasses.dataclasses.Point
+import com.example.ochev.baseclasses.dataclasses.Stroke
+import com.example.ochev.baseclasses.dataclasses.StrokeInteractor
+import com.example.ochev.baseclasses.dataclasses.Vector
 
 
 class Rectangle(
