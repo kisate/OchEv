@@ -34,6 +34,44 @@ fun FigureInteractor.getCenter(triangle: Triangle): Point {
     )
 }
 
+fun FigureInteractor.getDistanceBetweenFigureAndPoint(triangle: Triangle, point: Point): Float {
+    val pointInteractor = PointInteractor()
+
+    // we have triangle ABC
+    // check distance till line segments AB,BC,AC, take min
+
+    // AB
+
+    val tillFirstLine = pointInteractor.getDistanceBetweenPointAndLineSegment(
+        point,
+        triangle.pointA,
+        triangle.pointB
+    )
+
+    // BC
+
+    val tillSecondLine = pointInteractor.getDistanceBetweenPointAndLineSegment(
+        point,
+        triangle.pointB,
+        triangle.pointC
+    )
+
+    // AC
+
+    val tillThirdLine = pointInteractor.getDistanceBetweenPointAndLineSegment(
+        point,
+        triangle.pointC,
+        triangle.pointA
+    )
+
+    return listOf(
+        tillFirstLine,
+        tillSecondLine,
+        tillThirdLine
+    ).min()!!
+
+}
+
 fun VertexFigureNormalizer.normalizeTriangle(strokes: MutableList<Stroke>): Triangle {
     val strokeInteractor = StrokeInteractor()
     val pointInteractor = PointInteractor()
