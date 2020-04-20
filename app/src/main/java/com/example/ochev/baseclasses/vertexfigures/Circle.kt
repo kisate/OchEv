@@ -1,8 +1,8 @@
-package baseclasses.vertexfigures
+package com.example.ochev.baseclasses.vertexfigures
 
-import baseclasses.VertexFigure
-import baseclasses.VertexFigureNormalizer
-import baseclasses.dataclasses.*
+import com.example.ochev.baseclasses.VertexFigure
+import com.example.ochev.baseclasses.VertexFigureNormalizer
+import com.example.ochev.baseclasses.dataclasses.*
 import kotlin.math.abs
 
 class Circle(

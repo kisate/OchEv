@@ -1,4 +1,4 @@
-package baseclasses.dataclasses
+package com.example.ochev.baseclasses.dataclasses
 
 import java.lang.Float.min
 import kotlin.math.sqrt

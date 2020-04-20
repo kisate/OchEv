@@ -6,9 +6,8 @@ import android.util.AttributeSet
 import android.util.Log
 import android.view.MotionEvent
 import android.view.View
-import baseclasses.dataclasses.Point
-import baseclasses.dataclasses.Stroke
-import baseclasses.dataclasses.StrokeInteractor
+import com.example.ochev.baseclasses.dataclasses.Point
+import com.example.ochev.baseclasses.dataclasses.Stroke
 import java.io.File
 import java.io.FileOutputStream
 import java.io.IOException

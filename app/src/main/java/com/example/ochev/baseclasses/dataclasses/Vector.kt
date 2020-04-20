@@ -1,4 +1,4 @@
-package baseclasses.dataclasses
+package com.example.ochev.baseclasses.dataclasses
 
 import kotlin.math.sqrt
 

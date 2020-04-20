@@ -1,4 +1,4 @@
-package baseclasses.dataclasses
+package com.example.ochev.baseclasses.dataclasses
 
 data class Stroke(val points: MutableList<Point> = ArrayList()) {
     fun addPoint(pointToAdd: Point) {
