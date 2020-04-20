@@ -1,17 +1,17 @@
 package viewclasses
 
-import android.R.attr.data
 import android.annotation.SuppressLint
 import android.content.Context
 import android.util.AttributeSet
 import android.util.Log
-import android.util.Log.DEBUG
 import android.view.MotionEvent
 import android.view.View
 import baseclasses.dataclasses.Point
 import baseclasses.dataclasses.PointInteractor
 import baseclasses.dataclasses.Stroke
 import baseclasses.dataclasses.StrokeInteractor
+import java.io.File
+import java.io.FileOutputStream
 import java.io.IOException
 import java.io.OutputStreamWriter
 
@@ -81,12 +81,9 @@ class InputHandler(
             outputData.plus("\n")
         }
         try {
-            val outputStreamWriter = OutputStreamWriter(
-                context!!.openFileOutput(
-                    path,
-                    Context.MODE_APPEND
-                )
-            )
+            val file = File(context!!.getExternalFilesDir(null), path)
+            val fileOutput = FileOutputStream(file)
+            val outputStreamWriter = OutputStreamWriter(fileOutput)
             outputStreamWriter.write(outputData)
             outputStreamWriter.close()
         } catch (e: IOException) {

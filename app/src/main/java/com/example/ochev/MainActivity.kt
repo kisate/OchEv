@@ -31,7 +31,7 @@ class MainActivity : AppCompatActivity() {
         relativeId.addView(strokeInput, layoutParams)
 
         loadButtonId.setOnClickListener {
-            strokeInput.inputHandler.loadStrokes("config.txt")
+            strokeInput.inputHandler.loadStrokes("strokes.txt")
             DrawStrokeInteractor().clear(drawOutputId)
         }
 
