@@ -7,19 +7,12 @@ import android.util.Log
 import android.view.MotionEvent
 import android.view.View
 import baseclasses.dataclasses.Point
-import baseclasses.dataclasses.PointInteractor
 import baseclasses.dataclasses.Stroke
 import baseclasses.dataclasses.StrokeInteractor
 import java.io.File
 import java.io.FileOutputStream
 import java.io.IOException
 import java.io.OutputStreamWriter
-
-/*
-
-    Считывание касания.
-
- */
 
 class StrokeInputView(
     context: Context?,
@@ -33,7 +26,7 @@ class StrokeInputView(
 
     @SuppressLint("ClickableViewAccessibility")
     override fun onTouchEvent(event: MotionEvent): Boolean {
-        val point = Point(event.x.toInt(), event.y.toInt(), inputHandler.currentTime++)
+        val point = Point(event.x.toInt(), event.y.toInt())
         when (event.action) {
             MotionEvent.ACTION_DOWN -> {
                 inputHandler.touchStart(point)
@@ -63,12 +56,9 @@ class InputHandler(
 
     var strokes: MutableList<Stroke> = ArrayList()
 
-    var currentTime: Long = 0
-
     lateinit var lastPoint: Point
 
     fun clear() {
-        currentTime = 0
         strokes.clear()
     }
 
@@ -79,7 +69,7 @@ class InputHandler(
         strokes.forEach {
             it.points.forEach {
                 //Log.println(Log.DEBUG, "dbgFileString", it.toString())
-                outputData += " " + it.x.toString() + "," + it.y.toString() + "," + it.time.toString()
+                outputData += " " + it.x.toString() + "," + it.y.toString()
                 cnt++
             }
             outputData += "\n"
