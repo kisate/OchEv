@@ -1,14 +1,12 @@
 package baseclasses.dataclasses
 
+import java.lang.Float.min
 import kotlin.math.sqrt
 
-data class Point(var x: Int = 0, var y: Int = 0, val time: Long = 0) {}
+data class Point(var x: Int = 0, var y: Int = 0)
 
 
 class PointInteractor {
-    fun toString(point: Point): String {
-        return "x: ${point.x}\ny: ${point.y}\ntime: ${point.time}\n"
-    }
 
     fun getDistanceBetweenTwoPoints(firstPoint: Point, secondPoint: Point): Float {
         return sqrt(
@@ -77,11 +75,36 @@ class PointInteractor {
         pointC: Point,
         linePointA: Point,
         linePointB: Point
-    ) {
+    ): Float {
         // we have triange on 3 vertexes : A,B lies on line segment, C is alone
         val vectorInteractor = VectorInteractor()
-        val directionFromAToC = Vector(pointC.x - linePointA.x, pointC.y - linePointA.x)
-        val directionFromAToB = Vector(linePointB.x - linePointA.x, linePointB.y - linePointA.y)
+        val pointInteractor = PointInteractor()
 
+        val vectorFromAToC = Vector(pointC.x - linePointA.x, pointC.y - linePointA.x)
+        val vectorFromAToB = Vector(linePointB.x - linePointA.x, linePointB.y - linePointA.y)
+        val vectorFromBToA = Vector(linePointA.x - linePointB.x, linePointA.y - linePointB.y)
+        val vectorFromBToC = Vector(pointC.x - linePointB.x, pointC.y - linePointB.y)
+
+        val signOfCosAngleCAB =
+            if (vectorInteractor.scalarProduct(vectorFromAToB, vectorFromAToC) >= 0) 1 else -1
+        val signOfCosAngleCBA =
+            if (vectorInteractor.scalarProduct(vectorFromBToA, vectorFromBToC) >= 0) 1 else -1
+
+
+        if (signOfCosAngleCAB == 1 && signOfCosAngleCBA == 1) {
+
+            // the shortest path is perpendicular
+
+            val cosAngleCAB = vectorInteractor.scalarProduct(vectorFromAToB, vectorFromAToC) /
+                    (vectorInteractor.getLength(vectorFromAToB) *
+                            vectorInteractor.getLength(vectorFromAToC))
+            val sinAngleCAB = sqrt(1 - cosAngleCAB * cosAngleCAB)
+            return vectorInteractor.getLength(vectorFromAToC) * sinAngleCAB
+        }
+
+        return min(
+            pointInteractor.getDistanceBetweenTwoPoints(pointC, linePointA),
+            pointInteractor.getDistanceBetweenTwoPoints(pointC, linePointB)
+        )
     }
 }
