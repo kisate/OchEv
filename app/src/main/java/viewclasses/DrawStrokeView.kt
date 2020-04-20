@@ -17,9 +17,13 @@ class DrawStrokeView(
     attrs: AttributeSet? = null
 ) : View(context, attrs) {
 
-    val paint: Paint = Paint(Paint.ANTI_ALIAS_FLAG)
+    val paint: Paint = Paint()
 
     var path = Path()
+
+    init {
+        paint.setStyle(Paint.Style.STROKE)
+    }
 
     override fun onDraw(canvas: Canvas?) {
         canvas?.drawColor(Color.WHITE)
@@ -33,20 +37,18 @@ class DrawStrokeInteractor {
 
     fun set(drawStrokeView: DrawStrokeView, stroke: Stroke) {
         for (id in lastId..stroke.points.size - 1) {
-            drawStrokeView.path.addCircle(
+            drawStrokeView.path.lineTo(
                 stroke.points[id].x.toFloat(),
-                stroke.points[id].y.toFloat(),
-                1f,
-                Path.Direction.CW
+                stroke.points[id].y.toFloat()
             )
         }
+
         drawStrokeView.invalidate()
-        drawStrokeView.path
         lastId = stroke.points.size
     }
 
     fun clear(drawStrokeView: DrawStrokeView) {
-        drawStrokeView.path = Path()
+        drawStrokeView.path.reset()
         drawStrokeView.invalidate()
         lastId = 0
     }

@@ -75,14 +75,17 @@ class InputHandler(
     fun loadStrokes(path: String) {
         var outputData: String = ""
         Log.println(Log.DEBUG, "dbgFile", strokes.toString())
+        var cnt = 0
         strokes.forEach {
             it.points.forEach {
-                Log.println(Log.DEBUG, "dbgFileString", it.toString())
+                //Log.println(Log.DEBUG, "dbgFileString", it.toString())
                 outputData += " " + it.x.toString() + "," + it.y.toString() + "," + it.time.toString()
+                cnt++
             }
             outputData += "\n"
         }
         Log.println(Log.DEBUG, "dbgFileString", outputData)
+        Log.println(Log.DEBUG, "dbgCount", cnt.toString())
         try {
             val file = File(context!!.getExternalFilesDir(null), path)
             val fileOutput = FileOutputStream(file)
@@ -94,16 +97,10 @@ class InputHandler(
         }
     }
 
-    private var calls = 0
-
     private fun modifyLastStroke(point: Point) {
-        calls++
         val pointInteractor = PointInteractor()
         val interactor = StrokeInteractor()
-        pointInteractor.getPointsAroundLine(lastPoint, point, 3f).forEach {
-            interactor.addPoint(strokes.last(), it)
-            Log.println(Log.DEBUG, "dbg", calls.toString() + ": " + it.toString())
-        }
+        interactor.addPoint(strokes.last(), point)
         drawStrokeInteractor.set(drawStrokeView, strokes.last())
     }
 
@@ -119,6 +116,7 @@ class InputHandler(
     fun touchStart(point: Point) {
         strokes.add(Stroke())
         lastPoint = point
+        drawStrokeView.path.moveTo(point.x.toFloat(), point.y.toFloat())
         modifyLastStroke(point)
     }
 
