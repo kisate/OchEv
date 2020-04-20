@@ -33,10 +33,10 @@ data class Point(var x: Int = 0, var y: Int = 0) {
             // the shortest path is perpendicular
 
             val cosAngleCAB = vectorInteractor.scalarProduct(vectorFromAToB, vectorFromAToC) /
-                    (vectorInteractor.getLength(vectorFromAToB) *
-                            vectorInteractor.getLength(vectorFromAToC))
+                    (vectorFromAToB.length *
+                            vectorFromAToC.length)
             val sinAngleCAB = sqrt(1 - cosAngleCAB * cosAngleCAB)
-            return vectorInteractor.getLength(vectorFromAToC) * sinAngleCAB
+            return vectorFromAToC.length * sinAngleCAB
         }
 
         return min(
