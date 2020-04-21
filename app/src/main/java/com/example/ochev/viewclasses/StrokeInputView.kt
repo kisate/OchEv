@@ -60,13 +60,13 @@ class InputHandler(
         strokes.clear()
     }
 
-    fun loadStrokes(path: String) {
+    fun saveStrokes(path: String) {
         var outputData = ""
         Log.println(Log.DEBUG, "dbgFile", strokes.toString())
         var cnt = 0
         strokes.forEach {
             it.points.forEach {
-                //Log.println(Log.DEBUG, "dbgFileString", it.toString())
+                Log.println(Log.DEBUG, "dbgFileResString", it.toString())
                 outputData += " " + it.x.toString() + "," + it.y.toString()
                 cnt++
             }

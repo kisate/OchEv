@@ -30,7 +30,7 @@ class MainActivity : AppCompatActivity() {
         relativeId.addView(strokeInput, layoutParams)
 
         loadButtonId.setOnClickListener {
-            strokeInput.inputHandler.loadStrokes("strokes.txt")
+            strokeInput.inputHandler.saveStrokes("strokes.txt")
             strokeInput.inputHandler.clear()
             DrawStrokeInteractor().clear(drawOutputId)
         }
@@ -38,21 +38,6 @@ class MainActivity : AppCompatActivity() {
         clearButtonId.setOnClickListener {
             strokeInput.inputHandler.clear()
             DrawStrokeInteractor().clear(drawOutputId)
-        }
-
-        fileClearId.setOnClickListener{
-            try {
-                val outputStreamWriter = OutputStreamWriter(
-                    this.openFileOutput(
-                        "config.txt",
-                        Context.MODE_PRIVATE
-                    )
-                )
-                outputStreamWriter.write("")
-                outputStreamWriter.close()
-            } catch (e: IOException) {
-                Log.e("Exception", "File write failed: " + e.toString())
-            }
         }
 
     }
