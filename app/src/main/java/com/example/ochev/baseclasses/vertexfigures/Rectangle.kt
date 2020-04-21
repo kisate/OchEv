@@ -45,6 +45,13 @@ class Rectangle(
 
         return listOf(tillAB, tillBC, tillCD, tillAD).min()!!
     }
+
+    override fun checkIfPointIsInside(point: Point): Boolean {
+        return point.x <= rightDownCorner.x &&
+                point.x >= leftDownCorner.x &&
+                point.y <= leftUpCorner.y &&
+                point.y >= leftDownCorner.y
+    }
 }
 
 

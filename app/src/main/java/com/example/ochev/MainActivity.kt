@@ -5,6 +5,7 @@ import android.os.Bundle
 import android.util.Log
 import android.widget.RelativeLayout
 import androidx.appcompat.app.AppCompatActivity
+import com.example.ochev.ml.Classifier
 import kotlinx.android.synthetic.main.activity_main.*
 import com.example.ochev.viewclasses.DrawStrokeInteractor
 import com.example.ochev.viewclasses.StrokeInputView
@@ -13,7 +14,7 @@ import java.io.OutputStreamWriter
 
 class MainActivity : AppCompatActivity() {
 
-
+    private val classifier = Classifier(this)
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -30,7 +31,7 @@ class MainActivity : AppCompatActivity() {
         relativeId.addView(strokeInput, layoutParams)
 
         loadButtonId.setOnClickListener {
-            strokeInput.inputHandler.saveStrokes("strokes.txt")
+            strokeInput.inputHandler.loadStrokes("strokes.txt")
             strokeInput.inputHandler.clear()
             DrawStrokeInteractor().clear(drawOutputId)
         }
@@ -40,6 +41,24 @@ class MainActivity : AppCompatActivity() {
             DrawStrokeInteractor().clear(drawOutputId)
         }
 
+        fileClearId.setOnClickListener{
+            try {
+                val outputStreamWriter = OutputStreamWriter(
+                    this.openFileOutput(
+                        "config.txt",
+                        Context.MODE_PRIVATE
+                    )
+                )
+                outputStreamWriter.write("")
+                outputStreamWriter.close()
+            } catch (e: IOException) {
+                Log.e("Exception", "File write failed: " + e.toString())
+            }
+        }
+
+        classifier
+            .initialize()
+            .addOnFailureListener {e -> Log.e("MainActivity", "Error to setting up classifier", e)}
     }
 
 
