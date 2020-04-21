@@ -5,9 +5,6 @@ import android.util.Log
 import com.example.ochev.baseclasses.dataclasses.Stroke
 import com.google.android.gms.tasks.Task
 import com.google.android.gms.tasks.Tasks.call
-import ml.dmlc.xgboost4j.java.Booster
-import ml.dmlc.xgboost4j.java.DMatrix
-import ml.dmlc.xgboost4j.java.XGBoost
 import java.io.File
 import java.io.FileInputStream
 import java.lang.IllegalStateException
@@ -16,7 +13,7 @@ import java.util.concurrent.ExecutorService
 import java.util.concurrent.Executors
 
 class Classifier(private val context: Context){
-    private var booster : Booster? = null
+//    private var booster : Booster? = null
     var isInitialized = false
         private set
 
@@ -25,7 +22,7 @@ class Classifier(private val context: Context){
     fun initialize() : Task<Void> {
         return call(
             executorService,
-            Callable {
+            Callable<Void> {
                 initializeBooster()
                 null
             }
@@ -35,7 +32,7 @@ class Classifier(private val context: Context){
     private fun initializeBooster() {
         val file = File(context.getExternalFilesDir(null), MODEL_FILE)
         val inputStream = FileInputStream(file)
-        booster = XGBoost.loadModel(inputStream)
+//        booster = XGBoost.loadModel(inputStream)
     }
 
     fun classify (stroke : Stroke){
@@ -47,11 +44,11 @@ class Classifier(private val context: Context){
         val elapsedTime: Long
         val startTime: Long = System.nanoTime()
 
-        val mat = DMatrix(stroke.toFloatArray(), 1, POINTS_IN_STROKE)
-        val predicted = booster?.predict(mat)
+//        val mat = DMatrix(stroke.toFloatArray(), 1, POINTS_IN_STROKE)
+//        val predicted = booster?.predict(mat)
         elapsedTime = (System.nanoTime() - startTime) / 1000000
         Log.d(TAG, "Inference time = " + elapsedTime + "ms")
-        Log.d(TAG, "Prediction results : $predicted")
+//        Log.d(TAG, "Prediction results : $predicted")
 //        return predicted?.get(0)?.get(0)!!
     }
 
