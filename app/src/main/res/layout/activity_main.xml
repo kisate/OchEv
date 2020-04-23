@@ -9,12 +9,13 @@
         android:id="@+id/relativeId"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
-        <com.example.ochev.viewclasses.DrawStrokeView
-            android:id="@+id/drawStrokeId"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent" />
+
         <com.example.ochev.viewclasses.DrawGraphView
             android:id="@+id/drawGraphId"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" />
+        <com.example.ochev.viewclasses.DrawStrokeView
+            android:id="@+id/drawStrokeId"
             android:layout_width="match_parent"
             android:layout_height="match_parent" />
 

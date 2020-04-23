@@ -73,23 +73,23 @@ class InputHandler(
         // Дать stroke на разбор
 
         // Принять фигуру
-        lateinit var figure: Figure
+        var figure: Figure? = null
 
         if (cnt == 0) {
             figure = Triangle(pointA = Point(200, 200), pointB = Point(200, 700), pointC = Point(500, 300))
         }
-        if (cnt == 1) {
+        else if (cnt == 1) {
             figure = Circle(center = Point(600, 600), radius = 100)
         }
-        if (cnt == 2) {
+        else if (cnt == 2) {
             figure = Rectangle(leftDownCorner = Point(200, 800), rightUpCorner = Point(500, 700))
         }
-        if (cnt == 3) {
+        else if (cnt == 3) {
             figure = Line(beginFigure = drawGraphView.graph.vertexes[0], endFigure = drawGraphView.graph.vertexes[1])
         }
         stroke.points.clear()
         drawStrokeInteractor.set(drawStrokeView, stroke)
-        drawGraphInteractor.add(drawGraphView, figure)
+        figure?.let { drawGraphInteractor.add(drawGraphView, it) }
         cnt++
     }
 
