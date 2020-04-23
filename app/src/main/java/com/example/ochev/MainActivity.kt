@@ -1,26 +1,23 @@
 package com.example.ochev
 
-import android.content.Context
 import android.os.Bundle
 import android.util.Log
 import android.widget.RelativeLayout
 import androidx.appcompat.app.AppCompatActivity
 import com.example.ochev.ml.Classifier
 import kotlinx.android.synthetic.main.activity_main.*
-import com.example.ochev.viewclasses.DrawStrokeInteractor
 import com.example.ochev.viewclasses.StrokeInputView
-import java.io.IOException
-import java.io.OutputStreamWriter
 
 class MainActivity : AppCompatActivity() {
 
     private val classifier = Classifier(this)
+    private lateinit var strokeInput: StrokeInputView
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        val strokeInput = StrokeInputView(this, null, drawOutputId)
+        strokeInput = StrokeInputView(this, null, drawStrokeId, drawGraphId)
         strokeInput.alpha = 0F
 
         val layoutParams =  RelativeLayout.LayoutParams(
@@ -29,17 +26,6 @@ class MainActivity : AppCompatActivity() {
         )
 
         relativeId.addView(strokeInput, layoutParams)
-
-        loadButtonId.setOnClickListener {
-            strokeInput.inputHandler.saveStrokes("strokes.txt")
-            strokeInput.inputHandler.clear()
-            DrawStrokeInteractor().clear(drawOutputId)
-        }
-
-        clearButtonId.setOnClickListener {
-            strokeInput.inputHandler.clear()
-            DrawStrokeInteractor().clear(drawOutputId)
-        }
 
         classifier
             .initialize()

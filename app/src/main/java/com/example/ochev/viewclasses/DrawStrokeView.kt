@@ -1,17 +1,16 @@
 package com.example.ochev.viewclasses
 
 import android.content.Context
-import android.graphics.Canvas
-import android.graphics.Color
-import android.graphics.Paint
-import android.graphics.Path
+import android.graphics.*
 import android.util.AttributeSet
 import android.view.View
 import com.example.ochev.baseclasses.dataclasses.Stroke
 
+
 class DrawStrokeView(
     context: Context?,
     attrs: AttributeSet? = null
+
 ) : View(context, attrs) {
 
     private val paint: Paint = Paint()
@@ -24,30 +23,29 @@ class DrawStrokeView(
     }
 
     override fun onDraw(canvas: Canvas?) {
-        canvas?.drawColor(Color.WHITE)
         canvas?.drawPath(path, paint)
     }
 }
 
 class DrawStrokeInteractor {
 
-    private var lastId = 0
-
-    fun add(drawStrokeView: DrawStrokeView, stroke: Stroke) {
-        for (id in lastId until stroke.points.size) {
-            drawStrokeView.path.lineTo(
-                stroke.points[id].x.toFloat(),
-                stroke.points[id].y.toFloat()
-            )
+    fun set(drawStrokeView: DrawStrokeView, stroke: Stroke) {
+        clear(drawStrokeView)
+        if (stroke.points.size > 0) {
+            drawStrokeView.path.moveTo(stroke.points[0].x.toFloat(), stroke.points[0].y.toFloat())
+            for (id in 1 until stroke.points.size) {
+                drawStrokeView.path.lineTo(
+                    stroke.points[id].x.toFloat(),
+                    stroke.points[id].y.toFloat()
+                )
+            }
         }
         drawStrokeView.invalidate()
-        lastId = stroke.points.size
     }
 
     fun clear(drawStrokeView: DrawStrokeView) {
         drawStrokeView.path.reset()
         drawStrokeView.invalidate()
-        lastId = 0
     }
 
 }
