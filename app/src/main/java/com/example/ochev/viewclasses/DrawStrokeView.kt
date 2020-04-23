@@ -20,6 +20,7 @@ class DrawStrokeView(
     init {
         paint.style = Paint.Style.STROKE
         paint.strokeWidth = 10f
+        paint.setPathEffect(CornerPathEffect(50f))
     }
 
     override fun onDraw(canvas: Canvas?) {
