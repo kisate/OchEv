@@ -40,8 +40,8 @@ data class Point(var x: Int = 0, var y: Int = 0) {
         }
 
         return min(
-            pointInteractor.getDistanceBetweenTwoPoints(this, linePointA),
-            pointInteractor.getDistanceBetweenTwoPoints(this, linePointB)
+            pointInteractor.distance(this, linePointA),
+            pointInteractor.distance(this, linePointB)
         )
     }
 
@@ -50,7 +50,7 @@ data class Point(var x: Int = 0, var y: Int = 0) {
 
 class PointInteractor {
 
-    fun getDistanceBetweenTwoPoints(firstPoint: Point, secondPoint: Point): Float {
+    fun distance(firstPoint: Point, secondPoint: Point): Float {
         return sqrt(
             (firstPoint.x - secondPoint.x) * (firstPoint.x - secondPoint.x) +
                     (firstPoint.y - secondPoint.y) * (firstPoint.y - secondPoint.y).toFloat()
