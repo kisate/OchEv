@@ -1,10 +1,7 @@
 package com.example.ochev.viewclasses
 
 import android.content.Context
-import android.graphics.Canvas
-import android.graphics.Color
-import android.graphics.Paint
-import android.graphics.Path
+import android.graphics.*
 import android.util.AttributeSet
 import android.view.View
 import com.example.ochev.baseclasses.dataclasses.Stroke
@@ -21,6 +18,7 @@ class DrawStrokeView(
     init {
         paint.style = Paint.Style.STROKE
         paint.strokeWidth = 10f
+        paint.setPathEffect(CornerPathEffect(50f))
     }
 
     override fun onDraw(canvas: Canvas?) {

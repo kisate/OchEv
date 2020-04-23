@@ -18,7 +18,7 @@
         android:layout_alignParentBottom="true"
         android:text="Удалить" />
 
-    <RelativeLayout
+    <FrameLayout
         android:layout_width="match_parent"
         android:id="@+id/relativeId"
         android:layout_height="match_parent">
@@ -29,6 +29,6 @@
 
 
 
-    </RelativeLayout>
+    </FrameLayout>
 
 </RelativeLayout>
