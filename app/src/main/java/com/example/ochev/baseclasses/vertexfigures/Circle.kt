@@ -6,11 +6,9 @@ import com.example.ochev.baseclasses.dataclasses.*
 import kotlin.math.abs
 
 class Circle(
-    figureText: MutableList<Char> = ArrayList(),
-    texturePath: String = "",
     override val center: Point = Point(),
     val radius: Int = 0
-) : VertexFigure(figureText, texturePath) {
+) : VertexFigure() {
     override fun getDistanceToPoint(point: Point): Float {
         val pointInteractor = PointInteractor()
         return abs(

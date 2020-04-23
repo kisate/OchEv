@@ -8,12 +8,10 @@ import com.example.ochev.baseclasses.dataclasses.Stroke
 import com.example.ochev.baseclasses.dataclasses.Vector
 
 class Triangle(
-    figureText: MutableList<Char> = ArrayList(),
-    texturePath: String = "",
     var pointA: Point = Point(),
     var pointB: Point = Point(),
     var pointC: Point = Point()
-) : VertexFigure(figureText, texturePath) {
+) : VertexFigure() {
     override val center: Point
         get() = Point(
             x = (pointA.x + pointB.x + pointC.x) / 3,

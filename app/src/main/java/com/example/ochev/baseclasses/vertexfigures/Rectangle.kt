@@ -9,11 +9,9 @@ import com.example.ochev.baseclasses.dataclasses.Vector
 
 
 class Rectangle(
-    figureText: MutableList<Char> = ArrayList(),
-    texturePath: String = "",
     val leftDownCorner: Point = Point(),
     val rightUpCorner: Point = Point()
-) : VertexFigure(figureText, texturePath) {
+) : VertexFigure() {
     val leftUpCorner: Point
         get() = Point(leftDownCorner.x, rightUpCorner.y)
     val rightDownCorner: Point
