@@ -74,13 +74,13 @@ fun VertexFigureNormalizer.normalizeTriangle(strokes: MutableList<Stroke>): Tria
     val mostDistancedPoint =
         strokes.maxBy { stroke ->
             stroke.points.maxBy { point ->
-                pointInteractor.getDistanceBetweenTwoPoints(point, pointWithMaxY)
+                pointInteractor.distance(point, pointWithMaxY)
             }!!.let { point ->
-                pointInteractor.getDistanceBetweenTwoPoints(point, pointWithMaxY)
+                pointInteractor.distance(point, pointWithMaxY)
             }
         }!!.let { stroke ->
             stroke.points.maxBy { point ->
-                pointInteractor.getDistanceBetweenTwoPoints(point, pointWithMaxY)
+                pointInteractor.distance(point, pointWithMaxY)
             }!!
         }
 
@@ -89,16 +89,16 @@ fun VertexFigureNormalizer.normalizeTriangle(strokes: MutableList<Stroke>): Tria
 
     val thirdPoint = strokes.maxBy { stroke ->
         stroke.points.maxBy { point ->
-            pointInteractor.getDistanceBetweenTwoPoints(point, pointWithMaxY) +
-                    pointInteractor.getDistanceBetweenTwoPoints(point, mostDistancedPoint)
+            pointInteractor.distance(point, pointWithMaxY) +
+                    pointInteractor.distance(point, mostDistancedPoint)
         }!!.let { point ->
-            pointInteractor.getDistanceBetweenTwoPoints(point, pointWithMaxY) +
-                    pointInteractor.getDistanceBetweenTwoPoints(point, mostDistancedPoint)
+            pointInteractor.distance(point, pointWithMaxY) +
+                    pointInteractor.distance(point, mostDistancedPoint)
         }
     }!!.let { stroke ->
         stroke.points.maxBy { point ->
-            pointInteractor.getDistanceBetweenTwoPoints(point, pointWithMaxY) +
-                    pointInteractor.getDistanceBetweenTwoPoints(point, mostDistancedPoint)
+            pointInteractor.distance(point, pointWithMaxY) +
+                    pointInteractor.distance(point, mostDistancedPoint)
         }!!
     }
 

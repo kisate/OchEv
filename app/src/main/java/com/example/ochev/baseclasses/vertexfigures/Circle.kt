@@ -14,7 +14,7 @@ class Circle(
     override fun getDistanceToPoint(point: Point): Float {
         val pointInteractor = PointInteractor()
         return abs(
-            pointInteractor.getDistanceBetweenTwoPoints(center, point)
+            pointInteractor.distance(center, point)
                     - radius
         )
     }
@@ -26,7 +26,7 @@ class Circle(
 
     override fun checkIfPointIsInside(point: Point): Boolean {
         val pointInteractor = PointInteractor()
-        return pointInteractor.getDistanceBetweenTwoPoints(point, center) <= radius
+        return pointInteractor.distance(point, center) <= radius
     }
 }
 
