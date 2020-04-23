@@ -5,30 +5,21 @@
     android:layout_height="match_parent"
     tools:context=".MainActivity">
 
-    <Button
-        android:id="@+id/loadButtonId"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Сохранить" />
-
-    <Button
-        android:id="@+id/clearButtonId"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:text="Удалить" />
-
-    <RelativeLayout
-        android:layout_width="match_parent"
+    <FrameLayout
         android:id="@+id/relativeId"
+        android:layout_width="match_parent"
         android:layout_height="match_parent">
         <com.example.ochev.viewclasses.DrawStrokeView
-            android:id="@+id/drawOutputId"
+            android:id="@+id/drawStrokeId"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" />
+        <com.example.ochev.viewclasses.DrawGraphView
+            android:id="@+id/drawGraphId"
             android:layout_width="match_parent"
             android:layout_height="match_parent" />
 
 
 
-    </RelativeLayout>
+    </FrameLayout>
 
 </RelativeLayout>

@@ -3,107 +3,80 @@ package com.example.ochev.viewclasses
 import android.annotation.SuppressLint
 import android.content.Context
 import android.util.AttributeSet
-import android.util.Log
 import android.view.MotionEvent
 import android.view.View
+import com.example.ochev.baseclasses.Figure
 import com.example.ochev.baseclasses.dataclasses.Point
+import com.example.ochev.baseclasses.dataclasses.PointInteractor
 import com.example.ochev.baseclasses.dataclasses.Stroke
-import java.io.File
-import java.io.FileOutputStream
-import java.io.IOException
-import java.io.OutputStreamWriter
+import com.example.ochev.baseclasses.vertexfigures.Circle
 
+@SuppressLint("ViewConstructor")
 class StrokeInputView(
     context: Context?,
     attrs: AttributeSet? = null,
-    drawStrokeView: DrawStrokeView
+    drawStrokeView: DrawStrokeView,
+    drawFiguresView: DrawGraphView
 ) :
     View(context, attrs) {
 
     // public <-> ML
-    val inputHandler = InputHandler(context, drawStrokeView)
+    val inputHandler = InputHandler(drawStrokeView, drawFiguresView)
 
     @SuppressLint("ClickableViewAccessibility")
     override fun onTouchEvent(event: MotionEvent): Boolean {
         val point = Point(event.x.toInt(), event.y.toInt())
+
         when (event.action) {
             MotionEvent.ACTION_DOWN -> {
                 inputHandler.touchStart(point)
-                invalidate()
             }
             MotionEvent.ACTION_MOVE -> {
                 inputHandler.touchMove(point)
-                invalidate()
             }
             MotionEvent.ACTION_UP -> {
-                inputHandler.touchUp(point)
-                invalidate()
+                inputHandler.touchUp()
             }
         }
+
         return true
     }
 
 }
 
 class InputHandler(
-    private val context: Context?,
-    private val drawStrokeView: DrawStrokeView
+    private val drawStrokeView: DrawStrokeView,
+    private val drawGraphView: DrawGraphView
 ) {
 
     private var drawStrokeInteractor = DrawStrokeInteractor()
+    private var drawGraphInteractor = DrawGraphInteractor()
 
-    private var strokes: MutableList<Stroke> = ArrayList()
+    private var stroke: Stroke = Stroke()
 
     private lateinit var lastPoint: Point
 
-    fun clear() {
-        strokes.clear()
-    }
-
-    fun saveStrokes(path: String) {
-        var outputData = ""
-        Log.println(Log.DEBUG, "dbgFile", strokes.toString())
-        var cnt = 0
-        strokes.forEach {
-            it.points.forEach {
-                Log.println(Log.DEBUG, "dbgFileResString", it.toString())
-                outputData += " " + it.x.toString() + "," + it.y.toString()
-                cnt++
-            }
-            outputData += "\n"
-        }
-        Log.println(Log.DEBUG, "dbgFileString", outputData)
-        Log.println(Log.DEBUG, "dbgCount", cnt.toString())
-        try {
-            val file = File(context!!.getExternalFilesDir(null), path)
-            val fileOutput = FileOutputStream(file)
-            val outputStreamWriter = OutputStreamWriter(fileOutput)
-            outputStreamWriter.write(outputData)
-            outputStreamWriter.close()
-        } catch (e: IOException) {
-            Log.e("Exception", "File write failed: " + e.toString())
-        }
-    }
-
-    private fun modifyLastStroke(point: Point) {
-        strokes.last().addPoint(point)
-        drawStrokeInteractor.add(drawStrokeView, strokes.last())
-    }
-
     fun touchMove(point: Point) {
-        modifyLastStroke(point)
+        if (PointInteractor().distance(point, lastPoint) <= 20f) return
+        stroke.addPoint(point)
+        drawStrokeInteractor.set(drawStrokeView, stroke)
         lastPoint = point
     }
 
-    fun touchUp(point: Point) {
-        modifyLastStroke(point)
+    fun touchUp() {
+        // Дать stroke на разбор
+
+        // Принять фигуру
+        val figure: Figure = Circle(center = Point(500, 500), radius = 50)
+        stroke.points.clear()
+        drawStrokeInteractor.set(drawStrokeView, stroke)
+        drawGraphInteractor.add(drawGraphView, figure)
     }
 
     fun touchStart(point: Point) {
-        strokes.add(Stroke())
         lastPoint = point
-        drawStrokeView.path.moveTo(point.x.toFloat(), point.y.toFloat())
-        modifyLastStroke(point)
+        stroke.addPoint(point)
+        drawStrokeInteractor.set(drawStrokeView, stroke)
     }
 
 
