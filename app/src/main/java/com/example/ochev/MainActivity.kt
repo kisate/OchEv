@@ -27,6 +27,8 @@ class MainActivity : AppCompatActivity() {
 
         relativeId.addView(strokeInput, layoutParams)
 
+
+
         classifier
             .initialize()
             .addOnFailureListener {e -> Log.e("MainActivity", "Error to setting up classifier", e)}
