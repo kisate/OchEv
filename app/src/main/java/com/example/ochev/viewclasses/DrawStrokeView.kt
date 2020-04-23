@@ -23,7 +23,6 @@ class DrawStrokeView(
     }
 
     override fun onDraw(canvas: Canvas?) {
-        canvas?.drawColor(Color.WHITE)
         canvas?.drawPath(path, paint)
     }
 }
