@@ -9,7 +9,11 @@ import com.example.ochev.baseclasses.Figure
 import com.example.ochev.baseclasses.dataclasses.Point
 import com.example.ochev.baseclasses.dataclasses.PointInteractor
 import com.example.ochev.baseclasses.dataclasses.Stroke
+import com.example.ochev.baseclasses.edgefigures.Line
 import com.example.ochev.baseclasses.vertexfigures.Circle
+import com.example.ochev.baseclasses.vertexfigures.Rectangle
+import com.example.ochev.baseclasses.vertexfigures.Triangle
+import kotlin.random.Random
 
 @SuppressLint("ViewConstructor")
 class StrokeInputView(
@@ -63,14 +67,30 @@ class InputHandler(
         lastPoint = point
     }
 
+    var cnt = 0
+
     fun touchUp() {
         // Дать stroke на разбор
 
         // Принять фигуру
-        val figure: Figure = Circle(center = Point(500, 500), radius = 50)
+        lateinit var figure: Figure
+
+        if (cnt == 0) {
+            figure = Triangle(pointA = Point(200, 200), pointB = Point(200, 700), pointC = Point(500, 300))
+        }
+        if (cnt == 1) {
+            figure = Circle(center = Point(600, 600), radius = 100)
+        }
+        if (cnt == 2) {
+            figure = Rectangle(leftDownCorner = Point(200, 800), rightUpCorner = Point(500, 700))
+        }
+        if (cnt == 3) {
+            figure = Line(beginFigure = drawGraphView.graph.vertexes[0], endFigure = drawGraphView.graph.vertexes[1])
+        }
         stroke.points.clear()
         drawStrokeInteractor.set(drawStrokeView, stroke)
         drawGraphInteractor.add(drawGraphView, figure)
+        cnt++
     }
 
     fun touchStart(point: Point) {
