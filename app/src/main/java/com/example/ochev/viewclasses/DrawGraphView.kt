@@ -1,48 +1,131 @@
 package com.example.ochev.viewclasses
 
 import android.content.Context
-import android.graphics.Canvas
-import android.graphics.Color
-import android.graphics.Paint
+import android.graphics.*
 import android.util.AttributeSet
 import android.view.View
+import com.example.ochev.baseclasses.EdgeFigure
 import com.example.ochev.baseclasses.Figure
 import com.example.ochev.baseclasses.VertexFigure
 import com.example.ochev.baseclasses.dataclasses.Graph
 import com.example.ochev.baseclasses.edgefigures.Line
 import com.example.ochev.baseclasses.vertexfigures.Circle
+import com.example.ochev.baseclasses.vertexfigures.Rectangle
+import com.example.ochev.baseclasses.vertexfigures.Triangle
 
-class DrawGraphView (
+class DrawGraphView(
     context: Context?,
     attrs: AttributeSet? = null
 
 ) : View(context, attrs) {
     val graph = Graph()
-    val drawGraphInteractor = DrawGraphInteractor()
+    private val drawGraphInteractor = DrawGraphInteractor()
 
     override fun onDraw(canvas: Canvas?) {
         for (vertex in graph.vertexes) {
-            drawGraphInteractor.draw(vertex as Circle, canvas)
+            drawGraphInteractor.draw(vertex, canvas)
+        }
+        for (edge in graph.edges) {
+            drawGraphInteractor.draw(edge, canvas)
         }
     }
 }
 
-class DrawGraphInteractor {
-    fun add(drawGraphView: DrawGraphView, figure: Figure) {
-        when (figure) {
-            is Circle -> addCircle(drawGraphView, figure)
-        }
-    }
+class CircleDrawer {
+    private val paint = Paint()
 
-    private fun addCircle(drawGraphView: DrawGraphView, figure: Circle) {
-        drawGraphView.graph.addVertex(figure)
-        drawGraphView.invalidate()
+    init {
+        paint.style = Paint.Style.STROKE
+        paint.strokeWidth = 10f
+        paint.color = Color.YELLOW
     }
 
     fun draw(vertex: Circle, canvas: Canvas?) {
-        if (canvas != null) {
-            canvas.drawCircle(vertex.center.x.toFloat(), vertex.center.y.toFloat(), vertex.radius.toFloat(), Paint())
+        canvas?.drawCircle(
+            vertex.center.x.toFloat(),
+            vertex.center.y.toFloat(),
+            vertex.radius.toFloat(),
+            paint
+        )
+    }
+}
+
+class RectangleDrawer {
+    private val paint = Paint()
+
+    fun draw(vertex: Rectangle, canvas: Canvas?) {
+        canvas?.drawRect(vertex.toRect(), paint)
+    }
+}
+
+class TriangleDrawer {
+    private val paint = Paint()
+
+    init {
+        paint.style = Paint.Style.STROKE
+        paint.strokeWidth = 10f
+        paint.color = Color.RED
+    }
+
+    fun draw(vertex: Triangle, canvas: Canvas?) {
+        val path = Path()
+        path.moveTo(vertex.pointA.x.toFloat(), vertex.pointA.y.toFloat())
+        path.lineTo(vertex.pointB.x.toFloat(), vertex.pointB.y.toFloat())
+        path.lineTo(vertex.pointC.x.toFloat(), vertex.pointC.y.toFloat())
+        path.lineTo(vertex.pointA.x.toFloat(), vertex.pointA.y.toFloat())
+        canvas?.drawPath(path, paint)
+    }
+}
+
+class LineDrawer {
+    private val paint = Paint()
+
+    init {
+        paint.style = Paint.Style.STROKE
+        paint.strokeWidth = 10f
+    }
+
+    fun draw(edge: Line, canvas: Canvas?) {
+        val path = Path()
+        val from = edge.beginFigure.center
+        val to = edge.endFigure.center
+        path.moveTo(from.x.toFloat(), from.y.toFloat())
+        path.lineTo(to.x.toFloat(), to.y.toFloat())
+        canvas?.drawPath(path, paint)
+    }
+
+
+
+}
+
+class DrawGraphInteractor {
+    private val circleDrawer = CircleDrawer()
+    private val rectangleDrawer = RectangleDrawer()
+    private val triangleDrawer = TriangleDrawer()
+    private val lineDrawer = LineDrawer()
+
+    fun add(drawGraphView: DrawGraphView, figure: Figure) {
+        when (figure) {
+            is VertexFigure -> drawGraphView.graph.addVertex(figure)
+            is EdgeFigure -> drawGraphView.graph.addEdge(figure)
+        }
+        drawGraphView.invalidate()
+    }
+
+    fun draw(vertex: VertexFigure, canvas: Canvas?) {
+        when (vertex) {
+            is Circle -> circleDrawer.draw(vertex, canvas)
+            is Rectangle -> rectangleDrawer.draw(vertex, canvas)
+            is Triangle -> triangleDrawer.draw(vertex, canvas)
         }
     }
+
+    fun draw(edge: EdgeFigure, canvas: Canvas?) {
+        when (edge) {
+            is Line -> lineDrawer.draw(edge, canvas)
+        }
+    }
+
+
 }
 

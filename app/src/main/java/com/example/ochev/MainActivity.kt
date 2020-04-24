@@ -6,7 +6,6 @@ import android.widget.RelativeLayout
 import androidx.appcompat.app.AppCompatActivity
 import com.example.ochev.ml.Classifier
 import kotlinx.android.synthetic.main.activity_main.*
-import com.example.ochev.viewclasses.DrawStrokeInteractor
 import com.example.ochev.viewclasses.StrokeInputView
 
 class MainActivity : AppCompatActivity() {
@@ -18,7 +17,7 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        strokeInput = StrokeInputView(this, null, drawOutputId)
+        strokeInput = StrokeInputView(this, null, drawStrokeId, drawGraphId)
         strokeInput.alpha = 0F
 
         val layoutParams =  RelativeLayout.LayoutParams(
@@ -28,16 +27,7 @@ class MainActivity : AppCompatActivity() {
 
         relativeId.addView(strokeInput, layoutParams)
 
-        loadButtonId.setOnClickListener {
-            strokeInput.inputHandler.saveStrokes("strokes.txt")
-            strokeInput.inputHandler.clear()
-            DrawStrokeInteractor().clear(drawOutputId)
-        }
 
-        clearButtonId.setOnClickListener {
-            strokeInput.inputHandler.clear()
-            DrawStrokeInteractor().clear(drawOutputId)
-        }
 
         classifier
             .initialize()

@@ -1,5 +1,6 @@
 package com.example.ochev.baseclasses.vertexfigures
 
+import android.graphics.Rect
 import com.example.ochev.baseclasses.VertexFigure
 import com.example.ochev.baseclasses.VertexFigureNormalizer
 import com.example.ochev.baseclasses.dataclasses.Point
@@ -49,6 +50,10 @@ class Rectangle(
                 point.x >= leftDownCorner.x &&
                 point.y <= leftUpCorner.y &&
                 point.y >= leftDownCorner.y
+    }
+
+    fun toRect(): Rect {
+        return Rect(leftUpCorner.x, leftUpCorner.y, rightDownCorner.x, leftDownCorner.y)
     }
 }
 
