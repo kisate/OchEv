@@ -5,6 +5,7 @@ import android.content.Context
 import android.util.AttributeSet
 import android.view.MotionEvent
 import android.view.View
+import com.example.ochev.baseclasses.FigureNormalizer
 import com.example.ochev.baseclasses.dataclasses.Point
 import com.example.ochev.baseclasses.dataclasses.PointInteractor
 import com.example.ochev.baseclasses.dataclasses.Stroke
@@ -43,6 +44,7 @@ class InputHandler(
     private val drawGraphView: DrawGraphView
 ) {
 
+    private val figureNormalizer = FigureNormalizer()
     private var drawStrokeInteractor = drawStrokeView.drawStrokeInteractor
     private var stroke: Stroke = Stroke()
     private lateinit var lastPoint: Point
@@ -55,9 +57,10 @@ class InputHandler(
     }
 
     fun touchUp() {
-        stroke               //  to
-        drawGraphView.graph  //  give
 
+        figureNormalizer.normaliseStrokes( mutableListOf(stroke), drawGraphView.graph)
+
+        drawGraphView.invalidate()
         stroke.points.clear()
         drawStrokeInteractor.clear(drawStrokeView)
     }

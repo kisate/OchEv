@@ -19,7 +19,7 @@ class DrawGraphView(
 ) : View(context, attrs) {
 
     val graph = Graph()
-    private val drawGraphInteractor = DrawGraphInteractor()
+    val drawGraphInteractor = DrawGraphInteractor()
 
     override fun onDraw(canvas: Canvas?) {
         for (vertex in graph.vertexes) {
