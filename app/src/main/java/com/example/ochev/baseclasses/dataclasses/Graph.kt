@@ -25,13 +25,10 @@ data class Graph(
         val normalizer = FigureNormalizer()
         val newFigure = normalizer.normaliseStrokes(strokes, this)
 
-        return if (newFigure == null) null
-        else {
-            when (newFigure) {
-                is VertexFigure -> addVertex(newFigure)
-                is EdgeFigure -> addEdge(newFigure)
-            }
-            newFigure
+        when (newFigure) {
+            is VertexFigure -> addVertex(newFigure)
+            is EdgeFigure -> addEdge(newFigure)
         }
+        return newFigure
     }
 }

@@ -31,7 +31,7 @@ class VertexFigureNormalizer {
 
         val penalty = getPenalty(strokes, bestFigure)
 
-        return if (penalty >= 20) null
+        return if (penalty >= 200) null
         else bestFigure
     }
 
