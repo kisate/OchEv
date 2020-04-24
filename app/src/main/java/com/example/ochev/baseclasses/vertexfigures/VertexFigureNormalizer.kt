@@ -27,12 +27,11 @@ class VertexFigureNormalizer {
     }
 
     fun normalizeByPatterns(strokes: MutableList<Stroke>): VertexFigure? {
-        val totalyPoints = strokes.sumBy { it.points.size }
         val bestFigure = getMostLikeFigure(strokes)
 
         val penalty = getPenalty(strokes, bestFigure)
 
-        return if (penalty >= 20) null
+        return if (penalty >= 200) null
         else bestFigure
     }
 
