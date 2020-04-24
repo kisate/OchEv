@@ -58,6 +58,7 @@ class InputHandler(
 
     fun touchUp() {
 
+
         figureNormalizer.normaliseStrokes( mutableListOf(stroke), drawGraphView.graph)
 
         drawGraphView.invalidate()
