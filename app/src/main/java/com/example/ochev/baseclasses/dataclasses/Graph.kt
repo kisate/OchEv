@@ -18,4 +18,6 @@ data class Graph(
     fun getClosestToPointVertexFigureOrNull(point: Point): VertexFigure? {
         return vertexes.minBy { it.getDistanceToPoint(point) }
     }
+
+
 }
