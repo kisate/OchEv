@@ -2,6 +2,7 @@ package com.example.ochev.baseclasses.vertexfigures
 
 import com.example.ochev.baseclasses.VertexFigure
 import com.example.ochev.baseclasses.dataclasses.Stroke
+import com.example.ochev.baseclasses.dataclasses.StrokeInteractor
 
 class VertexFigureNormalizer {
     fun getPenalty(strokes: MutableList<Stroke>, vertexFigure: VertexFigure): Float {
@@ -31,7 +32,10 @@ class VertexFigureNormalizer {
 
         val penalty = getPenalty(strokes, bestFigure)
 
-        return if (penalty >= 200) null
+        val strokeInteractor = StrokeInteractor()
+
+        val (maxX, maxY, minX, minY) = strokeInteractor.getStrokesRestrictions(strokes)
+        return if (penalty >= (maxX - minX + maxY - minY) / 20) null
         else bestFigure
     }
 
