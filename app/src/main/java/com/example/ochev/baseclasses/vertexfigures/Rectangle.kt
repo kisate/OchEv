@@ -2,7 +2,6 @@ package com.example.ochev.baseclasses.vertexfigures
 
 import android.graphics.Rect
 import com.example.ochev.baseclasses.VertexFigure
-import com.example.ochev.baseclasses.VertexFigureNormalizer
 import com.example.ochev.baseclasses.dataclasses.Point
 import com.example.ochev.baseclasses.dataclasses.Stroke
 import com.example.ochev.baseclasses.dataclasses.StrokeInteractor
