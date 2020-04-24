@@ -1,7 +1,6 @@
 package com.example.ochev.baseclasses.vertexfigures
 
 import com.example.ochev.baseclasses.VertexFigure
-import com.example.ochev.baseclasses.VertexFigureNormalizer
 import com.example.ochev.baseclasses.dataclasses.*
 import kotlin.math.abs
 

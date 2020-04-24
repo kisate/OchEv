@@ -1,6 +1,8 @@
 package com.example.ochev.baseclasses.dataclasses
 
 import com.example.ochev.baseclasses.EdgeFigure
+import com.example.ochev.baseclasses.Figure
+import com.example.ochev.baseclasses.FigureNormalizer
 import com.example.ochev.baseclasses.VertexFigure
 
 data class Graph(
@@ -19,5 +21,17 @@ data class Graph(
         return vertexes.minBy { it.getDistanceToPoint(point) }
     }
 
+    fun modifyByStrokes(strokes: MutableList<Stroke>): Figure? {
+        val normalizer = FigureNormalizer()
+        val newFigure = normalizer.normaliseStrokes(strokes, this)
 
+        return if (newFigure == null) null
+        else {
+            when (newFigure) {
+                is VertexFigure -> addVertex(newFigure)
+                is EdgeFigure -> addEdge(newFigure)
+            }
+            newFigure
+        }
+    }
 }
