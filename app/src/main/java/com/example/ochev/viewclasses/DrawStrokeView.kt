@@ -10,12 +10,18 @@ import com.example.ochev.baseclasses.dataclasses.Stroke
 class DrawStrokeView(
     context: Context?,
     attrs: AttributeSet? = null
-
 ) : View(context, attrs) {
 
-    private val paint: Paint = Paint()
+    val path = Path()
+    val drawStrokeInteractor = DrawStrokeInteractor()
 
-    var path = Path()
+    override fun onDraw(canvas: Canvas?) {
+        drawStrokeInteractor.draw(path, canvas)
+    }
+}
+
+class PathDrawer {
+    private val paint = Paint()
 
     init {
         paint.style = Paint.Style.STROKE
@@ -23,12 +29,14 @@ class DrawStrokeView(
         paint.setPathEffect(CornerPathEffect(50f))
     }
 
-    override fun onDraw(canvas: Canvas?) {
+    fun draw(path: Path, canvas: Canvas?) {
         canvas?.drawPath(path, paint)
     }
 }
 
 class DrawStrokeInteractor {
+
+    private val pathDrawer = PathDrawer()
 
     fun set(drawStrokeView: DrawStrokeView, stroke: Stroke) {
         clear(drawStrokeView)
@@ -47,6 +55,10 @@ class DrawStrokeInteractor {
     fun clear(drawStrokeView: DrawStrokeView) {
         drawStrokeView.path.reset()
         drawStrokeView.invalidate()
+    }
+
+    fun draw(path: Path, canvas: Canvas?) {
+        pathDrawer.draw(path, canvas)
     }
 
 }

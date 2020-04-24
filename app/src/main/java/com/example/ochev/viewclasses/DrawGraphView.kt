@@ -16,8 +16,8 @@ import com.example.ochev.baseclasses.vertexfigures.Triangle
 class DrawGraphView(
     context: Context?,
     attrs: AttributeSet? = null
-
 ) : View(context, attrs) {
+
     val graph = Graph()
     private val drawGraphInteractor = DrawGraphInteractor()
 
@@ -93,9 +93,6 @@ class LineDrawer {
         path.lineTo(to.x.toFloat(), to.y.toFloat())
         canvas?.drawPath(path, paint)
     }
-
-
-
 }
 
 class DrawGraphInteractor {
@@ -103,14 +100,6 @@ class DrawGraphInteractor {
     private val rectangleDrawer = RectangleDrawer()
     private val triangleDrawer = TriangleDrawer()
     private val lineDrawer = LineDrawer()
-
-    fun add(drawGraphView: DrawGraphView, figure: Figure) {
-        when (figure) {
-            is VertexFigure -> drawGraphView.graph.addVertex(figure)
-            is EdgeFigure -> drawGraphView.graph.addEdge(figure)
-        }
-        drawGraphView.invalidate()
-    }
 
     fun draw(vertex: VertexFigure, canvas: Canvas?) {
         when (vertex) {
