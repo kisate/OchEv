@@ -9,6 +9,8 @@ import com.example.ochev.baseclasses.FigureNormalizer
 import com.example.ochev.baseclasses.dataclasses.Point
 import com.example.ochev.baseclasses.dataclasses.PointInteractor
 import com.example.ochev.baseclasses.dataclasses.Stroke
+import com.example.ochev.baseclasses.vertexfigures.Circle
+import java.util.*
 
 @SuppressLint("ViewConstructor")
 class StrokeInputView(
@@ -43,8 +45,6 @@ class InputHandler(
     private val drawStrokeView: DrawStrokeView,
     private val drawGraphView: DrawGraphView
 ) {
-
-    private val figureNormalizer = FigureNormalizer()
     private var drawStrokeInteractor = drawStrokeView.drawStrokeInteractor
     private var stroke: Stroke = Stroke()
     private lateinit var lastPoint: Point
@@ -58,8 +58,9 @@ class InputHandler(
 
     fun touchUp() {
 
+        drawGraphView.graph.modifyByStrokes(mutableListOf(stroke))
 
-        figureNormalizer.normaliseStrokes( mutableListOf(stroke), drawGraphView.graph)
+        //drawGraphView.graph.addVertex(Circle(Point(Random().nextInt(500)+50, Random().nextInt(500)+50), Random().nextInt(20)+10))
 
         drawGraphView.invalidate()
         stroke.points.clear()
