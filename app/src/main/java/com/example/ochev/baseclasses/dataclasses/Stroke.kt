@@ -41,4 +41,13 @@ class StrokeInteractor {
         return listOf(maxX, maxY, minX, minY)
     }
 
+    fun joinListOfStrokes(strokes: MutableList<Stroke>): Stroke {
+        val points: HashMap<Point, Boolean> = HashMap()
+        strokes.forEach { stroke ->
+            stroke.points.forEach { point ->
+                points[point] = true
+            }
+        }
+        return Stroke(points.keys.toMutableList())
+    }
 }
