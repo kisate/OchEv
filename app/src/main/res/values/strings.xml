@@ -1,3 +1,4 @@
 <resources>
     <string name="app_name">OchEv</string>
+    <string name="clearButtonName">Clear</string>
 </resources>

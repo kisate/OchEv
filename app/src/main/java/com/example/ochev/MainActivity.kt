@@ -4,7 +4,9 @@ import android.os.Bundle
 import android.util.Log
 import android.widget.RelativeLayout
 import androidx.appcompat.app.AppCompatActivity
+import com.example.ochev.baseclasses.dataclasses.StrokeInteractor
 import com.example.ochev.ml.Classifier
+import com.example.ochev.viewclasses.InputHandler
 import kotlinx.android.synthetic.main.activity_main.*
 import com.example.ochev.viewclasses.StrokeInputView
 
@@ -27,6 +29,9 @@ class MainActivity : AppCompatActivity() {
 
         relativeId.addView(strokeInput, layoutParams)
 
+        clearButtonId.setOnClickListener {
+            strokeInput.clear()
+        }
 
 
         classifier
