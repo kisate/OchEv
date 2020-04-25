@@ -1,5 +1,6 @@
 package com.example.ochev.baseclasses.vertexfigures
 
+import com.example.ochev.algorithms.convexhull.ConvexHullMaker
 import com.example.ochev.baseclasses.VertexFigure
 import com.example.ochev.baseclasses.dataclasses.Point
 import com.example.ochev.baseclasses.dataclasses.Stroke
@@ -60,6 +61,65 @@ class Triangle(
 }
 
 fun VertexFigureNormalizer.normalizeTriangle(strokes: MutableList<Stroke>): Triangle {
-    TODO()
+    val convexHullMaker = ConvexHullMaker()
+    val convexHull = convexHullMaker.getConvexHull(strokes)
 
+    val getSquare = { A: Point, B: Point, C: Point ->
+        val vectorAB = Vector(A, B)
+        val vectorAC = Vector(A, C)
+        (vectorAB.x * vectorAC.y - vectorAB.y * vectorAC.x) / 2f
+    }
+
+    val result = Triangle()
+    var currentSquare = 0f
+    val totalyPoints = convexHull.points.size
+
+
+    // n^2 algorithm with two pointers ti find a triangle with the biggest square
+
+    for (firstPointIndex in convexHull.points.indices) {
+        var bestChoiceIndex = (firstPointIndex + 2) % totalyPoints
+
+        val firstPoint = convexHull.points[firstPointIndex]
+
+        for (shiftFromFirstPoint in 1..totalyPoints) {
+            val secondPoint =
+                convexHull.points[(firstPointIndex + shiftFromFirstPoint) % totalyPoints]
+            var bestPoint: Point
+
+            while (true) {
+                val possibleBestPoint = convexHull.points[(bestChoiceIndex + 1) % totalyPoints]
+                bestPoint = convexHull.points[bestChoiceIndex]
+
+                if (getSquare(
+                        possibleBestPoint,
+                        firstPoint,
+                        secondPoint
+                    ) -
+                    getSquare(
+                        bestPoint,
+                        firstPoint,
+                        secondPoint
+                    ) >= 0.0001f
+                ) {
+                    bestChoiceIndex++
+                } else break
+            }
+
+            val newSquare = getSquare(
+                bestPoint,
+                firstPoint,
+                secondPoint
+            )
+
+            if (newSquare > currentSquare) {
+                currentSquare = newSquare
+                result.pointA = bestPoint
+                result.pointB = firstPoint
+                result.pointC = secondPoint
+            }
+        }
+    }
+
+    return result
 }
