@@ -21,6 +21,7 @@ class VertexFigureNormalizer {
 
         results.add(vertexFigureNormalizer.normalizeFigure(strokes, Vertexes.TRIANGLE))
 
+
         // now lets get figure with the smallest average distance to the strokes
 
         return results.minBy { vertexFigure ->
