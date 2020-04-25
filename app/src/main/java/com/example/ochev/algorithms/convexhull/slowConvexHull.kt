@@ -5,6 +5,7 @@ import com.example.ochev.baseclasses.dataclasses.Stroke
 import com.example.ochev.baseclasses.dataclasses.StrokeInteractor
 import com.example.ochev.baseclasses.dataclasses.Vector
 
+
 fun ConvexHullMaker.slowConvexHull(strokes: MutableList<Stroke>): Stroke {
     val strokeInteractor = StrokeInteractor()
     val uniquePoints = strokeInteractor.joinListOfStrokes(strokes)
@@ -13,14 +14,23 @@ fun ConvexHullMaker.slowConvexHull(strokes: MutableList<Stroke>): Stroke {
     val usedPoints: HashMap<Point, Boolean> = HashMap()
     var currentPoint = uniquePoints.points.maxBy { it.y }!!
 
+    class ComparatorByPolarAngle(val mainPoint: Point) : Comparator<Point> {
+        override fun compare(A: Point?, B: Point?): Int {
+            if (A == null && B == null) return 0
+            if (A == null) return -1
+            if (B == null) return 1
+            val vectorAB = Vector(mainPoint, A)
+            val vectorAC = Vector(mainPoint, B)
+            return vectorAB.x * vectorAC.y - vectorAB.y * vectorAC.x
+        }
+    }
+
     while (!usedPoints.containsKey(currentPoint)) {
         result.addPoint(currentPoint)
         usedPoints[currentPoint] = true
 
-        currentPoint = uniquePoints.points.minBy { point ->
-            val vector = Vector(currentPoint, point)
-            vector.x / (vector.y + 0.00001)
-        }!!
+        uniquePoints.points.sortWith(ComparatorByPolarAngle(currentPoint))
+        currentPoint = uniquePoints.points.first()
     }
 
     return result
