@@ -15,11 +15,9 @@ class VertexFigureNormalizer {
     fun getMostLikeFigure(strokes: MutableList<Stroke>): VertexFigure {
         val vertexFigureNormalizer = VertexFigureNormalizer()
         val results: MutableList<VertexFigure> = ArrayList()
-        /*for (type in Vertexes.values()) {
+        for (type in Vertexes.values()) {
             results.add(vertexFigureNormalizer.normalizeFigure(strokes, type))
-        }*/
-
-        results.add(vertexFigureNormalizer.normalizeFigure(strokes, Vertexes.TRIANGLE))
+        }
 
         // now lets get figure with the smallest average distance to the strokes
 

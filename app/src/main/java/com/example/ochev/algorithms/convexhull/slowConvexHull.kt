@@ -17,8 +17,8 @@ fun ConvexHullMaker.slowConvexHull(strokes: MutableList<Stroke>): Stroke {
     class ComparatorByPolarAngle(val mainPoint: Point) : Comparator<Point> {
         override fun compare(A: Point?, B: Point?): Int {
             if (A == null && B == null) return 0
-            if (A == null) return -1
-            if (B == null) return 1
+            if (A == null || A == mainPoint) return -1
+            if (B == null || B == mainPoint) return 1
             val vectorAB = Vector(mainPoint, A)
             val vectorAC = Vector(mainPoint, B)
             return vectorAB.x * vectorAC.y - vectorAB.y * vectorAC.x
@@ -30,7 +30,7 @@ fun ConvexHullMaker.slowConvexHull(strokes: MutableList<Stroke>): Stroke {
         usedPoints[currentPoint] = true
 
         uniquePoints.points.sortWith(ComparatorByPolarAngle(currentPoint))
-        currentPoint = uniquePoints.points.first()
+        currentPoint = uniquePoints.points.last()
     }
 
     return result

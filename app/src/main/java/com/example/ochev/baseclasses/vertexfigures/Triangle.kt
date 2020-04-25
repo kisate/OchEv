@@ -1,9 +1,11 @@
 package com.example.ochev.baseclasses.vertexfigures
 
+import com.example.ochev.algorithms.convexhull.ConvexHullMaker
 import com.example.ochev.baseclasses.VertexFigure
 import com.example.ochev.baseclasses.dataclasses.Point
 import com.example.ochev.baseclasses.dataclasses.Stroke
 import com.example.ochev.baseclasses.dataclasses.Vector
+import kotlin.math.abs
 
 class Triangle(
     var pointA: Point = Point(),
@@ -58,7 +60,7 @@ class Triangle(
 }
 
 fun VertexFigureNormalizer.normalizeTriangle(strokes: MutableList<Stroke>): Triangle {
-    /*val convexHullMaker = ConvexHullMaker()
+    val convexHullMaker = ConvexHullMaker()
     val convexHull = convexHullMaker.getConvexHull(strokes)
 
     val getSquare = { A: Point, B: Point, C: Point ->
@@ -119,6 +121,5 @@ fun VertexFigureNormalizer.normalizeTriangle(strokes: MutableList<Stroke>): Tria
         }
     }
 
-    return result*/
-    return Triangle(Point(100, 100), Point(200, 200), Point(200, 100))
+    return result
 }
