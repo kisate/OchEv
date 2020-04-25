@@ -55,8 +55,6 @@ class Triangle(
         return cordAlongVectorB >= 0 &&
                 cordAlongVectorC >= 0 &&
                 cordAlongVectorB + cordAlongVectorC <= 1
-
-
     }
 }
 
@@ -70,19 +68,20 @@ fun VertexFigureNormalizer.normalizeTriangle(strokes: MutableList<Stroke>): Tria
         (vectorAB.x * vectorAC.y - vectorAB.y * vectorAC.x) / 2f
     }
 
+
     val result = Triangle()
     var currentSquare = 0f
     val totalyPoints = convexHull.points.size
 
 
-    // n^2 algorithm with two pointers ti find a triangle with the biggest square
+    // n^2 algorithm with two pointers to find a triangle with the biggest square
 
     for (firstPointIndex in convexHull.points.indices) {
         var bestChoiceIndex = (firstPointIndex + 2) % totalyPoints
 
         val firstPoint = convexHull.points[firstPointIndex]
 
-        for (shiftFromFirstPoint in 1..totalyPoints) {
+        for (shiftFromFirstPoint in 1 until totalyPoints) {
             val secondPoint =
                 convexHull.points[(firstPointIndex + shiftFromFirstPoint) % totalyPoints]
             var bestPoint: Point
@@ -102,7 +101,7 @@ fun VertexFigureNormalizer.normalizeTriangle(strokes: MutableList<Stroke>): Tria
                         secondPoint
                     ) >= 0.0001f
                 ) {
-                    bestChoiceIndex++
+                    bestChoiceIndex = (bestChoiceIndex + 1) % totalyPoints
                 } else break
             }
 

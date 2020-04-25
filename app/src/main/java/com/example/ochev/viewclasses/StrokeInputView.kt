@@ -10,8 +10,6 @@ import com.example.ochev.baseclasses.dataclasses.Point
 import com.example.ochev.baseclasses.dataclasses.PointInteractor
 import com.example.ochev.baseclasses.dataclasses.Stroke
 import com.example.ochev.baseclasses.timeinteractors.Throttle
-import com.example.ochev.baseclasses.vertexfigures.Circle
-import java.util.*
 
 @SuppressLint("ViewConstructor")
 class StrokeInputView(
@@ -62,11 +60,11 @@ class InputHandler(
 
     fun touchUp() {
 
-        //drawGraphView.graph.modifyByStrokes(mutableListOf(stroke))
+        drawGraphView.graph.modifyByStrokes(mutableListOf(stroke))
 
         Log.println(Log.DEBUG, "dbgCountOfPointInStroke", stroke.points.size.toString())
 
-        drawGraphView.graph.addVertex(Circle(Point(Random().nextInt(500)+50, Random().nextInt(500)+50), Random().nextInt(20)+10))
+        //drawGraphView.graph.addVertex(Circle(Point(Random().nextInt(500)+50, Random().nextInt(500)+50), Random().nextInt(20)+10))
 
         drawGraphView.invalidate()
         stroke.points.clear()
