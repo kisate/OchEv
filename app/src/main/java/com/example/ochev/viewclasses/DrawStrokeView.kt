@@ -26,7 +26,6 @@ class PathDrawer {
     init {
         paint.style = Paint.Style.STROKE
         paint.strokeWidth = 10f
-        paint.setPathEffect(CornerPathEffect(50f))
     }
 
     fun draw(path: Path, canvas: Canvas?) {

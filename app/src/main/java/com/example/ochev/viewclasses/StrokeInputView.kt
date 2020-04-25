@@ -5,10 +5,10 @@ import android.content.Context
 import android.util.AttributeSet
 import android.view.MotionEvent
 import android.view.View
-import com.example.ochev.baseclasses.FigureNormalizer
 import com.example.ochev.baseclasses.dataclasses.Point
 import com.example.ochev.baseclasses.dataclasses.PointInteractor
 import com.example.ochev.baseclasses.dataclasses.Stroke
+import com.example.ochev.baseclasses.timeinteractors.Throttle
 import com.example.ochev.baseclasses.vertexfigures.Circle
 import java.util.*
 
@@ -22,10 +22,12 @@ class StrokeInputView(
     View(context, attrs) {
 
     private val inputHandler = InputHandler(drawStrokeView, drawFiguresView)
+    private val throttle = Throttle(20)
 
     @SuppressLint("ClickableViewAccessibility")
     override fun onTouchEvent(event: MotionEvent): Boolean {
-        val point = Point(event.x.toInt(), event.y.toInt())
+        var point: Point? = null
+        throttle.attempt(Runnable { point = Point(event.x.toInt(), event.y.toInt()) })
         when (event.action) {
             MotionEvent.ACTION_DOWN -> {
                 inputHandler.touchStart(point)
@@ -49,8 +51,9 @@ class InputHandler(
     private var stroke: Stroke = Stroke()
     private lateinit var lastPoint: Point
 
-    fun touchMove(point: Point) {
-        if (PointInteractor().distance(point, lastPoint) <= 20f) return
+    fun touchMove(point: Point?) {
+        if (point == null) return
+        if (PointInteractor().distance(point, lastPoint) <= 40f) return
         stroke.addPoint(point)
         drawStrokeInteractor.set(drawStrokeView, stroke)
         lastPoint = point
@@ -58,16 +61,17 @@ class InputHandler(
 
     fun touchUp() {
 
-        drawGraphView.graph.modifyByStrokes(mutableListOf(stroke))
+        //drawGraphView.graph.modifyByStrokes(mutableListOf(stroke))
 
-        //drawGraphView.graph.addVertex(Circle(Point(Random().nextInt(500)+50, Random().nextInt(500)+50), Random().nextInt(20)+10))
+        drawGraphView.graph.addVertex(Circle(Point(Random().nextInt(500)+50, Random().nextInt(500)+50), Random().nextInt(20)+10))
 
         drawGraphView.invalidate()
         stroke.points.clear()
         drawStrokeInteractor.clear(drawStrokeView)
     }
 
-    fun touchStart(point: Point) {
+    fun touchStart(point: Point?) {
+        if (point == null) return
         lastPoint = point
         stroke.addPoint(point)
         drawStrokeInteractor.set(drawStrokeView, stroke)
