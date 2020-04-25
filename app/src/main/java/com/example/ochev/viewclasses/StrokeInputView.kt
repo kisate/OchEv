@@ -3,6 +3,7 @@ package com.example.ochev.viewclasses
 import android.annotation.SuppressLint
 import android.content.Context
 import android.util.AttributeSet
+import android.util.Log
 import android.view.MotionEvent
 import android.view.View
 import com.example.ochev.baseclasses.dataclasses.Point
@@ -22,7 +23,7 @@ class StrokeInputView(
     View(context, attrs) {
 
     private val inputHandler = InputHandler(drawStrokeView, drawFiguresView)
-    private val throttle = Throttle(20)
+    private val throttle = Throttle(2)
 
     @SuppressLint("ClickableViewAccessibility")
     override fun onTouchEvent(event: MotionEvent): Boolean {
@@ -53,7 +54,7 @@ class InputHandler(
 
     fun touchMove(point: Point?) {
         if (point == null) return
-        if (PointInteractor().distance(point, lastPoint) <= 40f) return
+        if (PointInteractor().distance(point, lastPoint) <= 10f) return
         stroke.addPoint(point)
         drawStrokeInteractor.set(drawStrokeView, stroke)
         lastPoint = point
@@ -62,6 +63,8 @@ class InputHandler(
     fun touchUp() {
 
         //drawGraphView.graph.modifyByStrokes(mutableListOf(stroke))
+
+        Log.println(Log.DEBUG, "dbgCountOfPointInStroke", stroke.points.size.toString())
 
         drawGraphView.graph.addVertex(Circle(Point(Random().nextInt(500)+50, Random().nextInt(500)+50), Random().nextInt(20)+10))
 
