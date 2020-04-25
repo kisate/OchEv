@@ -23,12 +23,13 @@ data class Graph(
 
     fun modifyByStrokes(strokes: MutableList<Stroke>): Figure? {
         val normalizer = FigureNormalizer()
-        val newFigure = normalizer.normaliseStrokes(strokes, this)
+        val newFigure = normalizer.normaliseStrokes(strokes, this) ?: return null
 
         when (newFigure) {
             is VertexFigure -> addVertex(newFigure)
             is EdgeFigure -> addEdge(newFigure)
         }
         return newFigure
+        return null
     }
 }

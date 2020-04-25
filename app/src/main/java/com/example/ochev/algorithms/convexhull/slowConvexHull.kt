@@ -15,12 +15,11 @@ fun ConvexHullMaker.slowConvexHull(strokes: MutableList<Stroke>): Stroke {
 
     while (!usedPoints.containsKey(currentPoint)) {
         result.addPoint(currentPoint)
-        uniquePoints.points.remove(currentPoint)
         usedPoints[currentPoint] = true
 
         currentPoint = uniquePoints.points.minBy { point ->
             val vector = Vector(currentPoint, point)
-            vector.x / vector.y.toFloat()
+            vector.x / (vector.y + 0.00001)
         }!!
     }
 
