@@ -21,6 +21,12 @@ class DrawGraphView(
     val graph = Graph()
     val drawGraphInteractor = DrawGraphInteractor()
 
+    fun clear(){
+        graph.vertexes.clear()
+        graph.edges.clear()
+        invalidate()
+    }
+
     override fun onDraw(canvas: Canvas?) {
         for (vertex in graph.vertexes) {
             drawGraphInteractor.draw(vertex, canvas)

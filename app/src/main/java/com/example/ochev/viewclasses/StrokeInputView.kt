@@ -83,10 +83,7 @@ class InputHandler(
     }
 
     fun clear() {
-        stroke.points.clear()
-        drawGraphView.graph.vertexes.clear()
-        drawGraphView.graph.edges.clear()
-        drawGraphView.invalidate()
+        drawGraphView.clear()
         drawStrokeInteractor.clear(drawStrokeView)
     }
 }
