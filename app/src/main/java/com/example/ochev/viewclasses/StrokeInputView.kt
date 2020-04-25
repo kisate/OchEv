@@ -23,6 +23,10 @@ class StrokeInputView(
     private val inputHandler = InputHandler(drawStrokeView, drawFiguresView)
     private val throttle = Throttle(2)
 
+    fun clear(){
+        inputHandler.clear()
+    }
+
     @SuppressLint("ClickableViewAccessibility")
     override fun onTouchEvent(event: MotionEvent): Boolean {
         var point: Point? = null
@@ -76,5 +80,13 @@ class InputHandler(
         lastPoint = point
         stroke.addPoint(point)
         drawStrokeInteractor.set(drawStrokeView, stroke)
+    }
+
+    fun clear() {
+        stroke.points.clear()
+        drawGraphView.graph.vertexes.clear()
+        drawGraphView.graph.edges.clear()
+        drawGraphView.invalidate()
+        drawStrokeInteractor.clear(drawStrokeView)
     }
 }

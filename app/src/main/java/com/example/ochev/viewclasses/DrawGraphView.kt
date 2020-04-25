@@ -35,7 +35,7 @@ class CircleDrawer {
     private val paint = Paint()
 
     init {
-        paint.style = Paint.Style.FILL_AND_STROKE
+        paint.style = Paint.Style.STROKE
         paint.strokeWidth = 10f
         paint.color = Color.GREEN
     }
@@ -54,7 +54,7 @@ class RectangleDrawer {
     private val paint = Paint()
 
     init {
-        paint.style = Paint.Style.FILL_AND_STROKE
+        paint.style = Paint.Style.STROKE
         paint.strokeWidth = 10f
         paint.color = Color.BLUE
     }
@@ -68,7 +68,7 @@ class TriangleDrawer {
     private val paint = Paint()
 
     init {
-        paint.style = Paint.Style.FILL_AND_STROKE
+        paint.style = Paint.Style.STROKE
         paint.strokeWidth = 10f
         paint.color = Color.RED
     }
@@ -79,6 +79,7 @@ class TriangleDrawer {
         path.lineTo(vertex.pointB.x.toFloat(), vertex.pointB.y.toFloat())
         path.lineTo(vertex.pointC.x.toFloat(), vertex.pointC.y.toFloat())
         path.lineTo(vertex.pointA.x.toFloat(), vertex.pointA.y.toFloat())
+        path.lineTo(vertex.pointB.x.toFloat(), vertex.pointB.y.toFloat())
         canvas?.drawPath(path, paint)
     }
 }
