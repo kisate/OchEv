@@ -1,6 +1,5 @@
 package com.example.ochev.baseclasses.vertexfigures
 
-import com.example.ochev.algorithms.convexhull.ConvexHullMaker
 import com.example.ochev.baseclasses.VertexFigure
 import com.example.ochev.baseclasses.dataclasses.Point
 import com.example.ochev.baseclasses.dataclasses.Stroke
@@ -59,35 +58,35 @@ class Triangle(
 }
 
 fun VertexFigureNormalizer.normalizeTriangle(strokes: MutableList<Stroke>): Triangle {
-    val convexHullMaker = ConvexHullMaker()
+    /*val convexHullMaker = ConvexHullMaker()
     val convexHull = convexHullMaker.getConvexHull(strokes)
 
     val getSquare = { A: Point, B: Point, C: Point ->
         val vectorAB = Vector(A, B)
         val vectorAC = Vector(A, C)
-        (vectorAB.x * vectorAC.y - vectorAB.y * vectorAC.x) / 2f
+        abs((vectorAB.x * vectorAC.y - vectorAB.y * vectorAC.x) / 2f)
     }
 
 
     val result = Triangle()
     var currentSquare = 0f
-    val totalyPoints = convexHull.points.size
+    val totallyPoints = convexHull.points.size
 
 
     // n^2 algorithm with two pointers to find a triangle with the biggest square
 
     for (firstPointIndex in convexHull.points.indices) {
-        var bestChoiceIndex = (firstPointIndex + 2) % totalyPoints
+        var bestChoiceIndex = (firstPointIndex + 2) % totallyPoints
 
         val firstPoint = convexHull.points[firstPointIndex]
 
-        for (shiftFromFirstPoint in 1 until totalyPoints) {
+        for (shiftFromFirstPoint in 1 until totallyPoints) {
             val secondPoint =
-                convexHull.points[(firstPointIndex + shiftFromFirstPoint) % totalyPoints]
+                convexHull.points[(firstPointIndex + shiftFromFirstPoint) % totallyPoints]
             var bestPoint: Point
 
             while (true) {
-                val possibleBestPoint = convexHull.points[(bestChoiceIndex + 1) % totalyPoints]
+                val possibleBestPoint = convexHull.points[(bestChoiceIndex + 1) % totallyPoints]
                 bestPoint = convexHull.points[bestChoiceIndex]
 
                 if (getSquare(
@@ -101,7 +100,7 @@ fun VertexFigureNormalizer.normalizeTriangle(strokes: MutableList<Stroke>): Tria
                         secondPoint
                     ) >= 0.0001f
                 ) {
-                    bestChoiceIndex = (bestChoiceIndex + 1) % totalyPoints
+                    bestChoiceIndex = (bestChoiceIndex + 1) % totallyPoints
                 } else break
             }
 
@@ -120,5 +119,6 @@ fun VertexFigureNormalizer.normalizeTriangle(strokes: MutableList<Stroke>): Tria
         }
     }
 
-    return result
+    return result*/
+    return Triangle(Point(100, 100), Point(200, 200), Point(200, 100))
 }
