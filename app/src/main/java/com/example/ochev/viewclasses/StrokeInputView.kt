@@ -10,17 +10,19 @@ import com.example.ochev.baseclasses.dataclasses.Point
 import com.example.ochev.baseclasses.dataclasses.PointInteractor
 import com.example.ochev.baseclasses.dataclasses.Stroke
 import com.example.ochev.baseclasses.timeinteractors.Throttle
+import com.example.ochev.ml.Classifier
 
 @SuppressLint("ViewConstructor")
 class StrokeInputView(
     context: Context?,
     attrs: AttributeSet? = null,
     drawStrokeView: DrawStrokeView,
-    drawFiguresView: DrawGraphView
+    drawFiguresView: DrawGraphView,
+    classifier: Classifier
 ) :
     View(context, attrs) {
 
-    private val inputHandler = InputHandler(drawStrokeView, drawFiguresView)
+    private val inputHandler = InputHandler(drawStrokeView, drawFiguresView, classifier)
     private val throttle = Throttle(2)
 
     fun clear(){
@@ -48,7 +50,8 @@ class StrokeInputView(
 
 class InputHandler(
     private val drawStrokeView: DrawStrokeView,
-    private val drawGraphView: DrawGraphView
+    private val drawGraphView: DrawGraphView,
+    private val classifier: Classifier
 ) {
     private var drawStrokeInteractor = drawStrokeView.drawStrokeInteractor
     private var stroke: Stroke = Stroke()
@@ -73,6 +76,7 @@ class InputHandler(
         drawGraphView.invalidate()
         stroke.points.clear()
         drawStrokeInteractor.clear(drawStrokeView)
+        classifier.classify(stroke)
     }
 
     fun touchStart(point: Point?) {

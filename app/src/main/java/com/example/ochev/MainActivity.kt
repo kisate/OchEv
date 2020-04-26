@@ -19,7 +19,7 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        strokeInput = StrokeInputView(this, null, drawStrokeId, drawGraphId)
+        strokeInput = StrokeInputView(this, null, drawStrokeId, drawGraphId , classifier)
         strokeInput.alpha = 0F
 
         val layoutParams =  RelativeLayout.LayoutParams(
