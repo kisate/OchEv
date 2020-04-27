@@ -6,6 +6,7 @@ import android.util.AttributeSet
 import android.util.Log
 import android.view.MotionEvent
 import android.view.View
+import android.widget.Toast
 import com.example.ochev.MainActivity
 import com.example.ochev.baseclasses.Figure
 import com.example.ochev.baseclasses.dataclasses.InfrormationForNormalizer
@@ -89,7 +90,10 @@ class InputHandler(
                 drawGraphView.graph.modifyByStrokes(information) })
             .addOnSuccessListener { figure ->
                 Log.d("Modify", "Classified as $figure")
-                drawGraphView.invalidate()}
+                drawGraphView.invalidate()
+                if (figure == null)
+                    Toast.makeText(drawGraphView.context, "Could not recognize", Toast.LENGTH_SHORT).show()
+            }
             .addOnFailureListener {e -> Log.e("Modify", "Error modifying", e)}
 
         Log.println(Log.DEBUG, "dbgCountOfPointInStroke", stroke.points.size.toString())
