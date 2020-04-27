@@ -28,11 +28,11 @@ class DrawGraphView(
     }
 
     override fun onDraw(canvas: Canvas?) {
-        for (vertex in graph.vertexes) {
-            drawGraphInteractor.draw(vertex, canvas)
-        }
         for (edge in graph.edges) {
             drawGraphInteractor.draw(edge, canvas)
+        }
+        for (vertex in graph.vertexes) {
+            drawGraphInteractor.draw(vertex, canvas)
         }
     }
 }
