@@ -1,6 +1,5 @@
 package com.example.ochev.baseclasses.vertexfigures
 
-import com.example.ochev.baseclasses.Constants
 import com.example.ochev.baseclasses.VertexFigure
 import com.example.ochev.baseclasses.dataclasses.InfrormationForNormalizer
 import com.example.ochev.baseclasses.dataclasses.PointInteractor
@@ -19,8 +18,10 @@ class NormalizerByML {
         val classifier = information.classifier
         val stroke = strokeInteractor.joinListOfStrokes(information.strokes)
 
+        val (maxX, maxY, minX, minY) = strokeInteractor.getStrokesRestrictions(mutableListOf(stroke))
+
         if (pointInteractor.distance(stroke.points.first(), stroke.points.last()) >=
-            Constants.MAX_DISTANCE_BETWEEN_STROKE_ENDS.value
+            (maxX - minX + maxY - minY) / 4
         ) {
             return null
         }
