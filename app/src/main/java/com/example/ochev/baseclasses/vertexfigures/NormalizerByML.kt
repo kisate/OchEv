@@ -13,6 +13,15 @@ class NormalizerByML {
         val bitmap = Utils.loadBitmapFromView(information.view!!)
         val classifier = information.classifier!!
         val stroke = strokeInteractor.joinListOfStrokes(information.strokes!!)
+
+        if (bitmap != null && classifier.isInitialized) {
+            val type = classifier.classify(bitmap, stroke)
+            val vertexFigureBuilder = VertexFigureBuilder()
+
+            return if (type == null) null
+            else vertexFigureBuilder.buildFigure(mutableListOf(stroke), type)
+        }
+
         return null
     }
 
