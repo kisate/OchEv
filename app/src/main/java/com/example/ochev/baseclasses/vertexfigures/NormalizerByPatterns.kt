@@ -13,7 +13,7 @@ class NormalizerByPatterns {
     }
 
     fun getMostLikeFigure(strokes: MutableList<Stroke>): VertexFigure {
-        val vertexFigureNormalizer = VertexFigureNormalizer()
+        val vertexFigureNormalizer = VertexFigureBuilder()
         val results: MutableList<VertexFigure> = ArrayList()
         for (type in Vertexes.values()) {
             results.add(vertexFigureNormalizer.buildFigure(strokes, type))
