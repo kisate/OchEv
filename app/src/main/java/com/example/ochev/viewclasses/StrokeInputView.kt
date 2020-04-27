@@ -87,8 +87,11 @@ class InputHandler(
 
         Tasks.call(
             MainActivity.Executor.executorService,
-            Callable<Figure?> { drawGraphView.graph.modifyByStrokes(information) })
-            .addOnSuccessListener { figure -> Log.d("Modify", "Classified as $figure") }
+            Callable<Figure?> {
+                drawGraphView.graph.modifyByStrokes(information) })
+            .addOnSuccessListener { figure ->
+                Log.d("Modify", "Classified as $figure")
+                drawGraphView.invalidate()}
             .addOnFailureListener {e -> Log.e("Modify", "Error modifying", e)}
 
 //        drawGraphView.graph.modifyByStrokes(information)
@@ -96,7 +99,6 @@ class InputHandler(
         Log.println(Log.DEBUG, "dbgCountOfPointInStroke", stroke.points.size.toString())
 
 
-        drawGraphView.invalidate()
         stroke = Stroke()
 
         /* val bitmap = Utils.loadBitmapFromView(drawStrokeView)
