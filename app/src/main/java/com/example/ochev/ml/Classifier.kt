@@ -58,7 +58,7 @@ class Classifier(val context: Context){
         isInitialized = true
     }
 
-    private fun classify(bitmap: Bitmap): Vertexes? {
+    private fun classify(bitmap: Bitmap, stroke: Stroke): Vertexes? {
         if (!isInitialized) {
             throw IllegalStateException("TF Lite Interpreter is not initialized yet.")
         }
@@ -84,8 +84,8 @@ class Classifier(val context: Context){
         return getVertex(result[0])
     }
 
-    fun classifyAsync(bitmap: Bitmap, stroke : Stroke): Task<Vertexes> {
-        return call(executorService, Callable<Vertexes> { classify(bitmap) })
+    fun classifyAsync(bitmap: Bitmap, stroke : Stroke): Task<Vertexes?> {
+        return call(executorService, Callable<Vertexes?> { classify(bitmap, stroke) })
     }
 
     private fun convertBitmapToByteBuffer(bitmap: Bitmap): ByteBuffer {
