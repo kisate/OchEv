@@ -97,7 +97,7 @@ class InputHandler(
 
 
         drawGraphView.invalidate()
-        stroke.points.clear()
+        stroke = Stroke()
 
         /* val bitmap = Utils.loadBitmapFromView(drawStrokeView)
 
