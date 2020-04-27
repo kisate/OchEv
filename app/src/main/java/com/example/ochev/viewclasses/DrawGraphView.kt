@@ -21,7 +21,7 @@ class DrawGraphView(
     val graph = Graph()
     val drawGraphInteractor = DrawGraphInteractor()
 
-    fun clear(){
+    fun clear() {
         graph.vertexes.clear()
         graph.edges.clear()
         invalidate()
@@ -37,13 +37,22 @@ class DrawGraphView(
     }
 }
 
-class CircleDrawer {
-    private val paint = Paint()
+abstract class Drawer {
+    protected val fontPaint = Paint()
+    protected val circuitPaint = Paint()
+    protected val fillPaint = Paint()
+}
+
+class CircleDrawer : Drawer() {
 
     init {
-        paint.style = Paint.Style.STROKE
-        paint.strokeWidth = 10f
-        paint.color = Color.BLACK
+        fillPaint.style = Paint.Style.FILL
+        fillPaint.strokeWidth = 0f
+        fillPaint.color = Color.WHITE
+
+        circuitPaint.style = Paint.Style.STROKE
+        circuitPaint.strokeWidth = 10f
+        circuitPaint.color = Color.BLACK
     }
 
     fun draw(vertex: Circle, canvas: Canvas?) {
@@ -51,33 +60,48 @@ class CircleDrawer {
             vertex.center.x.toFloat(),
             vertex.center.y.toFloat(),
             vertex.radius.toFloat(),
-            paint
+            fillPaint
+        )
+        canvas?.drawCircle(
+            vertex.center.x.toFloat(),
+            vertex.center.y.toFloat(),
+            vertex.radius.toFloat(),
+            circuitPaint
         )
     }
 }
 
-class RectangleDrawer {
-    private val paint = Paint()
+class RectangleDrawer : Drawer() {
 
     init {
-        paint.style = Paint.Style.STROKE
-        paint.strokeWidth = 10f
-        paint.color = Color.BLUE
+        fillPaint.style = Paint.Style.FILL
+        fillPaint.strokeWidth = 0f
+        fillPaint.color = Color.WHITE
+
+        circuitPaint.style = Paint.Style.STROKE
+        circuitPaint.strokeWidth = 10f
+        circuitPaint.color = Color.BLACK
     }
 
+
     fun draw(vertex: Rectangle, canvas: Canvas?) {
-        canvas?.drawRect(vertex.toRect(), paint)
+        canvas?.drawRect(vertex.toRect(), fillPaint)
+        canvas?.drawRect(vertex.toRect(), circuitPaint)
     }
 }
 
-class TriangleDrawer {
-    private val paint = Paint()
+class TriangleDrawer : Drawer() {
 
     init {
-        paint.style = Paint.Style.STROKE
-        paint.strokeWidth = 10f
-        paint.color = Color.RED
+        fillPaint.style = Paint.Style.FILL
+        fillPaint.strokeWidth = 0f
+        fillPaint.color = Color.WHITE
+
+        circuitPaint.style = Paint.Style.STROKE
+        circuitPaint.strokeWidth = 10f
+        circuitPaint.color = Color.BLACK
     }
+
 
     fun draw(vertex: Triangle, canvas: Canvas?) {
         val path = Path()
@@ -86,7 +110,8 @@ class TriangleDrawer {
         path.lineTo(vertex.pointC.x.toFloat(), vertex.pointC.y.toFloat())
         path.lineTo(vertex.pointA.x.toFloat(), vertex.pointA.y.toFloat())
         path.lineTo(vertex.pointB.x.toFloat(), vertex.pointB.y.toFloat())
-        canvas?.drawPath(path, paint)
+        canvas?.drawPath(path, fillPaint)
+        canvas?.drawPath(path, circuitPaint)
     }
 }
 
