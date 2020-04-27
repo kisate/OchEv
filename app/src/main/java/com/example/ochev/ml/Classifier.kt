@@ -86,6 +86,14 @@ class Classifier(val context: Context){
         return call(executorService, Callable<Vertexes?> { classify(bitmap, stroke) })
     }
 
+    fun saveBitmapForDataset(bitmap: Bitmap, stroke: Stroke): String {
+        val preparedBitmap = prepareBitmap(bitmap, stroke)
+        val filename = "bmp${counter.toString().padStart(4, '0')}.png"
+        Utils.saveBitmap(preparedBitmap, context, filename)
+        counter++
+        return filename
+    }
+
     private fun prepareBitmap(bitmap: Bitmap, stroke: Stroke): Bitmap {
         val minX = stroke.minX()
         val minY = stroke.minY()
@@ -139,5 +147,7 @@ class Classifier(val context: Context){
         private const val OUTPUT_CLASSES_COUNT = 2
 
         private const val THRESHOLD = 0.8
+
+        private var counter = 0
     }
 }

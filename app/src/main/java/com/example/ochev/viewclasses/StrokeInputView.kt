@@ -87,12 +87,12 @@ class InputHandler(
 
         Tasks.call(
             MainActivity.Executor.executorService,
-            Callable<Figure?> {
-                drawGraphView.graph.modifyByStrokes(information) })
-            .addOnSuccessListener { figure ->
-                Log.d("Modify", "Classified as $figure")
+            Callable {
+                classifier.saveBitmapForDataset(bitmap!!, stroke) })
+            .addOnSuccessListener { result ->
+                Log.d("Saving", "Saved as $result")
                 drawGraphView.invalidate()}
-            .addOnFailureListener {e -> Log.e("Modify", "Error modifying", e)}
+            .addOnFailureListener {e -> Log.e("Saving", "Error saving", e)}
 
 //        drawGraphView.graph.modifyByStrokes(information)
 

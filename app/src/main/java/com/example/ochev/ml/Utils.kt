@@ -45,15 +45,13 @@ class Utils {
             return b
         }
 
-        private var counter = 0
 
-        fun saveBitmap(bitmap: Bitmap, context: Context) {
+        fun saveBitmap(bitmap: Bitmap, context: Context, filename : String) {
             try {
-                val file = File(context.getExternalFilesDir(null), "bmp${counter.toString().padStart(4, '0')}.png")
+                val file = File(context.getExternalFilesDir(null), filename)
                 FileOutputStream(file).use { out ->
                     bitmap.compress(Bitmap.CompressFormat.PNG, 100, out) // bmp is your Bitmap instance
                 }
-                counter++
             } catch (e: IOException) {
                 e.printStackTrace()
             }
