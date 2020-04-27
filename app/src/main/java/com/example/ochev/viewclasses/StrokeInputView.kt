@@ -79,7 +79,6 @@ class InputHandler(
 
         Log.println(Log.DEBUG, "dbgCountOfPointInStroke", stroke.points.size.toString())
 
-        //drawGraphView.graph.addVertex(Circle(Point(Random().nextInt(500)+50, Random().nextInt(500)+50), Random().nextInt(20)+10))
 
         drawGraphView.invalidate()
         stroke.points.clear()
