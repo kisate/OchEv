@@ -12,6 +12,7 @@ import com.example.ochev.baseclasses.dataclasses.PointInteractor
 import com.example.ochev.baseclasses.dataclasses.Stroke
 import com.example.ochev.baseclasses.timeinteractors.Throttle
 import com.example.ochev.ml.Classifier
+import com.example.ochev.ml.Utils
 
 
 @SuppressLint("ViewConstructor")
@@ -69,14 +70,16 @@ class InputHandler(
 
     fun touchUp() {
 
-        val infromation = InfrormationForNormalizer(
+        val bitmap = Utils.loadBitmapFromView(drawStrokeView)
+
+        val information = InfrormationForNormalizer(
             classifier,
-            drawStrokeView,
+            bitmap,
             drawGraphView.graph,
             mutableListOf(stroke.copy())
         )
 
-        drawGraphView.graph.modifyByStrokes(infromation)
+        drawGraphView.graph.modifyByStrokes(information)
 
         Log.println(Log.DEBUG, "dbgCountOfPointInStroke", stroke.points.size.toString())
 
