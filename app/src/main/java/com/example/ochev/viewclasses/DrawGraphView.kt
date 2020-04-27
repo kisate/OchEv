@@ -43,7 +43,8 @@ class CircleDrawer {
     init {
         paint.style = Paint.Style.STROKE
         paint.strokeWidth = 10f
-        paint.color = Color.GREEN
+        paint.color = Color.BLACK
+
     }
 
     fun draw(vertex: Circle, canvas: Canvas?) {
