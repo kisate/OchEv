@@ -137,14 +137,14 @@ class Classifier(val context: Context){
     }
 
     companion object {
-        private const val MODEL_FILE = "model4.tflite"
+        private const val MODEL_FILE = "model5.tflite"
 
         private const val TAG = "StrokeClassifier"
 
         private const val FLOAT_TYPE_SIZE = 4
         private const val PIXEL_SIZE = 3
 
-        private const val OUTPUT_CLASSES_COUNT = 2
+        private const val OUTPUT_CLASSES_COUNT = 3
 
         private const val THRESHOLD = 0.8
 
