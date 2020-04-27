@@ -1,16 +1,20 @@
-package com.example.ochev.baseclasses.edgefigures
+package com.example.ochev.baseclasses.edgefigures.normalizers
 
 import com.example.ochev.baseclasses.EdgeFigure
 import com.example.ochev.baseclasses.VertexFigure
 import com.example.ochev.baseclasses.dataclasses.InfrormationForNormalizer
 import com.example.ochev.baseclasses.dataclasses.Point
+import com.example.ochev.baseclasses.edgefigures.Line
 
 class EdgeFigureNormalizer {
+
+    private val MAX_DISTANCE_BETWEEN_END_AND_FIGURE = 50
+
     fun checkIfTheClosestigureIsCorrect(vertexFigure: VertexFigure, point: Point): Boolean {
         val distance =
             if (vertexFigure.checkIfPointIsInside(point)) 0f
             else vertexFigure.getDistanceToPoint(point)
-        return distance <= 50
+        return distance <= MAX_DISTANCE_BETWEEN_END_AND_FIGURE
     }
 
     fun normalizeAsTwoClosestFigures(information: InfrormationForNormalizer): EdgeFigure? {

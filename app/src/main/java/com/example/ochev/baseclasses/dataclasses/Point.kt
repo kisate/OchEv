@@ -13,7 +13,7 @@ data class Point(var x: Int = 0, var y: Int = 0) {
         linePointA: Point,
         linePointB: Point
     ): Float {
-        // we have triange on 3 vertexes : A,B lies on line segment, С ( this ) is alone
+        // we have triangle on 3 vertexes : A,B lies on line segment, С ( this ) is alone
         val vectorInteractor = VectorInteractor()
         val pointInteractor = PointInteractor()
 

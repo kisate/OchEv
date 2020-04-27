@@ -1,7 +1,9 @@
-package com.example.ochev.baseclasses.vertexfigures
+package com.example.ochev.baseclasses.vertexfigures.normalizers
 
 import com.example.ochev.baseclasses.VertexFigure
 import com.example.ochev.baseclasses.dataclasses.Stroke
+import com.example.ochev.baseclasses.vertexfigures.VertexFigureBuilder
+import com.example.ochev.baseclasses.vertexfigures.Vertexes
 
 class NormalizerByPatterns {
     fun getPenalty(strokes: MutableList<Stroke>, vertexFigure: VertexFigure): Float {
@@ -13,20 +15,19 @@ class NormalizerByPatterns {
     }
 
     fun getMostLikeFigure(strokes: MutableList<Stroke>): VertexFigure {
-        val vertexFigureNormalizer = VertexFigureBuilder()
+        val vertexFigureNormalizer =
+            VertexFigureBuilder()
         val results: MutableList<VertexFigure> = ArrayList()
         for (type in Vertexes.values()) {
             results.add(vertexFigureNormalizer.buildFigure(strokes, type))
         }
-
-        // now lets get figure with the smallest average distance to the strokes
 
         return results.minBy { vertexFigure ->
             getPenalty(strokes, vertexFigure)
         }!!
     }
 
-    fun normalizeByPatterns(strokes: MutableList<Stroke>): VertexFigure? {
+    fun normalizeByPatterns(strokes: MutableList<Stroke>): VertexFigure {
         return getMostLikeFigure(strokes)
     }
 }
