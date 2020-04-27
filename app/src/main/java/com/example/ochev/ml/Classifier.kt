@@ -13,7 +13,6 @@ import java.nio.ByteBuffer
 import java.nio.ByteOrder
 import java.util.concurrent.Callable
 import java.util.concurrent.ExecutorService
-import java.util.concurrent.Executors
 
 
 class Classifier(val context: Context){
@@ -67,7 +66,7 @@ class Classifier(val context: Context){
 
         // Preprocessing: resize the input
         startTime = System.nanoTime()
-        val resizedImage = Bitmap.createScaledBitmap(bitmap, inputImageWidth, inputImageHeight, true)
+        val resizedImage = prepareBitmap(bitmap, stroke)
         val byteBuffer = convertBitmapToByteBuffer(resizedImage)
         elapsedTime = (System.nanoTime() - startTime) / 1000000
         Log.d(TAG, "Preprocessing time = " + elapsedTime + "ms")
@@ -85,6 +84,17 @@ class Classifier(val context: Context){
 
     fun classifyAsync(bitmap: Bitmap, stroke : Stroke, executorService: ExecutorService): Task<Vertexes?> {
         return call(executorService, Callable<Vertexes?> { classify(bitmap, stroke) })
+    }
+
+    private fun prepareBitmap(bitmap: Bitmap, stroke: Stroke): Bitmap {
+        val minX = stroke.minX()
+        val minY = stroke.minY()
+        val maxX = stroke.maxX()
+        val maxY = stroke.maxY()
+
+        val croppedBitmap = Bitmap.createBitmap(bitmap, minX, minY, maxX - minX, maxY - minY)
+
+        return Bitmap.createScaledBitmap(croppedBitmap, inputImageWidth, inputImageHeight, true)
     }
 
     private fun convertBitmapToByteBuffer(bitmap: Bitmap): ByteBuffer {
