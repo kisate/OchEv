@@ -9,6 +9,8 @@ import com.example.ochev.ml.Classifier
 import com.example.ochev.viewclasses.InputHandler
 import kotlinx.android.synthetic.main.activity_main.*
 import com.example.ochev.viewclasses.StrokeInputView
+import java.util.concurrent.ExecutorService
+import java.util.concurrent.Executors
 
 class MainActivity : AppCompatActivity() {
 
@@ -35,10 +37,11 @@ class MainActivity : AppCompatActivity() {
 
 
         classifier
-            .initialize()
+            .initialize(Executor.executorService)
             .addOnFailureListener {e -> Log.e("MainActivity", "Error to setting up classifier", e)}
     }
 
-
-
+    object Executor {
+        val executorService: ExecutorService = Executors.newCachedThreadPool()
+    }
 }

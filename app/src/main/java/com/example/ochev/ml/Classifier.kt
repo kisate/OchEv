@@ -21,12 +21,11 @@ class Classifier(val context: Context){
     var isInitialized = false
         private set
 
-    val executorService: ExecutorService = Executors.newCachedThreadPool()
     private var inputImageWidth: Int = 0 // will be inferred from TF Lite model
     private var inputImageHeight: Int = 0 // will be inferred from TF Lite model
     private var modelInputSize: Int = 0 // will be inferred from TF Lite model
 
-    fun initialize() : Task<Void> {
+    fun initialize(executorService: ExecutorService) : Task<Void> {
         return call(
             executorService,
             Callable<Void> {
@@ -84,7 +83,7 @@ class Classifier(val context: Context){
         return getVertex(result[0])
     }
 
-    fun classifyAsync(bitmap: Bitmap, stroke : Stroke): Task<Vertexes?> {
+    fun classifyAsync(bitmap: Bitmap, stroke : Stroke, executorService: ExecutorService): Task<Vertexes?> {
         return call(executorService, Callable<Vertexes?> { classify(bitmap, stroke) })
     }
 
