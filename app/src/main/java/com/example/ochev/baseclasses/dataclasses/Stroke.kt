@@ -5,6 +5,12 @@ data class Stroke(val points: MutableList<Point> = ArrayList()) {
         points.add(pointToAdd)
     }
 
+    fun copy(): Stroke {
+        val result = Stroke()
+        points.forEach { result.addPoint(it.copy()) }
+        return result
+    }
+
     fun toFloatArray(): FloatArray {
         val result: MutableList<Float> = ArrayList()
         for (point in points) {
@@ -43,11 +49,13 @@ class StrokeInteractor {
 
     fun joinListOfStrokes(strokes: MutableList<Stroke>): Stroke {
         val points: HashMap<Point, Boolean> = HashMap()
+        val result = Stroke()
         strokes.forEach { stroke ->
             stroke.points.forEach { point ->
+                if (!points.containsKey(point)) result.addPoint(point)
                 points[point] = true
             }
         }
-        return Stroke(points.keys.toMutableList())
+        return result
     }
 }

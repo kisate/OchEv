@@ -6,7 +6,6 @@ import android.util.AttributeSet
 import android.util.Log
 import android.view.MotionEvent
 import android.view.View
-import android.widget.Toast
 import com.example.ochev.MainActivity
 import com.example.ochev.baseclasses.Figure
 import com.example.ochev.baseclasses.dataclasses.InfrormationForNormalizer
@@ -14,7 +13,6 @@ import com.example.ochev.baseclasses.dataclasses.Point
 import com.example.ochev.baseclasses.dataclasses.PointInteractor
 import com.example.ochev.baseclasses.dataclasses.Stroke
 import com.example.ochev.baseclasses.timeinteractors.Throttle
-import com.example.ochev.baseclasses.vertexfigures.Vertexes
 import com.example.ochev.ml.Classifier
 import com.example.ochev.ml.Utils
 import com.google.android.gms.tasks.Tasks
@@ -94,26 +92,11 @@ class InputHandler(
                 drawGraphView.invalidate()}
             .addOnFailureListener {e -> Log.e("Modify", "Error modifying", e)}
 
-//        drawGraphView.graph.modifyByStrokes(information)
-
         Log.println(Log.DEBUG, "dbgCountOfPointInStroke", stroke.points.size.toString())
 
 
         stroke = Stroke()
 
-        /* val bitmap = Utils.loadBitmapFromView(drawStrokeView)
-
-         if ((bitmap != null) && classifier.isInitialized) {
-             classifier
-                 .classifyAsync(bitmap, stroke)
-                 .addOnSuccessListener { result ->
-                     Toast.makeText(
-                         classifier.context,
-                         result.toString(), LENGTH_LONG
-                     ).show()
-                 }
-                 .addOnFailureListener { e -> Log.e("Classify", "Error classifying", e) }
-         }*/
         drawStrokeInteractor.clear(drawStrokeView)
     }
 

@@ -26,10 +26,7 @@ class FigureNormalizer {
 
     fun normalizeStrokesAsEdgeFigure(information: InfrormationForNormalizer): EdgeFigure? {
         val edgeFigureNormalizer = EdgeFigureNormalizer()
-        return edgeFigureNormalizer.normalizeAsTwoClosestFigures(
-            information.strokes!!,
-            information.graph!!
-        )
+        return edgeFigureNormalizer.normalizeAsTwoClosestFigures(information)
     }
 
 

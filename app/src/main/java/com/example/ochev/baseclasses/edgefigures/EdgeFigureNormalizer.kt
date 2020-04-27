@@ -2,9 +2,8 @@ package com.example.ochev.baseclasses.edgefigures
 
 import com.example.ochev.baseclasses.EdgeFigure
 import com.example.ochev.baseclasses.VertexFigure
-import com.example.ochev.baseclasses.dataclasses.Graph
+import com.example.ochev.baseclasses.dataclasses.InfrormationForNormalizer
 import com.example.ochev.baseclasses.dataclasses.Point
-import com.example.ochev.baseclasses.dataclasses.Stroke
 
 class EdgeFigureNormalizer {
     fun checkIfTheClosestigureIsCorrect(vertexFigure: VertexFigure, point: Point): Boolean {
@@ -14,7 +13,15 @@ class EdgeFigureNormalizer {
         return distance <= 50
     }
 
-    fun normalizeAsTwoClosestFigures(strokes: MutableList<Stroke>, graph: Graph): EdgeFigure? {
+    fun normalizeAsTwoClosestFigures(information: InfrormationForNormalizer): EdgeFigure? {
+        if (
+            information.strokes == null ||
+            information.graph == null
+        ) return null
+
+        val strokes = information.strokes
+        val graph = information.graph
+
         val beginPoint = strokes[0].points[0]
         val endPoint = strokes.last().points.last()
 
