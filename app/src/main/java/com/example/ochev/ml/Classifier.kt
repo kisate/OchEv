@@ -84,7 +84,7 @@ class Classifier(val context: Context){
         return getVertex(result[0])
     }
 
-    fun classifyAsync(bitmap: Bitmap, strokes : MutableList<Stroke>): Task<Vertexes> {
+    fun classifyAsync(bitmap: Bitmap, stroke : Stroke): Task<Vertexes> {
         return call(executorService, Callable<Vertexes> { classify(bitmap) })
     }
 

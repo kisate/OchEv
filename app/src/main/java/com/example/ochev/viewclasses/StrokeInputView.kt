@@ -86,7 +86,7 @@ class InputHandler(
 
         if ((bitmap != null) && classifier.isInitialized){
             classifier
-                .classifyAsync(bitmap)
+                .classifyAsync(bitmap, stroke)
                 .addOnSuccessListener { result -> Toast.makeText(classifier.context,
                     result.toString(), LENGTH_LONG).show() }
                 .addOnFailureListener { e -> Log.e("Classify", "Error classifying" , e) }
