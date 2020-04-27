@@ -48,8 +48,8 @@ class VertexFigureNormalizer {
         if (bitmap != null && classifier.isInitialized) {
             classifier
                 .classifyAsync(bitmap, stroke)
-                .addOnSuccessListener { result: Vertexes ->
-                    figure = normalizeFigure(information.strokes, result)
+                .addOnSuccessListener { result ->
+                    if (result != null) figure = normalizeFigure(mutableListOf(stroke), result)
                     Toast.makeText(
                         classifier.context,
                         result.toString(), Toast.LENGTH_LONG
