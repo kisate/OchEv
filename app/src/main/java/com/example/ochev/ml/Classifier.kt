@@ -3,6 +3,7 @@ package com.example.ochev.ml
 import android.content.Context
 import android.graphics.Bitmap
 import android.util.Log
+import com.example.ochev.baseclasses.dataclasses.Stroke
 import com.example.ochev.baseclasses.vertexfigures.Vertexes
 import com.google.android.gms.tasks.Task
 import com.google.android.gms.tasks.Tasks.call
@@ -78,10 +79,12 @@ class Classifier(val context: Context){
         elapsedTime = (System.nanoTime() - startTime) / 1000000
         Log.d(TAG, "Inference time = " + elapsedTime + "ms")
 
+        Log.d(TAG, "Results : ${result[0].contentToString()}")
+
         return getVertex(result[0])
     }
 
-    fun classifyAsync(bitmap: Bitmap): Task<Vertexes> {
+    fun classifyAsync(bitmap: Bitmap, strokes : MutableList<Stroke>): Task<Vertexes> {
         return call(executorService, Callable<Vertexes> { classify(bitmap) })
     }
 
