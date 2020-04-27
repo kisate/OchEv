@@ -47,11 +47,11 @@ class Triangle(
         if (vectorB.y == 0) vectorB = vectorC.also { vectorC = vectorB }
 
         val cordAlongVectorC =
-            (vectorP.x - vectorB.x * vectorP.y / vectorB.y.toFloat()) /
-                    (vectorC.x - vectorC.y * vectorB.x / vectorB.y.toFloat())
+            ((vectorB.x * vectorP.y / vectorB.y.toFloat()) - vectorP.x) /
+                    (vectorC.y * vectorB.x / vectorB.y.toFloat() - vectorC.x)
 
         val cordAlongVectorB =
-            (vectorP.y - cordAlongVectorC * vectorC.y) / vectorC.y.toFloat()
+            (vectorP.y - cordAlongVectorC * vectorC.y) / vectorB.y.toFloat()
 
         return cordAlongVectorB >= 0 &&
                 cordAlongVectorC >= 0 &&
