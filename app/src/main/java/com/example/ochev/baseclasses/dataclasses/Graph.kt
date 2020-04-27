@@ -21,15 +21,14 @@ data class Graph(
         return vertexes.minBy { it.getDistanceToPoint(point) }
     }
 
-    fun modifyByStrokes(strokes: MutableList<Stroke>): Figure? {
+    fun modifyByStrokes(information: InfrormationForNormalizer): Figure? {
         val normalizer = FigureNormalizer()
-        val newFigure = normalizer.normaliseStrokes(strokes, this) ?: return null
+        val newFigure = normalizer.normaliseStrokes(information) ?: return null
 
         when (newFigure) {
             is VertexFigure -> addVertex(newFigure)
             is EdgeFigure -> addEdge(newFigure)
         }
         return newFigure
-        return null
     }
 }
