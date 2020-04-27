@@ -59,7 +59,7 @@ class Triangle(
     }
 }
 
-fun VertexFigureNormalizer.normalizeTriangle(strokes: MutableList<Stroke>): Triangle {
+fun VertexFigureNormalizer.buildTriangle(strokes: MutableList<Stroke>): Triangle {
     val convexHullMaker = ConvexHullMaker()
     val convexHull = convexHullMaker.getConvexHull(strokes)
 

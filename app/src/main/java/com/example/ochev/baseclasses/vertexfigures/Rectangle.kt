@@ -57,7 +57,7 @@ class Rectangle(
 }
 
 
-fun VertexFigureNormalizer.normalizeRectangle(strokes: MutableList<Stroke>): Rectangle {
+fun VertexFigureNormalizer.buildRectangle(strokes: MutableList<Stroke>): Rectangle {
     val strokeInteractor = StrokeInteractor()
     val (maxX, maxY, minX, minY) = strokeInteractor.getStrokesRestrictions(strokes)
     return Rectangle(
