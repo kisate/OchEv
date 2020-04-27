@@ -138,6 +138,6 @@ class Classifier(val context: Context){
 
         private const val OUTPUT_CLASSES_COUNT = 3
 
-        private const val THRESHOLD = 0.8
+        private const val THRESHOLD = 0.65
     }
 }
