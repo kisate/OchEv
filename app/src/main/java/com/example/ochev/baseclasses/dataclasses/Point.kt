@@ -17,7 +17,7 @@ data class Point(var x: Int = 0, var y: Int = 0) {
         val vectorInteractor = VectorInteractor()
         val pointInteractor = PointInteractor()
 
-        val vectorFromAToC = Vector(this.x - linePointA.x, this.y - linePointA.x)
+        val vectorFromAToC = Vector(this.x - linePointA.x, this.y - linePointA.y)
         val vectorFromAToB = Vector(linePointB.x - linePointA.x, linePointB.y - linePointA.y)
         val vectorFromBToA = Vector(linePointA.x - linePointB.x, linePointA.y - linePointB.y)
         val vectorFromBToC = Vector(this.x - linePointB.x, this.y - linePointB.y)
@@ -28,7 +28,7 @@ data class Point(var x: Int = 0, var y: Int = 0) {
             if (vectorInteractor.scalarProduct(vectorFromBToA, vectorFromBToC) >= 0) 1 else -1
 
 
-        if (signOfCosAngleCAB == 1 && signOfCosAngleCBA == 1) {
+        if (signOfCosAngleCAB == signOfCosAngleCBA) {
 
             // the shortest path is perpendicular
 
