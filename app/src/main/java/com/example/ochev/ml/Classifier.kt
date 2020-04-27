@@ -21,7 +21,7 @@ class Classifier(val context: Context){
     var isInitialized = false
         private set
 
-    private val executorService: ExecutorService = Executors.newCachedThreadPool()
+    val executorService: ExecutorService = Executors.newCachedThreadPool()
     private var inputImageWidth: Int = 0 // will be inferred from TF Lite model
     private var inputImageHeight: Int = 0 // will be inferred from TF Lite model
     private var modelInputSize: Int = 0 // will be inferred from TF Lite model
@@ -58,7 +58,7 @@ class Classifier(val context: Context){
         isInitialized = true
     }
 
-    private fun classify(bitmap: Bitmap, stroke: Stroke): Vertexes? {
+    fun classify(bitmap: Bitmap, stroke: Stroke): Vertexes? {
         if (!isInitialized) {
             throw IllegalStateException("TF Lite Interpreter is not initialized yet.")
         }
