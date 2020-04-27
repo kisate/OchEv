@@ -1,20 +1,24 @@
 package com.example.ochev.ml
 
 import android.content.Context
+import android.graphics.Bitmap
+import android.graphics.Canvas
+import android.view.View
 import java.io.File
 import java.io.FileOutputStream
 import java.io.IOException
 
+
 class Utils {
     companion object {
         @Throws(IOException::class)
-        fun assetFilePath(
+        fun assetFile(
             context: Context,
             assetName: String?
-        ): String? {
+        ): File? {
             val file = File(context.filesDir, assetName)
             if (file.exists() && file.length() > 0) {
-                return file.absolutePath
+                return file
             }
             context.assets.open(assetName!!).use { `is` ->
                 FileOutputStream(file).use { os ->
@@ -25,7 +29,33 @@ class Utils {
                     }
                     os.flush()
                 }
-                return file.absolutePath
+                return file
+            }
+        }
+
+        fun loadBitmapFromView(v: View): Bitmap? {
+            val b = Bitmap.createBitmap(
+                v.measuredWidth,
+                v.measuredHeight,
+                Bitmap.Config.ARGB_8888
+            )
+            val c = Canvas(b)
+            v.layout(v.left, v.top, v.right, v.bottom)
+            v.draw(c)
+            return b
+        }
+
+        private var counter = 0
+
+        fun saveBitmap(bitmap: Bitmap, context: Context) {
+            try {
+                val file = File(context.getExternalFilesDir(null), "bmp${counter.toString().padStart(4, '0')}.png")
+                FileOutputStream(file).use { out ->
+                    bitmap.compress(Bitmap.CompressFormat.PNG, 100, out) // bmp is your Bitmap instance
+                }
+                counter++
+            } catch (e: IOException) {
+                e.printStackTrace()
             }
         }
     }

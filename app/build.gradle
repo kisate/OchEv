@@ -36,7 +36,9 @@ dependencies {
     testImplementation 'junit:junit:4.12'
     androidTestImplementation 'androidx.test.ext:junit:1.1.1'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.2.0'
-    implementation 'com.google.android.gms:play-services-tasks:17.0.2'
-    implementation 'org.pytorch:pytorch_android:1.4.0'
-    implementation 'org.pytorch:pytorch_android_torchvision:1.4.0'
+    // Task API
+    implementation "com.google.android.gms:play-services-tasks:17.0.0"
+
+    // TF Lite
+    implementation('org.tensorflow:tensorflow-lite:0.0.0-nightly') { changing = true }
 }

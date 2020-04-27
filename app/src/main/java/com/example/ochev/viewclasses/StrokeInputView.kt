@@ -2,15 +2,21 @@ package com.example.ochev.viewclasses
 
 import android.annotation.SuppressLint
 import android.content.Context
+import android.graphics.Bitmap
 import android.util.AttributeSet
 import android.util.Log
 import android.view.MotionEvent
 import android.view.View
+import android.widget.Toast
+import android.widget.Toast.LENGTH_LONG
 import com.example.ochev.baseclasses.dataclasses.Point
 import com.example.ochev.baseclasses.dataclasses.PointInteractor
 import com.example.ochev.baseclasses.dataclasses.Stroke
 import com.example.ochev.baseclasses.timeinteractors.Throttle
 import com.example.ochev.ml.Classifier
+import com.example.ochev.ml.Utils
+import java.io.File
+
 
 @SuppressLint("ViewConstructor")
 class StrokeInputView(
@@ -75,8 +81,21 @@ class InputHandler(
 
         drawGraphView.invalidate()
         stroke.points.clear()
+
+        val bitmap = Utils.loadBitmapFromView(drawStrokeView)
+
+//        Utils.saveBitmap(bitmap!!, classifier.context)
+
+//        Log.d("Classify", "${bitmap?.width}")
+
+        if ((bitmap != null) && classifier.isInitialized){
+            classifier
+                .classifyAsync(bitmap)
+                .addOnSuccessListener { result -> Toast.makeText(classifier.context,
+                    result, LENGTH_LONG).show() }
+                .addOnFailureListener { e -> Log.e("Classify", "Error classifying" , e) }
+        }
         drawStrokeInteractor.clear(drawStrokeView)
-        classifier.classify(stroke)
     }
 
     fun touchStart(point: Point?) {
