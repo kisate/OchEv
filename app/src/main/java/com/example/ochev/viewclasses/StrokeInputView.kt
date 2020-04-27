@@ -73,8 +73,9 @@ class InputHandler(
             classifier,
             drawStrokeView,
             drawGraphView.graph,
-            mutableListOf(stroke)
+            mutableListOf(stroke.copy())
         )
+
         drawGraphView.graph.modifyByStrokes(infromation)
 
         Log.println(Log.DEBUG, "dbgCountOfPointInStroke", stroke.points.size.toString())
