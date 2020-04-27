@@ -2,20 +2,16 @@ package com.example.ochev.viewclasses
 
 import android.annotation.SuppressLint
 import android.content.Context
-import android.graphics.Bitmap
 import android.util.AttributeSet
 import android.util.Log
 import android.view.MotionEvent
 import android.view.View
-import android.widget.Toast
-import android.widget.Toast.LENGTH_LONG
+import com.example.ochev.baseclasses.dataclasses.InfrormationForNormalizer
 import com.example.ochev.baseclasses.dataclasses.Point
 import com.example.ochev.baseclasses.dataclasses.PointInteractor
 import com.example.ochev.baseclasses.dataclasses.Stroke
 import com.example.ochev.baseclasses.timeinteractors.Throttle
 import com.example.ochev.ml.Classifier
-import com.example.ochev.ml.Utils
-import java.io.File
 
 
 @SuppressLint("ViewConstructor")
@@ -31,7 +27,7 @@ class StrokeInputView(
     private val inputHandler = InputHandler(drawStrokeView, drawFiguresView, classifier)
     private val throttle = Throttle(2)
 
-    fun clear(){
+    fun clear() {
         inputHandler.clear()
     }
 
@@ -73,7 +69,13 @@ class InputHandler(
 
     fun touchUp() {
 
-        drawGraphView.graph.modifyByStrokes(mutableListOf(stroke))
+        val infromation = InfrormationForNormalizer(
+            classifier,
+            drawStrokeView,
+            drawGraphView.graph,
+            mutableListOf(stroke)
+        )
+        drawGraphView.graph.modifyByStrokes(infromation)
 
         Log.println(Log.DEBUG, "dbgCountOfPointInStroke", stroke.points.size.toString())
 
@@ -82,15 +84,19 @@ class InputHandler(
         drawGraphView.invalidate()
         stroke.points.clear()
 
-        val bitmap = Utils.loadBitmapFromView(drawStrokeView)
+        /* val bitmap = Utils.loadBitmapFromView(drawStrokeView)
 
-        if ((bitmap != null) && classifier.isInitialized){
-            classifier
-                .classifyAsync(bitmap, stroke)
-                .addOnSuccessListener { result -> Toast.makeText(classifier.context,
-                    result.toString(), LENGTH_LONG).show() }
-                .addOnFailureListener { e -> Log.e("Classify", "Error classifying" , e) }
-        }
+         if ((bitmap != null) && classifier.isInitialized) {
+             classifier
+                 .classifyAsync(bitmap, stroke)
+                 .addOnSuccessListener { result ->
+                     Toast.makeText(
+                         classifier.context,
+                         result.toString(), LENGTH_LONG
+                     ).show()
+                 }
+                 .addOnFailureListener { e -> Log.e("Classify", "Error classifying", e) }
+         }*/
         drawStrokeInteractor.clear(drawStrokeView)
     }
 

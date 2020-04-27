@@ -1,7 +1,12 @@
 package com.example.ochev.baseclasses.vertexfigures
 
+import android.util.Log
+import android.widget.Toast
 import com.example.ochev.baseclasses.VertexFigure
+import com.example.ochev.baseclasses.dataclasses.InfrormationForNormalizer
 import com.example.ochev.baseclasses.dataclasses.Stroke
+import com.example.ochev.baseclasses.dataclasses.StrokeInteractor
+import com.example.ochev.ml.Utils
 
 class VertexFigureNormalizer {
     fun getPenalty(strokes: MutableList<Stroke>, vertexFigure: VertexFigure): Float {
@@ -15,12 +20,9 @@ class VertexFigureNormalizer {
     fun getMostLikeFigure(strokes: MutableList<Stroke>): VertexFigure {
         val vertexFigureNormalizer = VertexFigureNormalizer()
         val results: MutableList<VertexFigure> = ArrayList()
-        /*for (type in Vertexes.values()) {
+        for (type in Vertexes.values()) {
             results.add(vertexFigureNormalizer.normalizeFigure(strokes, type))
-        }*/
-
-        results.add(vertexFigureNormalizer.normalizeFigure(strokes, Vertexes.TRIANGLE))
-
+        }
 
         // now lets get figure with the smallest average distance to the strokes
 
@@ -31,6 +33,33 @@ class VertexFigureNormalizer {
 
     fun normalizeByPatterns(strokes: MutableList<Stroke>): VertexFigure? {
         return getMostLikeFigure(strokes)
+    }
+
+    fun normalizeByML(information: InfrormationForNormalizer): VertexFigure? {
+
+        val strokeInteractor = StrokeInteractor()
+
+        val bitmap = Utils.loadBitmapFromView(information.view!!)
+        val classifier = information.classifier!!
+        val stroke = strokeInteractor.joinListOfStrokes(information.strokes!!)
+
+        var figure: VertexFigure? = null
+
+        if (bitmap != null && classifier.isInitialized) {
+            classifier
+                .classifyAsync(bitmap, stroke)
+                .addOnSuccessListener { result: Vertexes ->
+                    figure = normalizeFigure(information.strokes, result)
+                    Toast.makeText(
+                        classifier.context,
+                        result.toString(), Toast.LENGTH_LONG
+                    ).show()
+                }
+                .addOnFailureListener { e -> Log.e("Classify", "Error classifying", e) }
+
+        }
+
+        return figure
     }
 
 
