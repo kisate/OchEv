@@ -84,15 +84,11 @@ class InputHandler(
 
         val bitmap = Utils.loadBitmapFromView(drawStrokeView)
 
-//        Utils.saveBitmap(bitmap!!, classifier.context)
-
-//        Log.d("Classify", "${bitmap?.width}")
-
         if ((bitmap != null) && classifier.isInitialized){
             classifier
                 .classifyAsync(bitmap)
                 .addOnSuccessListener { result -> Toast.makeText(classifier.context,
-                    result, LENGTH_LONG).show() }
+                    result.toString(), LENGTH_LONG).show() }
                 .addOnFailureListener { e -> Log.e("Classify", "Error classifying" , e) }
         }
         drawStrokeInteractor.clear(drawStrokeView)

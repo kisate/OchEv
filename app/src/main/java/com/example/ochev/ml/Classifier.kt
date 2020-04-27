@@ -2,16 +2,12 @@ package com.example.ochev.ml
 
 import android.content.Context
 import android.graphics.Bitmap
-import android.graphics.BitmapFactory
 import android.util.Log
-import com.example.ochev.baseclasses.dataclasses.Stroke
+import com.example.ochev.baseclasses.vertexfigures.Vertexes
 import com.google.android.gms.tasks.Task
 import com.google.android.gms.tasks.Tasks.call
 import org.tensorflow.lite.Interpreter
-import java.io.File
 import java.io.FileNotFoundException
-import java.io.FileOutputStream
-import java.io.IOException
 import java.nio.ByteBuffer
 import java.nio.ByteOrder
 import java.util.concurrent.Callable
@@ -61,7 +57,7 @@ class Classifier(val context: Context){
         isInitialized = true
     }
 
-    private fun classify(bitmap: Bitmap): String {
+    private fun classify(bitmap: Bitmap): Vertexes? {
         if (!isInitialized) {
             throw IllegalStateException("TF Lite Interpreter is not initialized yet.")
         }
@@ -82,15 +78,15 @@ class Classifier(val context: Context){
         elapsedTime = (System.nanoTime() - startTime) / 1000000
         Log.d(TAG, "Inference time = " + elapsedTime + "ms")
 
-        return getOutputString(result[0])
+        return getVertex(result[0])
     }
 
-    fun classifyAsync(bitmap: Bitmap): Task<String> {
-        return call(executorService, Callable<String> { classify(bitmap) })
+    fun classifyAsync(bitmap: Bitmap): Task<Vertexes> {
+        return call(executorService, Callable<Vertexes> { classify(bitmap) })
     }
 
     private fun convertBitmapToByteBuffer(bitmap: Bitmap): ByteBuffer {
-        val byteBuffer = ByteBuffer.allocateDirect(3*modelInputSize)
+        val byteBuffer = ByteBuffer.allocateDirect(modelInputSize)
         byteBuffer.order(ByteOrder.nativeOrder())
 
         val pixels = IntArray(inputImageWidth * inputImageHeight)
@@ -111,18 +107,25 @@ class Classifier(val context: Context){
 
     private fun getOutputString(output: FloatArray): String {
         val maxIndex = output.indices.maxBy { output[it] } ?: -1
-//        return "Prediction Result: %d\nConfidence: %2f".format(maxIndex, output[maxIndex])
         return "Prediction Result: ${output.contentToString()}"
     }
 
+    private fun getVertex(output: FloatArray) : Vertexes? {
+        var maxIndex = output.indices.maxBy { output[it] } ?: -1
+        if (output.max()!! < THRESHOLD) maxIndex = -1
+        return Vertexes.fromInt(maxIndex)
+    }
+
     companion object {
-        private const val MODEL_FILE = "model.tflite"
+        private const val MODEL_FILE = "model4.tflite"
 
         private const val TAG = "StrokeClassifier"
 
         private const val FLOAT_TYPE_SIZE = 4
-        private const val PIXEL_SIZE = 1
+        private const val PIXEL_SIZE = 3
 
         private const val OUTPUT_CLASSES_COUNT = 2
+
+        private const val THRESHOLD = 0.8
     }
 }
