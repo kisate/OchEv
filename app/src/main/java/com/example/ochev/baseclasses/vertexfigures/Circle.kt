@@ -27,7 +27,7 @@ class Circle(
     }
 }
 
-fun VertexFigureNormalizer.normalizeCircle(strokes: MutableList<Stroke>): Circle {
+fun VertexFigureNormalizer.buildCircle(strokes: MutableList<Stroke>): Circle {
     val strokeInteractor = StrokeInteractor()
     val (maxX, maxY, minX, minY) = strokeInteractor.getStrokesRestrictions(strokes)
     return Circle(
