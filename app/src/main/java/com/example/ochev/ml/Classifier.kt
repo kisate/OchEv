@@ -15,7 +15,7 @@ import java.util.concurrent.Callable
 import java.util.concurrent.ExecutorService
 
 
-class Classifier(val context: Context){
+class Classifier(private val context: Context){
     private var interpreter : Interpreter? = null
     var isInitialized = false
         private set
