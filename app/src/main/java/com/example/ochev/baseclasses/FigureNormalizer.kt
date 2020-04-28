@@ -1,8 +1,8 @@
 package com.example.ochev.baseclasses
 
 import com.example.ochev.baseclasses.dataclasses.InfrormationForNormalizer
-import com.example.ochev.baseclasses.edgefigures.EdgeFigureNormalizer
-import com.example.ochev.baseclasses.vertexfigures.NormalizerByML
+import com.example.ochev.baseclasses.edgefigures.normalizers.EdgeFigureNormalizer
+import com.example.ochev.baseclasses.vertexfigures.normalizers.NormalizerByML
 
 class FigureNormalizer {
     fun normaliseStrokes(
@@ -20,12 +20,14 @@ class FigureNormalizer {
     fun normalizeStrokesAsVertexFigure(
         information: InfrormationForNormalizer
     ): VertexFigure? {
-        val mlNormalizer = NormalizerByML()
+        val mlNormalizer =
+            NormalizerByML()
         return mlNormalizer.normalizeByML(information)
     }
 
     fun normalizeStrokesAsEdgeFigure(information: InfrormationForNormalizer): EdgeFigure? {
-        val edgeFigureNormalizer = EdgeFigureNormalizer()
+        val edgeFigureNormalizer =
+            EdgeFigureNormalizer()
         return edgeFigureNormalizer.normalizeAsTwoClosestFigures(information)
     }
 

@@ -1,9 +1,10 @@
-package com.example.ochev.baseclasses.vertexfigures
+package com.example.ochev.baseclasses.vertexfigures.normalizers
 
 import com.example.ochev.baseclasses.VertexFigure
 import com.example.ochev.baseclasses.dataclasses.InfrormationForNormalizer
 import com.example.ochev.baseclasses.dataclasses.PointInteractor
 import com.example.ochev.baseclasses.dataclasses.StrokeInteractor
+import com.example.ochev.baseclasses.vertexfigures.VertexFigureBuilder
 
 class NormalizerByML {
     fun normalizeByML(information: InfrormationForNormalizer): VertexFigure? {
@@ -22,9 +23,7 @@ class NormalizerByML {
 
         if (pointInteractor.distance(stroke.points.first(), stroke.points.last()) >=
             (maxX - minX + maxY - minY) / 4
-        ) {
-            return null
-        }
+        ) return null
 
         if (classifier.isInitialized) {
             val type = classifier.classify(information.bitmap, stroke)

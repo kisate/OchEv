@@ -18,7 +18,10 @@ data class Graph(
     }
 
     fun getClosestToPointVertexFigureOrNull(point: Point): VertexFigure? {
-        return vertexes.minBy { it.getDistanceToPoint(point) }
+        return vertexes.minBy {
+            if (it.checkIfPointIsInside(point)) 0f
+            else it.getDistanceToPoint(point)
+        }
     }
 
     fun modifyByStrokes(information: InfrormationForNormalizer): Figure? {
