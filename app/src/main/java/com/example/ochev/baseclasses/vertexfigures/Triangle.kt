@@ -57,6 +57,16 @@ class Triangle(
                 cordAlongVectorC >= 0 &&
                 cordAlongVectorB + cordAlongVectorC <= 1
     }
+
+    fun tryToMakeMoreSmooth() {
+        val points = listOf(pointA, pointB, pointC).sortedBy { it.y }
+        val firstBottomPoint = points[2]
+        val secondBottomPoint = points[1]
+
+        val miss = Vector(firstBottomPoint, secondBottomPoint)
+
+        if (abs(miss.x / miss.y.toFloat()) >= 7) secondBottomPoint.y = firstBottomPoint.y
+    }
 }
 
 fun VertexFigureBuilder.buildTriangle(strokes: MutableList<Stroke>): Triangle {
@@ -120,6 +130,8 @@ fun VertexFigureBuilder.buildTriangle(strokes: MutableList<Stroke>): Triangle {
             }
         }
     }
+
+    result.tryToMakeMoreSmooth()
 
     return result
 }
