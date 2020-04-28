@@ -108,8 +108,7 @@ class TriangleDrawer : Drawer() {
         path.moveTo(vertex.pointA.x.toFloat(), vertex.pointA.y.toFloat())
         path.lineTo(vertex.pointB.x.toFloat(), vertex.pointB.y.toFloat())
         path.lineTo(vertex.pointC.x.toFloat(), vertex.pointC.y.toFloat())
-        path.lineTo(vertex.pointA.x.toFloat(), vertex.pointA.y.toFloat())
-        path.lineTo(vertex.pointB.x.toFloat(), vertex.pointB.y.toFloat())
+        path.close()
         canvas?.drawPath(path, fillPaint)
         canvas?.drawPath(path, circuitPaint)
     }
