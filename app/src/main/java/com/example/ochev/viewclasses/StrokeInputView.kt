@@ -89,14 +89,14 @@ class InputHandler(
             Callable<Figure?> {
                 drawGraphView.graph.modifyByStrokes(information) })
             .addOnSuccessListener { figure ->
-                Log.d("Modify", "Classified as $figure")
+                Log.i("Modify", "Classified as $figure")
                 drawGraphView.invalidate()
                 if (figure == null)
                     Toast.makeText(drawGraphView.context, "Could not recognize", Toast.LENGTH_SHORT).show()
             }
-            .addOnFailureListener {e -> Log.e("Modify", "Error modifying", e)}
+            .addOnFailureListener {e -> Log.i("Modify", "Error modifying", e)}
 
-        Log.println(Log.DEBUG, "dbgCountOfPointInStroke", stroke.points.size.toString())
+        Log.i("dbgCountOfPointInStroke", stroke.points.size.toString())
 
 
         stroke = Stroke()

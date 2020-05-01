@@ -51,9 +51,6 @@ class Rectangle(
                 point.y >= leftDownCorner.y
     }
 
-    fun toRect(): Rect {
-        return Rect(leftUpCorner.x, leftUpCorner.y, rightDownCorner.x, leftDownCorner.y)
-    }
 }
 
 

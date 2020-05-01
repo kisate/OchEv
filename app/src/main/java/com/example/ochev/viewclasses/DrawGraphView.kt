@@ -3,6 +3,7 @@ package com.example.ochev.viewclasses
 import android.content.Context
 import android.graphics.*
 import android.util.AttributeSet
+import android.util.Log
 import android.view.View
 import com.example.ochev.baseclasses.EdgeFigure
 import com.example.ochev.baseclasses.Figure
@@ -83,10 +84,21 @@ class RectangleDrawer : Drawer() {
         circuitPaint.color = Color.BLACK
     }
 
-
     fun draw(vertex: Rectangle, canvas: Canvas?) {
-        canvas?.drawRect(vertex.toRect(), fillPaint)
-        canvas?.drawRect(vertex.toRect(), circuitPaint)
+        canvas?.drawRect(
+            vertex.leftUpCorner.x.toFloat(),
+            vertex.leftDownCorner.y.toFloat(),
+            vertex.rightDownCorner.x.toFloat(),
+            vertex.leftUpCorner.y.toFloat(),
+            fillPaint
+        )
+        canvas?.drawRect(
+            vertex.leftUpCorner.x.toFloat(),
+            vertex.leftDownCorner.y.toFloat(),
+            vertex.rightDownCorner.x.toFloat(),
+            vertex.leftUpCorner.y.toFloat(),
+            circuitPaint
+        )
     }
 }
 
