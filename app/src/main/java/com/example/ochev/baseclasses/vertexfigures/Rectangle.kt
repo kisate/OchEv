@@ -10,12 +10,10 @@ import com.example.ochev.baseclasses.dataclasses.Vector
 
 class Rectangle(
     val leftDownCorner: Point = Point(),
+    val leftUpCorner: Point = Point(),
+    val rightDownCorner: Point = Point(),
     val rightUpCorner: Point = Point()
 ) : VertexFigure() {
-    val leftUpCorner: Point
-        get() = Point(leftDownCorner.x, rightUpCorner.y)
-    val rightDownCorner: Point
-        get() = Point(rightUpCorner.x, leftDownCorner.y)
     override val center
         get() =
             Point(
@@ -25,6 +23,8 @@ class Rectangle(
 
     override fun moveByVector(vector: Vector) {
         leftDownCorner.moveByVector(vector)
+        leftUpCorner.moveByVector(vector)
+        rightDownCorner.moveByVector(vector)
         rightUpCorner.moveByVector(vector)
     }
 
@@ -45,10 +45,10 @@ class Rectangle(
     }
 
     override fun checkIfPointIsInside(point: Point): Boolean {
-        return point.x <= rightDownCorner.x &&
-                point.x >= leftDownCorner.x &&
-                point.y <= leftUpCorner.y &&
-                point.y >= leftDownCorner.y
+        val triangleABC = Triangle(leftDownCorner, leftUpCorner, rightUpCorner)
+        val triangleABD = Triangle(leftDownCorner, rightUpCorner, rightDownCorner)
+
+        return (triangleABC.checkIfPointIsInside(point) || triangleABD.checkIfPointIsInside(point))
     }
 
 }
@@ -59,6 +59,8 @@ fun VertexFigureBuilder.buildRectangle(strokes: MutableList<Stroke>): Rectangle 
     val (maxX, maxY, minX, minY) = strokeInteractor.getStrokesRestrictions(strokes)
     return Rectangle(
         leftDownCorner = Point(minX, minY),
+        leftUpCorner = Point(minX, maxY),
+        rightDownCorner = Point(maxX, minY),
         rightUpCorner = Point(maxX, maxY)
     )
 }
