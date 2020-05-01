@@ -39,7 +39,7 @@ data class Point(var x: Int = 0, var y: Int = 0) {
             return vectorFromAToC.length * sinAngleCAB
         }
 
-        return min(
+        return Math.min(
             pointInteractor.distance(this, linePointA),
             pointInteractor.distance(this, linePointB)
         )
