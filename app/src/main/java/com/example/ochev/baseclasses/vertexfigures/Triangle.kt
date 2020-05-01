@@ -59,7 +59,7 @@ class Triangle(
     }
 
     fun tryToMakeMoreSmooth() {
-        // try to make one of the sides of triangle parralell to OX
+        // try to make one of the sides of triangle parallel to OX
 
         val points = listOf(pointA, pointB, pointC).sortedBy { it.y }
         val firstBottomPoint = points[2]
@@ -67,7 +67,7 @@ class Triangle(
 
         val miss = Vector(firstBottomPoint, secondBottomPoint)
 
-        if (abs(miss.x / miss.y.toFloat()) >= 5) {
+        if (abs(miss.x / miss.y.toFloat()) >= 4) {
             secondBottomPoint.y = firstBottomPoint.y
             tryToCentralizeTopPoint(firstBottomPoint, secondBottomPoint)
         }

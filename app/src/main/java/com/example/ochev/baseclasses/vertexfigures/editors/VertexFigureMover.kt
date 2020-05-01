@@ -9,14 +9,14 @@ class VertexFigureMover(information: InformationForVertexEditor) {
     lateinit var previous: Point
 
     fun tryToStartMove(point: Point): Boolean {
-        if (
+        return if (
             figure.getDistanceToPoint(point) <= 100f ||
             figure.checkIfPointIsInside(point)
         ) {
             previous = point
-            return true
+            true
         } else {
-            return false
+            false
         }
     }
 
