@@ -1,6 +1,5 @@
 package com.example.ochev.baseclasses.vertexfigures
 
-import android.graphics.Rect
 import com.example.ochev.baseclasses.VertexFigure
 import com.example.ochev.baseclasses.dataclasses.Point
 import com.example.ochev.baseclasses.dataclasses.Stroke
@@ -10,10 +9,13 @@ import com.example.ochev.baseclasses.dataclasses.Vector
 
 class Rectangle(
     val leftDownCorner: Point = Point(),
-    val leftUpCorner: Point = Point(),
-    val rightDownCorner: Point = Point(),
     val rightUpCorner: Point = Point()
 ) : VertexFigure() {
+    val leftUpCorner: Point
+        get() = Point(leftDownCorner.x, rightUpCorner.y)
+    val rightDownCorner: Point
+        get() = Point(leftDownCorner.y, rightUpCorner.x)
+
     override val center
         get() =
             Point(
@@ -23,8 +25,6 @@ class Rectangle(
 
     override fun moveByVector(vector: Vector) {
         leftDownCorner.moveByVector(vector)
-        leftUpCorner.moveByVector(vector)
-        rightDownCorner.moveByVector(vector)
         rightUpCorner.moveByVector(vector)
     }
 
@@ -51,6 +51,7 @@ class Rectangle(
         return (triangleABC.checkIfPointIsInside(point) || triangleABD.checkIfPointIsInside(point))
     }
 
+
 }
 
 
@@ -59,8 +60,6 @@ fun VertexFigureBuilder.buildRectangle(strokes: MutableList<Stroke>): Rectangle 
     val (maxX, maxY, minX, minY) = strokeInteractor.getStrokesRestrictions(strokes)
     return Rectangle(
         leftDownCorner = Point(minX, minY),
-        leftUpCorner = Point(minX, maxY),
-        rightDownCorner = Point(maxX, minY),
         rightUpCorner = Point(maxX, maxY)
     )
 }
