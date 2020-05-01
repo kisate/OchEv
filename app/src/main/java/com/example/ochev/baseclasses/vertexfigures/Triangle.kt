@@ -59,13 +59,28 @@ class Triangle(
     }
 
     fun tryToMakeMoreSmooth() {
+        // try to make one of the sides of triangle parralell to OX
+
         val points = listOf(pointA, pointB, pointC).sortedBy { it.y }
         val firstBottomPoint = points[2]
         val secondBottomPoint = points[1]
 
         val miss = Vector(firstBottomPoint, secondBottomPoint)
 
-        if (abs(miss.x / miss.y.toFloat()) >= 7) secondBottomPoint.y = firstBottomPoint.y
+        if (abs(miss.x / miss.y.toFloat()) >= 5) {
+            secondBottomPoint.y = firstBottomPoint.y
+            tryToCentralizeTopPoint(firstBottomPoint, secondBottomPoint)
+        }
+    }
+
+    fun tryToCentralizeTopPoint(firstBottomPoint: Point, secondBottomPoint: Point) {
+        val topPoint = listOf(pointA, pointB, pointC).minBy { it.y }!!
+        val delta = abs(firstBottomPoint.x - secondBottomPoint.x)
+        val relation = (topPoint.x - firstBottomPoint.x) / delta.toFloat()
+
+        if (relation in 0.4..0.6) {
+            topPoint.x = (firstBottomPoint.x + secondBottomPoint.x) / 2
+        }
     }
 }
 
