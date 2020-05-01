@@ -31,6 +31,8 @@ class PathDrawer {
     fun draw(path: Path, canvas: Canvas?) {
         canvas?.drawPath(path, paint)
     }
+
+
 }
 
 class DrawStrokeInteractor {
@@ -41,13 +43,11 @@ class DrawStrokeInteractor {
         clear(drawStrokeView)
         if (stroke.points.size > 0) {
             drawStrokeView.path.moveTo(stroke.points[0].x.toFloat(), stroke.points[0].y.toFloat())
-            //drawStrokeView.path.addCircle(stroke.points[0].x.toFloat(), stroke.points[0].y.toFloat(),5f, Path.Direction.CCW)
             for (id in 1 until stroke.points.size) {
                 drawStrokeView.path.lineTo(
                     stroke.points[id].x.toFloat(),
                     stroke.points[id].y.toFloat()
                 )
-                //drawStrokeView.path.addCircle(stroke.points[id].x.toFloat(), stroke.points[id].y.toFloat(),5f, Path.Direction.CCW)
             }
         }
         drawStrokeView.invalidate()
@@ -61,5 +61,6 @@ class DrawStrokeInteractor {
     fun draw(path: Path, canvas: Canvas?) {
         pathDrawer.draw(path, canvas)
     }
+
 
 }
