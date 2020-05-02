@@ -1,6 +1,5 @@
 package com.example.ochev.baseclasses.dataclasses
 
-import java.lang.Float.min
 import kotlin.math.sqrt
 
 data class Point(var x: Int = 0, var y: Int = 0) {
@@ -44,7 +43,6 @@ data class Point(var x: Int = 0, var y: Int = 0) {
             pointInteractor.distance(this, linePointB)
         )
     }
-
 }
 
 

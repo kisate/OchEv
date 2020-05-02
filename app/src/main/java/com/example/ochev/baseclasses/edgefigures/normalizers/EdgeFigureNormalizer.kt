@@ -11,10 +11,8 @@ class EdgeFigureNormalizer {
     private val MAX_DISTANCE_BETWEEN_END_AND_FIGURE = 50
 
     fun checkIfTheClosestigureIsCorrect(vertexFigure: VertexFigure, point: Point): Boolean {
-        val distance =
-            if (vertexFigure.checkIfPointIsInside(point)) 0f
-            else vertexFigure.getDistanceToPoint(point)
-        return distance <= MAX_DISTANCE_BETWEEN_END_AND_FIGURE
+        return vertexFigure.getDistanceToPointOrZeroIfInside(point) <=
+                MAX_DISTANCE_BETWEEN_END_AND_FIGURE
     }
 
     fun normalizeAsTwoClosestFigures(information: InfrormationForNormalizer): EdgeFigure? {
