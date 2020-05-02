@@ -5,14 +5,32 @@ import com.example.ochev.baseclasses.Figure
 import com.example.ochev.baseclasses.FigureNormalizer
 import com.example.ochev.baseclasses.VertexFigure
 
+
 data class Graph(
     val vertexes: MutableList<VertexFigure> = ArrayList(),
     val edges: MutableList<EdgeFigure> = ArrayList()
 ) {
     val allFigures: MutableList<Figure>
         get() = (vertexes + edges).toMutableList()
+
+    class ComparatorByHeights() : Comparator<Figure> {
+        override fun compare(x: Figure?, y: Figure?): Int {
+            if (x == null && y == null) return 0
+            if (x == null) return -1
+            if (y == null) return 1
+
+            val diff = x.heightOnPlain - y.heightOnPlain
+            if (diff == 0) {
+                if (x is VertexFigure && y is EdgeFigure) return 1
+                if (x is EdgeFigure && y is VertexFigure) return -1
+            }
+            return diff
+        }
+
+    }
+
     val figuresSortedByHeights: MutableList<Figure>
-        get() = allFigures.sortedBy { it.heightOnPlain }.toMutableList()
+        get() = allFigures.sortedWith(ComparatorByHeights()).toMutableList()
 
     fun addEdge(edgeFigure: EdgeFigure) {
         edges.add(edgeFigure)
