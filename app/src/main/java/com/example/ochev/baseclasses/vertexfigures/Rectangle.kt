@@ -5,6 +5,8 @@ import com.example.ochev.baseclasses.dataclasses.Point
 import com.example.ochev.baseclasses.dataclasses.Stroke
 import com.example.ochev.baseclasses.dataclasses.StrokeInteractor
 import com.example.ochev.baseclasses.dataclasses.Vector
+import com.example.ochev.baseclasses.vertexfigures.editors.PointMover
+import kotlin.math.min
 
 
 class Rectangle(
@@ -45,10 +47,37 @@ class Rectangle(
     }
 
     override fun checkIfPointIsInside(point: Point): Boolean {
-        val triangleABC = Triangle(leftDownCorner, leftUpCorner, rightUpCorner)
-        val triangleABD = Triangle(leftDownCorner, rightUpCorner, rightDownCorner)
+        val maxX = kotlin.math.max(leftDownCorner.x, rightDownCorner.x)
+        val minX = min(leftDownCorner.x, rightDownCorner.x)
+        val maxY = kotlin.math.max(leftDownCorner.y, leftUpCorner.y)
+        val minY = min(leftDownCorner.y, leftUpCorner.y)
 
-        return (triangleABC.checkIfPointIsInside(point) || triangleABD.checkIfPointIsInside(point))
+        return (point.x in minX..maxX && point.y in minY..maxY)
+    }
+
+    override fun getPointMovers(): MutableList<PointMover> {
+        val points = mutableListOf(leftDownCorner, leftUpCorner, rightUpCorner, rightDownCorner)
+
+        val result: MutableList<PointMover> = ArrayList()
+
+        for (i in 0..3) {
+            val moveFun =
+                if (i % 2 == 0) {
+                    { point: Point ->
+                        points[i].x = point.x;points[i].y = point.y
+                        points[(i - 1 + 4) % 4].y = point.y
+                        points[(i + 1) % 4].x = point.x
+                    }
+                } else {
+                    { point: Point ->
+                        points[i].x = point.x;points[i].y = point.y
+                        points[(i - 1 + 4) % 4].x = point.x
+                        points[(i + 1) % 4].y = point.y
+                    }
+                }
+            result.add(PointMover(points[i], moveFun))
+        }
+        return result
     }
 
 
