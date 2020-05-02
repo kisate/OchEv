@@ -10,6 +10,7 @@ abstract class Figure(
     var heightOnPlain: Int = 0
 ) {
     abstract fun getDistanceToPoint(point: Point): Float
+    abstract fun checkIfFigureIsCloseEnough(point: Point): Boolean
 }
 
 
