@@ -210,7 +210,8 @@ class InputHandler(
         if (point != null) {
             if (vertexFigureEditor != null) {
                 if (!vertexFigureEditor!!.mover.tryToStartMove(point)) {
-                    closeEditing(lastEditingFigure)
+                    //closeEditing(lastEditingFigure)
+                    vertexFigureEditor = null
                 }
             } else {
                 closeEditing(lastEditingFigure)
@@ -228,6 +229,9 @@ class InputHandler(
     }
 
     fun movementUp(point: Point?) {
+        if (vertexFigureEditor == null){
+            closeEditing(lastEditingFigure)
+        }
         drawGraphView.invalidate()
     }
 }
