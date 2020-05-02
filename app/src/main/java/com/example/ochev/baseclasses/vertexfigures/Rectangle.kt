@@ -11,12 +11,11 @@ import kotlin.math.min
 
 class Rectangle(
     val leftDownCorner: Point = Point(),
-    val rightUpCorner: Point = Point()
+    val rightUpCorner: Point = Point(),
+    val leftUpCorner: Point = Point(leftDownCorner.x, rightUpCorner.y),
+    val rightDownCorner: Point = Point(rightUpCorner.x, leftDownCorner.y)
 ) : VertexFigure() {
-    val leftUpCorner: Point
-        get() = Point(leftDownCorner.x, rightUpCorner.y)
-    val rightDownCorner: Point
-        get() = Point(rightUpCorner.x, leftDownCorner.y)
+
 
     override val center
         get() =
@@ -27,7 +26,9 @@ class Rectangle(
 
     override fun moveByVector(vector: Vector) {
         leftDownCorner.moveByVector(vector)
+        leftUpCorner.moveByVector(vector)
         rightUpCorner.moveByVector(vector)
+        rightDownCorner.moveByVector(vector)
     }
 
     override fun getDistanceToPoint(point: Point): Float {
@@ -95,7 +96,10 @@ fun VertexFigureBuilder.buildRectangle(strokes: MutableList<Stroke>): Rectangle 
     val (maxX, maxY, minX, minY) = strokeInteractor.getStrokesRestrictions(strokes)
     return Rectangle(
         leftDownCorner = Point(minX, minY),
+        leftUpCorner = Point(minX, maxY),
+        rightDownCorner = Point(maxX, minY),
         rightUpCorner = Point(maxX, maxY)
+
     )
 }
 
