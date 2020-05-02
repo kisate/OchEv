@@ -70,7 +70,7 @@ abstract class Drawer {
         }
     }
 
-    abstract fun draw(figure: Figure, canvas: Canvas?, graphPos: Point);
+    abstract fun draw(figure: Figure, canvas: Canvas?, graphPos: Point)
 }
 
 class CircleDrawer : Drawer() {
@@ -99,7 +99,7 @@ class CircleDrawer : Drawer() {
          */
         styles[DrawingMode.EDIT_CORNERS.ordinal].circuitPaint.style = Paint.Style.FILL_AND_STROKE
         styles[DrawingMode.EDIT_CORNERS.ordinal].circuitPaint.strokeWidth = 3f
-        styles[DrawingMode.EDIT.ordinal].circuitPaint.color = Color.BLUE
+        styles[DrawingMode.EDIT_CORNERS.ordinal].circuitPaint.color = Color.BLUE
     }
 
     override fun draw(figure: Figure, canvas: Canvas?, graphPos: Point) {
@@ -118,9 +118,15 @@ class CircleDrawer : Drawer() {
             figure.radius.toFloat(),
             styles[currentStyle].circuitPaint
         )
-        for (point in figure.getMovingPoints()){
-            canvas?.drawCircle(point.x.toFloat(), point.y.toFloat(), 5f, styles[DrawingMode.EDIT_CORNERS.ordinal].circuitPaint)
-        }
+        if (figure.drawingInformation.drawingMode == DrawingMode.EDIT)
+            for (point in figure.getMovingPoints()) {
+                canvas?.drawCircle(
+                    point.x.toFloat(),
+                    point.y.toFloat(),
+                    5f,
+                    styles[DrawingMode.EDIT_CORNERS.ordinal].circuitPaint
+                )
+            }
     }
 }
 
@@ -144,13 +150,13 @@ class RectangleDrawer : Drawer() {
         styles[DrawingMode.EDIT.ordinal].fillPaint.color = Color.rgb(195, 0, 251)
         styles[DrawingMode.EDIT.ordinal].circuitPaint.style = Paint.Style.STROKE
         styles[DrawingMode.EDIT.ordinal].circuitPaint.strokeWidth = 10f
-        styles[DrawingMode.EDIT.ordinal].circuitPaint.color =  Color.BLACK
+        styles[DrawingMode.EDIT.ordinal].circuitPaint.color = Color.BLACK
         /*
             editing corner style of rectabgles
          */
         styles[DrawingMode.EDIT_CORNERS.ordinal].circuitPaint.style = Paint.Style.FILL_AND_STROKE
         styles[DrawingMode.EDIT_CORNERS.ordinal].circuitPaint.strokeWidth = 3f
-        styles[DrawingMode.EDIT.ordinal].circuitPaint.color = Color.BLUE
+        styles[DrawingMode.EDIT_CORNERS.ordinal].circuitPaint.color = Color.BLUE
 
     }
 
@@ -170,9 +176,15 @@ class RectangleDrawer : Drawer() {
             figure.rightUpCorner.y.toFloat(),
             styles[currentStyle].circuitPaint
         )
-        for (point in figure.getMovingPoints()){
-            canvas?.drawCircle(point.x.toFloat(), point.y.toFloat(), 5f, styles[DrawingMode.EDIT_CORNERS.ordinal].circuitPaint)
-        }
+        if (figure.drawingInformation.drawingMode == DrawingMode.EDIT)
+            for (point in figure.getMovingPoints()) {
+                canvas?.drawCircle(
+                    point.x.toFloat(),
+                    point.y.toFloat(),
+                    5f,
+                    styles[DrawingMode.EDIT_CORNERS.ordinal].circuitPaint
+                )
+            }
     }
 }
 

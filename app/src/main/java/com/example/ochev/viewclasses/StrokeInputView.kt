@@ -276,7 +276,10 @@ class InputHandler(
                 closeEditing(lastEditingFigure)
             }
         }
+        movementType = MovementType.CHILL
         drawGraphView.invalidate()
+
+
     }
 
     companion object {
