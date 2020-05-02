@@ -205,7 +205,9 @@ class InputHandler(
 
     fun movementStart(point: Point?) {
         if (point != null) {
-            vertexFigureEditor.mover.tryToStartMove(point)
+            if(!vertexFigureEditor.mover.tryToStartMove(point)){
+                closeEditing(lastEditingFigure)
+            }
             drawGraphView.invalidate()
         }
     }
