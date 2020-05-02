@@ -38,7 +38,7 @@ class DrawGraphView(
     }
 }
 
-class FigureStyle{
+class FigureStyle {
     val fontPaint = Paint()
     val circuitPaint = Paint()
     val fillPaint = Paint()
@@ -50,21 +50,22 @@ abstract class Drawer {
 
     init {
         styles.add(FigureStyle())
+        styles.add(FigureStyle())
     }
 
-    fun setFontWidth(width: Float){
+    fun setFontWidth(width: Float) {
         for (style in styles) {
             style.fontPaint.strokeWidth = width
         }
     }
 
-    fun setCircuitWidth(width: Float){
+    fun setCircuitWidth(width: Float) {
         for (style in styles) {
             style.circuitPaint.strokeWidth = width
         }
     }
 
-    fun setFillWidth(width: Float){
+    fun setFillWidth(width: Float) {
         for (style in styles) {
             style.fillPaint.strokeWidth = width
         }
@@ -75,17 +76,23 @@ class CircleDrawer : Drawer() {
 
     init {
         /*
-            first style of circles
+            default style of circles
          */
-        styles[0].fillPaint.style = Paint.Style.FILL
-        styles[0].fillPaint.strokeWidth = 0f
-        styles[0].fillPaint.color = Color.WHITE
-        styles[0].circuitPaint.style = Paint.Style.STROKE
-        styles[0].circuitPaint.strokeWidth = 10f
-        styles[0].circuitPaint.color = Color.BLACK
+        styles[DrawingMode.DEFAULT.ordinal].fillPaint.style = Paint.Style.FILL
+        styles[DrawingMode.DEFAULT.ordinal].fillPaint.strokeWidth = 0f
+        styles[DrawingMode.DEFAULT.ordinal].fillPaint.color = Color.WHITE
+        styles[DrawingMode.DEFAULT.ordinal].circuitPaint.style = Paint.Style.STROKE
+        styles[DrawingMode.DEFAULT.ordinal].circuitPaint.strokeWidth = 10f
+        styles[DrawingMode.DEFAULT.ordinal].circuitPaint.color = Color.BLACK
         /*
-
+            editing style of circles
          */
+        styles[DrawingMode.EDIT.ordinal].fillPaint.style = Paint.Style.FILL
+        styles[DrawingMode.EDIT.ordinal].fillPaint.strokeWidth = 0f
+        styles[DrawingMode.EDIT.ordinal].fillPaint.color = Color.WHITE
+        styles[DrawingMode.EDIT.ordinal].circuitPaint.style = Paint.Style.STROKE
+        styles[DrawingMode.EDIT.ordinal].circuitPaint.strokeWidth = 10f
+        styles[DrawingMode.EDIT.ordinal].circuitPaint.color = Color.BLUE
     }
 
     fun draw(vertex: Circle, canvas: Canvas?) {
@@ -108,17 +115,23 @@ class RectangleDrawer : Drawer() {
 
     init {
         /*
-            first style of rectangles
+            default style of rectangles
          */
-        styles[0].fillPaint.style = Paint.Style.FILL
-        styles[0].fillPaint.strokeWidth = 0f
-        styles[0].fillPaint.color = Color.WHITE
-        styles[0].circuitPaint.style = Paint.Style.STROKE
-        styles[0].circuitPaint.strokeWidth = 10f
-        styles[0].circuitPaint.color = Color.BLACK
+        styles[DrawingMode.DEFAULT.ordinal].fillPaint.style = Paint.Style.FILL
+        styles[DrawingMode.DEFAULT.ordinal].fillPaint.strokeWidth = 0f
+        styles[DrawingMode.DEFAULT.ordinal].fillPaint.color = Color.WHITE
+        styles[DrawingMode.DEFAULT.ordinal].circuitPaint.style = Paint.Style.STROKE
+        styles[DrawingMode.DEFAULT.ordinal].circuitPaint.strokeWidth = 10f
+        styles[DrawingMode.DEFAULT.ordinal].circuitPaint.color = Color.BLACK
         /*
-
+            editing style of rectangles
          */
+        styles[DrawingMode.EDIT.ordinal].fillPaint.style = Paint.Style.FILL
+        styles[DrawingMode.EDIT.ordinal].fillPaint.strokeWidth = 0f
+        styles[DrawingMode.EDIT.ordinal].fillPaint.color = Color.WHITE
+        styles[DrawingMode.EDIT.ordinal].circuitPaint.style = Paint.Style.STROKE
+        styles[DrawingMode.EDIT.ordinal].circuitPaint.strokeWidth = 10f
+        styles[DrawingMode.EDIT.ordinal].circuitPaint.color = Color.BLUE
     }
 
     fun draw(vertex: Rectangle, canvas: Canvas?) {
@@ -143,17 +156,23 @@ class TriangleDrawer : Drawer() {
 
     init {
         /*
-            first style of triangels
+            default style of triangels
          */
-        styles[0].fillPaint.style = Paint.Style.FILL
-        styles[0].fillPaint.strokeWidth = 0f
-        styles[0].fillPaint.color = Color.WHITE
-        styles[0].circuitPaint.style = Paint.Style.STROKE
-        styles[0].circuitPaint.strokeWidth = 10f
-        styles[0].circuitPaint.color = Color.BLACK
+        styles[DrawingMode.DEFAULT.ordinal].fillPaint.style = Paint.Style.FILL
+        styles[DrawingMode.DEFAULT.ordinal].fillPaint.strokeWidth = 0f
+        styles[DrawingMode.DEFAULT.ordinal].fillPaint.color = Color.WHITE
+        styles[DrawingMode.DEFAULT.ordinal].circuitPaint.style = Paint.Style.STROKE
+        styles[DrawingMode.DEFAULT.ordinal].circuitPaint.strokeWidth = 10f
+        styles[DrawingMode.DEFAULT.ordinal].circuitPaint.color = Color.BLACK
         /*
-
+            editing style of triangles
          */
+        styles[DrawingMode.EDIT.ordinal].fillPaint.style = Paint.Style.FILL
+        styles[DrawingMode.EDIT.ordinal].fillPaint.strokeWidth = 0f
+        styles[DrawingMode.EDIT.ordinal].fillPaint.color = Color.WHITE
+        styles[DrawingMode.EDIT.ordinal].circuitPaint.style = Paint.Style.STROKE
+        styles[DrawingMode.EDIT.ordinal].circuitPaint.strokeWidth = 10f
+        styles[DrawingMode.EDIT.ordinal].circuitPaint.color = Color.BLUE
     }
 
 
@@ -172,14 +191,17 @@ class LineDrawer : Drawer() {
 
     init {
         /*
-            first style of lines
+            default style of lines
          */
-        styles[0].circuitPaint.style = Paint.Style.STROKE
-        styles[0].circuitPaint.color = Color.DKGRAY
-        styles[0].circuitPaint.strokeWidth = 10f
+        styles[DrawingMode.DEFAULT.ordinal].circuitPaint.style = Paint.Style.STROKE
+        styles[DrawingMode.DEFAULT.ordinal].circuitPaint.color = Color.DKGRAY
+        styles[DrawingMode.DEFAULT.ordinal].circuitPaint.strokeWidth = 10f
         /*
-
+            editing stype of lines
          */
+        styles[DrawingMode.EDIT.ordinal].circuitPaint.style = Paint.Style.STROKE
+        styles[DrawingMode.EDIT.ordinal].circuitPaint.color = Color.BLUE
+        styles[DrawingMode.EDIT.ordinal].circuitPaint.strokeWidth = 10f
     }
 
     fun draw(edge: Line, canvas: Canvas?) {
@@ -198,22 +220,32 @@ class DrawGraphInteractor {
     val triangleDrawer = TriangleDrawer()
     val lineDrawer = LineDrawer()
 
-
-
     fun draw(vertex: VertexFigure, canvas: Canvas?) {
+
         when (vertex) {
-            is Circle -> circleDrawer.draw(vertex, canvas)
-            is Rectangle -> rectangleDrawer.draw(vertex, canvas)
-            is Triangle -> triangleDrawer.draw(vertex, canvas)
+            is Circle -> {
+                circleDrawer.currentStyle = vertex.drawingInformation.drawingMode.ordinal
+                circleDrawer.draw(vertex, canvas)
+            }
+            is Rectangle -> {
+                rectangleDrawer.currentStyle = vertex.drawingInformation.drawingMode.ordinal
+                rectangleDrawer.draw(vertex, canvas)
+            }
+            is Triangle -> {
+                triangleDrawer.currentStyle = vertex.drawingInformation.drawingMode.ordinal
+                triangleDrawer.draw(vertex, canvas)
+            }
         }
     }
 
     fun draw(edge: EdgeFigure, canvas: Canvas?) {
         when (edge) {
-            is Line -> lineDrawer.draw(edge, canvas)
+            is Line -> {
+                lineDrawer.currentStyle = edge.drawingInformation.drawingMode.ordinal
+                lineDrawer.draw(edge, canvas)
+            }
         }
     }
-
 
 }
 

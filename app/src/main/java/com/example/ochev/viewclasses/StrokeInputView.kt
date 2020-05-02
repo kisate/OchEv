@@ -8,12 +8,13 @@ import android.view.MotionEvent
 import android.view.View
 import android.widget.Toast
 import com.example.ochev.MainActivity
+import com.example.ochev.baseclasses.EdgeFigure
 import com.example.ochev.baseclasses.Figure
-import com.example.ochev.baseclasses.dataclasses.InfrormationForNormalizer
-import com.example.ochev.baseclasses.dataclasses.Point
-import com.example.ochev.baseclasses.dataclasses.PointInteractor
-import com.example.ochev.baseclasses.dataclasses.Stroke
+import com.example.ochev.baseclasses.VertexFigure
+import com.example.ochev.baseclasses.dataclasses.*
 import com.example.ochev.baseclasses.timeinteractors.Throttle
+import com.example.ochev.baseclasses.vertexfigures.editors.VertexFigureEditor
+import com.example.ochev.baseclasses.vertexfigures.editors.VertexFigureMover
 import com.example.ochev.ml.Classifier
 import com.example.ochev.ml.Utils
 import com.google.android.gms.tasks.Tasks
@@ -34,7 +35,7 @@ class StrokeInputView(
 ) :
     View(context, attrs) {
 
-    private val inputHandler = InputHandler(drawStrokeView, drawFiguresView, classifier)
+    private val inputHandler = InputHandler(this, drawStrokeView, drawFiguresView, classifier)
     private val throttle = Throttle(2)
 
     var inputMode = InputMode.DRAWING
@@ -62,10 +63,13 @@ class StrokeInputView(
         } else {
             when (event.action) {
                 MotionEvent.ACTION_DOWN -> {
+                    inputHandler.movementStart(point)
                 }
                 MotionEvent.ACTION_MOVE -> {
+                    inputHandler.movementMove(point)
                 }
                 MotionEvent.ACTION_UP -> {
+                    inputHandler.movementUp(point)
                 }
             }
         }
@@ -74,6 +78,7 @@ class StrokeInputView(
 }
 
 class InputHandler(
+    private val strokeInputView: StrokeInputView,
     private val drawStrokeView: DrawStrokeView,
     private val drawGraphView: DrawGraphView,
     private val classifier: Classifier
@@ -82,6 +87,8 @@ class InputHandler(
     private var stroke: Stroke = Stroke()
     private lateinit var firstPoint: Point
     private lateinit var lastPoint: Point
+    private lateinit var lastEditingFigure: Figure
+    private lateinit var vertexFigureEditor: VertexFigureEditor
 
     private var lastTime = 0L
     private val MICROSECOND = 1000000f // nanosecond / microsecond = milisecond
@@ -113,13 +120,16 @@ class InputHandler(
             lastPoint = point
         }
 
-        if (possibleEditModeEntry()) {
+        if (possibleEditModeEntry() && checkEditModeEntry()) {
             Log.i("timeDebug", (System.nanoTime() - lastTime).toString())
-            // check if points inside some figure
+            enterEditing(drawGraphView.graph.getClosestFigureToPointOrNull(lastPoint)!!)
+            vertexFigureEditor =
+                VertexFigureEditor(InformationForVertexEditor(lastEditingFigure as VertexFigure))
 
+            drawGraphView.invalidate()
+        } else {
+            classifyStroke()
         }
-
-        classifyStroke()
         stroke = Stroke()
         drawStrokeInteractor.clear(drawStrokeView)
     }
@@ -138,6 +148,27 @@ class InputHandler(
             lastPoint,
             firstPoint
         ) <= EDITMODEACCURACY
+    }
+
+    fun enterEditing(figure: Figure) {
+        lastEditingFigure = figure
+        figure.drawingInformation.set(DrawingMode.EDIT)
+        strokeInputView.inputMode = InputMode.EDITING
+    }
+
+    fun closeEditing(figure: Figure) {
+        figure.drawingInformation.set(DrawingMode.DEFAULT)
+        strokeInputView.inputMode = InputMode.DRAWING
+    }
+
+    fun checkEditModeEntry(): Boolean {
+        if (drawGraphView.graph.getClosestFigureToPointOrNull(firstPoint) == null || drawGraphView.graph.getClosestFigureToPointOrNull(
+                lastPoint
+            ) == null
+        ) {
+            return false
+        }
+        return drawGraphView.graph.getClosestFigureToPointOrNull(firstPoint) is VertexFigure
     }
 
     fun classifyStroke() {
@@ -170,5 +201,24 @@ class InputHandler(
     fun clear() {
         drawGraphView.clear()
         drawStrokeInteractor.clear(drawStrokeView)
+    }
+
+    fun movementStart(point: Point?) {
+        if (point != null) {
+            vertexFigureEditor.mover.tryToStartMove(point)
+            drawGraphView.invalidate()
+        }
+    }
+
+    fun movementMove(point: Point?) {
+        if (point != null) {
+            vertexFigureEditor.mover.newPoint(point)
+            drawGraphView.invalidate()
+        }
+    }
+
+    fun movementUp(point: Point?) {
+        closeEditing(lastEditingFigure)
+        drawGraphView.invalidate()
     }
 }

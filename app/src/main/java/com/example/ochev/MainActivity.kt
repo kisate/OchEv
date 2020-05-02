@@ -6,7 +6,9 @@ import android.widget.RelativeLayout
 import androidx.appcompat.app.AppCompatActivity
 import com.example.ochev.baseclasses.dataclasses.StrokeInteractor
 import com.example.ochev.ml.Classifier
+import com.example.ochev.viewclasses.DrawingMode
 import com.example.ochev.viewclasses.InputHandler
+import com.example.ochev.viewclasses.InputMode
 import kotlinx.android.synthetic.main.activity_main.*
 import com.example.ochev.viewclasses.StrokeInputView
 import java.util.concurrent.ExecutorService
@@ -36,6 +38,7 @@ class MainActivity : AppCompatActivity() {
 
         clearButtonId.setOnClickListener {
             strokeInput?.clear()
+            strokeInput?.inputMode = InputMode.DRAWING
         }
 
         classifier
