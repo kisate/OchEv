@@ -14,7 +14,7 @@ class Rectangle(
     val leftUpCorner: Point
         get() = Point(leftDownCorner.x, rightUpCorner.y)
     val rightDownCorner: Point
-        get() = Point(leftDownCorner.y, rightUpCorner.x)
+        get() = Point(rightUpCorner.x, leftDownCorner.y)
 
     override val center
         get() =
