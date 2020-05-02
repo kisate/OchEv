@@ -9,6 +9,10 @@ data class Graph(
     val vertexes: MutableList<VertexFigure> = ArrayList(),
     val edges: MutableList<EdgeFigure> = ArrayList()
 ) {
+    val allFigures: MutableList<Figure>
+        get() = (vertexes + edges).toMutableList()
+    val figuresSortedByHeights: MutableList<Figure>
+        get() = allFigures.sortedBy { it.heightOnPlain }.toMutableList()
 
     fun addEdge(edgeFigure: EdgeFigure) {
         edges.add(edgeFigure)
@@ -19,13 +23,13 @@ data class Graph(
     }
 
     fun getClosestToPointVertexFigureOrNull(point: Point): VertexFigure? {
-        return vertexes.minBy {
+        return vertexes.sortedByDescending { it.heightOnPlain }.minBy {
             it.getDistanceToPointOrZeroIfInside(point)
         }
     }
 
     fun getClosestToPointEdgeFigureOrNull(point: Point): EdgeFigure? {
-        return edges.minBy {
+        return edges.sortedByDescending { it.heightOnPlain }.minBy {
             it.getDistanceToPoint(point)
         }
     }
