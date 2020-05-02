@@ -37,7 +37,7 @@ class StrokeInputView(
 
     private val inputHandler = InputHandler(this, drawStrokeView, drawFiguresView, classifier)
     private val throttle = Throttle(2)
-    private val funMap = HashMap<InputMode, HashMap<Int, (InputHandler, MotionEvent) -> Unit>> ()
+    private val funMap = HashMap<InputMode, HashMap<Int, (InputHandler, MotionEvent) -> Unit>>()
 
     var inputMode = InputMode.DRAWING
 
@@ -45,31 +45,34 @@ class StrokeInputView(
         inputHandler.clear()
     }
 
-    private fun addToFunMap(mode : InputMode, eventAction : Int, function : (InputHandler, MotionEvent) -> Unit)
-    {
+    private fun addToFunMap(
+        mode: InputMode,
+        eventAction: Int,
+        function: (InputHandler, MotionEvent) -> Unit
+    ) {
         if (!funMap.containsKey(mode)) funMap[mode] = HashMap()
         funMap[mode]!![eventAction] = function
     }
 
     init {
-        addToFunMap(InputMode.DRAWING, MotionEvent.ACTION_DOWN) {
-                inputHandler, event -> inputHandler.touchStart(event)
+        addToFunMap(InputMode.DRAWING, MotionEvent.ACTION_DOWN) { inputHandler, event ->
+            inputHandler.touchStart(event)
         }
-        addToFunMap(InputMode.DRAWING, MotionEvent.ACTION_MOVE) {
-                inputHandler, event -> inputHandler.touchMove(event)
+        addToFunMap(InputMode.DRAWING, MotionEvent.ACTION_MOVE) { inputHandler, event ->
+            inputHandler.touchMove(event)
         }
-        addToFunMap(InputMode.DRAWING, MotionEvent.ACTION_UP) {
-                inputHandler, event -> inputHandler.touchUp(event)
+        addToFunMap(InputMode.DRAWING, MotionEvent.ACTION_UP) { inputHandler, event ->
+            inputHandler.touchUp(event)
         }
 
-        addToFunMap(InputMode.EDITING, MotionEvent.ACTION_DOWN) {
-                inputHandler, event -> inputHandler.movementStart(event)
+        addToFunMap(InputMode.EDITING, MotionEvent.ACTION_DOWN) { inputHandler, event ->
+            inputHandler.movementStart(event)
         }
-        addToFunMap(InputMode.EDITING, MotionEvent.ACTION_MOVE) {
-                inputHandler, event -> inputHandler.movementMove(event)
+        addToFunMap(InputMode.EDITING, MotionEvent.ACTION_MOVE) { inputHandler, event ->
+            inputHandler.movementMove(event)
         }
-        addToFunMap(InputMode.EDITING, MotionEvent.ACTION_UP) {
-                inputHandler, event -> inputHandler.movementUp(event)
+        addToFunMap(InputMode.EDITING, MotionEvent.ACTION_UP) { inputHandler, event ->
+            inputHandler.movementUp(event)
         }
     }
 
@@ -86,6 +89,12 @@ class StrokeInputView(
     }
 }
 
+enum class MovementType(value: Int) {
+    CHILL(0),
+    MOVING(1),
+    RESCALING(2);
+}
+
 class InputHandler(
     private val strokeInputView: StrokeInputView,
     private val drawStrokeView: DrawStrokeView,
@@ -97,7 +106,9 @@ class InputHandler(
     private lateinit var firstPoint: Point
     private lateinit var lastPoint: Point
     private lateinit var lastEditingFigure: Figure
+
     private var vertexFigureEditor: VertexFigureEditor? = null
+    private var movementType = MovementType.CHILL
 
     private var lastTime = 0L
     private var ACCURACY = 15f // radius of checking unnecessary movement while drawing stroke
@@ -223,34 +234,47 @@ class InputHandler(
     }
 
     fun movementStart(event: MotionEvent?) {
-
         val point = event?.let { Point(it) }
-
+        movementType = MovementType.CHILL
         if (point != null) {
             if (vertexFigureEditor != null) {
-                if (!vertexFigureEditor!!.mover.tryToStartMove(point)) {
-                    //closeEditing(lastEditingFigure)
-                    vertexFigureEditor = null
+                if (vertexFigureEditor!!.rescaler.tryToStartMoving(point)) {
+                    movementType = MovementType.RESCALING
+                } else if (vertexFigureEditor!!.mover.tryToStartMove(point)) {
+                    movementType = MovementType.MOVING
                 }
-            } else {
-                vertexFigureEditor = null
             }
         }
     }
 
     fun movementMove(event: MotionEvent?) {
-
-        val point = event?.let { Point(it) }
-
-        if (point != null && vertexFigureEditor != null) {
-            vertexFigureEditor!!.mover.newPoint(point)
-            drawGraphView.invalidate()
+        val point = event?.let { Point(it) } ?: return
+        when (movementType) {
+            MovementType.MOVING -> {
+                vertexFigureEditor!!.mover.newPoint(point)
+            }
+            MovementType.RESCALING -> {
+                vertexFigureEditor!!.rescaler.newPoint(point)
+            }
+            else -> {
+                return
+            }
         }
+        drawGraphView.invalidate()
     }
 
     fun movementUp(event: MotionEvent?) {
-        if (vertexFigureEditor == null){
-            closeEditing(lastEditingFigure)
+        val point = event?.let { Point(it) } ?: return
+        when (movementType) {
+            MovementType.MOVING -> {
+                vertexFigureEditor!!.mover.newPoint(point)
+            }
+            MovementType.RESCALING -> {
+                vertexFigureEditor!!.rescaler.newPoint(point)
+            }
+            MovementType.CHILL -> {
+                closeEditing(lastEditingFigure)
+            }
         }
         drawGraphView.invalidate()
     }
