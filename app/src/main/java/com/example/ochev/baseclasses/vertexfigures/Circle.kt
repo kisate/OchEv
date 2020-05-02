@@ -2,11 +2,16 @@ package com.example.ochev.baseclasses.vertexfigures
 
 import com.example.ochev.baseclasses.VertexFigure
 import com.example.ochev.baseclasses.dataclasses.*
+import com.example.ochev.baseclasses.vertexfigures.editors.PointMover
 import kotlin.math.abs
 
 class Circle(
     override val center: Point = Point(),
-    val radius: Int = 0
+    var radius: Int = 0,
+    val leftPoint: Point = Point(center.x - radius, center.y),
+    val upPoint: Point = Point(center.x, center.y + radius),
+    val rightPoint: Point = Point(center.x + radius, center.y),
+    val downPoint: Point = Point(center.x, center.y - radius)
 ) : VertexFigure() {
     override fun getDistanceToPoint(point: Point): Float {
         val pointInteractor = PointInteractor()
@@ -24,6 +29,24 @@ class Circle(
     override fun checkIfPointIsInside(point: Point): Boolean {
         val pointInteractor = PointInteractor()
         return pointInteractor.distance(point, center) <= radius
+    }
+
+    override fun getPointMovers(): MutableList<PointMover> {
+        val points = listOf(leftPoint, upPoint, rightPoint, downPoint)
+
+        val result: MutableList<PointMover> = ArrayList()
+
+        for (i in 0..3) {
+            val moveFun = { point: Point ->
+                val pointInteractor = PointInteractor()
+                val newRadius = pointInteractor.distance(center, point)
+                radius = newRadius.toInt()
+            }
+
+            result.add(PointMover(points[i], moveFun))
+        }
+
+        return result
     }
 }
 

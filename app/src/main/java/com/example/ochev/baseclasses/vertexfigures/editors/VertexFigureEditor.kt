@@ -8,4 +8,5 @@ class VertexFigureEditor(
 ) {
     val figure: VertexFigure = information.figure
     val mover = VertexFigureMover(information)
+    val rescaler = VertexFigureRescaler(information)
 }

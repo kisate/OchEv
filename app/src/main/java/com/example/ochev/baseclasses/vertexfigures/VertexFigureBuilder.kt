@@ -9,7 +9,6 @@ class VertexFigureBuilder {
         return when (type) {
             Vertexes.RECTANGLE -> buildRectangle(strokes)
             Vertexes.CIRCLE -> buildCircle(strokes)
-            // Vertexes.TRIANGLE -> buildTriangle(strokes)
         }
     }
 }
