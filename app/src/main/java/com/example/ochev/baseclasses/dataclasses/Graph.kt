@@ -4,6 +4,7 @@ import com.example.ochev.baseclasses.EdgeFigure
 import com.example.ochev.baseclasses.Figure
 import com.example.ochev.baseclasses.FigureNormalizer
 import com.example.ochev.baseclasses.VertexFigure
+import com.example.ochev.baseclasses.edgefigures.Line
 
 
 data class Graph(
@@ -82,5 +83,13 @@ data class Graph(
             is EdgeFigure -> addEdge(newFigure)
         }
         return newFigure
+    }
+
+    fun recalcHeights() {
+        for (edge in edges) {
+            if (edge is Line) {
+                edge.heightOnPlain = Math.min(edge.beginFigure.heightOnPlain, edge.endFigure.heightOnPlain)
+            }
+        }
     }
 }

@@ -12,6 +12,7 @@ import com.example.ochev.baseclasses.EdgeFigure
 import com.example.ochev.baseclasses.Figure
 import com.example.ochev.baseclasses.VertexFigure
 import com.example.ochev.baseclasses.dataclasses.*
+import com.example.ochev.baseclasses.edgefigures.Line
 import com.example.ochev.baseclasses.timeinteractors.Throttle
 import com.example.ochev.baseclasses.vertexfigures.editors.VertexFigureEditor
 import com.example.ochev.baseclasses.vertexfigures.editors.VertexFigureMover
@@ -88,7 +89,7 @@ class InputHandler(
     private lateinit var firstPoint: Point
     private lateinit var lastPoint: Point
     private lateinit var lastEditingFigure: Figure
-    private lateinit var vertexFigureEditor: VertexFigureEditor
+    private var vertexFigureEditor: VertexFigureEditor? = null
 
     private var lastTime = 0L
     private val MICROSECOND = 1000000f // nanosecond / microsecond = milisecond
@@ -123,8 +124,13 @@ class InputHandler(
         if (possibleEditModeEntry() && checkEditModeEntry()) {
             Log.i("timeDebug", (System.nanoTime() - lastTime).toString())
             enterEditing(drawGraphView.graph.getClosestFigureToPointOrNull(lastPoint)!!)
-            vertexFigureEditor =
-                VertexFigureEditor(InformationForVertexEditor(lastEditingFigure as VertexFigure))
+
+            if (lastEditingFigure is VertexFigure) {
+                vertexFigureEditor =
+                    VertexFigureEditor(InformationForVertexEditor(lastEditingFigure as VertexFigure))
+            } else if (lastEditingFigure is EdgeFigure) {
+                vertexFigureEditor = null
+            }
 
             drawGraphView.invalidate()
         } else {
@@ -151,6 +157,11 @@ class InputHandler(
     }
 
     fun enterEditing(figure: Figure) {
+        if (drawGraphView.graph.maximalHeight != null) {
+            if (figure is VertexFigure) {
+                figure.heightOnPlain = drawGraphView.graph.maximalHeight!! + 1
+            }
+        }
         lastEditingFigure = figure
         figure.drawingInformation.set(DrawingMode.EDIT)
         strokeInputView.inputMode = InputMode.EDITING
@@ -162,13 +173,9 @@ class InputHandler(
     }
 
     fun checkEditModeEntry(): Boolean {
-        if (drawGraphView.graph.getClosestFigureToPointOrNull(firstPoint) == null || drawGraphView.graph.getClosestFigureToPointOrNull(
-                lastPoint
-            ) == null
-        ) {
-            return false
-        }
-        return drawGraphView.graph.getClosestFigureToPointOrNull(firstPoint) is VertexFigure
+        return drawGraphView.graph.getClosestFigureToPointOrNull(firstPoint) != null && drawGraphView.graph.getClosestFigureToPointOrNull(
+            lastPoint
+        ) != null
     }
 
     fun classifyStroke() {
@@ -205,16 +212,21 @@ class InputHandler(
 
     fun movementStart(point: Point?) {
         if (point != null) {
-            if(!vertexFigureEditor.mover.tryToStartMove(point)){
+            if (vertexFigureEditor != null) {
+                if (!vertexFigureEditor!!.mover.tryToStartMove(point)) {
+                    closeEditing(lastEditingFigure)
+                }
+            } else {
                 closeEditing(lastEditingFigure)
             }
             drawGraphView.invalidate()
+
         }
     }
 
     fun movementMove(point: Point?) {
-        if (point != null) {
-            vertexFigureEditor.mover.newPoint(point)
+        if (point != null && vertexFigureEditor != null) {
+            vertexFigureEditor!!.mover.newPoint(point)
             drawGraphView.invalidate()
         }
     }

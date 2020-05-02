@@ -29,11 +29,8 @@ class DrawGraphView(
     }
 
     override fun onDraw(canvas: Canvas?) {
-        for (edge in graph.edges) {
-            drawGraphInteractor.draw(edge, canvas)
-        }
-        for (vertex in graph.vertexes) {
-            drawGraphInteractor.draw(vertex, canvas)
+        for (figure in graph.figuresSortedByHeights) {
+            drawGraphInteractor.draw(figure, canvas)
         }
     }
 }
@@ -220,29 +217,24 @@ class DrawGraphInteractor {
     val triangleDrawer = TriangleDrawer()
     val lineDrawer = LineDrawer()
 
-    fun draw(vertex: VertexFigure, canvas: Canvas?) {
+    fun draw(figure: Figure, canvas: Canvas?) {
 
-        when (vertex) {
+        when (figure) {
             is Circle -> {
-                circleDrawer.currentStyle = vertex.drawingInformation.drawingMode.ordinal
-                circleDrawer.draw(vertex, canvas)
+                circleDrawer.currentStyle = figure.drawingInformation.drawingMode.ordinal
+                circleDrawer.draw(figure, canvas)
             }
             is Rectangle -> {
-                rectangleDrawer.currentStyle = vertex.drawingInformation.drawingMode.ordinal
-                rectangleDrawer.draw(vertex, canvas)
+                rectangleDrawer.currentStyle = figure.drawingInformation.drawingMode.ordinal
+                rectangleDrawer.draw(figure, canvas)
             }
             is Triangle -> {
-                triangleDrawer.currentStyle = vertex.drawingInformation.drawingMode.ordinal
-                triangleDrawer.draw(vertex, canvas)
+                triangleDrawer.currentStyle = figure.drawingInformation.drawingMode.ordinal
+                triangleDrawer.draw(figure, canvas)
             }
-        }
-    }
-
-    fun draw(edge: EdgeFigure, canvas: Canvas?) {
-        when (edge) {
             is Line -> {
-                lineDrawer.currentStyle = edge.drawingInformation.drawingMode.ordinal
-                lineDrawer.draw(edge, canvas)
+                lineDrawer.currentStyle = figure.drawingInformation.drawingMode.ordinal
+                lineDrawer.draw(figure, canvas)
             }
         }
     }
