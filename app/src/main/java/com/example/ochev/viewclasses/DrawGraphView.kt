@@ -29,7 +29,7 @@ class DrawGraphView(
     }
 
     override fun onDraw(canvas: Canvas?) {
-        canvas?.drawColor(Color.rgb(255, 0 ,250))
+        canvas?.drawColor(Color.rgb(16, 62, 97))
         for (figure in graph.figuresSortedByHeights) {
             drawGraphInteractor.draw(figure, canvas, graphPos)
         }
