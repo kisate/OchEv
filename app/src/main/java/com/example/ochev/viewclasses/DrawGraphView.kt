@@ -29,6 +29,7 @@ class DrawGraphView(
     }
 
     override fun onDraw(canvas: Canvas?) {
+        canvas?.drawColor(Color.rgb(255, 0 ,250))
         for (figure in graph.figuresSortedByHeights) {
             drawGraphInteractor.draw(figure, canvas)
         }
@@ -43,9 +44,10 @@ class FigureStyle {
 
 abstract class Drawer {
     var currentStyle = 0
-    val styles: MutableList<FigureStyle> = ArrayList()
+    val styles: MutableList<FigureStyle> = ArrayList(3)
 
     init {
+        styles.add(FigureStyle())
         styles.add(FigureStyle())
         styles.add(FigureStyle())
     }
@@ -77,7 +79,7 @@ class CircleDrawer : Drawer() {
          */
         styles[DrawingMode.DEFAULT.ordinal].fillPaint.style = Paint.Style.FILL
         styles[DrawingMode.DEFAULT.ordinal].fillPaint.strokeWidth = 0f
-        styles[DrawingMode.DEFAULT.ordinal].fillPaint.color = Color.WHITE
+        styles[DrawingMode.DEFAULT.ordinal].fillPaint.color = Color.rgb(232, 146, 253)
         styles[DrawingMode.DEFAULT.ordinal].circuitPaint.style = Paint.Style.STROKE
         styles[DrawingMode.DEFAULT.ordinal].circuitPaint.strokeWidth = 10f
         styles[DrawingMode.DEFAULT.ordinal].circuitPaint.color = Color.BLACK
@@ -86,10 +88,10 @@ class CircleDrawer : Drawer() {
          */
         styles[DrawingMode.EDIT.ordinal].fillPaint.style = Paint.Style.FILL
         styles[DrawingMode.EDIT.ordinal].fillPaint.strokeWidth = 0f
-        styles[DrawingMode.EDIT.ordinal].fillPaint.color = Color.WHITE
+        styles[DrawingMode.EDIT.ordinal].fillPaint.color = Color.rgb(195, 0, 251)
         styles[DrawingMode.EDIT.ordinal].circuitPaint.style = Paint.Style.STROKE
         styles[DrawingMode.EDIT.ordinal].circuitPaint.strokeWidth = 10f
-        styles[DrawingMode.EDIT.ordinal].circuitPaint.color = Color.BLUE
+        styles[DrawingMode.EDIT.ordinal].circuitPaint.color = Color.BLACK
     }
 
     fun draw(vertex: Circle, canvas: Canvas?) {
@@ -116,7 +118,7 @@ class RectangleDrawer : Drawer() {
          */
         styles[DrawingMode.DEFAULT.ordinal].fillPaint.style = Paint.Style.FILL
         styles[DrawingMode.DEFAULT.ordinal].fillPaint.strokeWidth = 0f
-        styles[DrawingMode.DEFAULT.ordinal].fillPaint.color = Color.WHITE
+        styles[DrawingMode.DEFAULT.ordinal].fillPaint.color = Color.rgb(232, 146, 253)
         styles[DrawingMode.DEFAULT.ordinal].circuitPaint.style = Paint.Style.STROKE
         styles[DrawingMode.DEFAULT.ordinal].circuitPaint.strokeWidth = 10f
         styles[DrawingMode.DEFAULT.ordinal].circuitPaint.color = Color.BLACK
@@ -125,10 +127,11 @@ class RectangleDrawer : Drawer() {
          */
         styles[DrawingMode.EDIT.ordinal].fillPaint.style = Paint.Style.FILL
         styles[DrawingMode.EDIT.ordinal].fillPaint.strokeWidth = 0f
-        styles[DrawingMode.EDIT.ordinal].fillPaint.color = Color.WHITE
+        styles[DrawingMode.EDIT.ordinal].fillPaint.color = Color.rgb(195, 0, 251)
         styles[DrawingMode.EDIT.ordinal].circuitPaint.style = Paint.Style.STROKE
         styles[DrawingMode.EDIT.ordinal].circuitPaint.strokeWidth = 10f
-        styles[DrawingMode.EDIT.ordinal].circuitPaint.color = Color.BLUE
+        styles[DrawingMode.EDIT.ordinal].circuitPaint.color =  Color.BLACK
+
     }
 
     fun draw(vertex: Rectangle, canvas: Canvas?) {
@@ -169,7 +172,7 @@ class TriangleDrawer : Drawer() {
         styles[DrawingMode.EDIT.ordinal].fillPaint.color = Color.WHITE
         styles[DrawingMode.EDIT.ordinal].circuitPaint.style = Paint.Style.STROKE
         styles[DrawingMode.EDIT.ordinal].circuitPaint.strokeWidth = 10f
-        styles[DrawingMode.EDIT.ordinal].circuitPaint.color = Color.BLUE
+        styles[DrawingMode.EDIT.ordinal].circuitPaint.color =  Color.BLUE
     }
 
 
@@ -191,14 +194,15 @@ class LineDrawer : Drawer() {
             default style of lines
          */
         styles[DrawingMode.DEFAULT.ordinal].circuitPaint.style = Paint.Style.STROKE
-        styles[DrawingMode.DEFAULT.ordinal].circuitPaint.color = Color.DKGRAY
+        styles[DrawingMode.DEFAULT.ordinal].circuitPaint.color = Color.BLACK
         styles[DrawingMode.DEFAULT.ordinal].circuitPaint.strokeWidth = 10f
         /*
-            editing stype of lines
+            editing style of lines
          */
         styles[DrawingMode.EDIT.ordinal].circuitPaint.style = Paint.Style.STROKE
-        styles[DrawingMode.EDIT.ordinal].circuitPaint.color = Color.BLUE
+        styles[DrawingMode.EDIT.ordinal].circuitPaint.color = Color.rgb(195, 0, 251)
         styles[DrawingMode.EDIT.ordinal].circuitPaint.strokeWidth = 10f
+
     }
 
     fun draw(edge: Line, canvas: Canvas?) {

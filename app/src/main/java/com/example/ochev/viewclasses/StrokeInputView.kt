@@ -214,10 +214,8 @@ class InputHandler(
                     vertexFigureEditor = null
                 }
             } else {
-                closeEditing(lastEditingFigure)
+                vertexFigureEditor = null
             }
-            drawGraphView.invalidate()
-
         }
     }
 
