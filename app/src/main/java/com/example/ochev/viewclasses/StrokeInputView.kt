@@ -47,6 +47,7 @@ class StrokeInputView(
 
     private fun addToFunMap(mode : InputMode, eventAction : Int, function : (InputHandler, MotionEvent) -> Unit)
     {
+        if (!funMap.containsKey(mode)) funMap[mode] = HashMap()
         funMap[mode]!![eventAction] = function
     }
 
@@ -99,7 +100,6 @@ class InputHandler(
     private var vertexFigureEditor: VertexFigureEditor? = null
 
     private var lastTime = 0L
-    private val MICROSECOND = 1000000f // nanosecond / microsecond = milisecond
     private var ACCURACY = 15f // radius of checking unnecessary movement while drawing stroke
         set(value) {
             field = value
@@ -186,6 +186,10 @@ class InputHandler(
         ) != null
     }
 
+    fun checkMovementModeEntry(): Boolean {
+        return false
+    }
+
     fun classifyStroke() {
         val bitmap = Utils.loadBitmapFromView(drawStrokeView)
 
@@ -249,5 +253,10 @@ class InputHandler(
             closeEditing(lastEditingFigure)
         }
         drawGraphView.invalidate()
+    }
+
+    companion object {
+        private const val MICROSECOND = 1000000f // nanosecond / microsecond = milisecond
+//        private const val TIMEBEFOREMOVEMENT =
     }
 }

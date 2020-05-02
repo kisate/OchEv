@@ -12,7 +12,6 @@ import com.example.ochev.baseclasses.dataclasses.Graph
 import com.example.ochev.baseclasses.edgefigures.Line
 import com.example.ochev.baseclasses.vertexfigures.Circle
 import com.example.ochev.baseclasses.vertexfigures.Rectangle
-import com.example.ochev.baseclasses.vertexfigures.Triangle
 
 class DrawGraphView(
     context: Context?,
@@ -159,44 +158,6 @@ class RectangleDrawer : Drawer() {
     }
 }
 
-class TriangleDrawer : Drawer() {
-
-    init {
-        /*
-            default style of triangels
-         */
-        styles[DrawingMode.DEFAULT.ordinal].fillPaint.style = Paint.Style.FILL
-        styles[DrawingMode.DEFAULT.ordinal].fillPaint.strokeWidth = 0f
-        styles[DrawingMode.DEFAULT.ordinal].fillPaint.color = Color.WHITE
-        styles[DrawingMode.DEFAULT.ordinal].circuitPaint.style = Paint.Style.STROKE
-        styles[DrawingMode.DEFAULT.ordinal].circuitPaint.strokeWidth = 10f
-        styles[DrawingMode.DEFAULT.ordinal].circuitPaint.color = Color.BLACK
-        /*
-            editing style of triangles
-         */
-        styles[DrawingMode.EDIT.ordinal].fillPaint.style = Paint.Style.FILL
-        styles[DrawingMode.EDIT.ordinal].fillPaint.strokeWidth = 0f
-        styles[DrawingMode.EDIT.ordinal].fillPaint.color = Color.WHITE
-        styles[DrawingMode.EDIT.ordinal].circuitPaint.style = Paint.Style.STROKE
-        styles[DrawingMode.EDIT.ordinal].circuitPaint.strokeWidth = 10f
-        styles[DrawingMode.EDIT.ordinal].circuitPaint.color =  Color.BLUE
-    }
-
-
-    override fun draw(figure: Figure, canvas: Canvas?, graphPos: Point) {
-
-        figure as Triangle
-
-        val path = Path()
-        path.moveTo(figure.pointA.x.toFloat(), figure.pointA.y.toFloat())
-        path.lineTo(figure.pointB.x.toFloat(), figure.pointB.y.toFloat())
-        path.lineTo(figure.pointC.x.toFloat(), figure.pointC.y.toFloat())
-        path.close()
-        canvas?.drawPath(path, styles[currentStyle].fillPaint)
-        canvas?.drawPath(path, styles[currentStyle].circuitPaint)
-    }
-}
-
 class LineDrawer : Drawer() {
 
     init {
@@ -231,7 +192,6 @@ class LineDrawer : Drawer() {
 class DrawGraphInteractor {
     val circleDrawer = CircleDrawer()
     val rectangleDrawer = RectangleDrawer()
-    val triangleDrawer = TriangleDrawer()
     val lineDrawer = LineDrawer()
 
     fun draw(figure: Figure, canvas: Canvas?, graphPos: Point = Point(0, 0)) {
@@ -244,10 +204,6 @@ class DrawGraphInteractor {
             is Rectangle -> {
                 rectangleDrawer.currentStyle = figure.drawingInformation.drawingMode.ordinal
                 rectangleDrawer.draw(figure, canvas, graphPos)
-            }
-            is Triangle -> {
-                triangleDrawer.currentStyle = figure.drawingInformation.drawingMode.ordinal
-                triangleDrawer.draw(figure, canvas, graphPos)
             }
             is Line -> {
                 lineDrawer.currentStyle = figure.drawingInformation.drawingMode.ordinal
