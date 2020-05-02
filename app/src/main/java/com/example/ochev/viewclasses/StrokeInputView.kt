@@ -80,7 +80,7 @@ class StrokeInputView(
 
         Log.i("Touch", event.pointerCount.toString())
 
-        event?.let { (funMap[inputMode]!![event.action]!!)(inputHandler, it) }
+        event?.let { (funMap[inputMode]!![event.action])?.let { it1 -> it1(inputHandler, it) } }
 
         return true
     }
