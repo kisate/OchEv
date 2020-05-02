@@ -37,7 +37,7 @@ class StrokeInputView(
 
     private val inputHandler = InputHandler(this, drawStrokeView, drawFiguresView, classifier)
     private val throttle = Throttle(2)
-    private val funMap = HashMap<InputMode, HashMap<Int, (InputHandler, Point) -> Unit>> ()
+    private val funMap = HashMap<InputMode, HashMap<Int, (InputHandler, MotionEvent) -> Unit>> ()
 
     var inputMode = InputMode.DRAWING
 
@@ -45,41 +45,41 @@ class StrokeInputView(
         inputHandler.clear()
     }
 
-    private fun addToFunMap(mode : InputMode, eventAction : Int, function : (InputHandler, Point) -> Unit)
+    private fun addToFunMap(mode : InputMode, eventAction : Int, function : (InputHandler, MotionEvent) -> Unit)
     {
         funMap[mode]!![eventAction] = function
     }
 
     init {
         addToFunMap(InputMode.DRAWING, MotionEvent.ACTION_DOWN) {
-                inputHandler, point -> inputHandler.touchStart(point)
+                inputHandler, event -> inputHandler.touchStart(event)
         }
         addToFunMap(InputMode.DRAWING, MotionEvent.ACTION_MOVE) {
-                inputHandler, point -> inputHandler.touchMove(point)
+                inputHandler, event -> inputHandler.touchMove(event)
         }
         addToFunMap(InputMode.DRAWING, MotionEvent.ACTION_UP) {
-                inputHandler, point -> inputHandler.touchUp(point)
+                inputHandler, event -> inputHandler.touchUp(event)
         }
 
         addToFunMap(InputMode.EDITING, MotionEvent.ACTION_DOWN) {
-                inputHandler, point -> inputHandler.movementStart(point)
+                inputHandler, event -> inputHandler.movementStart(event)
         }
         addToFunMap(InputMode.EDITING, MotionEvent.ACTION_MOVE) {
-                inputHandler, point -> inputHandler.movementMove(point)
+                inputHandler, event -> inputHandler.movementMove(event)
         }
         addToFunMap(InputMode.EDITING, MotionEvent.ACTION_UP) {
-                inputHandler, point -> inputHandler.movementUp(point)
+                inputHandler, event -> inputHandler.movementUp(event)
         }
     }
 
     @SuppressLint("ClickableViewAccessibility")
     override fun onTouchEvent(event: MotionEvent): Boolean {
-        var point: Point? = null
-        throttle.attempt(Runnable { point = Point(event.x.toInt(), event.y.toInt()) })
+        var currentEvent: MotionEvent? = null
+        throttle.attempt(Runnable { currentEvent = event })
 
         Log.i("Touch", event.pointerCount.toString())
 
-        point?.let { (funMap[inputMode]!![event.action]!!)(inputHandler, it) }
+        event?.let { (funMap[inputMode]!![event.action]!!)(inputHandler, it) }
 
         return true
     }
@@ -115,15 +115,18 @@ class InputHandler(
         }
 
 
-    fun touchMove(point: Point?) {
-        if (point == null) return
+    fun touchMove(event: MotionEvent?) {
+        val point = event?.let { Point(it) } ?: return
         if (PointInteractor().distance(point, lastPoint) <= ACCURACY) return
         stroke.addPoint(point)
         drawStrokeInteractor.set(drawStrokeView, stroke)
         lastPoint = point
     }
 
-    fun touchUp(point: Point?) {
+    fun touchUp(event: MotionEvent?) {
+
+        val point = event?.let { Point(it) }
+
         if (point != null) {
             lastPoint = point
         }
@@ -147,8 +150,8 @@ class InputHandler(
         drawStrokeInteractor.clear(drawStrokeView)
     }
 
-    fun touchStart(point: Point?) {
-        if (point == null) return
+    fun touchStart(event: MotionEvent?) {
+        val point = event?.let { Point(it) } ?: return
         firstPoint = point
         lastTime = System.nanoTime()
         lastPoint = point
@@ -215,7 +218,10 @@ class InputHandler(
         drawStrokeInteractor.clear(drawStrokeView)
     }
 
-    fun movementStart(point: Point?) {
+    fun movementStart(event: MotionEvent?) {
+
+        val point = event?.let { Point(it) }
+
         if (point != null) {
             if (vertexFigureEditor != null) {
                 if (!vertexFigureEditor!!.mover.tryToStartMove(point)) {
@@ -228,14 +234,17 @@ class InputHandler(
         }
     }
 
-    fun movementMove(point: Point?) {
+    fun movementMove(event: MotionEvent?) {
+
+        val point = event?.let { Point(it) }
+
         if (point != null && vertexFigureEditor != null) {
             vertexFigureEditor!!.mover.newPoint(point)
             drawGraphView.invalidate()
         }
     }
 
-    fun movementUp(point: Point?) {
+    fun movementUp(event: MotionEvent?) {
         if (vertexFigureEditor == null){
             closeEditing(lastEditingFigure)
         }

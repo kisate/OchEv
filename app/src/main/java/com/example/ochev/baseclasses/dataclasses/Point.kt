@@ -1,8 +1,12 @@
 package com.example.ochev.baseclasses.dataclasses
 
+import android.view.MotionEvent
 import kotlin.math.sqrt
 
 data class Point(var x: Int = 0, var y: Int = 0) {
+
+    constructor(event: MotionEvent) : this(event.x.toInt(), event.y.toInt())
+
     fun moveByVector(vector: Vector) {
         x += vector.x
         y += vector.y
