@@ -27,20 +27,20 @@ data class Graph(
             }
             return diff
         }
-
     }
 
     val figuresSortedByHeights: MutableList<Figure>
         get() = allFigures.sortedWith(ComparatorByHeights()).toMutableList()
 
-    val maximalHeight: Int?
-        get() = allFigures.maxBy { it.heightOnPlain }?.heightOnPlain
+    val maximalHeight: Int
+        get() = allFigures.maxBy { it.heightOnPlain }?.heightOnPlain ?: 0
 
     fun addEdge(edgeFigure: EdgeFigure) {
         edges.add(edgeFigure)
     }
 
     fun addVertex(vertexFigure: VertexFigure) {
+        vertexFigure.heightOnPlain = maximalHeight + 1
         vertexes.add(vertexFigure)
     }
 
@@ -74,7 +74,7 @@ data class Graph(
         }
     }
 
-    fun modifyByStrokes(information: InfrormationForNormalizer): Figure? {
+    fun modifyByStrokes(information: InformationForNormalizer): Figure? {
         val normalizer = FigureNormalizer()
         val newFigure = normalizer.normaliseStrokes(information) ?: return null
 
@@ -88,7 +88,8 @@ data class Graph(
     fun recalcHeights() {
         for (edge in edges) {
             if (edge is Line) {
-                edge.heightOnPlain = Math.min(edge.beginFigure.heightOnPlain, edge.endFigure.heightOnPlain)
+                edge.heightOnPlain =
+                    Math.min(edge.beginFigure.heightOnPlain, edge.endFigure.heightOnPlain)
             }
         }
     }
