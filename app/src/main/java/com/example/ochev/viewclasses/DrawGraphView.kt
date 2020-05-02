@@ -38,34 +38,54 @@ class DrawGraphView(
     }
 }
 
+class FigureStyle{
+    val fontPaint = Paint()
+    val circuitPaint = Paint()
+    val fillPaint = Paint()
+}
+
 abstract class Drawer {
-    protected val fontPaint = Paint()
-    protected val circuitPaint = Paint()
-    protected val fillPaint = Paint()
+    var currentStyle = 0
+    val styles: MutableList<FigureStyle> = ArrayList()
+
+    init {
+        styles.add(FigureStyle())
+    }
 
     fun setFontWidth(width: Float){
-        fontPaint.strokeWidth = width
+        for (style in styles) {
+            style.fontPaint.strokeWidth = width
+        }
     }
 
     fun setCircuitWidth(width: Float){
-        circuitPaint.strokeWidth = width
+        for (style in styles) {
+            style.circuitPaint.strokeWidth = width
+        }
     }
 
     fun setFillWidth(width: Float){
-        fillPaint.strokeWidth = width
+        for (style in styles) {
+            style.fillPaint.strokeWidth = width
+        }
     }
 }
 
 class CircleDrawer : Drawer() {
 
     init {
-        fillPaint.style = Paint.Style.FILL
-        fillPaint.strokeWidth = 0f
-        fillPaint.color = Color.WHITE
+        /*
+            first style of circles
+         */
+        styles[0].fillPaint.style = Paint.Style.FILL
+        styles[0].fillPaint.strokeWidth = 0f
+        styles[0].fillPaint.color = Color.WHITE
+        styles[0].circuitPaint.style = Paint.Style.STROKE
+        styles[0].circuitPaint.strokeWidth = 10f
+        styles[0].circuitPaint.color = Color.BLACK
+        /*
 
-        circuitPaint.style = Paint.Style.STROKE
-        circuitPaint.strokeWidth = 10f
-        circuitPaint.color = Color.BLACK
+         */
     }
 
     fun draw(vertex: Circle, canvas: Canvas?) {
@@ -73,13 +93,13 @@ class CircleDrawer : Drawer() {
             vertex.center.x.toFloat(),
             vertex.center.y.toFloat(),
             vertex.radius.toFloat(),
-            fillPaint
+            styles[currentStyle].fillPaint
         )
         canvas?.drawCircle(
             vertex.center.x.toFloat(),
             vertex.center.y.toFloat(),
             vertex.radius.toFloat(),
-            circuitPaint
+            styles[currentStyle].circuitPaint
         )
     }
 }
@@ -87,13 +107,18 @@ class CircleDrawer : Drawer() {
 class RectangleDrawer : Drawer() {
 
     init {
-        fillPaint.style = Paint.Style.FILL
-        fillPaint.strokeWidth = 0f
-        fillPaint.color = Color.WHITE
+        /*
+            first style of rectangles
+         */
+        styles[0].fillPaint.style = Paint.Style.FILL
+        styles[0].fillPaint.strokeWidth = 0f
+        styles[0].fillPaint.color = Color.WHITE
+        styles[0].circuitPaint.style = Paint.Style.STROKE
+        styles[0].circuitPaint.strokeWidth = 10f
+        styles[0].circuitPaint.color = Color.BLACK
+        /*
 
-        circuitPaint.style = Paint.Style.STROKE
-        circuitPaint.strokeWidth = 10f
-        circuitPaint.color = Color.BLACK
+         */
     }
 
     fun draw(vertex: Rectangle, canvas: Canvas?) {
@@ -102,14 +127,14 @@ class RectangleDrawer : Drawer() {
             vertex.leftDownCorner.y.toFloat(),
             vertex.rightUpCorner.x.toFloat(),
             vertex.rightUpCorner.y.toFloat(),
-            fillPaint
+            styles[currentStyle].fillPaint
         )
         canvas?.drawRect(
             vertex.leftDownCorner.x.toFloat(),
             vertex.leftDownCorner.y.toFloat(),
             vertex.rightUpCorner.x.toFloat(),
             vertex.rightUpCorner.y.toFloat(),
-            circuitPaint
+            styles[currentStyle].circuitPaint
         )
     }
 }
@@ -117,13 +142,18 @@ class RectangleDrawer : Drawer() {
 class TriangleDrawer : Drawer() {
 
     init {
-        fillPaint.style = Paint.Style.FILL
-        fillPaint.strokeWidth = 0f
-        fillPaint.color = Color.WHITE
+        /*
+            first style of triangels
+         */
+        styles[0].fillPaint.style = Paint.Style.FILL
+        styles[0].fillPaint.strokeWidth = 0f
+        styles[0].fillPaint.color = Color.WHITE
+        styles[0].circuitPaint.style = Paint.Style.STROKE
+        styles[0].circuitPaint.strokeWidth = 10f
+        styles[0].circuitPaint.color = Color.BLACK
+        /*
 
-        circuitPaint.style = Paint.Style.STROKE
-        circuitPaint.strokeWidth = 10f
-        circuitPaint.color = Color.BLACK
+         */
     }
 
 
@@ -133,18 +163,23 @@ class TriangleDrawer : Drawer() {
         path.lineTo(vertex.pointB.x.toFloat(), vertex.pointB.y.toFloat())
         path.lineTo(vertex.pointC.x.toFloat(), vertex.pointC.y.toFloat())
         path.close()
-        canvas?.drawPath(path, fillPaint)
-        canvas?.drawPath(path, circuitPaint)
+        canvas?.drawPath(path, styles[currentStyle].fillPaint)
+        canvas?.drawPath(path, styles[currentStyle].circuitPaint)
     }
 }
 
-class LineDrawer {
-    private val paint = Paint()
+class LineDrawer : Drawer() {
 
     init {
-        paint.style = Paint.Style.STROKE
-        paint.color = Color.DKGRAY
-        paint.strokeWidth = 10f
+        /*
+            first style of lines
+         */
+        styles[0].circuitPaint.style = Paint.Style.STROKE
+        styles[0].circuitPaint.color = Color.DKGRAY
+        styles[0].circuitPaint.strokeWidth = 10f
+        /*
+
+         */
     }
 
     fun draw(edge: Line, canvas: Canvas?) {
@@ -153,7 +188,7 @@ class LineDrawer {
         val to = edge.endFigure.center
         path.moveTo(from.x.toFloat(), from.y.toFloat())
         path.lineTo(to.x.toFloat(), to.y.toFloat())
-        canvas?.drawPath(path, paint)
+        canvas?.drawPath(path, styles[currentStyle].circuitPaint)
     }
 }
 
