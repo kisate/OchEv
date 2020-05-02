@@ -32,7 +32,7 @@ class PathDrawer {
         canvas?.drawPath(path, paint)
     }
 
-    fun setWidth(width : Float){
+    fun setWidth(width: Float) {
         paint.strokeWidth = width
     }
 
@@ -42,7 +42,7 @@ class DrawStrokeInteractor {
 
     private val pathDrawer = PathDrawer()
 
-    fun setWidth(width : Float){
+    fun setWidth(width: Float) {
         pathDrawer.setWidth(width)
     }
 

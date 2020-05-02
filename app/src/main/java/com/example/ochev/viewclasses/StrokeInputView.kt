@@ -121,7 +121,7 @@ class InputHandler(
 
         if (possibleEditModeEntry() && checkEditModeEntry()) {
             Log.i("timeDebug", (System.nanoTime() - lastTime).toString())
-            enterEditing(drawGraphView.graph.getClosestToPointFigureOrNull(lastPoint)!!)
+            enterEditing(drawGraphView.graph.getFigureForEditing(lastPoint)!!)
 
             if (lastEditingFigure is VertexFigure) {
                 vertexFigureEditor =
@@ -155,10 +155,8 @@ class InputHandler(
     }
 
     fun enterEditing(figure: Figure) {
-        if (drawGraphView.graph.maximalHeight != null) {
-            if (figure is VertexFigure) {
-                figure.heightOnPlain = drawGraphView.graph.maximalHeight!! + 1
-            }
+        if (figure is VertexFigure) {
+            figure.heightOnPlain = drawGraphView.graph.maximalHeight + 1
         }
         lastEditingFigure = figure
         figure.drawingInformation.set(DrawingMode.EDIT)
@@ -171,7 +169,7 @@ class InputHandler(
     }
 
     fun checkEditModeEntry(): Boolean {
-        return drawGraphView.graph.getClosestToPointFigureOrNull(firstPoint) != null && drawGraphView.graph.getClosestToPointFigureOrNull(
+        return drawGraphView.graph.getFigureForEditing(firstPoint) != null && drawGraphView.graph.getFigureForEditing(
             lastPoint
         ) != null
     }
