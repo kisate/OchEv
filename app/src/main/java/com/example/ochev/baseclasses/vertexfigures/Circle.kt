@@ -27,8 +27,7 @@ class Circle(
     }
 
     override fun moveByVector(vector: Vector) {
-        center.x += vector.x
-        center.y += vector.y
+        center.moveByVector(vector)
     }
 
     override fun checkIfPointIsInside(point: Point): Boolean {
@@ -46,6 +45,12 @@ class Circle(
                 val pointInteractor = PointInteractor()
                 val newRadius = pointInteractor.distance(center, point)
                 radius = newRadius.toInt()
+                val upd = getMovingPoints()
+                for (j in 0..3) {
+                    result[j].point.x = upd[j].x
+                    result[j].point.y = upd[j].y
+                }
+
             }
 
             result.add(PointMover(points[i], moveFun))
