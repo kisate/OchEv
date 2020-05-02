@@ -1,5 +1,6 @@
 package com.example.ochev.baseclasses.vertexfigures
 
+
 import com.example.ochev.algorithms.convexhull.ConvexHullMaker
 import com.example.ochev.baseclasses.VertexFigure
 import com.example.ochev.baseclasses.dataclasses.Point
@@ -150,3 +151,4 @@ fun VertexFigureBuilder.buildTriangle(strokes: MutableList<Stroke>): Triangle {
 
     return result
 }
+
