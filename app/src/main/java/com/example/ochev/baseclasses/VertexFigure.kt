@@ -15,6 +15,7 @@ abstract class VertexFigure(
     abstract fun moveByVector(vector: Vector)
     abstract fun checkIfPointIsInside(point: Point): Boolean
     abstract fun getPointMovers(): MutableList<PointMover>
+    abstract fun getMovingPoints(): MutableList<Point>
 
 
     fun getDistanceToPointOrZeroIfInside(point: Point): Float {

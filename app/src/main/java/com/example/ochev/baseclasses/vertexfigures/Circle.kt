@@ -32,7 +32,7 @@ class Circle(
     }
 
     override fun getPointMovers(): MutableList<PointMover> {
-        val points = listOf(leftPoint, upPoint, rightPoint, downPoint)
+        val points = getMovingPoints()
 
         val result: MutableList<PointMover> = ArrayList()
 
@@ -47,6 +47,10 @@ class Circle(
         }
 
         return result
+    }
+
+    override fun getMovingPoints(): MutableList<Point> {
+        return mutableListOf(leftPoint, upPoint, rightPoint, downPoint)
     }
 }
 
