@@ -12,7 +12,6 @@ abstract class VertexFigure(
     abstract val center: Point
 
     abstract fun moveByVector(vector: Vector)
-    abstract fun getDistanceToPoint(point: Point): Float
     abstract fun checkIfPointIsInside(point: Point): Boolean
 
     fun getDistanceToPointOrZeroIfInside(point: Point): Float {
