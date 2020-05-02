@@ -56,7 +56,7 @@ class Rectangle(
     }
 
     override fun getPointMovers(): MutableList<PointMover> {
-        val points = mutableListOf(leftDownCorner, leftUpCorner, rightUpCorner, rightDownCorner)
+        val points = getMovingPoints()
 
         val result: MutableList<PointMover> = ArrayList()
 
@@ -64,13 +64,15 @@ class Rectangle(
             val moveFun =
                 if (i % 2 == 0) {
                     { point: Point ->
-                        points[i].x = point.x;points[i].y = point.y
+                        points[i].x = point.x
+                        points[i].y = point.y
                         points[(i - 1 + 4) % 4].y = point.y
                         points[(i + 1) % 4].x = point.x
                     }
                 } else {
                     { point: Point ->
-                        points[i].x = point.x;points[i].y = point.y
+                        points[i].x = point.x
+                        points[i].y = point.y
                         points[(i - 1 + 4) % 4].x = point.x
                         points[(i + 1) % 4].y = point.y
                     }
@@ -78,6 +80,10 @@ class Rectangle(
             result.add(PointMover(points[i], moveFun))
         }
         return result
+    }
+
+    override fun getMovingPoints(): MutableList<Point> {
+        return mutableListOf(leftDownCorner, leftUpCorner, rightUpCorner, rightDownCorner)
     }
 
 
