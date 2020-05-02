@@ -21,7 +21,8 @@ import java.util.concurrent.Callable
 
 enum class InputMode(value: Int) {
     DRAWING(1),
-    EDITING(2);
+    EDITING(2),
+    MOVING_ALL(3);
 }
 
 @SuppressLint("ViewConstructor")
@@ -36,6 +37,7 @@ class StrokeInputView(
 
     private val inputHandler = InputHandler(this, drawStrokeView, drawFiguresView, classifier)
     private val throttle = Throttle(2)
+    private val funMap = HashMap<InputMode, HashMap<Int, (InputHandler, Point) -> Unit>> ()
 
     var inputMode = InputMode.DRAWING
 
@@ -43,35 +45,42 @@ class StrokeInputView(
         inputHandler.clear()
     }
 
+    private fun addToFunMap(mode : InputMode, eventAction : Int, function : (InputHandler, Point) -> Unit)
+    {
+        funMap[mode]!![eventAction] = function
+    }
+
+    init {
+        addToFunMap(InputMode.DRAWING, MotionEvent.ACTION_DOWN) {
+                inputHandler, point -> inputHandler.touchStart(point)
+        }
+        addToFunMap(InputMode.DRAWING, MotionEvent.ACTION_MOVE) {
+                inputHandler, point -> inputHandler.touchMove(point)
+        }
+        addToFunMap(InputMode.DRAWING, MotionEvent.ACTION_UP) {
+                inputHandler, point -> inputHandler.touchUp(point)
+        }
+
+        addToFunMap(InputMode.EDITING, MotionEvent.ACTION_DOWN) {
+                inputHandler, point -> inputHandler.movementStart(point)
+        }
+        addToFunMap(InputMode.EDITING, MotionEvent.ACTION_MOVE) {
+                inputHandler, point -> inputHandler.movementMove(point)
+        }
+        addToFunMap(InputMode.EDITING, MotionEvent.ACTION_UP) {
+                inputHandler, point -> inputHandler.movementUp(point)
+        }
+    }
+
     @SuppressLint("ClickableViewAccessibility")
     override fun onTouchEvent(event: MotionEvent): Boolean {
         var point: Point? = null
         throttle.attempt(Runnable { point = Point(event.x.toInt(), event.y.toInt()) })
-        if (inputMode == InputMode.DRAWING) {
-            when (event.action) {
-                MotionEvent.ACTION_DOWN -> {
-                    inputHandler.touchStart(point)
-                }
-                MotionEvent.ACTION_MOVE -> {
-                    inputHandler.touchMove(point)
-                }
-                MotionEvent.ACTION_UP -> {
-                    inputHandler.touchUp(point)
-                }
-            }
-        } else {
-            when (event.action) {
-                MotionEvent.ACTION_DOWN -> {
-                    inputHandler.movementStart(point)
-                }
-                MotionEvent.ACTION_MOVE -> {
-                    inputHandler.movementMove(point)
-                }
-                MotionEvent.ACTION_UP -> {
-                    inputHandler.movementUp(point)
-                }
-            }
-        }
+
+        Log.i("Touch", event.pointerCount.toString())
+
+        point?.let { (funMap[inputMode]!![event.action]!!)(inputHandler, it) }
+
         return true
     }
 }

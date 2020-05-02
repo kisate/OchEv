@@ -21,6 +21,7 @@ class DrawGraphView(
 
     val graph = Graph()
     val drawGraphInteractor = DrawGraphInteractor()
+    var graphPos = Point(0, 0)
 
     fun clear() {
         graph.vertexes.clear()
@@ -31,7 +32,7 @@ class DrawGraphView(
     override fun onDraw(canvas: Canvas?) {
         canvas?.drawColor(Color.rgb(255, 0 ,250))
         for (figure in graph.figuresSortedByHeights) {
-            drawGraphInteractor.draw(figure, canvas)
+            drawGraphInteractor.draw(figure, canvas, graphPos)
         }
     }
 }
@@ -69,6 +70,8 @@ abstract class Drawer {
             style.fillPaint.strokeWidth = width
         }
     }
+
+    abstract fun draw(figure: Figure, canvas: Canvas?, graphPos: Point);
 }
 
 class CircleDrawer : Drawer() {
@@ -94,17 +97,20 @@ class CircleDrawer : Drawer() {
         styles[DrawingMode.EDIT.ordinal].circuitPaint.color = Color.BLACK
     }
 
-    fun draw(vertex: Circle, canvas: Canvas?) {
+    override fun draw(figure: Figure, canvas: Canvas?, graphPos: Point) {
+
+        figure as Circle
+
         canvas?.drawCircle(
-            vertex.center.x.toFloat(),
-            vertex.center.y.toFloat(),
-            vertex.radius.toFloat(),
+            figure.center.x.toFloat(),
+            figure.center.y.toFloat(),
+            figure.radius.toFloat(),
             styles[currentStyle].fillPaint
         )
         canvas?.drawCircle(
-            vertex.center.x.toFloat(),
-            vertex.center.y.toFloat(),
-            vertex.radius.toFloat(),
+            figure.center.x.toFloat(),
+            figure.center.y.toFloat(),
+            figure.radius.toFloat(),
             styles[currentStyle].circuitPaint
         )
     }
@@ -134,19 +140,20 @@ class RectangleDrawer : Drawer() {
 
     }
 
-    fun draw(vertex: Rectangle, canvas: Canvas?) {
+    override fun draw(figure: Figure, canvas: Canvas?, graphPos: Point) {
+        figure as Rectangle
         canvas?.drawRect(
-            vertex.leftDownCorner.x.toFloat(),
-            vertex.leftDownCorner.y.toFloat(),
-            vertex.rightUpCorner.x.toFloat(),
-            vertex.rightUpCorner.y.toFloat(),
+            figure.leftDownCorner.x.toFloat(),
+            figure.leftDownCorner.y.toFloat(),
+            figure.rightUpCorner.x.toFloat(),
+            figure.rightUpCorner.y.toFloat(),
             styles[currentStyle].fillPaint
         )
         canvas?.drawRect(
-            vertex.leftDownCorner.x.toFloat(),
-            vertex.leftDownCorner.y.toFloat(),
-            vertex.rightUpCorner.x.toFloat(),
-            vertex.rightUpCorner.y.toFloat(),
+            figure.leftDownCorner.x.toFloat(),
+            figure.leftDownCorner.y.toFloat(),
+            figure.rightUpCorner.x.toFloat(),
+            figure.rightUpCorner.y.toFloat(),
             styles[currentStyle].circuitPaint
         )
     }
@@ -176,11 +183,14 @@ class TriangleDrawer : Drawer() {
     }
 
 
-    fun draw(vertex: Triangle, canvas: Canvas?) {
+    override fun draw(figure: Figure, canvas: Canvas?, graphPos: Point) {
+
+        figure as Triangle
+
         val path = Path()
-        path.moveTo(vertex.pointA.x.toFloat(), vertex.pointA.y.toFloat())
-        path.lineTo(vertex.pointB.x.toFloat(), vertex.pointB.y.toFloat())
-        path.lineTo(vertex.pointC.x.toFloat(), vertex.pointC.y.toFloat())
+        path.moveTo(figure.pointA.x.toFloat(), figure.pointA.y.toFloat())
+        path.lineTo(figure.pointB.x.toFloat(), figure.pointB.y.toFloat())
+        path.lineTo(figure.pointC.x.toFloat(), figure.pointC.y.toFloat())
         path.close()
         canvas?.drawPath(path, styles[currentStyle].fillPaint)
         canvas?.drawPath(path, styles[currentStyle].circuitPaint)
@@ -205,10 +215,13 @@ class LineDrawer : Drawer() {
 
     }
 
-    fun draw(edge: Line, canvas: Canvas?) {
+    override fun draw(figure: Figure, canvas: Canvas?, graphPos: Point) {
+
+        figure as Line
+
         val path = Path()
-        val from = edge.beginFigure.center
-        val to = edge.endFigure.center
+        val from = figure.beginFigure.center
+        val to = figure.endFigure.center
         path.moveTo(from.x.toFloat(), from.y.toFloat())
         path.lineTo(to.x.toFloat(), to.y.toFloat())
         canvas?.drawPath(path, styles[currentStyle].circuitPaint)
@@ -221,24 +234,24 @@ class DrawGraphInteractor {
     val triangleDrawer = TriangleDrawer()
     val lineDrawer = LineDrawer()
 
-    fun draw(figure: Figure, canvas: Canvas?) {
+    fun draw(figure: Figure, canvas: Canvas?, graphPos: Point = Point(0, 0)) {
 
         when (figure) {
             is Circle -> {
                 circleDrawer.currentStyle = figure.drawingInformation.drawingMode.ordinal
-                circleDrawer.draw(figure, canvas)
+                circleDrawer.draw(figure, canvas, graphPos)
             }
             is Rectangle -> {
                 rectangleDrawer.currentStyle = figure.drawingInformation.drawingMode.ordinal
-                rectangleDrawer.draw(figure, canvas)
+                rectangleDrawer.draw(figure, canvas, graphPos)
             }
             is Triangle -> {
                 triangleDrawer.currentStyle = figure.drawingInformation.drawingMode.ordinal
-                triangleDrawer.draw(figure, canvas)
+                triangleDrawer.draw(figure, canvas, graphPos)
             }
             is Line -> {
                 lineDrawer.currentStyle = figure.drawingInformation.drawingMode.ordinal
-                lineDrawer.draw(figure, canvas)
+                lineDrawer.draw(figure, canvas, graphPos)
             }
         }
     }
