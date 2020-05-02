@@ -1,13 +1,13 @@
 package com.example.ochev.baseclasses.vertexfigures.normalizers
 
 import com.example.ochev.baseclasses.VertexFigure
-import com.example.ochev.baseclasses.dataclasses.InfrormationForNormalizer
+import com.example.ochev.baseclasses.dataclasses.InformationForNormalizer
 import com.example.ochev.baseclasses.dataclasses.PointInteractor
 import com.example.ochev.baseclasses.dataclasses.StrokeInteractor
 import com.example.ochev.baseclasses.vertexfigures.VertexFigureBuilder
 
 class NormalizerByML {
-    fun normalizeByML(information: InfrormationForNormalizer): VertexFigure? {
+    fun normalizeByML(information: InformationForNormalizer): VertexFigure? {
         if (
             information.classifier == null ||
             information.bitmap == null ||

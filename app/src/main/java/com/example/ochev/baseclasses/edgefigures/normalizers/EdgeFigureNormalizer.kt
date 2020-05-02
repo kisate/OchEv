@@ -2,7 +2,7 @@ package com.example.ochev.baseclasses.edgefigures.normalizers
 
 import com.example.ochev.baseclasses.EdgeFigure
 import com.example.ochev.baseclasses.VertexFigure
-import com.example.ochev.baseclasses.dataclasses.InfrormationForNormalizer
+import com.example.ochev.baseclasses.dataclasses.InformationForNormalizer
 import com.example.ochev.baseclasses.dataclasses.Point
 import com.example.ochev.baseclasses.edgefigures.Line
 
@@ -15,7 +15,7 @@ class EdgeFigureNormalizer {
                 MAX_DISTANCE_BETWEEN_END_AND_FIGURE
     }
 
-    fun normalizeAsTwoClosestFigures(information: InfrormationForNormalizer): EdgeFigure? {
+    fun normalizeAsTwoClosestFigures(information: InformationForNormalizer): EdgeFigure? {
         if (
             information.strokes == null ||
             information.graph == null

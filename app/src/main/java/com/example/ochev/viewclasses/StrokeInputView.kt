@@ -12,10 +12,8 @@ import com.example.ochev.baseclasses.EdgeFigure
 import com.example.ochev.baseclasses.Figure
 import com.example.ochev.baseclasses.VertexFigure
 import com.example.ochev.baseclasses.dataclasses.*
-import com.example.ochev.baseclasses.edgefigures.Line
 import com.example.ochev.baseclasses.timeinteractors.Throttle
 import com.example.ochev.baseclasses.vertexfigures.editors.VertexFigureEditor
-import com.example.ochev.baseclasses.vertexfigures.editors.VertexFigureMover
 import com.example.ochev.ml.Classifier
 import com.example.ochev.ml.Utils
 import com.google.android.gms.tasks.Tasks
@@ -181,7 +179,7 @@ class InputHandler(
     fun classifyStroke() {
         val bitmap = Utils.loadBitmapFromView(drawStrokeView)
 
-        val information = InfrormationForNormalizer(
+        val information = InformationForNormalizer(
             classifier,
             bitmap,
             drawGraphView.graph,
