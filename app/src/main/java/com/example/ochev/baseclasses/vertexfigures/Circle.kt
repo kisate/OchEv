@@ -7,12 +7,17 @@ import kotlin.math.abs
 
 class Circle(
     override val center: Point = Point(),
-    var radius: Int = 0,
-    val leftPoint: Point = Point(center.x - radius, center.y),
-    val upPoint: Point = Point(center.x, center.y + radius),
-    val rightPoint: Point = Point(center.x + radius, center.y),
-    val downPoint: Point = Point(center.x, center.y - radius)
+    var radius: Int = 0
 ) : VertexFigure() {
+    val leftPoint: Point
+        get() = Point(center.x - radius, center.y)
+    val upPoint: Point
+        get() = Point(center.x, center.y + radius)
+    val rightPoint: Point
+        get() = Point(center.x + radius, center.y)
+    val downPoint: Point
+        get() = Point(center.x, center.y - radius)
+
     override fun getDistanceToPoint(point: Point): Float {
         val pointInteractor = PointInteractor()
         return abs(
