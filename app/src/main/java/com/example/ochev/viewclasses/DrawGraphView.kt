@@ -42,6 +42,18 @@ abstract class Drawer {
     protected val fontPaint = Paint()
     protected val circuitPaint = Paint()
     protected val fillPaint = Paint()
+
+    fun setFontWidth(width: Float){
+        fontPaint.strokeWidth = width
+    }
+
+    fun setCircuitWidth(width: Float){
+        circuitPaint.strokeWidth = width
+    }
+
+    fun setFillWidth(width: Float){
+        fillPaint.strokeWidth = width
+    }
 }
 
 class CircleDrawer : Drawer() {
@@ -86,17 +98,17 @@ class RectangleDrawer : Drawer() {
 
     fun draw(vertex: Rectangle, canvas: Canvas?) {
         canvas?.drawRect(
-            vertex.leftUpCorner.x.toFloat(),
+            vertex.leftDownCorner.x.toFloat(),
             vertex.leftDownCorner.y.toFloat(),
-            vertex.rightDownCorner.x.toFloat(),
-            vertex.leftUpCorner.y.toFloat(),
+            vertex.rightUpCorner.x.toFloat(),
+            vertex.rightUpCorner.y.toFloat(),
             fillPaint
         )
         canvas?.drawRect(
-            vertex.leftUpCorner.x.toFloat(),
+            vertex.leftDownCorner.x.toFloat(),
             vertex.leftDownCorner.y.toFloat(),
-            vertex.rightDownCorner.x.toFloat(),
-            vertex.leftUpCorner.y.toFloat(),
+            vertex.rightUpCorner.x.toFloat(),
+            vertex.rightUpCorner.y.toFloat(),
             circuitPaint
         )
     }
@@ -146,10 +158,12 @@ class LineDrawer {
 }
 
 class DrawGraphInteractor {
-    private val circleDrawer = CircleDrawer()
-    private val rectangleDrawer = RectangleDrawer()
-    private val triangleDrawer = TriangleDrawer()
-    private val lineDrawer = LineDrawer()
+    val circleDrawer = CircleDrawer()
+    val rectangleDrawer = RectangleDrawer()
+    val triangleDrawer = TriangleDrawer()
+    val lineDrawer = LineDrawer()
+
+
 
     fun draw(vertex: VertexFigure, canvas: Canvas?) {
         when (vertex) {

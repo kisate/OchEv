@@ -82,12 +82,27 @@ class InputHandler(
     private var stroke: Stroke = Stroke()
     private lateinit var firstPoint: Point
     private lateinit var lastPoint: Point
+
     private var lastTime = 0L
+    private val MICROSECOND = 1000000f // nanosecond / microsecond = milisecond
+    private var ACCURACY = 15f // radius of checking unnecessary movement while drawing stroke
+        set(value) {
+            field = value
+        }
+    private var EDITMODEDURATION = 300 // time between touchdown and touchup (in ms)
+        set(value) {
+            field = value
+        }
+    private var EDITMODEACCURACY =
+        50f // radius of checking unnecessary movement while checking entry to edit mode
+        set(value) {
+            field = value
+        }
 
 
     fun touchMove(point: Point?) {
         if (point == null) return
-        if (PointInteractor().distance(point, lastPoint) <= 15f) return
+        if (PointInteractor().distance(point, lastPoint) <= ACCURACY) return
         stroke.addPoint(point)
         drawStrokeInteractor.set(drawStrokeView, stroke)
         lastPoint = point
@@ -119,7 +134,10 @@ class InputHandler(
     }
 
     fun possibleEditModeEntry(): Boolean {
-        return (System.nanoTime() - lastTime)/1000000f <= 300 && PointInteractor().distance(lastPoint, firstPoint) <= 50f
+        return (System.nanoTime() - lastTime) / MICROSECOND <= EDITMODEDURATION && PointInteractor().distance(
+            lastPoint,
+            firstPoint
+        ) <= EDITMODEACCURACY
     }
 
     fun classifyStroke() {

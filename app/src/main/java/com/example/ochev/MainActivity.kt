@@ -15,17 +15,19 @@ import java.util.concurrent.Executors
 class MainActivity : AppCompatActivity() {
 
     private val classifier = Classifier(this)
-    private lateinit var strokeInput: StrokeInputView
+    private var strokeInput: StrokeInputView? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         supportActionBar?.hide()
         setContentView(R.layout.activity_main)
 
-        strokeInput = StrokeInputView(this, null, drawStrokeId, drawGraphId , classifier)
-        strokeInput.alpha = 0F
+        if (strokeInput == null) {
+            strokeInput = StrokeInputView(this, null, drawStrokeId, drawGraphId, classifier)
+            strokeInput?.alpha = 0F
+        }
 
-        val layoutParams =  RelativeLayout.LayoutParams(
+        val layoutParams = RelativeLayout.LayoutParams(
             RelativeLayout.LayoutParams.MATCH_PARENT,
             RelativeLayout.LayoutParams.MATCH_PARENT
         )
@@ -33,13 +35,18 @@ class MainActivity : AppCompatActivity() {
         relativeId.addView(strokeInput, layoutParams)
 
         clearButtonId.setOnClickListener {
-            strokeInput.clear()
+            strokeInput?.clear()
         }
-
 
         classifier
             .initialize(Executor.executorService)
-            .addOnFailureListener {e -> Log.e("MainActivity", "Error to setting up classifier", e)}
+            .addOnFailureListener { e ->
+                Log.e(
+                    "MainActivity",
+                    "Error to setting up classifier",
+                    e
+                )
+            }
     }
 
     object Executor {
