@@ -16,7 +16,7 @@ class VertexFigureRescaler(information: InformationForVertexEditor) {
             pointInteractor.distance(point, pointMover.point)
         }!!
 
-        return if (pointInteractor.distance(point, closestMover.point) > 20) false
+        return if (pointInteractor.distance(point, closestMover.point) > 100f) false
         else {
             currentMover = closestMover
             true
