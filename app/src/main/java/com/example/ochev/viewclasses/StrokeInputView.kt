@@ -220,7 +220,6 @@ class InputHandler(
     }
 
     fun movementUp(point: Point?) {
-        closeEditing(lastEditingFigure)
         drawGraphView.invalidate()
     }
 }
