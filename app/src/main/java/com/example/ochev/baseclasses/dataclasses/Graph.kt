@@ -46,7 +46,7 @@ data class Graph(
 
     fun getFigureForEditing(point: Point): Figure? {
         val bestFigure = getClosestToPointFigureOrNull(point)
-        return if (bestFigure == null || bestFigure.getDistanceToPoint(point) > 20f) null
+        return if (bestFigure == null || !bestFigure.checkIfFigureIsCloseEnough(point)) null
         else bestFigure
     }
 

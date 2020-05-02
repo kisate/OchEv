@@ -18,6 +18,10 @@ abstract class VertexFigure(
         return if (checkIfPointIsInside(point)) 0f
         else getDistanceToPoint(point)
     }
+
+    override fun checkIfFigureIsCloseEnough(point: Point): Boolean {
+        return checkIfPointIsInside(point) || getDistanceToPoint(point) <= 30f
+    }
 }
 
 
