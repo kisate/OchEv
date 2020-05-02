@@ -50,9 +50,7 @@ class Circle(
                     result[j].point.x = upd[j].x
                     result[j].point.y = upd[j].y
                 }
-
             }
-
             result.add(PointMover(points[i], moveFun))
         }
 
