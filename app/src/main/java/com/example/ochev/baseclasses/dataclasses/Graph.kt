@@ -13,7 +13,7 @@ data class Graph(
     val allFigures: MutableList<Figure>
         get() = (vertexes + edges).toMutableList()
 
-    class ComparatorByHeights() : Comparator<Figure> {
+    class ComparatorByHeights : Comparator<Figure> {
         override fun compare(x: Figure?, y: Figure?): Int {
             if (x == null && y == null) return 0
             if (x == null) return -1
@@ -31,6 +31,9 @@ data class Graph(
 
     val figuresSortedByHeights: MutableList<Figure>
         get() = allFigures.sortedWith(ComparatorByHeights()).toMutableList()
+
+    val maximalHeight: Int?
+        get() = allFigures.maxBy { it.heightOnPlain }?.heightOnPlain
 
     fun addEdge(edgeFigure: EdgeFigure) {
         edges.add(edgeFigure)
