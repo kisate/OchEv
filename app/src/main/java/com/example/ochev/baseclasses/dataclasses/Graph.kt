@@ -44,6 +44,12 @@ data class Graph(
         vertexes.add(vertexFigure)
     }
 
+    fun getFigureForEditing(point: Point): Figure? {
+        val bestFigure = getClosestToPointFigureOrNull(point)
+        return if (bestFigure == null || bestFigure.getDistanceToPoint(point) > 20f) null
+        else bestFigure
+    }
+
     fun getClosestToPointVertexFigureOrNull(point: Point): VertexFigure? {
         return vertexes.sortedByDescending { it.heightOnPlain }.minBy {
             it.getDistanceToPointOrZeroIfInside(point)
@@ -56,7 +62,7 @@ data class Graph(
         }
     }
 
-    fun getClosestFigureToPointOrNull(point: Point): Figure? {
+    fun getClosestToPointFigureOrNull(point: Point): Figure? {
         val bestVertex = getClosestToPointVertexFigureOrNull(point)
         val bestEdge = getClosestToPointEdgeFigureOrNull(point)
 

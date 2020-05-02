@@ -121,7 +121,7 @@ class InputHandler(
 
         if (possibleEditModeEntry() && checkEditModeEntry()) {
             Log.i("timeDebug", (System.nanoTime() - lastTime).toString())
-            enterEditing(drawGraphView.graph.getClosestFigureToPointOrNull(lastPoint)!!)
+            enterEditing(drawGraphView.graph.getClosestToPointFigureOrNull(lastPoint)!!)
 
             if (lastEditingFigure is VertexFigure) {
                 vertexFigureEditor =
@@ -171,7 +171,7 @@ class InputHandler(
     }
 
     fun checkEditModeEntry(): Boolean {
-        return drawGraphView.graph.getClosestFigureToPointOrNull(firstPoint) != null && drawGraphView.graph.getClosestFigureToPointOrNull(
+        return drawGraphView.graph.getClosestToPointFigureOrNull(firstPoint) != null && drawGraphView.graph.getClosestToPointFigureOrNull(
             lastPoint
         ) != null
     }
