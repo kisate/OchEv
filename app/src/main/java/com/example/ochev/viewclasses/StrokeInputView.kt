@@ -6,8 +6,11 @@ import android.util.AttributeSet
 import android.util.Log
 import android.view.MotionEvent
 import android.view.View
+import android.widget.Button
 import android.widget.Toast
+import androidx.core.graphics.alpha
 import com.example.ochev.MainActivity
+import com.example.ochev.R
 import com.example.ochev.baseclasses.EdgeFigure
 import com.example.ochev.baseclasses.Figure
 import com.example.ochev.baseclasses.VertexFigure
@@ -17,6 +20,7 @@ import com.example.ochev.baseclasses.vertexfigures.editors.VertexFigureEditor
 import com.example.ochev.ml.Classifier
 import com.example.ochev.ml.Utils
 import com.google.android.gms.tasks.Tasks
+import kotlinx.android.synthetic.main.activity_main.*
 import java.util.concurrent.Callable
 
 enum class InputMode(value: Int) {
@@ -67,6 +71,10 @@ class StrokeInputView(
         }
         return true
     }
+
+    fun addDeleteButton(deleteButtonId: Button?) {
+        inputHandler.deleteButton = deleteButtonId
+    }
 }
 
 enum class MovementType(value: Int) {
@@ -88,7 +96,7 @@ class InputHandler(
             Log.i("InputMode", "set to $value")
             field = value
         }
-
+    var deleteButton: Button? = null
 
     private lateinit var firstPoint: Point
     private lateinit var lastPoint: Point
@@ -219,6 +227,10 @@ class InputHandler(
     }
 
     private fun startEditing() {
+        inputMode = InputMode.EDITING
+        if (deleteButton != null){
+            deleteButton!!.alpha = 1f
+        }
         enterEditing(drawGraphView.graph.getFigureForEditing(lastPoint)!!)
         if (lastEditingFigure is VertexFigure) {
             vertexFigureEditor =
@@ -235,12 +247,15 @@ class InputHandler(
         }
         lastEditingFigure = figure
         figure.drawingInformation.set(DrawingMode.EDIT)
-        inputMode = InputMode.EDITING
+
     }
 
     private fun closeEditing(figure: Figure) {
         figure.drawingInformation.set(DrawingMode.DEFAULT)
         inputMode = InputMode.DEFAULT
+        if (deleteButton != null){
+            deleteButton!!.alpha = 0f
+        }
     }
 
     private fun checkEditModeEntry(): Boolean {
