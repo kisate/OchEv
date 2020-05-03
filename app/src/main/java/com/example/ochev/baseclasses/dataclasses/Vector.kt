@@ -13,7 +13,15 @@ data class Vector(var x: Int = 0, var y: Int = 0) {
 }
 
 class VectorInteractor {
+
+
+
     fun scalarProduct(firstVector: Vector, secondVector: Vector): Int {
         return firstVector.x * secondVector.x + firstVector.y * secondVector.y
+    }
+
+    fun multiplyByFloat(vector: Vector, alpha: Float) {
+        vector.x = (vector.x * alpha).toInt()
+        vector.y = (vector.y * alpha).toInt()
     }
 }

@@ -9,6 +9,7 @@ import com.example.ochev.baseclasses.EdgeFigure
 import com.example.ochev.baseclasses.Figure
 import com.example.ochev.baseclasses.VertexFigure
 import com.example.ochev.baseclasses.dataclasses.Graph
+import com.example.ochev.baseclasses.dataclasses.Point
 import com.example.ochev.baseclasses.edgefigures.Line
 import com.example.ochev.baseclasses.vertexfigures.Circle
 import com.example.ochev.baseclasses.vertexfigures.Rectangle
@@ -20,7 +21,6 @@ class DrawGraphView(
 
     val graph = Graph()
     val drawGraphInteractor = DrawGraphInteractor()
-    var graphPos = Point(0, 0)
 
     fun clear() {
         graph.vertexes.clear()
@@ -31,7 +31,7 @@ class DrawGraphView(
     override fun onDraw(canvas: Canvas?) {
         canvas?.drawColor(Color.rgb(16, 62, 97))
         for (figure in graph.figuresSortedByHeights) {
-            drawGraphInteractor.draw(figure, canvas, graphPos)
+            drawGraphInteractor.draw(figure, canvas)
         }
     }
 }
@@ -70,7 +70,7 @@ abstract class Drawer {
         }
     }
 
-    abstract fun draw(figure: Figure, canvas: Canvas?, graphPos: Point)
+    abstract fun draw(figure: Figure, canvas: Canvas?);
 }
 
 class CircleDrawer : Drawer() {
@@ -102,7 +102,7 @@ class CircleDrawer : Drawer() {
         styles[DrawingMode.EDIT_CORNERS.ordinal].circuitPaint.color = Color.BLUE
     }
 
-    override fun draw(figure: Figure, canvas: Canvas?, graphPos: Point) {
+    override fun draw(figure: Figure, canvas: Canvas?) {
 
         figure as Circle
 
@@ -160,7 +160,7 @@ class RectangleDrawer : Drawer() {
 
     }
 
-    override fun draw(figure: Figure, canvas: Canvas?, graphPos: Point) {
+    override fun draw(figure: Figure, canvas: Canvas?) {
         figure as Rectangle
         canvas?.drawRect(
             figure.leftDownCorner.x.toFloat(),
@@ -206,7 +206,7 @@ class LineDrawer : Drawer() {
 
     }
 
-    override fun draw(figure: Figure, canvas: Canvas?, graphPos: Point) {
+    override fun draw(figure: Figure, canvas: Canvas?) {
 
         figure as Line
 
@@ -224,20 +224,20 @@ class DrawGraphInteractor {
     val rectangleDrawer = RectangleDrawer()
     val lineDrawer = LineDrawer()
 
-    fun draw(figure: Figure, canvas: Canvas?, graphPos: Point = Point(0, 0)) {
+    fun draw(figure: Figure, canvas: Canvas?) {
 
         when (figure) {
             is Circle -> {
                 circleDrawer.currentStyle = figure.drawingInformation.drawingMode.ordinal
-                circleDrawer.draw(figure, canvas, graphPos)
+                circleDrawer.draw(figure, canvas)
             }
             is Rectangle -> {
                 rectangleDrawer.currentStyle = figure.drawingInformation.drawingMode.ordinal
-                rectangleDrawer.draw(figure, canvas, graphPos)
+                rectangleDrawer.draw(figure, canvas)
             }
             is Line -> {
                 lineDrawer.currentStyle = figure.drawingInformation.drawingMode.ordinal
-                lineDrawer.draw(figure, canvas, graphPos)
+                lineDrawer.draw(figure, canvas)
             }
         }
     }

@@ -38,7 +38,6 @@ class MainActivity : AppCompatActivity() {
 
         clearButtonId.setOnClickListener {
             strokeInput?.clear()
-            strokeInput?.inputMode = InputMode.DRAWING
         }
 
         classifier
