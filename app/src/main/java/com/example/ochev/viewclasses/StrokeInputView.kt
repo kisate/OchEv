@@ -36,8 +36,8 @@ class StrokeInputView(
 ) :
     View(context, attrs) {
 
-    private val inputHandler = InputHandler(this, drawStrokeView, drawFiguresView, classifier)
-    private val throttle = Throttle(2)
+    private val inputHandler = InputHandler(drawStrokeView, drawFiguresView, classifier)
+    private val throttle = Throttle(100)
 
     fun clear() {
         inputHandler.clear()
@@ -45,8 +45,6 @@ class StrokeInputView(
 
     @SuppressLint("ClickableViewAccessibility")
     override fun onTouchEvent(event: MotionEvent): Boolean {
-        var currentEvent: MotionEvent? = null
-        throttle.attempt(Runnable { currentEvent = event })
 
         Log.i("Touch", event.pointerCount.toString())
 
@@ -74,7 +72,6 @@ enum class MovementType(value: Int) {
 }
 
 class InputHandler(
-    private val strokeInputView: StrokeInputView,
     private val drawStrokeView: DrawStrokeView,
     private val drawGraphView: DrawGraphView,
     private val classifier: Classifier
@@ -83,10 +80,10 @@ class InputHandler(
     private var stroke: Stroke = Stroke()
     private val funMap = HashMap<InputMode, HashMap<Int, (MotionEvent) -> Unit>>()
     private var inputMode = InputMode.DEFAULT
-    set(value) {
-        Log.i("InputMode", "set to $value")
-        field = value
-    }
+        set(value) {
+            Log.i("InputMode", "set to $value")
+            field = value
+        }
 
 
     private lateinit var firstPoint: Point
@@ -103,39 +100,39 @@ class InputHandler(
         set(value) {
             field = value
         }
-    private var EDITMODEDURATION = 300 // time between touchdown and touchup (in ms)
+    private var EDIT_MODE_DURATION = 300 // time between touchdown and touchup (in ms)
         set(value) {
             field = value
         }
-    private var EDITMODEACCURACY =
+    private var EDIT_MODE_ACCURACY =
         50f // radius of checking unnecessary movement while checking entry to edit mode
         set(value) {
             field = value
         }
 
     init {
-        addToFunMap(InputMode.DRAWING, MotionEvent.ACTION_MOVE) {
-                event -> drawMove(event)
+        addToFunMap(InputMode.DRAWING, MotionEvent.ACTION_MOVE) { event ->
+            drawMove(event)
         }
-        addToFunMap(InputMode.DRAWING, MotionEvent.ACTION_UP) {
-                event -> drawUp(event)
-        }
-
-        addToFunMap(InputMode.EDITING, MotionEvent.ACTION_DOWN) {
-                event -> movementStart(event)
-        }
-        addToFunMap(InputMode.EDITING, MotionEvent.ACTION_MOVE) {
-                event -> movementMove(event)
-        }
-        addToFunMap(InputMode.EDITING, MotionEvent.ACTION_UP) {
-                event -> movementUp(event)
+        addToFunMap(InputMode.DRAWING, MotionEvent.ACTION_UP) { event ->
+            drawUp(event)
         }
 
-        addToFunMap(InputMode.SCROLLING, MotionEvent.ACTION_MOVE) {
-                event -> scrollingMove(event)
+        addToFunMap(InputMode.EDITING, MotionEvent.ACTION_DOWN) { event ->
+            movementStart(event)
         }
-        addToFunMap(InputMode.SCROLLING, MotionEvent.ACTION_UP) {
-                event -> scrollingUp(event)
+        addToFunMap(InputMode.EDITING, MotionEvent.ACTION_MOVE) { event ->
+            movementMove(event)
+        }
+        addToFunMap(InputMode.EDITING, MotionEvent.ACTION_UP) { event ->
+            movementUp(event)
+        }
+
+        addToFunMap(InputMode.SCROLLING, MotionEvent.ACTION_MOVE) { event ->
+            scrollingMove(event)
+        }
+        addToFunMap(InputMode.SCROLLING, MotionEvent.ACTION_UP) { event ->
+            scrollingUp(event)
         }
     }
 
@@ -175,11 +172,9 @@ class InputHandler(
 
         if (inputMode != InputMode.DEFAULT) {
             funMap[inputMode]!![event.action]?.let { it(event) }
-        }
-        else if (checkScrollingModeEntry(event)) {
+        } else if (checkScrollingModeEntry(event)) {
             enterScrolling(event)
-        }
-        else if (!possibleEditModeEntry()) {
+        } else if (!possibleEditModeEntry()) {
             drawStart(event)
         }
         lastPoint = point
@@ -219,22 +214,20 @@ class InputHandler(
     }
 
     private fun possibleEditModeEntry(): Boolean {
-        return (System.nanoTime() - lastTime) / MICROSECOND <= EDITMODEDURATION && PointInteractor().distance(
+        return (System.nanoTime() - lastTime) / MICROSECOND <= EDIT_MODE_DURATION && PointInteractor().distance(
             lastPoint,
             firstPoint
-        ) <= EDITMODEACCURACY
+        ) <= EDIT_MODE_ACCURACY
     }
 
     private fun startEditing() {
         enterEditing(drawGraphView.graph.getFigureForEditing(lastPoint)!!)
-
         if (lastEditingFigure is VertexFigure) {
             vertexFigureEditor =
                 VertexFigureEditor(InformationForVertexEditor(lastEditingFigure as VertexFigure))
         } else if (lastEditingFigure is EdgeFigure) {
             vertexFigureEditor = null
         }
-
         drawGraphView.invalidate()
     }
 
@@ -265,7 +258,7 @@ class InputHandler(
 
     private fun checkScrollingModeEntry(event: MotionEvent?): Boolean {
         if (event == null) return false
-        return (System.nanoTime() - lastTime)/ MICROSECOND < SCROLLING_THRESHOLD && event.pointerCount == 2
+        return (System.nanoTime() - lastTime) / MICROSECOND < SCROLLING_THRESHOLD && event.pointerCount == 2
     }
 
     private fun classifyStroke() {
@@ -310,8 +303,7 @@ class InputHandler(
 
     private fun scrollingMove(event: MotionEvent?) {
         if (event == null) return
-        if (event.pointerCount < 2)
-        {
+        if (event.pointerCount < 2) {
             scrollingUp(event)
             return
         }
@@ -340,14 +332,13 @@ class InputHandler(
     private fun scrollingUp(event: MotionEvent?) {
         if (event == null) return
         inputMode = InputMode.DEFAULT
+        lastPoint = Point(event)
         stroke = Stroke()
     }
 
     private fun movementStart(event: MotionEvent?) {
         val point = event?.let { Point(it) }
-
         Log.i("movement", "Started moving")
-
         movementType = MovementType.CHILL
         if (point != null) {
             if (vertexFigureEditor != null) {
@@ -374,6 +365,7 @@ class InputHandler(
                 return
             }
         }
+
         drawGraphView.invalidate()
     }
 

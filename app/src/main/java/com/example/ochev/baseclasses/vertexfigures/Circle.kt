@@ -60,6 +60,7 @@ class Circle(
     override fun getMovingPoints(): MutableList<Point> {
         return mutableListOf(leftPoint, upPoint, rightPoint, downPoint)
     }
+
 }
 
 fun VertexFigureBuilder.buildCircle(strokes: MutableList<Stroke>): Circle {

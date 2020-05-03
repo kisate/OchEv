@@ -86,8 +86,6 @@ class Rectangle(
     override fun getMovingPoints(): MutableList<Point> {
         return mutableListOf(leftDownCorner, leftUpCorner, rightUpCorner, rightDownCorner)
     }
-
-
 }
 
 
