@@ -17,14 +17,13 @@ abstract class VertexFigure(
     abstract fun getPointMovers(): MutableList<PointMover>
     abstract fun getMovingPoints(): MutableList<Point>
 
-
     fun getDistanceToPointOrZeroIfInside(point: Point): Float {
         return if (checkIfPointIsInside(point)) 0f
         else getDistanceToPoint(point)
     }
 
     override fun checkIfFigureIsCloseEnough(point: Point): Boolean {
-        return checkIfPointIsInside(point) || getDistanceToPoint(point) <= 30f
+        return getDistanceToPointOrZeroIfInside(point) <= getDistanceToCountTouch()
     }
 }
 

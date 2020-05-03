@@ -7,7 +7,7 @@ import com.example.ochev.baseclasses.dataclasses.PointInteractor
 
 class VertexFigureRescaler(information: InformationForVertexEditor) {
     val figure: VertexFigure = information.figure
-    var pointMovers = figure.getPointMovers()
+    lateinit var pointMovers: MutableList<PointMover>
     lateinit var currentMover: PointMover
 
     fun tryToStartMoving(point: Point): Boolean {
@@ -17,10 +17,14 @@ class VertexFigureRescaler(information: InformationForVertexEditor) {
             pointInteractor.distance(point, pointMover.point)
         }!!
 
-        return if (pointInteractor.distance(point, closestMover.point) > 30f) false
-        else {
+        return if (
+            pointInteractor.distance(point, closestMover.point)
+            <= figure.getDistanceToCountTouch()
+        ){
             currentMover = closestMover
             true
+        } else {
+            false
         }
     }
 
