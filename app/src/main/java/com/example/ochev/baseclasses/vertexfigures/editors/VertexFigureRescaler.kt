@@ -20,7 +20,7 @@ class VertexFigureRescaler(information: InformationForVertexEditor) {
         return if (
             pointInteractor.distance(point, closestMover.point)
             <= figure.getDistanceToCountTouch()
-        ) {
+        ){
             currentMover = closestMover
             true
         } else {

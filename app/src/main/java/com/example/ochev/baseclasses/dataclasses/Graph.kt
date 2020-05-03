@@ -91,6 +91,10 @@ data class Graph(
         return newFigure
     }
 
+    fun moveByVector(vector: Vector) {
+        vertexes.forEach{ it -> it.moveByVector(vector) }
+    }
+
     fun recalcHeights() {
         for (edge in edges) {
             if (edge is Line) {

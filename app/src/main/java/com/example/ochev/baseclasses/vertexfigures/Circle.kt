@@ -65,6 +65,7 @@ class Circle(
     override fun getDistanceToCountTouch(): Float {
         return max(radius / 4f, 20f)
     }
+
 }
 
 fun VertexFigureBuilder.buildCircle(strokes: MutableList<Stroke>): Circle {

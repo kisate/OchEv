@@ -20,9 +20,10 @@ import com.google.android.gms.tasks.Tasks
 import java.util.concurrent.Callable
 
 enum class InputMode(value: Int) {
+    DEFAULT(0),
     DRAWING(1),
     EDITING(2),
-    MOVING_ALL(3);
+    SCROLLING(3);
 }
 
 @SuppressLint("ViewConstructor")
@@ -35,56 +36,31 @@ class StrokeInputView(
 ) :
     View(context, attrs) {
 
-    private val inputHandler = InputHandler(this, drawStrokeView, drawFiguresView, classifier)
-    private val throttle = Throttle(2)
-    private val funMap = HashMap<InputMode, HashMap<Int, (InputHandler, MotionEvent) -> Unit>>()
-
-    var inputMode = InputMode.DRAWING
+    private val inputHandler = InputHandler(drawStrokeView, drawFiguresView, classifier)
+    private val throttle = Throttle(100)
 
     fun clear() {
         inputHandler.clear()
     }
 
-    private fun addToFunMap(
-        mode: InputMode,
-        eventAction: Int,
-        function: (InputHandler, MotionEvent) -> Unit
-    ) {
-        if (!funMap.containsKey(mode)) funMap[mode] = HashMap()
-        funMap[mode]!![eventAction] = function
-    }
-
-    init {
-        addToFunMap(InputMode.DRAWING, MotionEvent.ACTION_DOWN) { inputHandler, event ->
-            inputHandler.touchStart(event)
-        }
-        addToFunMap(InputMode.DRAWING, MotionEvent.ACTION_MOVE) { inputHandler, event ->
-            inputHandler.touchMove(event)
-        }
-        addToFunMap(InputMode.DRAWING, MotionEvent.ACTION_UP) { inputHandler, event ->
-            inputHandler.touchUp(event)
-        }
-
-        addToFunMap(InputMode.EDITING, MotionEvent.ACTION_DOWN) { inputHandler, event ->
-            inputHandler.movementStart(event)
-        }
-        addToFunMap(InputMode.EDITING, MotionEvent.ACTION_MOVE) { inputHandler, event ->
-            inputHandler.movementMove(event)
-        }
-        addToFunMap(InputMode.EDITING, MotionEvent.ACTION_UP) { inputHandler, event ->
-            inputHandler.movementUp(event)
-        }
-    }
-
     @SuppressLint("ClickableViewAccessibility")
     override fun onTouchEvent(event: MotionEvent): Boolean {
-        var currentEvent: MotionEvent? = null
-        throttle.attempt(Runnable { currentEvent = event })
 
         Log.i("Touch", event.pointerCount.toString())
 
-        event?.let { (funMap[inputMode]!![event.action])?.let { it1 -> it1(inputHandler, it) } }
-
+        event.let {
+            when (event.action) {
+                MotionEvent.ACTION_DOWN -> {
+                    inputHandler.touchDown(event)
+                }
+                MotionEvent.ACTION_MOVE -> {
+                    inputHandler.touchMove(event)
+                }
+                MotionEvent.ACTION_UP -> {
+                    inputHandler.touchUp(event)
+                }
+            }
+        }
         return true
     }
 }
@@ -96,13 +72,20 @@ enum class MovementType(value: Int) {
 }
 
 class InputHandler(
-    private val strokeInputView: StrokeInputView,
     private val drawStrokeView: DrawStrokeView,
     private val drawGraphView: DrawGraphView,
     private val classifier: Classifier
 ) {
     private var drawStrokeInteractor = drawStrokeView.drawStrokeInteractor
     private var stroke: Stroke = Stroke()
+    private val funMap = HashMap<InputMode, HashMap<Int, (MotionEvent) -> Unit>>()
+    private var inputMode = InputMode.DEFAULT
+        set(value) {
+            Log.i("InputMode", "set to $value")
+            field = value
+        }
+
+
     private lateinit var firstPoint: Point
     private lateinit var lastPoint: Point
     private lateinit var lastEditingFigure: Figure
@@ -110,98 +93,175 @@ class InputHandler(
     private var vertexFigureEditor: VertexFigureEditor? = null
     private var movementType = MovementType.CHILL
 
+    private lateinit var lastScrollCenter: Point
+
     private var lastTime = 0L
     private var ACCURACY = 15f // radius of checking unnecessary movement while drawing stroke
         set(value) {
             field = value
         }
-    private var EDITMODEDURATION = 300 // time between touchdown and touchup (in ms)
+    private var EDIT_MODE_DURATION = 300 // time between touchdown and touchup (in ms)
         set(value) {
             field = value
         }
-    private var EDITMODEACCURACY =
+    private var EDIT_MODE_ACCURACY =
         50f // radius of checking unnecessary movement while checking entry to edit mode
         set(value) {
             field = value
         }
 
+    init {
+        addToFunMap(InputMode.DRAWING, MotionEvent.ACTION_MOVE) { event ->
+            drawMove(event)
+        }
+        addToFunMap(InputMode.DRAWING, MotionEvent.ACTION_UP) { event ->
+            drawUp(event)
+        }
+
+        addToFunMap(InputMode.EDITING, MotionEvent.ACTION_DOWN) { event ->
+            movementStart(event)
+        }
+        addToFunMap(InputMode.EDITING, MotionEvent.ACTION_MOVE) { event ->
+            movementMove(event)
+        }
+        addToFunMap(InputMode.EDITING, MotionEvent.ACTION_UP) { event ->
+            movementUp(event)
+        }
+
+        addToFunMap(InputMode.SCROLLING, MotionEvent.ACTION_MOVE) { event ->
+            scrollingMove(event)
+        }
+        addToFunMap(InputMode.SCROLLING, MotionEvent.ACTION_UP) { event ->
+            scrollingUp(event)
+        }
+    }
+
+    private fun addToFunMap(
+        mode: InputMode,
+        eventAction: Int,
+        function: (MotionEvent) -> Unit
+    ) {
+        if (!funMap.containsKey(mode)) funMap[mode] = HashMap()
+        funMap[mode]!![eventAction] = function
+    }
+
+    private fun drawStart(event: MotionEvent?) {
+        val point = event?.let { Point(it) } ?: return
+        inputMode = InputMode.DRAWING
+        drawStrokeInteractor.set(drawStrokeView, stroke)
+    }
+
+    private fun drawMove(event: MotionEvent?) {
+        val point = event?.let { Point(it) } ?: return
+        if (PointInteractor().distance(point, lastPoint) <= ACCURACY) return
+        drawStrokeInteractor.set(drawStrokeView, stroke)
+    }
+
+    private fun drawUp(event: MotionEvent?) {
+        val point = event?.let { Point(it) }
+        classifyStroke()
+        inputMode = InputMode.DEFAULT
+    }
 
     fun touchMove(event: MotionEvent?) {
         val point = event?.let { Point(it) } ?: return
         if (PointInteractor().distance(point, lastPoint) <= ACCURACY) return
-        stroke.addPoint(point)
-        drawStrokeInteractor.set(drawStrokeView, stroke)
+
+
+        if (event.pointerCount == 1) stroke.addPoint(point)
+
+        if (inputMode != InputMode.DEFAULT) {
+            funMap[inputMode]!![event.action]?.let { it(event) }
+        } else if (checkScrollingModeEntry(event)) {
+            enterScrolling(event)
+        } else if (!possibleEditModeEntry()) {
+            drawStart(event)
+        }
         lastPoint = point
     }
 
     fun touchUp(event: MotionEvent?) {
 
-        val point = event?.let { Point(it) }
+        if (event != null) {
+            val point = Point(event)
 
-        if (point != null) {
             lastPoint = point
-        }
 
-        if (possibleEditModeEntry() && checkEditModeEntry()) {
-            Log.i("timeDebug", (System.nanoTime() - lastTime).toString())
-            enterEditing(drawGraphView.graph.getFigureForEditing(lastPoint)!!)
+            if (inputMode == InputMode.DEFAULT && possibleEditModeEntry() && checkEditModeEntry()) {
+                Log.i("timeDebug", (System.nanoTime() - lastTime).toString())
+                startEditing()
 
-            if (lastEditingFigure is VertexFigure) {
-                vertexFigureEditor =
-                    VertexFigureEditor(InformationForVertexEditor(lastEditingFigure as VertexFigure))
-            } else if (lastEditingFigure is EdgeFigure) {
-                vertexFigureEditor = null
+            } else if (inputMode != InputMode.DEFAULT) {
+                funMap[inputMode]!![event.action]?.let { it(event) }
             }
-
-            drawGraphView.invalidate()
-        } else {
-            classifyStroke()
         }
         stroke = Stroke()
         drawStrokeInteractor.clear(drawStrokeView)
     }
 
-    fun touchStart(event: MotionEvent?) {
+    fun touchDown(event: MotionEvent?) {
         val point = event?.let { Point(it) } ?: return
         firstPoint = point
         lastTime = System.nanoTime()
-        lastPoint = point
         stroke.addPoint(point)
-        drawStrokeInteractor.set(drawStrokeView, stroke)
+
+        if (inputMode != InputMode.DEFAULT) {
+            funMap[inputMode]!![event.action]?.let { it(event) }
+        }
+
+        lastPoint = point
+
     }
 
-    fun possibleEditModeEntry(): Boolean {
-        return (System.nanoTime() - lastTime) / MICROSECOND <= EDITMODEDURATION && PointInteractor().distance(
+    private fun possibleEditModeEntry(): Boolean {
+        return (System.nanoTime() - lastTime) / MICROSECOND <= EDIT_MODE_DURATION && PointInteractor().distance(
             lastPoint,
             firstPoint
-        ) <= EDITMODEACCURACY
+        ) <= EDIT_MODE_ACCURACY
     }
 
-    fun enterEditing(figure: Figure) {
+    private fun startEditing() {
+        enterEditing(drawGraphView.graph.getFigureForEditing(lastPoint)!!)
+        if (lastEditingFigure is VertexFigure) {
+            vertexFigureEditor =
+                VertexFigureEditor(InformationForVertexEditor(lastEditingFigure as VertexFigure))
+        } else if (lastEditingFigure is EdgeFigure) {
+            vertexFigureEditor = null
+        }
+        drawGraphView.invalidate()
+    }
+
+    private fun enterEditing(figure: Figure) {
         if (figure is VertexFigure) {
             figure.heightOnPlain = drawGraphView.graph.maximalHeight + 1
         }
         lastEditingFigure = figure
         figure.drawingInformation.set(DrawingMode.EDIT)
-        strokeInputView.inputMode = InputMode.EDITING
+        inputMode = InputMode.EDITING
     }
 
-    fun closeEditing(figure: Figure) {
+    private fun closeEditing(figure: Figure) {
         figure.drawingInformation.set(DrawingMode.DEFAULT)
-        strokeInputView.inputMode = InputMode.DRAWING
+        inputMode = InputMode.DEFAULT
     }
 
-    fun checkEditModeEntry(): Boolean {
+    private fun checkEditModeEntry(): Boolean {
         return drawGraphView.graph.getFigureForEditing(firstPoint) != null && drawGraphView.graph.getFigureForEditing(
             lastPoint
         ) != null
     }
 
-    fun checkMovementModeEntry(): Boolean {
-        return false
+    private fun enterScrolling(event: MotionEvent) {
+        inputMode = InputMode.SCROLLING
+        scrollingStart(event)
     }
 
-    fun classifyStroke() {
+    private fun checkScrollingModeEntry(event: MotionEvent?): Boolean {
+        if (event == null) return false
+        return (System.nanoTime() - lastTime) / MICROSECOND < SCROLLING_THRESHOLD && event.pointerCount == 2
+    }
+
+    private fun classifyStroke() {
         val bitmap = Utils.loadBitmapFromView(drawStrokeView)
 
         val information = InformationForNormalizer(
@@ -231,10 +291,54 @@ class InputHandler(
     fun clear() {
         drawGraphView.clear()
         drawStrokeInteractor.clear(drawStrokeView)
+        inputMode = InputMode.DEFAULT
     }
 
-    fun movementStart(event: MotionEvent?) {
+    private fun scrollingStart(event: MotionEvent?) {
+        if (event == null) return
+        val firstFinger = Point(event.getX(0).toInt(), event.getY(0).toInt())
+        val secondFinger = Point(event.getX(1).toInt(), event.getY(1).toInt())
+        lastScrollCenter = PointInteractor.centerOfMass(arrayOf(firstFinger, secondFinger))
+    }
+
+    private fun scrollingMove(event: MotionEvent?) {
+        if (event == null) return
+        if (event.pointerCount < 2) {
+            scrollingUp(event)
+            return
+        }
+
+        val point = Point(event)
+
+        val firstFinger = Point(event.getAxisValue(0, 0).toInt(), event.getAxisValue(1, 0).toInt())
+        val secondFinger = Point(event.getAxisValue(0, 1).toInt(), event.getAxisValue(1, 1).toInt())
+
+
+        val delta = Vector(lastPoint, point)
+
+        Log.i("Scrolling", "First: $firstFinger")
+        Log.i("Scrolling", "Second: $secondFinger")
+        Log.i("Scrolling", "Point: $point")
+        Log.i("Scrolling", "Event: ${event.getAxisValue(0, 0)} ${event.getAxisValue(1, 0)}")
+        Log.i("Scrolling", delta.toString())
+        Log.i("Scrolling", Vector(lastPoint, point).toString())
+
+        lastScrollCenter = PointInteractor.centerOfMass(arrayOf(firstFinger, secondFinger))
+        VectorInteractor().multiplyByFloat(delta, SCROLLING_SPEED)
+        drawGraphView.graph.moveByVector(delta)
+        drawGraphView.invalidate()
+    }
+
+    private fun scrollingUp(event: MotionEvent?) {
+        if (event == null) return
+        inputMode = InputMode.DEFAULT
+        lastPoint = Point(event)
+        stroke = Stroke()
+    }
+
+    private fun movementStart(event: MotionEvent?) {
         val point = event?.let { Point(it) }
+        Log.i("movement", "Started moving")
         movementType = MovementType.CHILL
         if (point != null) {
             if (vertexFigureEditor != null) {
@@ -247,8 +351,9 @@ class InputHandler(
         }
     }
 
-    fun movementMove(event: MotionEvent?) {
+    private fun movementMove(event: MotionEvent?) {
         val point = event?.let { Point(it) } ?: return
+
         when (movementType) {
             MovementType.MOVING -> {
                 vertexFigureEditor!!.mover.newPoint(point)
@@ -260,10 +365,11 @@ class InputHandler(
                 return
             }
         }
+
         drawGraphView.invalidate()
     }
 
-    fun movementUp(event: MotionEvent?) {
+    private fun movementUp(event: MotionEvent?) {
         val point = event?.let { Point(it) } ?: return
         when (movementType) {
             MovementType.MOVING -> {
@@ -284,6 +390,7 @@ class InputHandler(
 
     companion object {
         private const val MICROSECOND = 1000000f // nanosecond / microsecond = milisecond
-//        private const val TIMEBEFOREMOVEMENT =
+        private const val SCROLLING_THRESHOLD = 200
+        private const val SCROLLING_SPEED = 1f
     }
 }

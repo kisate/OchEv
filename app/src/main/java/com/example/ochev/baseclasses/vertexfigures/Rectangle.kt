@@ -89,12 +89,14 @@ class Rectangle(
         return mutableListOf(leftDownCorner, leftUpCorner, rightUpCorner, rightDownCorner)
     }
 
+
     override fun getDistanceToCountTouch(): Float {
         val dX = abs(leftDownCorner.x - rightDownCorner.x)
         val dY = abs(leftDownCorner.y - leftUpCorner.y)
 
         return max(min(dX, dY) / 4f, 20f)
     }
+
 
 
 }

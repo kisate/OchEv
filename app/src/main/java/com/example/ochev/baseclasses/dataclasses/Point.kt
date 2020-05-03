@@ -1,5 +1,6 @@
 package com.example.ochev.baseclasses.dataclasses
 
+import android.util.Log
 import android.view.MotionEvent
 import kotlin.math.sqrt
 
@@ -59,5 +60,18 @@ class PointInteractor {
         )
     }
 
+    companion object {
+        fun centerOfMass(points: Array<Point>): Point
+        {
+            if (points.isEmpty()) return Point(0, 0)
+            val res = points.reduce { acc, point ->
+                acc.moveByVector(Vector(point.x, point.y))
+                acc
+            }
+            res.x /= points.size
+            res.y /= points.size
+            return res
+        }
+    }
 
 }
