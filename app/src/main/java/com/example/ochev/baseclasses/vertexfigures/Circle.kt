@@ -4,6 +4,7 @@ import com.example.ochev.baseclasses.VertexFigure
 import com.example.ochev.baseclasses.dataclasses.*
 import com.example.ochev.baseclasses.vertexfigures.editors.PointMover
 import kotlin.math.abs
+import kotlin.math.max
 
 class Circle(
     override val center: Point = Point(),
@@ -62,7 +63,7 @@ class Circle(
     }
 
     override fun getDistanceToCountTouch(): Float {
-        return radius / 4f
+        return max(radius / 4f, 20f)
     }
 }
 

@@ -7,6 +7,7 @@ import com.example.ochev.baseclasses.dataclasses.StrokeInteractor
 import com.example.ochev.baseclasses.dataclasses.Vector
 import com.example.ochev.baseclasses.vertexfigures.editors.PointMover
 import java.lang.Math.abs
+import kotlin.math.max
 import kotlin.math.min
 
 
@@ -92,7 +93,7 @@ class Rectangle(
         val dX = abs(leftDownCorner.x - rightDownCorner.x)
         val dY = abs(leftDownCorner.y - leftUpCorner.y)
 
-        return min(dX, dY) / 4f
+        return max(min(dX, dY) / 4f, 20f)
     }
 
 
