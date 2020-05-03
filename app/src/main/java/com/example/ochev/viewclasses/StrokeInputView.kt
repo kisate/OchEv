@@ -122,9 +122,7 @@ class InputHandler(
         }
 
         addToFunMap(InputMode.EDITING, MotionEvent.ACTION_DOWN) {
-                event ->
-            Log.i("Moving", "I'm doing something")
-            movementStart(event)
+                event -> movementStart(event)
         }
         addToFunMap(InputMode.EDITING, MotionEvent.ACTION_MOVE) {
                 event -> movementMove(event)
@@ -172,9 +170,8 @@ class InputHandler(
         val point = event?.let { Point(it) } ?: return
         if (PointInteractor().distance(point, lastPoint) <= ACCURACY) return
 
-        Log.i("Moving", inputMode.toString())
 
-        stroke.addPoint(point)
+        if (event.pointerCount == 1) stroke.addPoint(point)
 
         if (inputMode != InputMode.DEFAULT) {
             funMap[inputMode]!![event.action]?.let { it(event) }
@@ -248,11 +245,9 @@ class InputHandler(
         lastEditingFigure = figure
         figure.drawingInformation.set(DrawingMode.EDIT)
         inputMode = InputMode.EDITING
-        Log.i("Editing", "entered")
     }
 
     private fun closeEditing(figure: Figure) {
-        Log.i("Editing", "closed")
         figure.drawingInformation.set(DrawingMode.DEFAULT)
         inputMode = InputMode.DEFAULT
     }
@@ -320,20 +315,32 @@ class InputHandler(
             scrollingUp(event)
             return
         }
-        val firstFinger = Point(event.getX(0).toInt(), event.getY(0).toInt())
-        val secondFinger = Point(event.getX(1).toInt(), event.getY(1).toInt())
 
-        val delta = Vector(lastScrollCenter, PointInteractor.centerOfMass(arrayOf(firstFinger, secondFinger)))
+        val point = Point(event)
+
+        val firstFinger = Point(event.getAxisValue(0, 0).toInt(), event.getAxisValue(1, 0).toInt())
+        val secondFinger = Point(event.getAxisValue(0, 1).toInt(), event.getAxisValue(1, 1).toInt())
+
+
+        val delta = Vector(lastPoint, point)
+
+        Log.i("Scrolling", "First: $firstFinger")
+        Log.i("Scrolling", "Second: $secondFinger")
+        Log.i("Scrolling", "Point: $point")
+        Log.i("Scrolling", "Event: ${event.getAxisValue(0, 0)} ${event.getAxisValue(1, 0)}")
+        Log.i("Scrolling", delta.toString())
+        Log.i("Scrolling", Vector(lastPoint, point).toString())
+
+        lastScrollCenter = PointInteractor.centerOfMass(arrayOf(firstFinger, secondFinger))
         VectorInteractor().multiplyByFloat(delta, SCROLLING_SPEED)
         drawGraphView.graph.moveByVector(delta)
         drawGraphView.invalidate()
-        Log.i("Scrolling", "Moving")
     }
 
     private fun scrollingUp(event: MotionEvent?) {
         if (event == null) return
         inputMode = InputMode.DEFAULT
-        Log.i("Scrolling", "Finished")
+        stroke = Stroke()
     }
 
     private fun movementStart(event: MotionEvent?) {
@@ -355,7 +362,6 @@ class InputHandler(
 
     private fun movementMove(event: MotionEvent?) {
         val point = event?.let { Point(it) } ?: return
-        Log.i("movement", "Moving $movementType")
 
         when (movementType) {
             MovementType.MOVING -> {
@@ -393,6 +399,6 @@ class InputHandler(
     companion object {
         private const val MICROSECOND = 1000000f // nanosecond / microsecond = milisecond
         private const val SCROLLING_THRESHOLD = 200
-        private const val SCROLLING_SPEED = 0.01f
+        private const val SCROLLING_SPEED = 1f
     }
 }
