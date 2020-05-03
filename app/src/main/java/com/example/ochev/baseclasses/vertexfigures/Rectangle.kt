@@ -6,6 +6,7 @@ import com.example.ochev.baseclasses.dataclasses.Stroke
 import com.example.ochev.baseclasses.dataclasses.StrokeInteractor
 import com.example.ochev.baseclasses.dataclasses.Vector
 import com.example.ochev.baseclasses.vertexfigures.editors.PointMover
+import java.lang.Math.abs
 import kotlin.math.min
 
 
@@ -85,6 +86,13 @@ class Rectangle(
 
     override fun getMovingPoints(): MutableList<Point> {
         return mutableListOf(leftDownCorner, leftUpCorner, rightUpCorner, rightDownCorner)
+    }
+
+    override fun getDistanceToCountTouch(): Float {
+        val dX = abs(leftDownCorner.x - rightDownCorner.x)
+        val dY = abs(leftDownCorner.y - leftUpCorner.y)
+
+        return min(dX, dY) / 4f
     }
 
 

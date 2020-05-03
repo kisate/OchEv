@@ -7,6 +7,6 @@ import com.example.ochev.baseclasses.dataclasses.Point
 
 abstract class EdgeFigure : Figure() {
     override fun checkIfFigureIsCloseEnough(point: Point): Boolean {
-        return getDistanceToPoint(point) <= 30f
+        return getDistanceToPoint(point) <= getDistanceToCountTouch()
     }
 }

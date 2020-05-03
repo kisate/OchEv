@@ -1,19 +1,11 @@
 package com.example.ochev.baseclasses.edgefigures.normalizers
 
 import com.example.ochev.baseclasses.EdgeFigure
-import com.example.ochev.baseclasses.VertexFigure
 import com.example.ochev.baseclasses.dataclasses.InformationForNormalizer
-import com.example.ochev.baseclasses.dataclasses.Point
 import com.example.ochev.baseclasses.edgefigures.Line
 
 class EdgeFigureNormalizer {
 
-    private val MAX_DISTANCE_BETWEEN_END_AND_FIGURE = 50
-
-    fun checkIfTheClosestigureIsCorrect(vertexFigure: VertexFigure, point: Point): Boolean {
-        return vertexFigure.getDistanceToPointOrZeroIfInside(point) <=
-                MAX_DISTANCE_BETWEEN_END_AND_FIGURE
-    }
 
     fun normalizeAsTwoClosestFigures(information: InformationForNormalizer): EdgeFigure? {
         if (
@@ -29,15 +21,21 @@ class EdgeFigureNormalizer {
 
         val beginFigure = graph.getClosestToPointVertexFigureOrNull(beginPoint)
         if (beginFigure == null ||
-            !checkIfTheClosestigureIsCorrect(beginFigure, beginPoint)
+            !beginFigure.checkIfFigureIsCloseEnough(beginPoint)
         ) return null
 
         val endFigure = graph.getClosestToPointVertexFigureOrNull(endPoint)
         if (endFigure == null ||
-            !checkIfTheClosestigureIsCorrect(endFigure, endPoint)
+            !endFigure.checkIfFigureIsCloseEnough(endPoint)
         ) return null
 
         if (beginFigure == endFigure) return null
+        for (edge in graph.edges) {
+            when (edge) {
+                is Line ->
+                    if (edge.beginFigure == beginFigure && edge.endFigure == endFigure) return null
+            }
+        }
 
         return Line(beginFigure, endFigure)
     }

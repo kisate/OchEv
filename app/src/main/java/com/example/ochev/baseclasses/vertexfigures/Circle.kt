@@ -60,6 +60,10 @@ class Circle(
     override fun getMovingPoints(): MutableList<Point> {
         return mutableListOf(leftPoint, upPoint, rightPoint, downPoint)
     }
+
+    override fun getDistanceToCountTouch(): Float {
+        return radius / 4f
+    }
 }
 
 fun VertexFigureBuilder.buildCircle(strokes: MutableList<Stroke>): Circle {
