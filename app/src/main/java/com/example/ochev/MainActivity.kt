@@ -40,6 +40,10 @@ class MainActivity : AppCompatActivity() {
             strokeInput?.clear()
         }
 
+        deleteButtonId.setOnClickListener {
+            strokeInput?.deleteEditingFigure()
+        }
+
         classifier
             .initialize(Executor.executorService)
             .addOnFailureListener { e ->

@@ -43,6 +43,10 @@ class StrokeInputView(
         inputHandler.clear()
     }
 
+    fun deleteEditingFigure() {
+        inputHandler.deleteEditingFigure()
+    }
+
     @SuppressLint("ClickableViewAccessibility")
     override fun onTouchEvent(event: MotionEvent): Boolean {
 
@@ -166,10 +170,7 @@ class InputHandler(
     fun touchMove(event: MotionEvent?) {
         val point = event?.let { Point(it) } ?: return
         if (PointInteractor().distance(point, lastPoint) <= ACCURACY) return
-
-
         if (event.pointerCount == 1) stroke.addPoint(point)
-
         if (inputMode != InputMode.DEFAULT) {
             funMap[inputMode]!![event.action]?.let { it(event) }
         } else if (checkScrollingModeEntry(event)) {
@@ -181,12 +182,9 @@ class InputHandler(
     }
 
     fun touchUp(event: MotionEvent?) {
-
         if (event != null) {
             val point = Point(event)
-
             lastPoint = point
-
             if (inputMode == InputMode.DEFAULT && possibleEditModeEntry() && checkEditModeEntry()) {
                 Log.i("timeDebug", (System.nanoTime() - lastTime).toString())
                 startEditing()
@@ -263,14 +261,12 @@ class InputHandler(
 
     private fun classifyStroke() {
         val bitmap = Utils.loadBitmapFromView(drawStrokeView)
-
         val information = InformationForNormalizer(
             classifier,
             bitmap,
             drawGraphView.graph,
             mutableListOf(stroke.copy())
         )
-
         Tasks.call(
             MainActivity.Executor.executorService,
             Callable<Figure?> {
@@ -284,7 +280,6 @@ class InputHandler(
                         .show()
             }
             .addOnFailureListener { e -> Log.i("Modify", "Error modifying", e) }
-
         Log.i("dbgCountOfPointInStroke", stroke.points.size.toString())
     }
 
@@ -384,8 +379,13 @@ class InputHandler(
         }
         movementType = MovementType.CHILL
         drawGraphView.invalidate()
+    }
 
-
+    fun deleteEditingFigure() {
+        if (inputMode != InputMode.EDITING)return
+        closeEditing(lastEditingFigure)
+        drawGraphView.graph.delete(lastEditingFigure)
+        drawGraphView.invalidate()
     }
 
     companion object {

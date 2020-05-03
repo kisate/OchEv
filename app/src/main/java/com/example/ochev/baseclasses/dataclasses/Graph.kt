@@ -5,6 +5,9 @@ import com.example.ochev.baseclasses.Figure
 import com.example.ochev.baseclasses.FigureNormalizer
 import com.example.ochev.baseclasses.VertexFigure
 import com.example.ochev.baseclasses.edgefigures.Line
+import java.util.*
+import kotlin.Comparator
+import kotlin.collections.ArrayList
 
 
 data class Graph(
@@ -103,4 +106,26 @@ data class Graph(
             }
         }
     }
+
+    fun delete(figure: Figure){
+        when (figure) {
+            is Line -> {
+                edges.remove(figure)
+            }
+            is VertexFigure -> {
+                val toDelete = LinkedList<EdgeFigure>()
+                for (edge in edges){
+                    edge as Line
+                    if (edge.beginFigure == figure || edge.endFigure == figure){
+                        toDelete.add(edge)
+                    }
+                }
+                vertexes.remove(figure)
+                for (edge in toDelete) {
+                    edges.remove(edge)
+                }
+            }
+        }
+    }
+
 }
