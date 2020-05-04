@@ -6,7 +6,6 @@ import com.example.ochev.baseclasses.dataclasses.Stroke
 import com.example.ochev.baseclasses.dataclasses.StrokeInteractor
 import com.example.ochev.baseclasses.dataclasses.Vector
 import com.example.ochev.baseclasses.vertexfigures.editors.PointMover
-import java.lang.Math.abs
 import kotlin.math.max
 import kotlin.math.min
 
@@ -50,9 +49,9 @@ class Rectangle(
     }
 
     override fun checkIfPointIsInside(point: Point): Boolean {
-        val maxX = kotlin.math.max(leftDownCorner.x, rightDownCorner.x)
+        val maxX = max(leftDownCorner.x, rightDownCorner.x)
         val minX = min(leftDownCorner.x, rightDownCorner.x)
-        val maxY = kotlin.math.max(leftDownCorner.y, leftUpCorner.y)
+        val maxY = max(leftDownCorner.y, leftUpCorner.y)
         val minY = min(leftDownCorner.y, leftUpCorner.y)
 
         return (point.x in minX..maxX && point.y in minY..maxY)
@@ -91,12 +90,27 @@ class Rectangle(
 
 
     override fun getDistanceToCountTouch(): Float {
-        val dX = abs(leftDownCorner.x - rightDownCorner.x)
-        val dY = abs(leftDownCorner.y - leftUpCorner.y)
+        val dX = kotlin.math.abs(leftDownCorner.x - rightDownCorner.x)
+        val dY = kotlin.math.abs(leftDownCorner.y - leftUpCorner.y)
 
         return max(min(dX, dY) / 4f, 20f)
     }
 
+    fun repairOrderOfVertexes() {
+        val maxX = max(leftDownCorner.x, rightDownCorner.x)
+        val minX = min(leftDownCorner.x, rightDownCorner.x)
+        val maxY = max(leftDownCorner.y, leftUpCorner.y)
+        val minY = min(leftDownCorner.y, leftUpCorner.y)
+
+        leftUpCorner.x = minX
+        leftUpCorner.y = maxY
+        leftDownCorner.x = minX
+        leftDownCorner.y = minY
+        rightDownCorner.x = maxX
+        rightDownCorner.y = minY
+        rightUpCorner.x = maxX
+        rightUpCorner.y = maxY
+    }
 
 
 }
