@@ -159,22 +159,20 @@ class RectangleDrawer : Drawer() {
         styles[DrawingMode.EDIT_CORNERS.ordinal].circuitPaint.color = Color.parseColor("#FFC107")
     }
 
+    fun drawRect(rect: Rectangle, canvas: Canvas?, paint: Paint) {
+        val path = Path()
+        path.moveTo(rect.rightDownCorner.x.toFloat(), rect.rightDownCorner.y.toFloat())
+        path.lineTo(rect.rightUpCorner.x.toFloat(), rect.rightUpCorner.y.toFloat())
+        path.lineTo(rect.leftUpCorner.x.toFloat(), rect.leftUpCorner.y.toFloat())
+        path.lineTo(rect.leftDownCorner.x.toFloat(), rect.leftDownCorner.y.toFloat())
+        path.close()
+        canvas?.drawPath(path, paint)
+    }
+
     override fun draw(figure: Figure, canvas: Canvas?) {
         figure as Rectangle
-        canvas?.drawRect(
-            figure.leftDownCorner.x.toFloat(),
-            figure.leftDownCorner.y.toFloat(),
-            figure.rightUpCorner.x.toFloat(),
-            figure.rightUpCorner.y.toFloat(),
-            styles[currentStyle].fillPaint
-        )
-        canvas?.drawRect(
-            figure.leftDownCorner.x.toFloat(),
-            figure.leftDownCorner.y.toFloat(),
-            figure.rightUpCorner.x.toFloat(),
-            figure.rightUpCorner.y.toFloat(),
-            styles[currentStyle].circuitPaint
-        )
+        drawRect(figure, canvas, styles[currentStyle].fillPaint)
+        drawRect(figure, canvas, styles[currentStyle].circuitPaint)
         if (figure.drawingInformation.drawingMode == DrawingMode.EDIT)
             for (point in figure.getMovingPoints()) {
                 canvas?.drawCircle(
@@ -196,6 +194,9 @@ class LineDrawer : Drawer() {
         styles[DrawingMode.DEFAULT.ordinal].circuitPaint.style = Paint.Style.STROKE
         styles[DrawingMode.DEFAULT.ordinal].circuitPaint.color = Color.BLACK
         styles[DrawingMode.DEFAULT.ordinal].circuitPaint.strokeWidth = 10f
+        styles[DrawingMode.DEFAULT.ordinal].fontPaint.style = Paint.Style.FILL
+        styles[DrawingMode.DEFAULT.ordinal].fontPaint.color = Color.BLACK
+        styles[DrawingMode.DEFAULT.ordinal].fontPaint.textSize = 30f
         /*
             editing style of lines
          */
@@ -212,9 +213,11 @@ class LineDrawer : Drawer() {
         val path = Path()
         val from = figure.beginFigure.center
         val to = figure.endFigure.center
+
         path.moveTo(from.x.toFloat(), from.y.toFloat())
         path.lineTo(to.x.toFloat(), to.y.toFloat())
         canvas?.drawPath(path, styles[currentStyle].circuitPaint)
+        canvas?.drawTextOnPath("Test Text 1234567", path, 100f, 100f, styles[DrawingMode.DEFAULT.ordinal].fontPaint)
     }
 }
 
