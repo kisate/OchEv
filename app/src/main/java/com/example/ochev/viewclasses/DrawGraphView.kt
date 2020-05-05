@@ -217,7 +217,7 @@ class LineDrawer : Drawer() {
         path.moveTo(from.x.toFloat(), from.y.toFloat())
         path.lineTo(to.x.toFloat(), to.y.toFloat())
         canvas?.drawPath(path, styles[currentStyle].circuitPaint)
-        canvas?.drawTextOnPath("Test Text 1234567", path, 100f, 100f, styles[DrawingMode.DEFAULT.ordinal].fontPaint)
+//        canvas?.drawTextOnPath("Test Text 1234567", path, 100f, 100f, styles[DrawingMode.DEFAULT.ordinal].fontPaint)
     }
 }
 
