@@ -4,128 +4,34 @@ import com.example.ochev.baseclasses.EdgeFigure
 import com.example.ochev.baseclasses.Figure
 import com.example.ochev.baseclasses.FigureNormalizer
 import com.example.ochev.baseclasses.VertexFigure
-import com.example.ochev.baseclasses.edgefigures.Line
-import java.util.*
-import kotlin.Comparator
-import kotlin.collections.ArrayList
 
 
 data class Graph(
-    val vertexes: MutableList<VertexFigure> = ArrayList(),
-    val edges: MutableList<EdgeFigure> = ArrayList()
+    val figures: FigureContainer = FigureContainer()
 ) {
-    val allFigures: MutableList<Figure>
-        get() = (vertexes + edges).toMutableList()
-
-    class ComparatorByHeights : Comparator<Figure> {
-        override fun compare(x: Figure?, y: Figure?): Int {
-            if (x == null && y == null) return 0
-            if (x == null) return -1
-            if (y == null) return 1
-
-            val diff = x.heightOnPlain - y.heightOnPlain
-            if (diff == 0) {
-                if (x is VertexFigure && y is EdgeFigure) return 1
-                if (x is EdgeFigure && y is VertexFigure) return -1
-            }
-            return diff
-        }
-    }
-
-    val figuresSortedByHeights: MutableList<Figure>
-        get() = allFigures.sortedWith(ComparatorByHeights()).toMutableList()
-
-    val maximalHeight: Int
-        get() = allFigures.maxBy { it.heightOnPlain }?.heightOnPlain ?: 0
-
-    fun addEdge(edgeFigure: EdgeFigure) {
-        edges.add(edgeFigure)
-    }
-
-    fun addVertex(vertexFigure: VertexFigure) {
-        vertexFigure.heightOnPlain = maximalHeight + 1
-        vertexes.add(vertexFigure)
-    }
 
     fun getFigureForEditing(point: Point): Figure? {
-        val bestFigure = getClosestToPointFigureOrNull(point)
+        val bestFigure = figures.getClosestToPointFigureOrNull(point)
         return if (bestFigure == null || !bestFigure.checkIfFigureIsCloseEnough(point)) null
         else bestFigure
     }
 
-    fun getClosestToPointVertexFigureOrNull(point: Point): VertexFigure? {
-        return vertexes.sortedByDescending { it.heightOnPlain }.minBy {
-            it.getDistanceToPointOrZeroIfInside(point)
-        }
-    }
-
-    fun getClosestToPointEdgeFigureOrNull(point: Point): EdgeFigure? {
-        return edges.sortedByDescending { it.heightOnPlain }.minBy {
-            it.getDistanceToPoint(point)
-        }
-    }
-
-    fun getClosestToPointFigureOrNull(point: Point): Figure? {
-        val bestVertex = getClosestToPointVertexFigureOrNull(point)
-        val bestEdge = getClosestToPointEdgeFigureOrNull(point)
-
-        if (bestVertex == null) return bestEdge
-        if (bestEdge == null) return bestVertex
-
-        return if (bestVertex.getDistanceToPointOrZeroIfInside(point) <= 0.0001) {
-            bestVertex
-        } else {
-            if (
-                bestVertex.getDistanceToPointOrZeroIfInside(point) <=
-                bestEdge.getDistanceToPoint(point)
-            ) bestVertex
-            else bestEdge
-        }
-    }
-
-    fun modifyByStrokes(information: InformationForNormalizer): Figure? {
+    fun modifyByStrokes(information: InformationForNormalizer) {
         val normalizer = FigureNormalizer()
-        val newFigure = normalizer.normaliseStrokes(information) ?: return null
 
-        when (newFigure) {
-            is VertexFigure -> addVertex(newFigure)
-            is EdgeFigure -> addEdge(newFigure)
-        }
-        return newFigure
-    }
+        val result = normalizer.normaliseStrokes(information) ?: return
 
-    fun moveByVector(vector: Vector) {
-        vertexes.forEach{ it -> it.moveByVector(vector) }
-    }
-
-    fun recalcHeights() {
-        for (edge in edges) {
-            if (edge is Line) {
-                edge.heightOnPlain =
-                    Math.min(edge.beginFigure.heightOnPlain, edge.endFigure.heightOnPlain)
-            }
+        when (result) {
+            is VertexFigure -> figures.addVertex(result, figures.maxHeight + 1)
+            is EdgeFigure -> figures.addEdge(
+                result,
+                kotlin.math.min(
+                    figures.getHeight(result.beginFigure),
+                    figures.getHeight(result.endFigure)
+                )
+            )
         }
     }
 
-    fun delete(figure: Figure){
-        when (figure) {
-            is Line -> {
-                edges.remove(figure)
-            }
-            is VertexFigure -> {
-                val toDelete = LinkedList<EdgeFigure>()
-                for (edge in edges){
-                    edge as Line
-                    if (edge.beginFigure == figure || edge.endFigure == figure){
-                        toDelete.add(edge)
-                    }
-                }
-                vertexes.remove(figure)
-                for (edge in toDelete) {
-                    edges.remove(edge)
-                }
-            }
-        }
-    }
 
 }

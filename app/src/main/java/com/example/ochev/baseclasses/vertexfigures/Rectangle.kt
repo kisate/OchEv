@@ -3,19 +3,22 @@ package com.example.ochev.baseclasses.vertexfigures
 import com.example.ochev.baseclasses.VertexFigure
 import com.example.ochev.baseclasses.dataclasses.Point
 import com.example.ochev.baseclasses.dataclasses.Stroke
-import com.example.ochev.baseclasses.dataclasses.StrokeInteractor
+import com.example.ochev.baseclasses.dataclasses.Stroke.Companion.getStrokesRestrictions
 import com.example.ochev.baseclasses.dataclasses.Vector
-import com.example.ochev.baseclasses.vertexfigures.editors.PointMover
+import com.example.ochev.baseclasses.editors.vertexeditor.PointMover
 import kotlin.math.max
 import kotlin.math.min
 
 
-class Rectangle(
+data class Rectangle(
     val leftDownCorner: Point = Point(),
-    val rightUpCorner: Point = Point(),
-    val leftUpCorner: Point = Point(leftDownCorner.x, rightUpCorner.y),
-    val rightDownCorner: Point = Point(rightUpCorner.x, leftDownCorner.y)
+    val rightUpCorner: Point = Point()
 ) : VertexFigure() {
+    val leftUpCorner: Point
+        get() = Point(leftDownCorner.x, rightUpCorner.y)
+
+    val rightDownCorner: Point
+        get() = Point(leftDownCorner.y, rightUpCorner.x)
 
 
     override val center
@@ -25,11 +28,11 @@ class Rectangle(
                 y = (leftDownCorner.y + rightUpCorner.y) / 2
             )
 
-    override fun moveByVector(vector: Vector) {
-        leftDownCorner.moveByVector(vector)
-        leftUpCorner.moveByVector(vector)
-        rightUpCorner.moveByVector(vector)
-        rightDownCorner.moveByVector(vector)
+    override fun movedByVector(vector: Vector): VertexFigure {
+        return this.copy(
+            leftDownCorner = leftDownCorner.movedByVector(vector),
+            rightUpCorner = rightUpCorner.movedByVector(vector)
+        )
     }
 
     override fun getDistanceToPoint(point: Point): Float {
@@ -58,34 +61,101 @@ class Rectangle(
     }
 
     override fun getPointMovers(): MutableList<PointMover> {
+        val result: MutableList<PointMover> = ArrayList()
         val points = getMovingPoints()
 
-        val result: MutableList<PointMover> = ArrayList()
+        // add angle movers
+        result.add(PointMover(
+            points[0]
+        )
+        { point: Point ->
+            this.copy(
+                leftDownCorner = point
+            )
+        })
 
-        for (i in 0..3) {
-            val moveFun =
-                if (i % 2 == 0) {
-                    { point: Point ->
-                        points[i].x = point.x
-                        points[i].y = point.y
-                        points[(i - 1 + 4) % 4].y = point.y
-                        points[(i + 1) % 4].x = point.x
-                    }
-                } else {
-                    { point: Point ->
-                        points[i].x = point.x
-                        points[i].y = point.y
-                        points[(i - 1 + 4) % 4].x = point.x
-                        points[(i + 1) % 4].y = point.y
-                    }
-                }
-            result.add(PointMover(points[i], moveFun))
-        }
+        result.add(PointMover(
+            points[1]
+        )
+        { point: Point ->
+            this.copy(
+                leftDownCorner = Point(point.x, leftDownCorner.y),
+                rightUpCorner = Point(rightUpCorner.x, point.y)
+            )
+        })
+
+        result.add(PointMover(
+            points[2]
+        )
+        { point: Point ->
+            this.copy(
+                rightUpCorner = point
+            )
+        })
+
+        result.add(PointMover(
+            points[3]
+        )
+        { point: Point ->
+            this.copy(
+                leftDownCorner = Point(leftDownCorner.x, point.y),
+                rightUpCorner = Point(point.x, rightUpCorner.y)
+            )
+        })
+
+        // add side points
+
+        result.add(PointMover(
+            points[4]
+        )
+        { point: Point ->
+            this.copy(
+                leftDownCorner = Point(point.x, leftDownCorner.y)
+            )
+        })
+
+        result.add(PointMover(
+            points[5]
+        )
+        { point: Point ->
+            this.copy(
+                rightUpCorner = Point(rightUpCorner.x, point.y)
+            )
+        })
+
+        result.add(PointMover(
+            points[6]
+        )
+        { point: Point ->
+            this.copy(
+                rightUpCorner = Point(point.x, rightUpCorner.y)
+            )
+        })
+
+        result.add(PointMover(
+            points[7]
+        )
+        { point: Point ->
+            this.copy(
+                leftDownCorner = Point(leftDownCorner.x, point.y)
+            )
+        })
+
+
         return result
     }
 
     override fun getMovingPoints(): MutableList<Point> {
-        return mutableListOf(leftDownCorner, leftUpCorner, rightUpCorner, rightDownCorner)
+        return mutableListOf(
+            leftDownCorner,
+            leftUpCorner,
+            rightUpCorner,
+            rightDownCorner,
+            Point(leftDownCorner.x, (leftDownCorner.y + leftUpCorner.y) / 2),
+            Point((leftUpCorner.x + rightUpCorner.x) / 2, leftUpCorner.x),
+            Point(rightUpCorner.x, (rightUpCorner.y + rightDownCorner.y) / 2),
+            Point((leftDownCorner.x + rightDownCorner.x) / 2, rightDownCorner.y)
+        )
     }
 
 
@@ -96,33 +166,14 @@ class Rectangle(
         return max(min(dX, dY) / 4f, 20f)
     }
 
-    fun repairOrderOfVertexes() {
-        val maxX = max(leftDownCorner.x, rightDownCorner.x)
-        val minX = min(leftDownCorner.x, rightDownCorner.x)
-        val maxY = max(leftDownCorner.y, leftUpCorner.y)
-        val minY = min(leftDownCorner.y, leftUpCorner.y)
-
-        leftUpCorner.x = minX
-        leftUpCorner.y = maxY
-        leftDownCorner.x = minX
-        leftDownCorner.y = minY
-        rightDownCorner.x = maxX
-        rightDownCorner.y = minY
-        rightUpCorner.x = maxX
-        rightUpCorner.y = maxY
-    }
-
 
 }
 
 
 fun VertexFigureBuilder.buildRectangle(strokes: MutableList<Stroke>): Rectangle {
-    val strokeInteractor = StrokeInteractor()
-    val (maxX, maxY, minX, minY) = strokeInteractor.getStrokesRestrictions(strokes)
+    val (maxX, maxY, minX, minY) = getStrokesRestrictions(strokes)
     return Rectangle(
         leftDownCorner = Point(minX, minY),
-        leftUpCorner = Point(minX, maxY),
-        rightDownCorner = Point(maxX, minY),
         rightUpCorner = Point(maxX, maxY)
 
     )

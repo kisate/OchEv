@@ -35,27 +35,27 @@ data class Stroke(val points: MutableList<Point> = ArrayList()) {
     fun minY(): Int {
         return points.minBy { it.y }!!.y
     }
-}
 
-class StrokeInteractor {
-
-    fun getStrokesRestrictions(strokes: MutableList<Stroke>): List<Int> {
-        val maxX = strokes.maxBy { it.maxX() }!!.maxX()
-        val minX = strokes.minBy { it.minX() }!!.minX()
-        val maxY = strokes.maxBy { it.maxY() }!!.maxY()
-        val minY = strokes.minBy { it.minY() }!!.minY()
-        return listOf(maxX, maxY, minX, minY)
-    }
-
-    fun joinListOfStrokes(strokes: MutableList<Stroke>): Stroke {
-        val points: HashMap<Point, Boolean> = HashMap()
-        val result = Stroke()
-        strokes.forEach { stroke ->
-            stroke.points.forEach { point ->
-                if (!points.containsKey(point)) result.addPoint(point)
-                points[point] = true
-            }
+    companion object {
+        fun getStrokesRestrictions(strokes: MutableList<Stroke>): List<Int> {
+            val maxX = strokes.maxBy { it.maxX() }!!.maxX()
+            val minX = strokes.minBy { it.minX() }!!.minX()
+            val maxY = strokes.maxBy { it.maxY() }!!.maxY()
+            val minY = strokes.minBy { it.minY() }!!.minY()
+            return listOf(maxX, maxY, minX, minY)
         }
-        return result
+
+        fun joinListOfStrokes(strokes: MutableList<Stroke>): Stroke {
+            val points: HashMap<Point, Boolean> = HashMap()
+            val result = Stroke()
+            strokes.forEach { stroke ->
+                stroke.points.forEach { point ->
+                    if (!points.containsKey(point)) result.addPoint(point)
+                    points[point] = true
+                }
+            }
+            return result
+        }
     }
 }
+

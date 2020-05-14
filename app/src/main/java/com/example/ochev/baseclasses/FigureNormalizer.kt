@@ -5,6 +5,7 @@ import com.example.ochev.baseclasses.edgefigures.normalizers.EdgeFigureNormalize
 import com.example.ochev.baseclasses.vertexfigures.normalizers.NormalizerByML
 
 class FigureNormalizer {
+
     fun normaliseStrokes(
         information: InformationForNormalizer
     ): Figure? {
