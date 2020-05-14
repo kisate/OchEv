@@ -6,8 +6,7 @@ import com.example.ochev.viewclasses.DrawingInformation
 // Base object of our scheme
 
 abstract class Figure(
-    val drawingInformation: DrawingInformation = DrawingInformation(),
-    var heightOnPlain: Int = 0
+    val drawingInformation: DrawingInformation = DrawingInformation()
 ) {
     abstract fun getDistanceToPoint(point: Point): Float
     abstract fun getDistanceToCountTouch(): Float

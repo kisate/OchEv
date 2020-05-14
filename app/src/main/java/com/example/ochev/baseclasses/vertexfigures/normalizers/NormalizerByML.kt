@@ -2,8 +2,8 @@ package com.example.ochev.baseclasses.vertexfigures.normalizers
 
 import com.example.ochev.baseclasses.VertexFigure
 import com.example.ochev.baseclasses.dataclasses.InformationForNormalizer
-import com.example.ochev.baseclasses.dataclasses.PointInteractor
-import com.example.ochev.baseclasses.dataclasses.StrokeInteractor
+import com.example.ochev.baseclasses.dataclasses.Stroke.Companion.getStrokesRestrictions
+import com.example.ochev.baseclasses.dataclasses.Stroke.Companion.joinListOfStrokes
 import com.example.ochev.baseclasses.vertexfigures.VertexFigureBuilder
 
 class NormalizerByML {
@@ -14,14 +14,12 @@ class NormalizerByML {
             information.strokes == null
         ) return null
 
-        val strokeInteractor = StrokeInteractor()
-        val pointInteractor = PointInteractor()
         val classifier = information.classifier
-        val stroke = strokeInteractor.joinListOfStrokes(information.strokes)
+        val stroke = joinListOfStrokes(information.strokes)
 
-        val (maxX, maxY, minX, minY) = strokeInteractor.getStrokesRestrictions(mutableListOf(stroke))
+        val (maxX, maxY, minX, minY) = getStrokesRestrictions(mutableListOf(stroke))
 
-        if (pointInteractor.distance(stroke.points.first(), stroke.points.last()) >=
+        if (stroke.points.first().getDistanceToPoint(stroke.points.last()) >=
             (maxX - minX + maxY - minY) / 4
         ) return null
 
@@ -30,7 +28,7 @@ class NormalizerByML {
             val vertexFigureBuilder = VertexFigureBuilder()
 
             return if (type == null) null
-            else vertexFigureBuilder.buildFigure(mutableListOf(stroke), type)
+            else vertexFigureBuilder.buildFigure(information.strokes, type)
         }
 
         return null

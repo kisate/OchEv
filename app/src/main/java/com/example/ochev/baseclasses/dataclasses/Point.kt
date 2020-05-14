@@ -1,16 +1,19 @@
 package com.example.ochev.baseclasses.dataclasses
 
-import android.util.Log
 import android.view.MotionEvent
+import kotlin.math.min
 import kotlin.math.sqrt
 
-data class Point(var x: Int = 0, var y: Int = 0) {
+data class Point(val x: Int = 0, val y: Int = 0) {
 
     constructor(event: MotionEvent) : this(event.x.toInt(), event.y.toInt())
 
-    fun moveByVector(vector: Vector) {
-        x += vector.x
-        y += vector.y
+    fun getDistanceToPoint(point: Point): Float {
+        return sqrt(((x - point.x) * (x - point.x) + (y - point.y) * (y - point.y)).toFloat())
+    }
+
+    fun movedByVector(vector: Vector): Point {
+        return Point(x + vector.x, y + vector.y)
     }
 
     fun getDistanceToLineSegment(
@@ -18,8 +21,6 @@ data class Point(var x: Int = 0, var y: Int = 0) {
         linePointB: Point
     ): Float {
         // we have triangle on 3 vertexes : A,B lies on line segment, С ( this ) is alone
-        val vectorInteractor = VectorInteractor()
-        val pointInteractor = PointInteractor()
 
         val vectorFromAToC = Vector(this.x - linePointA.x, this.y - linePointA.y)
         val vectorFromAToB = Vector(linePointB.x - linePointA.x, linePointB.y - linePointA.y)
@@ -27,51 +28,24 @@ data class Point(var x: Int = 0, var y: Int = 0) {
         val vectorFromBToC = Vector(this.x - linePointB.x, this.y - linePointB.y)
 
         val signOfCosAngleCAB =
-            if (vectorInteractor.scalarProduct(vectorFromAToB, vectorFromAToC) >= 0) 1 else -1
+            if (vectorFromAToB.scalarProduct(vectorFromAToC) >= 0) 1 else -1
         val signOfCosAngleCBA =
-            if (vectorInteractor.scalarProduct(vectorFromBToA, vectorFromBToC) >= 0) 1 else -1
+            if (vectorFromBToA.scalarProduct(vectorFromBToC) >= 0) 1 else -1
 
 
         if (signOfCosAngleCAB == signOfCosAngleCBA) {
 
             // the shortest path is perpendicular
 
-            val cosAngleCAB = vectorInteractor.scalarProduct(vectorFromAToB, vectorFromAToC) /
-                    (vectorFromAToB.length *
-                            vectorFromAToC.length)
+            val cosAngleCAB = vectorFromAToB.scalarProduct(vectorFromAToC) /
+                    (vectorFromAToB.length * vectorFromAToC.length)
             val sinAngleCAB = sqrt(1 - cosAngleCAB * cosAngleCAB)
             return vectorFromAToC.length * sinAngleCAB
         }
 
-        return Math.min(
-            pointInteractor.distance(this, linePointA),
-            pointInteractor.distance(this, linePointB)
+        return min(
+            getDistanceToPoint(linePointA),
+            getDistanceToPoint(linePointB)
         )
     }
-}
-
-
-class PointInteractor {
-
-    fun distance(firstPoint: Point, secondPoint: Point): Float {
-        return sqrt(
-            (firstPoint.x - secondPoint.x) * (firstPoint.x - secondPoint.x) +
-                    (firstPoint.y - secondPoint.y) * (firstPoint.y - secondPoint.y).toFloat()
-        )
-    }
-
-    companion object {
-        fun centerOfMass(points: Array<Point>): Point
-        {
-            if (points.isEmpty()) return Point(0, 0)
-            val res = points.reduce { acc, point ->
-                acc.moveByVector(Vector(point.x, point.y))
-                acc
-            }
-            res.x /= points.size
-            res.y /= points.size
-            return res
-        }
-    }
-
 }
