@@ -53,6 +53,8 @@ class StrokeInputView(
 
         Log.i("Touch", event.pointerCount.toString())
 
+        Log.i("Touch", event.getPointerId(0).toString())
+
         event.let {
             when (event.action) {
                 MotionEvent.ACTION_DOWN -> {
@@ -175,6 +177,7 @@ class InputHandler(
     fun touchMove(event: MotionEvent?) {
         val point = event?.let { Point(it) } ?: return
         if (PointInteractor().distance(point, lastPoint) <= ACCURACY) return
+
         if (event.pointerCount == 1) stroke.addPoint(point)
         if (inputMode != InputMode.DEFAULT) {
             funMap[inputMode]!![event.action]?.let { it(event) }
@@ -330,7 +333,8 @@ class InputHandler(
         Log.i("Scrolling", "Point: $point")
         Log.i("Scrolling", "Event: ${event.getAxisValue(0, 0)} ${event.getAxisValue(1, 0)}")
         Log.i("Scrolling", delta.toString())
-        Log.i("Scrolling", Vector(lastPoint, point).toString())
+        Log.i("Scrolling", Vector(lastScrollCenter, PointInteractor.centerOfMass(arrayOf(firstFinger, secondFinger))).toString())
+
 
         lastScrollCenter = PointInteractor.centerOfMass(arrayOf(firstFinger, secondFinger))
         VectorInteractor().multiplyByFloat(delta, SCROLLING_SPEED)
