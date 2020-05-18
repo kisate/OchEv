@@ -22,6 +22,11 @@ data class Circle(
     val downPoint: Point
         get() = Point(center.x, center.y - radius)
 
+    override val importantPoints: MutableList<Point>
+        get() {
+            return mutableListOf(leftPoint, upPoint, rightPoint, downPoint)
+        }
+
     override fun getDistanceToPoint(point: Point): Float {
         return abs(
             center.getDistanceToPoint(point)
@@ -57,7 +62,7 @@ data class Circle(
     }
 
     override fun getMovingPoints(): MutableList<Point> {
-        return mutableListOf(leftPoint, upPoint, rightPoint, downPoint)
+        return importantPoints
     }
 
     override fun getDistanceToCountTouch(): Float {

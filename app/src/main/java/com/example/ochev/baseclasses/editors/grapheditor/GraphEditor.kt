@@ -76,13 +76,13 @@ class GraphEditor(
         graph = newGraph
     }
 
-    fun getLinker(changeFun: (VertexFigure) -> VertexFigure): HashMap<VertexFigure, VertexFigure> {
+    private fun getLinker(changeFun: (VertexFigure) -> VertexFigure): HashMap<VertexFigure, VertexFigure> {
         val linker: HashMap<VertexFigure, VertexFigure> = HashMap()
         graph.figures.vertexes.forEach { linker[it.first] = changeFun(it.first) }
         return linker
     }
 
-    fun reconnectEdges(linker: HashMap<VertexFigure, VertexFigure>): MutableList<Pair<EdgeFigure, Int>> {
+    private fun reconnectEdges(linker: HashMap<VertexFigure, VertexFigure>): MutableList<Pair<EdgeFigure, Int>> {
         val result: MutableList<Pair<EdgeFigure, Int>> = ArrayList()
         graph.figures.edges.forEach {
             when (it.first) {

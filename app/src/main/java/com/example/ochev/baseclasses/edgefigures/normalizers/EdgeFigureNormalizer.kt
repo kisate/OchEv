@@ -19,13 +19,13 @@ class EdgeFigureNormalizer {
         val beginPoint = strokes[0].points[0]
         val endPoint = strokes.last().points.last()
 
-        val beginFigure = graph.figures.getClosestToPointVertexFigureOrNull(beginPoint)
+        val beginFigure = graph.getClosestToPointVertexFigureOrNull(beginPoint)
         if (
             beginFigure == null ||
             !beginFigure.checkIfFigureIsCloseEnough(beginPoint)
         ) return null
 
-        val endFigure = graph.figures.getClosestToPointVertexFigureOrNull(endPoint)
+        val endFigure = graph.getClosestToPointVertexFigureOrNull(endPoint)
         if (
             endFigure == null ||
             !endFigure.checkIfFigureIsCloseEnough(endPoint)

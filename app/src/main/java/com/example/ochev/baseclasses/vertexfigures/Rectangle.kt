@@ -20,6 +20,11 @@ data class Rectangle(
     val rightDownCorner: Point
         get() = Point(leftDownCorner.y, rightUpCorner.x)
 
+    override val importantPoints: MutableList<Point>
+        get() {
+            return mutableListOf(leftDownCorner, leftUpCorner, rightUpCorner, rightDownCorner)
+        }
+
 
     override val center
         get() =
@@ -146,16 +151,12 @@ data class Rectangle(
     }
 
     override fun getMovingPoints(): MutableList<Point> {
-        return mutableListOf(
-            leftDownCorner,
-            leftUpCorner,
-            rightUpCorner,
-            rightDownCorner,
+        return (importantPoints + mutableListOf(
             Point(leftDownCorner.x, (leftDownCorner.y + leftUpCorner.y) / 2),
             Point((leftUpCorner.x + rightUpCorner.x) / 2, leftUpCorner.x),
             Point(rightUpCorner.x, (rightUpCorner.y + rightDownCorner.y) / 2),
             Point((leftDownCorner.x + rightDownCorner.x) / 2, rightDownCorner.y)
-        )
+        )).toMutableList()
     }
 
 
