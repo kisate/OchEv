@@ -12,6 +12,7 @@ abstract class VertexFigure : Figure() {
     abstract val center: Point
     abstract val importantPoints: MutableList<Point>
 
+    abstract fun rescaledByFactor(factor: Float): VertexFigure
     abstract fun movedByVector(vector: Vector): VertexFigure
     abstract fun checkIfPointIsInside(point: Point): Boolean
     abstract fun getPointMovers(): MutableList<PointMover>

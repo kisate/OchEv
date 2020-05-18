@@ -25,6 +25,17 @@ data class Rectangle(
             return mutableListOf(leftDownCorner, leftUpCorner, rightUpCorner, rightDownCorner)
         }
 
+    override fun rescaledByFactor(factor: Float): VertexFigure {
+        return this.copy(
+            leftDownCorner = center.movedByVector(
+                Vector(center, leftDownCorner).multipliedByFloat(factor)
+            ),
+            rightUpCorner = center.movedByVector(
+                Vector(center, rightUpCorner).multipliedByFloat(factor)
+            )
+        )
+    }
+
 
     override val center
         get() =

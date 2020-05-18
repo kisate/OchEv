@@ -27,6 +27,10 @@ data class Circle(
             return mutableListOf(leftPoint, upPoint, rightPoint, downPoint)
         }
 
+    override fun rescaledByFactor(factor: Float): VertexFigure {
+        return this.copy(radius = (radius * factor).toInt())
+    }
+
     override fun getDistanceToPoint(point: Point): Float {
         return abs(
             center.getDistanceToPoint(point)
