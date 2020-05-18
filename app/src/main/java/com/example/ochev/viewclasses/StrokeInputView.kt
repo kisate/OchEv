@@ -9,6 +9,7 @@ import android.view.View
 import android.widget.Button
 import android.widget.Toast
 import com.example.ochev.MainActivity
+import com.example.ochev.R
 import com.example.ochev.baseclasses.EdgeFigure
 import com.example.ochev.baseclasses.Figure
 import com.example.ochev.baseclasses.VertexFigure
@@ -18,6 +19,7 @@ import com.example.ochev.baseclasses.timeinteractors.Throttle
 import com.example.ochev.ml.Classifier
 import com.example.ochev.ml.Utils
 import com.google.android.gms.tasks.Tasks
+import kotlinx.android.synthetic.main.activity_main.view.*
 import java.util.concurrent.Callable
 
 enum class InputMode(value: Int) {
@@ -42,6 +44,8 @@ class StrokeInputView(
 
     fun clear() {
         inputHandler.clear()
+        var button = findViewById<Button>(R.id.deleteButtonId)
+
     }
 
     fun deleteEditingFigure() {
