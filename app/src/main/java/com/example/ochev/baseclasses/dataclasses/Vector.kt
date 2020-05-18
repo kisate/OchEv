@@ -15,6 +15,10 @@ data class Vector(val x: Int = 0, val y: Int = 0) {
         return x * vector.x + y * vector.y
     }
 
+    fun vectorProduct(vector: Vector): Int {
+        return x * vector.y - y * vector.x
+    }
+
     fun multipliedByFloat(c: Float): Vector {
         return Vector(x * c.toInt(), y * c.toInt())
     }
