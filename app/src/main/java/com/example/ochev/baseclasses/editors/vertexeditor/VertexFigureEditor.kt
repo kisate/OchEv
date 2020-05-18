@@ -15,5 +15,5 @@ class VertexFigureEditor(
     }
 
     val mover = VertexFigureMover(this)
-    val rescaler = VertexFigureRescaler(this)
+    val shaper = VertexFigureShaper(this)
 }

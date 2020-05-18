@@ -3,10 +3,10 @@ package com.example.ochev.baseclasses.editors.vertexeditor
 import com.example.ochev.baseclasses.dataclasses.Point
 
 
-class VertexFigureRescaler(val editor: VertexFigureEditor) {
+class VertexFigureShaper(val editor: VertexFigureEditor) {
     lateinit var currentMover: PointMover
 
-    fun rescaleBegins(point: Point): Boolean {
+    fun shapingBegins(point: Point): Boolean {
         val movers = editor.figureUnderControl.getPointMovers()
         val bestMover = movers.minBy { it.point.getDistanceToPoint(point) }!!
 

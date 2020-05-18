@@ -97,15 +97,38 @@ class GraphEditor(
         return result
     }
 
+    private fun moveVertexes(
+        oldGraph: Graph,
+        newGraph: Graph,
+        linker: HashMap<VertexFigure, VertexFigure>
+    ) {
+        oldGraph.figures.vertexes.forEach {
+            newGraph.figures.addVertex(linker[it.first]!!, it.second)
+        }
+    }
+
     fun moveGraphByVector(vector: Vector) {
         val newGraph = Graph()
         val linker = getLinker { it.movedByVector(vector) }
-        val newEdges = reconnectEdges(linker)
 
-        graph.figures.vertexes.forEach { newGraph.figures.addVertex(linker[it.first]!!, it.second) }
-        newGraph.figures.edges += newEdges
+        newGraph.figures.edges += reconnectEdges(linker)
+        moveVertexes(graph, newGraph, linker)
 
         graph = newGraph
+    }
+
+    fun zoomByPointAndFactor(point: Point, factor: Float) {
+        val newGraph = Graph()
+        val linker = getLinker {
+            it.movedByVector(Vector(point, it.center).multipliedByFloat(factor))
+                .rescaledByFactor(factor)
+        }
+
+        newGraph.figures.edges += reconnectEdges(linker)
+        moveVertexes(graph, newGraph, linker)
+
+        graph = newGraph
+
     }
 
 }

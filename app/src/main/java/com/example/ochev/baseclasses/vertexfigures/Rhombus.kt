@@ -28,6 +28,17 @@ data class Rhombus(
             return mutableListOf(leftCorner, upCorner, rightCorner, downCorner)
         }
 
+    override fun rescaledByFactor(factor: Float): VertexFigure {
+        return this.copy(
+            leftCorner = center.movedByVector(
+                Vector(center, leftCorner).multipliedByFloat(factor)
+            ),
+            upCorner = center.movedByVector(
+                Vector(center, upCorner).multipliedByFloat(factor)
+            )
+        )
+    }
+
     override val center: Point
         get() = Point(upCorner.x, leftCorner.y)
 
