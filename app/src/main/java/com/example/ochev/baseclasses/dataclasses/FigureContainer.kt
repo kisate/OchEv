@@ -9,6 +9,8 @@ data class FigureContainer(
     val vertexes: MutableList<Pair<VertexFigure, Int>> = ArrayList(),
     val edges: MutableList<Pair<EdgeFigure, Int>> = ArrayList()
 ) {
+    val allFigures: MutableList<Pair<Figure, Int>>
+        get() = (vertexes + edges).toMutableList()
 
     val maxHeightVertex: Int
         get() {
@@ -39,13 +41,6 @@ data class FigureContainer(
 
     fun addEdge(edge: EdgeFigure, height: Int) {
         edges.add(Pair(edge, height))
-    }
-
-    fun addFigure(figure: Figure, height: Int) {
-        when (figure) {
-            is VertexFigure -> addVertex(figure, height)
-            is EdgeFigure -> addEdge(figure, height)
-        }
     }
 
 
