@@ -9,8 +9,8 @@ data class FigureContainer(
     val vertexes: MutableList<Pair<VertexFigure, Int>> = ArrayList(),
     val edges: MutableList<Pair<EdgeFigure, Int>> = ArrayList()
 ) {
-    val figuresSortedByHeights: MutableList<Pair<Figure, Int>>
-        get() = (vertexes + edges).sortedBy { it.second }.toMutableList()
+    val allFigures: MutableList<Pair<Figure, Int>>
+        get() = (vertexes + edges).toMutableList()
 
     val maxHeightVertex: Int
         get() {
