@@ -1,6 +1,7 @@
 package com.example.ochev.viewclasses.eventhandlers
 
 
+import android.util.Log
 import android.view.MotionEvent
 import com.example.ochev.baseclasses.dataclasses.Point
 
@@ -36,11 +37,12 @@ class GestureDetector {
 
     private fun onTouchDown(event: MotionEvent): Gesture {
 
-        pointerCount += 1
-
         if (firstPoint == null) {
             gestureStart(event)
         }
+
+        pointerCount += 1
+
         if (checkScrollingStart(event)) {
             currentGesture = Gesture(GestureType.SCROLL, currentGesture.state)
             return currentGesture
@@ -55,14 +57,14 @@ class GestureDetector {
 
         if (checkScrollingStart(event))
         {
-            currentGesture = Gesture(GestureType.SCROLL)
+            currentGesture = Gesture(GestureType.SCROLL, GestureState.START)
             return currentGesture
         }
 
         if (!checkCanBeTap(event))
         {
             canBeTap = false
-            currentGesture = Gesture(GestureType.MOVE)
+            currentGesture = Gesture(GestureType.MOVE, GestureState.START)
             return currentGesture
         }
 

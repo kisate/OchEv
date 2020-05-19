@@ -2,7 +2,7 @@ package com.example.ochev.viewclasses.eventhandlers
 
 data class Gesture(
     val type: GestureType = GestureType.NONE,
-    val state: GestureState = GestureState.START
+    val state: GestureState = GestureState.NONE
 ) {
 }
 
@@ -14,6 +14,7 @@ enum class GestureType {
 }
 
 enum class GestureState {
+    NONE,
     START,
     IN_PROGRESS,
     END;

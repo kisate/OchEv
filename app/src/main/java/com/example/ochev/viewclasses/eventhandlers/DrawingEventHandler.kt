@@ -12,6 +12,6 @@ class DrawingEventHandler(
 ) : GestureEventHandler(drawStrokeView, drawGraphView, classifier) {
 
     override fun handle(gesture: Gesture, event: MotionEvent) {
-        TODO("Not yet implemented")
+//        TODO("Not yet implemented")
     }
 }
