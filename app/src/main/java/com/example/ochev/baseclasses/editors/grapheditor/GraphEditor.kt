@@ -1,6 +1,7 @@
 package com.example.ochev.baseclasses.editors.grapheditor
 
 import com.example.ochev.baseclasses.EdgeFigure
+import com.example.ochev.baseclasses.Figure
 import com.example.ochev.baseclasses.FigureNormalizer
 import com.example.ochev.baseclasses.VertexFigure
 import com.example.ochev.baseclasses.dataclasses.*
@@ -10,6 +11,40 @@ import com.example.ochev.baseclasses.editors.vertexeditor.VertexFigureEditor
 class GraphEditor(
     var graph: Graph = Graph()
 ) {
+    fun deleteFigure(figure: Figure) {
+        when (figure) {
+            is VertexFigure -> deleteVertex(figure)
+        }
+    }
+
+    fun deleteEdge(edgeFigure: EdgeFigure) {
+        val newGraph = Graph()
+        newGraph.figures.vertexes += graph.figures.vertexes
+
+        graph.figures.edges.forEach {
+            if (it.first != edgeFigure) {
+                newGraph.figures.edges.add(it)
+            }
+        }
+
+        graph = newGraph
+    }
+
+    fun deleteVertex(vertexFigure: VertexFigure) {
+        val newGraph = Graph()
+
+        graph.figures.vertexes.forEach {
+            if (it.first != vertexFigure) newGraph.figures.vertexes.add(it)
+        }
+        graph.figures.edges.forEach {
+            if (it.first.beginFigure != vertexFigure && it.first.endFigure != vertexFigure) {
+                newGraph.figures.edges.add(it)
+            }
+        }
+
+        graph = newGraph
+    }
+
     fun recalcEdgeHeights() {
         val fastHeightAcces: HashMap<VertexFigure, Int> = HashMap()
         graph.figures.vertexes.forEach { fastHeightAcces[it.first] = it.second }
@@ -76,13 +111,13 @@ class GraphEditor(
         graph = newGraph
     }
 
-    private fun getLinker(changeFun: (VertexFigure) -> VertexFigure): HashMap<VertexFigure, VertexFigure> {
+    fun getLinker(changeFun: (VertexFigure) -> VertexFigure): HashMap<VertexFigure, VertexFigure> {
         val linker: HashMap<VertexFigure, VertexFigure> = HashMap()
         graph.figures.vertexes.forEach { linker[it.first] = changeFun(it.first) }
         return linker
     }
 
-    private fun reconnectEdges(linker: HashMap<VertexFigure, VertexFigure>): MutableList<Pair<EdgeFigure, Int>> {
+    fun reconnectEdges(linker: HashMap<VertexFigure, VertexFigure>): MutableList<Pair<EdgeFigure, Int>> {
         val result: MutableList<Pair<EdgeFigure, Int>> = ArrayList()
         graph.figures.edges.forEach {
             when (it.first) {
@@ -97,7 +132,7 @@ class GraphEditor(
         return result
     }
 
-    private fun moveVertexes(
+    fun moveVertexes(
         oldGraph: Graph,
         newGraph: Graph,
         linker: HashMap<VertexFigure, VertexFigure>
@@ -128,7 +163,9 @@ class GraphEditor(
         moveVertexes(graph, newGraph, linker)
 
         graph = newGraph
-
     }
 
+    fun clear() {
+        graph = Graph()
+    }
 }

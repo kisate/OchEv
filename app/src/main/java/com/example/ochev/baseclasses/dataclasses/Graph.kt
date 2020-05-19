@@ -9,6 +9,7 @@ data class Graph(
     val figures: FigureContainer = FigureContainer()
 ) {
 
+
     fun getFigureForEditing(point: Point): Figure? {
         val bestFigure = getClosestToPointFigureOrNull(point)
         return if (bestFigure == null || !bestFigure.checkIfFigureIsCloseEnough(point)) null
