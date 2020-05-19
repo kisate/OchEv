@@ -9,8 +9,25 @@ data class FigureContainer(
     val vertexes: MutableList<Pair<VertexFigure, Int>> = ArrayList(),
     val edges: MutableList<Pair<EdgeFigure, Int>> = ArrayList()
 ) {
-    val allFigures: MutableList<Pair<Figure, Int>>
-        get() = (vertexes + edges).toMutableList()
+
+    class ComparatorByHeights() : Comparator<Pair<Figure, Int>> {
+        override fun compare(o1: Pair<Figure, Int>?, o2: Pair<Figure, Int>?): Int {
+            if (o1 == null && o2 == null) return 0
+            if (o1 == null) return -1
+            if (o2 == null) return 1
+
+            if (o1.second != o2.second) {
+                return o1.second - o2.second
+            }
+
+            if (o1.first is VertexFigure && o2.first is EdgeFigure) return 1
+            if (o2.first is EdgeFigure && o2.first is VertexFigure) return -1
+            return 0
+        }
+    }
+
+    val figuresSortedByHeights: MutableList<Pair<Figure, Int>>
+        get() = (vertexes + edges).sortedWith(ComparatorByHeights()).toMutableList()
 
     val maxHeightVertex: Int
         get() {
