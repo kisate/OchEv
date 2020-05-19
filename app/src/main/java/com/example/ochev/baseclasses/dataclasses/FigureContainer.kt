@@ -10,6 +10,25 @@ data class FigureContainer(
     val edges: MutableList<Pair<EdgeFigure, Int>> = ArrayList()
 ) {
 
+    class ComparatorByHeights() : Comparator<Pair<Figure, Int>> {
+        override fun compare(o1: Pair<Figure, Int>?, o2: Pair<Figure, Int>?): Int {
+            if (o1 == null && o2 == null) return 0
+            if (o1 == null) return -1
+            if (o2 == null) return 1
+
+            if (o1.second != o2.second) {
+                return o1.second - o2.second
+            }
+
+            if (o1.first is VertexFigure && o2.first is EdgeFigure) return 1
+            if (o2.first is EdgeFigure && o2.first is VertexFigure) return -1
+            return 0
+        }
+    }
+
+    val figuresSortedByHeights: MutableList<Pair<Figure, Int>>
+        get() = (vertexes + edges).sortedWith(ComparatorByHeights()).toMutableList()
+
     val maxHeightVertex: Int
         get() {
             return vertexes.maxBy { it.second }?.second ?: 0
@@ -39,13 +58,6 @@ data class FigureContainer(
 
     fun addEdge(edge: EdgeFigure, height: Int) {
         edges.add(Pair(edge, height))
-    }
-
-    fun addFigure(figure: Figure, height: Int) {
-        when (figure) {
-            is VertexFigure -> addVertex(figure, height)
-            is EdgeFigure -> addEdge(figure, height)
-        }
     }
 
 
