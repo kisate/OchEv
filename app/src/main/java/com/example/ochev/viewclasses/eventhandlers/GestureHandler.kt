@@ -1,5 +1,6 @@
 package com.example.ochev.viewclasses.eventhandlers
 
+import android.util.Log
 import android.view.MotionEvent
 import com.example.ochev.baseclasses.dataclasses.Point
 import com.example.ochev.baseclasses.editors.vertexeditor.VertexFigureEditor
@@ -34,6 +35,8 @@ class GestureHandler(
         if (gestureEventHandler != null) gestureEventHandler!!.handle(gesture, event)
 
         if (gesture.state == GestureState.END) gestureEventHandler = null
+
+        Log.d("Gestures", gesture.toString())
 
         return
     }

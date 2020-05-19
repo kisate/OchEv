@@ -77,8 +77,8 @@ class GestureDetector {
 
         if (pointerCount == 0) gestureEnd(event)
 
-        if (lastGesture.type != GestureType.NONE) return lastGesture
-        if (canBeTap && checkCanBeTap(event)) return Gesture(GestureType.TAP, GestureState.START)
+        if (lastGesture.type != GestureType.NONE) return Gesture(lastGesture.type, GestureState.END)
+        if (canBeTap && checkCanBeTap(event)) return Gesture(GestureType.TAP, GestureState.END)
 
         return Gesture()
     }
