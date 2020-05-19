@@ -12,7 +12,7 @@ class EditingEventHandler(
     classifier: Classifier,
     vertexFigureEditor: VertexFigureEditor
 ) : GestureEventHandler(drawStrokeView, drawGraphView, classifier) {
-    override fun handle(gestureType: GestureType?, event: MotionEvent) {
+    override fun handle(gesture: Gesture, event: MotionEvent) {
         TODO("Not yet implemented")
     }
 }

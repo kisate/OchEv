@@ -12,7 +12,7 @@ abstract class GestureEventHandler(
     private val drawGraphView: DrawGraphView,
     private val classifier: Classifier
 ) {
-    abstract fun handle(gestureType: GestureType?, event: MotionEvent)
+    abstract fun handle(gesture: Gesture, event: MotionEvent)
 }
 
 class GestureHandler(
@@ -25,21 +25,22 @@ class GestureHandler(
 
     private var currentFigureEditor: VertexFigureEditor? = null
 
-    fun handle(gestureType: GestureType?, event: MotionEvent) {
-        if (gestureType == null) return
+    fun handle(gesture: Gesture, event: MotionEvent) {
 
         if (gestureEventHandler == null) {
-            gestureEventHandler = chooseHandler(gestureType, event)
+            gestureEventHandler = chooseHandler(gesture, event)
         }
 
-        if (gestureEventHandler != null) gestureEventHandler!!.handle(gestureType, event)
+        if (gestureEventHandler != null) gestureEventHandler!!.handle(gesture, event)
+
+        if (gesture.state == GestureState.END) gestureEventHandler = null
 
         return
     }
 
-    private fun chooseHandler(gestureType: GestureType?, event: MotionEvent): GestureEventHandler? {
+    private fun chooseHandler(gesture: Gesture, event: MotionEvent): GestureEventHandler? {
 
-        if (gestureType == GestureType.SCROLL) return ScrollingEventHandler(
+        if (gesture.type == GestureType.SCROLL) return ScrollingEventHandler(
             drawStrokeView,
             drawGraphView,
             classifier
@@ -48,7 +49,7 @@ class GestureHandler(
         currentFigureEditor = drawGraphView.graphEditor.getFigureEditorByTouch(Point(event))
 
         if (currentFigureEditor == null) {
-            if (gestureType == GestureType.MOVE) return DrawingEventHandler(
+            if (gesture.type == GestureType.MOVE) return DrawingEventHandler(
                 drawStrokeView,
                 drawGraphView,
                 classifier

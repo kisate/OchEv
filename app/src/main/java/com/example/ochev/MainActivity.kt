@@ -4,10 +4,10 @@ import android.os.Bundle
 import android.util.Log
 import android.widget.RelativeLayout
 import androidx.appcompat.app.AppCompatActivity
-import com.example.ochev.baseclasses.dataclasses.StrokeInteractor
+//import com.example.ochev.baseclasses.dataclasses.StrokeInteractor
 import com.example.ochev.ml.Classifier
 import com.example.ochev.viewclasses.DrawingMode
-import com.example.ochev.viewclasses.InputHandler
+//import com.example.ochev.viewclasses.InputHandler
 import com.example.ochev.viewclasses.InputMode
 import kotlinx.android.synthetic.main.activity_main.*
 import com.example.ochev.viewclasses.StrokeInputView
@@ -36,15 +36,15 @@ class MainActivity : AppCompatActivity() {
 
         relativeId.addView(strokeInput, layoutParams)
 
-        clearButtonId.setOnClickListener {
-            strokeInput?.clear()
-        }
-
-        deleteButtonId.setOnClickListener {
-            strokeInput?.deleteEditingFigure()
-        }
-
-        strokeInput?.addDeleteButton(deleteButtonId)
+//        clearButtonId.setOnClickListener {
+//            strokeInput?.clear()
+//        }
+//
+//        deleteButtonId.setOnClickListener {
+//            strokeInput?.deleteEditingFigure()
+//        }
+//
+//        strokeInput?.addDeleteButton(deleteButtonId)
 
         classifier
             .initialize(Executor.executorService)

@@ -4,21 +4,15 @@ package com.example.ochev.viewclasses.eventhandlers
 import android.view.MotionEvent
 import com.example.ochev.baseclasses.dataclasses.Point
 
-enum class GestureType() {
-    TAP,
-    MOVE,
-    SCROLL;
-}
 
-
-class GestureDetector() {
+class GestureDetector {
 
     private var canBeTap = true
     private var firstPoint: Point? = null
-    private var currentType: GestureType? = null
+    private var currentGesture = Gesture()
     private var pointerCount = 0
 
-    fun detect(event: MotionEvent): GestureType? {
+    fun detect(event: MotionEvent): Gesture {
         when (event.action) {
             MotionEvent.ACTION_DOWN -> {
                 return onTouchDown(event)
@@ -30,17 +24,17 @@ class GestureDetector() {
                 return onTouchUp(event)
             }
         }
-        return currentType
+        return currentGesture
     }
 
     private fun gestureStart(event: MotionEvent) {
         canBeTap = true
         firstPoint = Point(event)
-        currentType = null
+        currentGesture = Gesture()
         pointerCount = 0
     }
 
-    private fun onTouchDown(event: MotionEvent): GestureType? {
+    private fun onTouchDown(event: MotionEvent): Gesture {
 
         pointerCount += 1
 
@@ -48,45 +42,45 @@ class GestureDetector() {
             gestureStart(event)
         }
         if (checkScrollingStart(event)) {
-            currentType = GestureType.SCROLL
-            return GestureType.SCROLL
+            currentGesture = Gesture(GestureType.SCROLL, currentGesture.state)
+            return currentGesture
         }
 
-        return null
+        return Gesture()
     }
 
-    private fun onTouchMove(event: MotionEvent): GestureType? {
+    private fun onTouchMove(event: MotionEvent): Gesture {
 
-        if (currentType != null) return currentType
+        if (currentGesture.type != GestureType.NONE) return Gesture(currentGesture.type, GestureState.IN_PROGRESS)
 
         if (checkScrollingStart(event))
         {
-            currentType = GestureType.SCROLL
-            return GestureType.SCROLL
+            currentGesture = Gesture(GestureType.SCROLL)
+            return currentGesture
         }
 
         if (!checkCanBeTap(event))
         {
             canBeTap = false
-            currentType = GestureType.MOVE
-            return GestureType.MOVE
+            currentGesture = Gesture(GestureType.MOVE)
+            return currentGesture
         }
 
-        return null
+        return Gesture()
     }
 
-    private fun onTouchUp(event: MotionEvent): GestureType? {
+    private fun onTouchUp(event: MotionEvent): Gesture {
 
         pointerCount -= 1
 
-        val lastGestureType = currentType
+        val lastGesture = currentGesture.copy()
 
         if (pointerCount == 0) gestureEnd(event)
 
-        if (currentType != null) return lastGestureType
-        if (canBeTap && checkCanBeTap(event)) return GestureType.TAP
+        if (lastGesture.type != GestureType.NONE) return lastGesture
+        if (canBeTap && checkCanBeTap(event)) return Gesture(GestureType.TAP, GestureState.START)
 
-        return null
+        return Gesture()
     }
 
     private fun checkCanBeTap(event: MotionEvent): Boolean {
@@ -99,6 +93,7 @@ class GestureDetector() {
 
     private fun gestureEnd(event: MotionEvent) {
         firstPoint = null
+        currentGesture = Gesture()
     }
 
     companion object {

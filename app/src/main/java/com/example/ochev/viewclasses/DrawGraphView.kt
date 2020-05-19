@@ -23,17 +23,17 @@ class DrawGraphView(
     val graphEditor = GraphEditor()
     val drawGraphInteractor = DrawGraphInteractor()
 
-    fun clear() {
-        graph.vertexes.clear()
-        graph.edges.clear()
-        invalidate()
-    }
+//    fun clear() {
+//        graph.vertexes.clear()
+//        graph.edges.clear()
+//        invalidate()
+//    }
 
     override fun onDraw(canvas: Canvas?) {
         canvas?.drawColor(Color.LTGRAY)
-        for (figure in graph.figuresSortedByHeights) {
-            drawGraphInteractor.draw(figure, canvas)
-        }
+//        for (figure in graphEditor.figuresSortedByHeights) {
+//            drawGraphInteractor.draw(figure, canvas)
+//        }
     }
 }
 
