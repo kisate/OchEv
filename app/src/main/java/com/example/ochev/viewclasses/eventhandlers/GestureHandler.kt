@@ -12,7 +12,7 @@ abstract class GestureEventHandler(
     private val drawGraphView: DrawGraphView,
     private val classifier: Classifier
 ) {
-    abstract fun handle(gestureType: GestureType?, event: MotionEvent): GestureType?
+    abstract fun handle(gestureType: GestureType?, event: MotionEvent)
 }
 
 class GestureHandler(
@@ -25,16 +25,16 @@ class GestureHandler(
 
     private var currentFigureEditor: VertexFigureEditor? = null
 
-    fun handle(gestureType: GestureType?, event: MotionEvent): GestureType? {
-        if (gestureType == null) return null
+    fun handle(gestureType: GestureType?, event: MotionEvent) {
+        if (gestureType == null) return
 
         if (gestureEventHandler == null) {
             gestureEventHandler = chooseHandler(gestureType, event)
         }
 
-        if (gestureEventHandler != null) return gestureEventHandler!!.handle(gestureType, event)
+        if (gestureEventHandler != null) gestureEventHandler!!.handle(gestureType, event)
 
-        return null
+        return
     }
 
     private fun chooseHandler(gestureType: GestureType?, event: MotionEvent): GestureEventHandler? {
@@ -62,5 +62,4 @@ class GestureHandler(
 
         return null
     }
-
 }

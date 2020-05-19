@@ -18,7 +18,7 @@ class GestureDetector() {
     private var currentType: GestureType? = null
     private var pointerCount = 0
 
-    fun handle(event: MotionEvent): GestureType? {
+    fun detect(event: MotionEvent): GestureType? {
         when (event.action) {
             MotionEvent.ACTION_DOWN -> {
                 return onTouchDown(event)

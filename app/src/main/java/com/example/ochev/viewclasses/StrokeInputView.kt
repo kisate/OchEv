@@ -42,11 +42,8 @@ class StrokeInputView(
 ) :
     View(context, attrs) {
 
-    private val defaultInputHandler = DefaultInputHandler(drawStrokeView, drawFiguresView, classifier)
-
-    private var currentGestureType: GestureType? = null
     private val gestureDetector = GestureDetector()
-    private val gestureHandler = GestureHandler()
+    private val gestureHandler = GestureHandler(drawStrokeView, drawFiguresView, classifier)
 
     fun clear() {
         inputHandler.clear()
@@ -63,26 +60,8 @@ class StrokeInputView(
 
         Log.i("Touch", event.getPointerId(0).toString())
 
-        if (currentGestureType == null)
-        {
-            currentGestureType = gestureDetector.handle(event)
-        }
+        gestureHandler.handle(gestureDetector.detect(event), event)
 
-        g
-
-        event.let {
-            when (event.action) {
-                MotionEvent.ACTION_DOWN -> {
-                    inputHandler.touchDown(event)
-                }
-                MotionEvent.ACTION_MOVE -> {
-                    inputHandler.touchMove(event)
-                }
-                MotionEvent.ACTION_UP -> {
-                    inputHandler.touchUp(event)
-                }
-            }
-        }
         return true
     }
 

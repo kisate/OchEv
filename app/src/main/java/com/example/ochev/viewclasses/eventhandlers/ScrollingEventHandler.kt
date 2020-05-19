@@ -11,7 +11,9 @@ class ScrollingEventHandler(
     classifier: Classifier
 ) : GestureEventHandler(drawStrokeView, drawGraphView, classifier) {
 
-    override fun handle(gestureType: GestureType?, event: MotionEvent): GestureType? {
+
+
+    override fun handle(gestureType: GestureType?, event: MotionEvent){
         TODO("Not yet implemented")
     }
 }
