@@ -23,7 +23,9 @@ class GestureDetector {
             MotionEvent.ACTION_UP -> {
                 onTouchUp(event)
             }
-            else -> currentGesture
+            else -> {
+                currentGesture
+            }
         }
     }
 
@@ -39,7 +41,6 @@ class GestureDetector {
             gestureStart(event)
         }
 
-        Log.d("Gestures", "a")
 
         if (checkScrollingStart(event)) {
             currentGesture = Gesture(GestureType.SCROLL, GestureState.START)
@@ -51,10 +52,12 @@ class GestureDetector {
 
     private fun onTouchMove(event: MotionEvent): Gesture {
 
-        if (currentGesture.type != GestureType.NONE) return Gesture(
-            currentGesture.type,
-            GestureState.IN_PROGRESS
-        )
+        if (currentGesture.type != GestureType.NONE) {
+
+            currentGesture = Gesture(currentGesture.type, GestureState.IN_PROGRESS)
+
+            return currentGesture
+        }
 
         if (checkScrollingStart(event)) {
             currentGesture = Gesture(GestureType.SCROLL, GestureState.START)
@@ -72,15 +75,12 @@ class GestureDetector {
 
     private fun onTouchUp(event: MotionEvent): Gesture {
 
-
         var gesture = currentGesture.copy()
 
 
         gesture = if (gesture.type != GestureType.NONE) Gesture(gesture.type, GestureState.END)
         else if (canBeTap && checkCanBeTap(event)) Gesture(GestureType.TAP, GestureState.END)
         else Gesture()
-
-//        Log.d("Gesture", pointerCount.toString())
 
         gestureEnd(event)
 
