@@ -9,7 +9,6 @@ import android.view.View
 import android.widget.Button
 import android.widget.Toast
 import com.example.ochev.MainActivity
-import com.example.ochev.R
 import com.example.ochev.baseclasses.EdgeFigure
 import com.example.ochev.baseclasses.Figure
 import com.example.ochev.baseclasses.VertexFigure
@@ -18,6 +17,10 @@ import com.example.ochev.baseclasses.editors.vertexeditor.VertexFigureEditor
 import com.example.ochev.baseclasses.timeinteractors.Throttle
 import com.example.ochev.ml.Classifier
 import com.example.ochev.ml.Utils
+import com.example.ochev.viewclasses.eventhandlers.DefaultInputHandler
+import com.example.ochev.viewclasses.eventhandlers.GestureDetector
+import com.example.ochev.viewclasses.eventhandlers.GestureHandler
+import com.example.ochev.viewclasses.eventhandlers.GestureType
 import com.google.android.gms.tasks.Tasks
 import kotlinx.android.synthetic.main.activity_main.view.*
 import java.util.concurrent.Callable
@@ -39,13 +42,14 @@ class StrokeInputView(
 ) :
     View(context, attrs) {
 
-    private val inputHandler = InputHandler(drawStrokeView, drawFiguresView, classifier)
-    private val throttle = Throttle(100)
+    private val defaultInputHandler = DefaultInputHandler(drawStrokeView, drawFiguresView, classifier)
+
+    private var currentGestureType: GestureType? = null
+    private val gestureDetector = GestureDetector()
+    private val gestureHandler = GestureHandler()
 
     fun clear() {
         inputHandler.clear()
-        var button = findViewById<Button>(R.id.deleteButtonId)
-
     }
 
     fun deleteEditingFigure() {
@@ -58,6 +62,13 @@ class StrokeInputView(
         Log.i("Touch", event.pointerCount.toString())
 
         Log.i("Touch", event.getPointerId(0).toString())
+
+        if (currentGestureType == null)
+        {
+            currentGestureType = gestureDetector.handle(event)
+        }
+
+        g
 
         event.let {
             when (event.action) {

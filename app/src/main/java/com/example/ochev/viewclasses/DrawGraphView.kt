@@ -11,6 +11,7 @@ import com.example.ochev.baseclasses.VertexFigure
 import com.example.ochev.baseclasses.dataclasses.Graph
 import com.example.ochev.baseclasses.dataclasses.Point
 import com.example.ochev.baseclasses.edgefigures.Line
+import com.example.ochev.baseclasses.editors.grapheditor.GraphEditor
 import com.example.ochev.baseclasses.vertexfigures.Circle
 import com.example.ochev.baseclasses.vertexfigures.Rectangle
 
@@ -19,7 +20,7 @@ class DrawGraphView(
     attrs: AttributeSet? = null
 ) : View(context, attrs) {
 
-    val graph = Graph()
+    val graphEditor = GraphEditor()
     val drawGraphInteractor = DrawGraphInteractor()
 
     fun clear() {
