@@ -37,8 +37,6 @@ class GestureHandler(
         if (gesture.state == GestureState.END) gestureEventHandler = null
 
         Log.d("Gestures", gesture.toString())
-
-        return
     }
 
     private fun chooseHandler(gesture: Gesture, event: MotionEvent): GestureEventHandler? {

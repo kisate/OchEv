@@ -11,28 +11,26 @@ class GestureDetector {
     private var canBeTap = true
     private var firstPoint: Point? = null
     private var currentGesture = Gesture()
-    private var pointerCount = 0
 
     fun detect(event: MotionEvent): Gesture {
-        when (event.action) {
+        return when (event.action) {
             MotionEvent.ACTION_DOWN -> {
-                return onTouchDown(event)
+                onTouchDown(event)
             }
             MotionEvent.ACTION_MOVE -> {
-                return onTouchMove(event)
+                onTouchMove(event)
             }
             MotionEvent.ACTION_UP -> {
-                return onTouchUp(event)
+                onTouchUp(event)
             }
+            else -> currentGesture
         }
-        return currentGesture
     }
 
     private fun gestureStart(event: MotionEvent) {
         canBeTap = true
         firstPoint = Point(event)
         currentGesture = Gesture()
-        pointerCount = 0
     }
 
     private fun onTouchDown(event: MotionEvent): Gesture {
@@ -41,10 +39,10 @@ class GestureDetector {
             gestureStart(event)
         }
 
-        pointerCount += 1
+        Log.d("Gestures", "a")
 
         if (checkScrollingStart(event)) {
-            currentGesture = Gesture(GestureType.SCROLL, currentGesture.state)
+            currentGesture = Gesture(GestureType.SCROLL, GestureState.START)
             return currentGesture
         }
 
@@ -53,16 +51,17 @@ class GestureDetector {
 
     private fun onTouchMove(event: MotionEvent): Gesture {
 
-        if (currentGesture.type != GestureType.NONE) return Gesture(currentGesture.type, GestureState.IN_PROGRESS)
+        if (currentGesture.type != GestureType.NONE) return Gesture(
+            currentGesture.type,
+            GestureState.IN_PROGRESS
+        )
 
-        if (checkScrollingStart(event))
-        {
+        if (checkScrollingStart(event)) {
             currentGesture = Gesture(GestureType.SCROLL, GestureState.START)
             return currentGesture
         }
 
-        if (!checkCanBeTap(event))
-        {
+        if (!checkCanBeTap(event)) {
             canBeTap = false
             currentGesture = Gesture(GestureType.MOVE, GestureState.START)
             return currentGesture
@@ -73,16 +72,19 @@ class GestureDetector {
 
     private fun onTouchUp(event: MotionEvent): Gesture {
 
-        pointerCount -= 1
 
-        val lastGesture = currentGesture.copy()
+        var gesture = currentGesture.copy()
 
-        if (pointerCount == 0) gestureEnd(event)
 
-        if (lastGesture.type != GestureType.NONE) return Gesture(lastGesture.type, GestureState.END)
-        if (canBeTap && checkCanBeTap(event)) return Gesture(GestureType.TAP, GestureState.END)
+        gesture = if (gesture.type != GestureType.NONE) Gesture(gesture.type, GestureState.END)
+        else if (canBeTap && checkCanBeTap(event)) Gesture(GestureType.TAP, GestureState.END)
+        else Gesture()
 
-        return Gesture()
+//        Log.d("Gesture", pointerCount.toString())
+
+        gestureEnd(event)
+
+        return gesture
     }
 
     private fun checkCanBeTap(event: MotionEvent): Boolean {
