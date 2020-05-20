@@ -1,13 +1,13 @@
 package com.example.ochev.baseclasses.dataclasses
 
-import com.example.ochev.baseclasses.EdgeFigure
 import com.example.ochev.baseclasses.Figure
 import com.example.ochev.baseclasses.VertexFigure
+import com.example.ochev.baseclasses.edgefigures.Edge
 import kotlin.math.max
 
 data class FigureContainer(
     val vertexes: MutableList<Pair<VertexFigure, Int>> = ArrayList(),
-    val edges: MutableList<Pair<EdgeFigure, Int>> = ArrayList()
+    val edges: MutableList<Pair<Edge, Int>> = ArrayList()
 ) {
 
     class ComparatorByHeights : Comparator<Pair<Figure, Int>> {
@@ -20,8 +20,8 @@ data class FigureContainer(
                 return o1.second - o2.second
             }
 
-            if (o1.first is VertexFigure && o2.first is EdgeFigure) return 1
-            if (o2.first is EdgeFigure && o2.first is VertexFigure) return -1
+            if (o1.first is VertexFigure && o2.first is Edge) return 1
+            if (o2.first is Edge && o2.first is VertexFigure) return -1
             return 0
         }
     }
@@ -46,7 +46,7 @@ data class FigureContainer(
 
     fun getHeight(figure: Figure): Int {
         return when (figure) {
-            is EdgeFigure -> edges.first { it.first == figure }.second
+            is Edge -> edges.first { it.first == figure }.second
             is VertexFigure -> vertexes.first { it.first == figure }.second
             else -> 0
         }
@@ -56,7 +56,7 @@ data class FigureContainer(
         vertexes.add(Pair(vertex, height))
     }
 
-    fun addEdge(edge: EdgeFigure, height: Int) {
+    fun addEdge(edge: Edge, height: Int) {
         edges.add(Pair(edge, height))
     }
 

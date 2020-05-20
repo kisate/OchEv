@@ -1,25 +1,26 @@
 package com.example.ochev.baseclasses.editors.grapheditor
 
-import com.example.ochev.baseclasses.EdgeFigure
 import com.example.ochev.baseclasses.Figure
 import com.example.ochev.baseclasses.FigureNormalizer
 import com.example.ochev.baseclasses.VertexFigure
 import com.example.ochev.baseclasses.dataclasses.*
-import com.example.ochev.baseclasses.edgefigures.Line
+import com.example.ochev.baseclasses.edgefigures.Edge
+import com.example.ochev.baseclasses.editors.drawingfigureseditor.DrawingFiguresEditor
 import com.example.ochev.baseclasses.editors.vertexeditor.VertexFigureEditor
 
 class GraphEditor(
-    var graph: Graph = Graph()
+    var graph: Graph = Graph(),
+    val drawingEditor: DrawingFiguresEditor = DrawingFiguresEditor()
 ) {
-    var scaler = 1.0
-
     fun deleteFigure(figure: Figure) {
         when (figure) {
             is VertexFigure -> deleteVertex(figure)
+            is Edge -> deleteEdge(figure)
         }
+        drawingEditor.deleteFigure(figure)
     }
 
-    fun deleteEdge(edgeFigure: EdgeFigure) {
+    private fun deleteEdge(edgeFigure: Edge) {
         val newGraph = Graph()
         newGraph.figures.vertexes += graph.figures.vertexes
 
@@ -32,7 +33,7 @@ class GraphEditor(
         graph = newGraph
     }
 
-    fun deleteVertex(vertexFigure: VertexFigure) {
+    private fun deleteVertex(vertexFigure: VertexFigure) {
         val newGraph = Graph()
 
         graph.figures.vertexes.forEach {
@@ -75,7 +76,7 @@ class GraphEditor(
 
         when (result) {
             is VertexFigure -> graph.figures.addVertex(result, graph.figures.maxHeight + 1)
-            is EdgeFigure -> graph.figures.addEdge(
+            is Edge -> graph.figures.addEdge(
                 result,
                 kotlin.math.min(
                     graph.figures.getHeight(result.beginFigure),
@@ -83,6 +84,8 @@ class GraphEditor(
                 )
             )
         }
+
+        drawingEditor.addFigure(result)
     }
 
     fun getFigureEditorByTouch(point: Point): VertexFigureEditor? {
@@ -110,6 +113,7 @@ class GraphEditor(
         }
 
         graph = newGraph
+        drawingEditor.changeFigure(old, new)
     }
 
     fun getLinker(changeFun: (VertexFigure) -> VertexFigure): HashMap<VertexFigure, VertexFigure> {
@@ -118,17 +122,17 @@ class GraphEditor(
         return linker
     }
 
-    fun reconnectEdges(linker: HashMap<VertexFigure, VertexFigure>): MutableList<Pair<EdgeFigure, Int>> {
-        val result: MutableList<Pair<EdgeFigure, Int>> = ArrayList()
+    fun reconnectEdges(linker: HashMap<VertexFigure, VertexFigure>): MutableList<Pair<Edge, Int>> {
+        val result: MutableList<Pair<Edge, Int>> = ArrayList()
         graph.figures.edges.forEach {
-            when (it.first) {
-                is Line -> result.add(
-                    Pair(
-                        Line(linker[it.first.beginFigure]!!, linker[it.first.endFigure]!!),
-                        it.second
-                    )
-                )
-            }
+
+            val newLine = Edge(
+                linker[it.first.beginFigure]!!,
+                linker[it.first.endFigure]!!
+            )
+            result.add(Pair(newLine, it.second))
+            drawingEditor.changeFigure(it.first, newLine)
+
         }
         return result
     }
@@ -140,6 +144,7 @@ class GraphEditor(
     ) {
         oldGraph.figures.vertexes.forEach {
             newGraph.figures.addVertex(linker[it.first]!!, it.second)
+            drawingEditor.changeFigure(it.first, linker[it.first]!!)
         }
     }
 
@@ -155,8 +160,6 @@ class GraphEditor(
 
     fun zoomByPointAndFactor(point: Point, factor: Float) {
         val newGraph = Graph()
-        if (scaler * factor !in 0.2..20.0) return
-        scaler *= factor
 
         val linker = getLinker {
             it.movedByVector(Vector(point, it.center).multipliedByFloat(factor - 1f))
@@ -171,6 +174,7 @@ class GraphEditor(
 
     fun clear() {
         graph = Graph()
+        drawingEditor.clear()
     }
 
 

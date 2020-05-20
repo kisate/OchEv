@@ -1,13 +1,20 @@
 package com.example.ochev.baseclasses.edgefigures
 
-import com.example.ochev.baseclasses.EdgeFigure
+import com.example.ochev.baseclasses.Figure
 import com.example.ochev.baseclasses.VertexFigure
 import com.example.ochev.baseclasses.dataclasses.Point
 
-class Line(
-    beginFigure: VertexFigure,
-    endFigure: VertexFigure
-) : EdgeFigure(beginFigure, endFigure) {
+
+// Figure that connects information blocks
+
+data class Edge(
+    val beginFigure: VertexFigure,
+    val endFigure: VertexFigure
+) : Figure() {
+    override fun checkIfFigureIsCloseEnough(point: Point): Boolean {
+        return getDistanceToPoint(point) <= getDistanceToCountTouch()
+    }
+
     override fun getDistanceToPoint(point: Point): Float {
         return point.getDistanceToLineSegment(
             beginFigure.center,

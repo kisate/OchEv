@@ -1,8 +1,8 @@
 package com.example.ochev.baseclasses.dataclasses
 
-import com.example.ochev.baseclasses.EdgeFigure
 import com.example.ochev.baseclasses.Figure
 import com.example.ochev.baseclasses.VertexFigure
+import com.example.ochev.baseclasses.edgefigures.Edge
 import kotlin.math.abs
 
 
@@ -31,7 +31,7 @@ data class Graph(
         return lookFor.maxBy { it.second }!!.first
     }
 
-    fun getClosestToPointEdgeFigureOrNull(point: Point): EdgeFigure? {
+    fun getClosestToPointEdgeFigureOrNull(point: Point): Edge? {
         if (figures.edges.isEmpty()) return null
 
         val bestDist = figures.edges.minBy {
