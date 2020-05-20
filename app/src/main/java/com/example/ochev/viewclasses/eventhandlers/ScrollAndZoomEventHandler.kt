@@ -34,14 +34,6 @@ class ScrollAndZoomEventHandler(
                     secondPointerId = event.getPointerId(1)
                 }
                 GestureState.IN_PROGRESS -> {
-//                    Log.i("Scrolling", event.getPointerId(0).toString())
-//                    Log.i("Scrolling", "${event.getX(0)} ${event.getY(0)}")
-//                    Log.i("Scrolling", "${event.getX(1)} ${event.getY(1)}")
-//                    Log.i("Scrolling", "${event.x} ${event.y}")
-//                    Log.i("Scrolling", "${Vector(calcCenter(event), lastCenter!!)}")
-//                    Log.i("Scrolling", "${calcDistance(event)}")
-//                    Log.i("Scrolling", "$firstPointerId $secondPointerId")
-
                     drawGraphView.graphView.graphEditor.moveGraphByVector(
                         Vector(
                             lastCenter!!,
@@ -50,9 +42,6 @@ class ScrollAndZoomEventHandler(
                     )
 
                     val factor = calcDistance(event) / lastDistance!!
-
-                    Log.d("Scrolling", factor.toString())
-                    Log.d("Scrolling", drawGraphView.graphView.scale.toString())
 
                     if (factor >= ZOOM_THRESHOLD && drawGraphView.graphView.scale*factor < MAX_SCALE)
                     {
