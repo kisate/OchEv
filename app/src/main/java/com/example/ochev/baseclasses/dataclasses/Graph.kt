@@ -3,6 +3,7 @@ package com.example.ochev.baseclasses.dataclasses
 import com.example.ochev.baseclasses.EdgeFigure
 import com.example.ochev.baseclasses.Figure
 import com.example.ochev.baseclasses.VertexFigure
+import kotlin.math.abs
 
 
 data class Graph(
@@ -20,17 +21,27 @@ data class Graph(
     fun getClosestToPointVertexFigureOrNull(point: Point): VertexFigure? {
         if (figures.vertexes.isEmpty()) return null
 
-        val maxHeight = figures.vertexes.maxBy { it.second }!!.second
-        val lookFor = figures.vertexes.partition { it.second == maxHeight }.first
-        return lookFor.minBy { it.first.getDistanceToPointOrZeroIfInside(point) }!!.first
+        val bestDist = figures.vertexes.minBy {
+            it.first.getDistanceToPointOrZeroIfInside(point)
+        }!!.first.getDistanceToPointOrZeroIfInside(point)
+
+        val lookFor = figures.vertexes.partition {
+            abs(it.first.getDistanceToPointOrZeroIfInside(point) - bestDist) <= 0.0001
+        }.first
+        return lookFor.maxBy { it.second }!!.first
     }
 
     fun getClosestToPointEdgeFigureOrNull(point: Point): EdgeFigure? {
         if (figures.edges.isEmpty()) return null
 
-        val maxHeight = figures.edges.maxBy { it.second }!!.second
-        val lookFor = figures.edges.partition { it.second == maxHeight }.first
-        return lookFor.minBy { it.first.getDistanceToPoint(point) }!!.first
+        val bestDist = figures.edges.minBy {
+            it.first.getDistanceToPoint(point)
+        }!!.first.getDistanceToPoint(point)
+
+        val lookFor = figures.edges.partition {
+            abs(it.first.getDistanceToPoint(point) - bestDist) <= 0.0001
+        }.first
+        return lookFor.maxBy { it.second }!!.first
     }
 
     fun getClosestToPointFigureOrNull(point: Point): Figure? {
@@ -42,7 +53,10 @@ data class Graph(
 
         if (bestVertex.checkIfPointIsInside(point)) return bestVertex
 
-        return if (bestVertex.getDistanceToPoint(point) <= bestEdge.getDistanceToPoint(point)) bestVertex
+        return if (bestVertex.getDistanceToPointOrZeroIfInside(point) <= bestEdge.getDistanceToPoint(
+                point
+            )
+        ) bestVertex
         else bestEdge
     }
 
