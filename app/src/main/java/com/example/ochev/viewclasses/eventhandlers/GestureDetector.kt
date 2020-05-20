@@ -1,7 +1,6 @@
 package com.example.ochev.viewclasses.eventhandlers
 
 
-import android.util.Log
 import android.view.MotionEvent
 import com.example.ochev.baseclasses.dataclasses.Point
 
@@ -43,7 +42,7 @@ class GestureDetector {
 
 
         if (checkScrollingStart(event)) {
-            currentGesture = Gesture(GestureType.SCROLL, GestureState.START)
+            currentGesture = Gesture(GestureType.SCROLL_AND_ZOOM, GestureState.START)
             return currentGesture
         }
 
@@ -60,7 +59,7 @@ class GestureDetector {
         }
 
         if (checkScrollingStart(event)) {
-            currentGesture = Gesture(GestureType.SCROLL, GestureState.START)
+            currentGesture = Gesture(GestureType.SCROLL_AND_ZOOM, GestureState.START)
             return currentGesture
         }
 

@@ -1,17 +1,11 @@
 package com.example.ochev.viewclasses.eventhandlers
 
-import android.app.Activity
-import android.content.Context
-import android.util.Log
 import android.view.MotionEvent
-import android.widget.Button
-import com.example.ochev.R
 import com.example.ochev.baseclasses.dataclasses.Point
 import com.example.ochev.baseclasses.editors.vertexeditor.VertexFigureEditor
 import com.example.ochev.ml.Classifier
 import com.example.ochev.viewclasses.GraphDrawer
 import com.example.ochev.viewclasses.StrokeDrawer
-import com.example.ochev.viewclasses.buttonshandler.ButtonsHandler
 
 abstract class GestureEventHandler(
     private val strokeDrawer: StrokeDrawer,
@@ -24,7 +18,6 @@ abstract class GestureEventHandler(
 class GestureHandler(
     private val strokeDrawer: StrokeDrawer,
     private val graphDrawer: GraphDrawer,
-    private val buttonsHandler: ButtonsHandler,
     private val classifier: Classifier
 ) {
 
@@ -33,6 +26,7 @@ class GestureHandler(
     private var currentFigureEditor: VertexFigureEditor? = null
 
     fun handle(gesture: Gesture, event: MotionEvent) {
+
         if (gestureEventHandler == null) {
             gestureEventHandler = chooseHandler(gesture, event)
         }
@@ -40,36 +34,58 @@ class GestureHandler(
         if (gestureEventHandler != null) gestureEventHandler!!.handle(gesture, event)
 
         if (gesture.state == GestureState.END) gestureEventHandler = null
-
-        Log.d("Gestures", gesture.toString())
     }
 
     private fun chooseHandler(gesture: Gesture, event: MotionEvent): GestureEventHandler? {
 
-        if (gesture.type == GestureType.SCROLL) return ScrollingEventHandler(
+        if (gesture.type == GestureType.SCROLL_AND_ZOOM) return ScrollAndZoomEventHandler(
             strokeDrawer,
             graphDrawer,
-            buttonsHandler,
             classifier
         )
 
-        currentFigureEditor = graphDrawer.graphView.graphEditor.getFigureEditorByTouch(Point(event))
+        val clickedFigureEditor = graphDrawer.graphView.graphEditor.getFigureEditorByTouch(Point(event))
 
-        if (currentFigureEditor == null) {
-            if (gesture.type == GestureType.MOVE) return DrawingEventHandler(
-                strokeDrawer,
-                graphDrawer,
-                buttonsHandler,
-                classifier
-            )
-        } else {
-            return EditingEventHandler(
-                strokeDrawer, graphDrawer,
-                buttonsHandler, classifier,
-                currentFigureEditor!!
-            )
+        if (gesture.type == GestureType.TAP)
+        {
+            if (clickedFigureEditor == null)
+            {
+                exitEditMode()
+                return null
+            }
+            currentFigureEditor = clickedFigureEditor
+            return null
+        }
+
+        if (gesture.type == GestureType.MOVE)
+        {
+            if (clickedFigureEditor == null)
+            {
+                exitEditMode()
+                return DrawingEventHandler(strokeDrawer, graphDrawer, classifier)
+            }
+            if (currentFigureEditor == null)
+            {
+                return ConnectingEventHandler(strokeDrawer, graphDrawer, classifier)
+            }
+            if (clickedFigureEditor.mover.moveBegins(Point(event)))
+            {
+                return MovingFigureHandler(strokeDrawer, graphDrawer, classifier)
+            }
+            else if (clickedFigureEditor.shaper.shapingBegins(Point(event)))
+            {
+                return ShapingEventHandler(strokeDrawer, graphDrawer, classifier)
+            }
         }
 
         return null
+    }
+
+    private fun exitEditMode() {
+        if (currentFigureEditor != null)
+        {
+            currentFigureEditor = null
+            TODO("Knopka")
+        }
     }
 }

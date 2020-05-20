@@ -16,7 +16,6 @@ import java.util.concurrent.Callable
 class DrawingEventHandler(
     private val strokeDrawer: StrokeDrawer,
     private val graphDrawer: GraphDrawer,
-    private  val buttonsHandler: ButtonsHandler,
     private val classifier: Classifier
 ) : GestureEventHandler(strokeDrawer, graphDrawer, classifier) {
 

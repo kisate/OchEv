@@ -17,15 +17,11 @@ import com.example.ochev.viewclasses.buttonshandler.ButtonsHandler
 class EditingEventHandler(
     strokeDrawer: StrokeDrawer,
     graphDrawer: GraphDrawer,
-    private val buttonsHandler: ButtonsHandler,
     classifier: Classifier,
     vertexFigureEditor: VertexFigureEditor
 ) : GestureEventHandler(strokeDrawer, graphDrawer, classifier) {
 
 
-    init {
-        buttonsHandler.enterEditing(vertexFigureEditor)
-    }
 
     override fun handle(gesture: Gesture, event: MotionEvent) {
 
