@@ -28,6 +28,7 @@ class DrawingEventHandler(
             }
             GestureState.END -> {
                 strokeDrawer.add(event.x, event.y)
+                Log.i("ClassifyEdgeDbg", strokeDrawer.stroke.toString())
                 classifyStroke()
                 strokeDrawer.clear()
             }
@@ -49,12 +50,8 @@ class DrawingEventHandler(
             Callable {
                 graphDrawer.modifyByStrokes(information)
             })
-            .addOnSuccessListener { figure ->
-                Log.i("Modify", "Classified as $figure")
+            .addOnSuccessListener {
                 graphDrawer.graphView.invalidate()
-                if (figure == null)
-                    Toast.makeText(graphDrawer.graphView.context, "Could not recognize", Toast.LENGTH_SHORT)
-                        .show()
             }
             .addOnFailureListener { e -> Log.i("Modify", "Error modifying", e) }
     }

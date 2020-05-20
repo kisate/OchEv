@@ -3,6 +3,7 @@ package com.example.ochev.viewclasses
 import android.content.Context
 import android.graphics.*
 import android.util.AttributeSet
+import android.util.Log
 import android.view.View
 import com.example.ochev.baseclasses.Figure
 import com.example.ochev.baseclasses.dataclasses.InformationForNormalizer
@@ -22,6 +23,7 @@ class DrawGraphView(
     override fun onDraw(canvas: Canvas?) {
         canvas?.drawColor(Color.LTGRAY)
         for (figure in graphEditor.graph.figures.figuresSortedByHeights) {
+            Log.i("ClassifyDbg", figure.toString())
             figuresDrawer.draw(figure.first, canvas)
         }
     }
@@ -151,6 +153,8 @@ class RectangleDrawer : Drawer() {
     }
 
     fun drawRect(rect: Rectangle, canvas: Canvas?, paint: Paint) {
+        Log.i("ClassifyDbg", rect.toString())
+        Log.i("ClassifyDbg", rect.rightDownCorner.toString() + rect.leftUpCorner.toString())
         val path = Path()
         path.moveTo(rect.rightDownCorner.x.toFloat(), rect.rightDownCorner.y.toFloat())
         path.lineTo(rect.rightUpCorner.x.toFloat(), rect.rightUpCorner.y.toFloat())
@@ -165,7 +169,7 @@ class RectangleDrawer : Drawer() {
         drawRect(figure, canvas, styles[currentStyle].fillPaint)
         drawRect(figure, canvas, styles[currentStyle].circuitPaint)
         if (figure.drawingInformation.drawingMode == DrawingMode.EDIT)
-            for (point in figure.getMovingPoints()) {
+            for (point in figure.importantPoints) {
                 canvas?.drawCircle(
                     point.x.toFloat(),
                     point.y.toFloat(),
@@ -200,6 +204,8 @@ class LineDrawer : Drawer() {
     override fun draw(figure: Figure, canvas: Canvas?) {
 
         figure as Line
+
+        Log.i("EdgeDrawingDbg", figure.toString())
 
         val path = Path()
         val from = figure.beginFigure.center
