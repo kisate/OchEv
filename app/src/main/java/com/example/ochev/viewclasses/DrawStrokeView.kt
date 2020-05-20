@@ -49,7 +49,7 @@ class StrokeDrawer(
 
     fun add(x: Float, y: Float) {
         Log.i("StrokeDrawer", x.toString() + " " + y.toString())
-        val point = Point(x.toInt(), y.toInt())
+        val point = Point(x, y)
         if (stroke.points.size == 0) {
             drawStrokeView.path.moveTo(x, y)
         }

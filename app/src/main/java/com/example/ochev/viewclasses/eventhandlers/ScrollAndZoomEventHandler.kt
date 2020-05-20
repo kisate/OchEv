@@ -42,12 +42,12 @@ class ScrollAndZoomEventHandler(
 //                    Log.i("Scrolling", "${calcDistance(event)}")
 //                    Log.i("Scrolling", "$firstPointerId $secondPointerId")
 
-//                    drawGraphView.graphView.graphEditor.moveGraphByVector(
-//                        Vector(
-//                            lastCenter!!,
-//                            calcCenter(event)
-//                        )
-//                    )
+                    drawGraphView.graphView.graphEditor.moveGraphByVector(
+                        Vector(
+                            lastCenter!!,
+                            calcCenter(event)
+                        )
+                    )
 
                     val factor = calcDistance(event) / lastDistance!!
 
@@ -92,15 +92,15 @@ class ScrollAndZoomEventHandler(
         val x = event.getX(0) + event.getX(1)
         val y = event.getY(0) + event.getY(1)
 
-        return Point((x / 2).toInt(), (y / 2).toInt())
+        return Point(x / 2, y / 2)
     }
 
     private fun calcDistance(event: MotionEvent): Float {
 
         return Point(
-            event.getX(0).toInt(),
-            event.getY(0).toInt()
-        ).getDistanceToPoint(Point(event.getX(1).toInt(), event.getY(1).toInt()))
+            event.getX(0),
+            event.getY(0)
+        ).getDistanceToPoint(Point(event.getX(1), event.getY(1)))
     }
 
     companion object {

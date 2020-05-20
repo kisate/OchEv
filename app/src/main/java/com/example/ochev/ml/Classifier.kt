@@ -92,7 +92,7 @@ class Classifier(private val context: Context){
         val maxX = stroke.maxX()
         val maxY = stroke.maxY()
 
-        val croppedBitmap = Bitmap.createBitmap(bitmap, minX, minY, maxX - minX, maxY - minY)
+        val croppedBitmap = Bitmap.createBitmap(bitmap, minX.toInt(), minY.toInt(), (maxX - minX).toInt(), (maxY - minY).toInt())
 
         return Bitmap.createScaledBitmap(croppedBitmap, inputImageWidth, inputImageHeight, true)
     }
