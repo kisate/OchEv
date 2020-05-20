@@ -51,11 +51,11 @@ class ScrollAndZoomEventHandler(
 
                     if (factor > ZOOM_THRESHOLD)
                     {
-                        drawGraphView.graphView.graphEditor.zoomByPointAndFactor(calcCenter(event), factor)
+                        drawGraphView.graphView.graphEditor.zoomByPointAndFactor(calcCenter(event), factor - 1)
                     }
                     if (factor < 1/ZOOM_THRESHOLD)
                     {
-                        drawGraphView.graphView.graphEditor.zoomByPointAndFactor(calcCenter(event), -factor)
+                        drawGraphView.graphView.graphEditor.zoomByPointAndFactor(calcCenter(event), -(factor - 1))
                     }
 
                     drawGraphView.graphView.invalidate()
