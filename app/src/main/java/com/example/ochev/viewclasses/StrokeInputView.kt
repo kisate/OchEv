@@ -24,7 +24,7 @@ class StrokeInputView(
     View(context, attrs) {
 
     private val gestureDetector = GestureDetector()
-    private val gestureHandler = GestureHandler(strokeDrawer, graphDrawer, classifier )
+    private val gestureHandler = GestureHandler(strokeDrawer, graphDrawer, buttonsHandler,classifier )
 
     fun clear() {
         graphDrawer.clear()

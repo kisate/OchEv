@@ -12,13 +12,14 @@ class ButtonsHandler (
     clearButton: Button,
     deleteButton: Button,
     strokeDrawer: StrokeDrawer,
-    graphDrawer: GraphDrawer
+    private val graphDrawer: GraphDrawer
 ) {
     val buttonsContainer = ButtonsContainer(clearButton, deleteButton)
 
     init{
         buttonsContainer.clearButton.setOnClickListener {
             strokeDrawer.clear()
+            graphDrawer.graphView.invalidate()
         }
     }
 
@@ -30,6 +31,7 @@ class ButtonsHandler (
         showDeleteButton()
         buttonsContainer.deleteButton.setOnClickListener {
             figureEditor.graphEditor.deleteFigure(figureEditor.figureUnderControl)
+            graphDrawer.graphView.invalidate()
         }
     }
 

@@ -6,6 +6,7 @@ import com.example.ochev.baseclasses.editors.vertexeditor.VertexFigureEditor
 import com.example.ochev.ml.Classifier
 import com.example.ochev.viewclasses.GraphDrawer
 import com.example.ochev.viewclasses.StrokeDrawer
+import com.example.ochev.viewclasses.buttonshandler.ButtonsHandler
 
 abstract class GestureEventHandler(
     private val strokeDrawer: StrokeDrawer,
@@ -18,6 +19,7 @@ abstract class GestureEventHandler(
 class GestureHandler(
     private val strokeDrawer: StrokeDrawer,
     private val graphDrawer: GraphDrawer,
+    private val buttonsHandler: ButtonsHandler,
     private val classifier: Classifier
 ) {
 
@@ -85,11 +87,12 @@ class GestureHandler(
         if (currentFigureEditor != null)
         {
             currentFigureEditor = null
-            TODO("Knopka")
+            buttonsHandler.closeEditing()
         }
     }
 
     private fun enterEditMode(clickedFigureEditor: VertexFigureEditor) {
         currentFigureEditor = clickedFigureEditor
+        buttonsHandler.enterEditing(clickedFigureEditor)
     }
 }
