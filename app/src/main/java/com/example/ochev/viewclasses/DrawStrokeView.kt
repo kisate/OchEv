@@ -1,9 +1,13 @@
 package com.example.ochev.viewclasses
 
 import android.content.Context
-import android.graphics.*
+import android.graphics.Canvas
+import android.graphics.Paint
+import android.graphics.Path
 import android.util.AttributeSet
+import android.util.Log
 import android.view.View
+import com.example.ochev.baseclasses.dataclasses.Point
 import com.example.ochev.baseclasses.dataclasses.Stroke
 
 
@@ -13,10 +17,10 @@ class DrawStrokeView(
 ) : View(context, attrs) {
 
     val path = Path()
-    val drawStrokeInteractor = DrawStrokeInteractor()
+    val pathDrawer = PathDrawer()
 
     override fun onDraw(canvas: Canvas?) {
-        drawStrokeInteractor.draw(path, canvas)
+        pathDrawer.draw(path, canvas)
     }
 }
 
@@ -38,35 +42,28 @@ class PathDrawer {
 
 }
 
-class DrawStrokeInteractor {
+class StrokeDrawer(
+    private val drawStrokeView: DrawStrokeView
+) {
+    private val stroke = Stroke()
 
-    private val pathDrawer = PathDrawer()
-
-    fun setWidth(width: Float) {
-        pathDrawer.setWidth(width)
-    }
-
-    fun set(drawStrokeView: DrawStrokeView, stroke: Stroke) {
-        clear(drawStrokeView)
-        if (stroke.points.size > 0) {
-            drawStrokeView.path.moveTo(stroke.points[0].x.toFloat(), stroke.points[0].y.toFloat())
-            for (id in 1 until stroke.points.size) {
-                drawStrokeView.path.lineTo(
-                    stroke.points[id].x.toFloat(),
-                    stroke.points[id].y.toFloat()
-                )
-            }
+    fun add(x: Float, y: Float) {
+        Log.i("StrokeDrawer", x.toString() + " " + y.toString())
+        val point = Point(x.toInt(), y.toInt())
+        if (stroke.points.size == 0) {
+            drawStrokeView.path.moveTo(x, y)
         }
+        else {
+            drawStrokeView.path.lineTo(x, y)
+        }
+        stroke.addPoint(point)
         drawStrokeView.invalidate()
     }
 
-    fun clear(drawStrokeView: DrawStrokeView) {
+    fun clear() {
         drawStrokeView.path.reset()
+        stroke.points.clear()
         drawStrokeView.invalidate()
-    }
-
-    fun draw(path: Path, canvas: Canvas?) {
-        pathDrawer.draw(path, canvas)
     }
 
 

@@ -6,7 +6,7 @@
     tools:context=".MainActivity">
 
     <FrameLayout
-        android:id="@+id/relativeId"
+        android:id="@+id/frameId"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 

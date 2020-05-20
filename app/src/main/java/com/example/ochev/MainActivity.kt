@@ -2,13 +2,12 @@ package com.example.ochev
 
 import android.os.Bundle
 import android.util.Log
+import android.widget.FrameLayout
 import android.widget.RelativeLayout
 import androidx.appcompat.app.AppCompatActivity
-//import com.example.ochev.baseclasses.dataclasses.StrokeInteractor
 import com.example.ochev.ml.Classifier
 import com.example.ochev.viewclasses.DrawingMode
-//import com.example.ochev.viewclasses.InputHandler
-import com.example.ochev.viewclasses.InputMode
+import com.example.ochev.viewclasses.StrokeDrawer
 import kotlinx.android.synthetic.main.activity_main.*
 import com.example.ochev.viewclasses.StrokeInputView
 import java.util.concurrent.ExecutorService
@@ -24,27 +23,25 @@ class MainActivity : AppCompatActivity() {
         supportActionBar?.hide()
         setContentView(R.layout.activity_main)
 
+        val strokeDrawer = StrokeDrawer(drawStrokeId)
+
         if (strokeInput == null) {
-            strokeInput = StrokeInputView(this, null, drawStrokeId, drawGraphId, classifier)
+            strokeInput = StrokeInputView(this, null, strokeDrawer, drawGraphId, classifier)
             strokeInput?.alpha = 0F
         }
 
-        val layoutParams = RelativeLayout.LayoutParams(
-            RelativeLayout.LayoutParams.MATCH_PARENT,
-            RelativeLayout.LayoutParams.MATCH_PARENT
+        val layoutParams = FrameLayout.LayoutParams(
+            FrameLayout.LayoutParams.MATCH_PARENT,
+            FrameLayout.LayoutParams.MATCH_PARENT
         )
 
-        relativeId.addView(strokeInput, layoutParams)
+        frameId.addView(strokeInput, layoutParams)
 
-//        clearButtonId.setOnClickListener {
-//            strokeInput?.clear()
-//        }
-//
-//        deleteButtonId.setOnClickListener {
-//            strokeInput?.deleteEditingFigure()
-//        }
-//
-//        strokeInput?.addDeleteButton(deleteButtonId)
+        clearButtonId.setOnClickListener {
+            strokeInput?.clear()
+        }
+
+
 
         classifier
             .initialize(Executor.executorService)

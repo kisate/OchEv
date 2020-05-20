@@ -5,14 +5,15 @@ import com.example.ochev.baseclasses.editors.vertexeditor.VertexFigureEditor
 import com.example.ochev.ml.Classifier
 import com.example.ochev.viewclasses.DrawGraphView
 import com.example.ochev.viewclasses.DrawStrokeView
+import com.example.ochev.viewclasses.StrokeDrawer
 
 class EditingEventHandler(
-    drawStrokeView: DrawStrokeView,
+    strokeDrawer: StrokeDrawer,
     drawGraphView: DrawGraphView,
     classifier: Classifier,
     vertexFigureEditor: VertexFigureEditor
-) : GestureEventHandler(drawStrokeView, drawGraphView, classifier) {
+) : GestureEventHandler(strokeDrawer, drawGraphView, classifier) {
     override fun handle(gesture: Gesture, event: MotionEvent) {
-        TODO("Not yet implemented")
+        //TODO("123")
     }
 }

@@ -7,9 +7,10 @@ import com.example.ochev.baseclasses.editors.vertexeditor.VertexFigureEditor
 import com.example.ochev.ml.Classifier
 import com.example.ochev.viewclasses.DrawGraphView
 import com.example.ochev.viewclasses.DrawStrokeView
+import com.example.ochev.viewclasses.StrokeDrawer
 
 abstract class GestureEventHandler(
-    private val drawStrokeView: DrawStrokeView,
+    private val strokeDrawer: StrokeDrawer,
     private val drawGraphView: DrawGraphView,
     private val classifier: Classifier
 ) {
@@ -17,7 +18,7 @@ abstract class GestureEventHandler(
 }
 
 class GestureHandler(
-    private val drawStrokeView: DrawStrokeView,
+    private val strokeDrawer: StrokeDrawer,
     private val drawGraphView: DrawGraphView,
     private val classifier: Classifier
 ) {
@@ -42,7 +43,7 @@ class GestureHandler(
     private fun chooseHandler(gesture: Gesture, event: MotionEvent): GestureEventHandler? {
 
         if (gesture.type == GestureType.SCROLL) return ScrollingEventHandler(
-            drawStrokeView,
+            strokeDrawer,
             drawGraphView,
             classifier
         )
@@ -51,13 +52,13 @@ class GestureHandler(
 
         if (currentFigureEditor == null) {
             if (gesture.type == GestureType.MOVE) return DrawingEventHandler(
-                drawStrokeView,
+                strokeDrawer,
                 drawGraphView,
                 classifier
             )
         } else {
             return EditingEventHandler(
-                drawStrokeView, drawGraphView, classifier,
+                strokeDrawer, drawGraphView, classifier,
                 currentFigureEditor!!
             )
         }

@@ -8,6 +8,7 @@ import android.view.View
 import com.example.ochev.baseclasses.EdgeFigure
 import com.example.ochev.baseclasses.Figure
 import com.example.ochev.baseclasses.VertexFigure
+import com.example.ochev.baseclasses.dataclasses.FigureContainer
 import com.example.ochev.baseclasses.dataclasses.Graph
 import com.example.ochev.baseclasses.dataclasses.Point
 import com.example.ochev.baseclasses.edgefigures.Line
@@ -23,17 +24,16 @@ class DrawGraphView(
     val graphEditor = GraphEditor()
     val drawGraphInteractor = DrawGraphInteractor()
 
-//    fun clear() {
-//        graph.vertexes.clear()
-//        graph.edges.clear()
-//        invalidate()
-//    }
+    fun clear() {
+        graphEditor.clear()
+        invalidate()
+    }
 
     override fun onDraw(canvas: Canvas?) {
         canvas?.drawColor(Color.LTGRAY)
-//        for (figure in graphEditor.figuresSortedByHeights) {
-//            drawGraphInteractor.draw(figure, canvas)
-//        }
+        for (figure in graphEditor.graph.figures.figuresSortedByHeights) {
+            drawGraphInteractor.draw(figure.first, canvas)
+        }
     }
 }
 

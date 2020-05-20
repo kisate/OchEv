@@ -6,12 +6,13 @@ import com.example.ochev.baseclasses.dataclasses.Point
 import com.example.ochev.ml.Classifier
 import com.example.ochev.viewclasses.DrawGraphView
 import com.example.ochev.viewclasses.DrawStrokeView
+import com.example.ochev.viewclasses.StrokeDrawer
 
 class ScrollingEventHandler(
-    drawStrokeView: DrawStrokeView,
+    strokeDrawer: StrokeDrawer,
     drawGraphView: DrawGraphView,
     classifier: Classifier
-) : GestureEventHandler(drawStrokeView, drawGraphView, classifier) {
+) : GestureEventHandler(strokeDrawer, drawGraphView, classifier) {
 
     private var lastCenter: Point? = null
 
