@@ -6,23 +6,9 @@ import android.util.AttributeSet
 import android.util.Log
 import android.view.MotionEvent
 import android.view.View
-import android.widget.Button
-import android.widget.Toast
-import com.example.ochev.MainActivity
-import com.example.ochev.baseclasses.EdgeFigure
-import com.example.ochev.baseclasses.Figure
-import com.example.ochev.baseclasses.VertexFigure
-import com.example.ochev.baseclasses.dataclasses.*
-import com.example.ochev.baseclasses.editors.vertexeditor.VertexFigureEditor
 import com.example.ochev.ml.Classifier
-import com.example.ochev.ml.Utils
 import com.example.ochev.viewclasses.eventhandlers.GestureDetector
 import com.example.ochev.viewclasses.eventhandlers.GestureHandler
-import com.example.ochev.viewclasses.eventhandlers.GestureType
-import com.google.android.gms.tasks.Tasks
-import kotlinx.android.synthetic.main.activity_main.view.*
-import java.util.concurrent.Callable
-
 
 
 @SuppressLint("ViewConstructor")
@@ -30,16 +16,16 @@ class StrokeInputView(
     context: Context?,
     attrs: AttributeSet? = null,
     strokeDrawer: StrokeDrawer,
-    private val drawFiguresView: DrawGraphView,
+    private val graphDrawer: GraphDrawer,
     classifier: Classifier
 ) :
     View(context, attrs) {
 
     private val gestureDetector = GestureDetector()
-    private val gestureHandler = GestureHandler(strokeDrawer, drawFiguresView, classifier)
+    private val gestureHandler = GestureHandler(strokeDrawer, graphDrawer, classifier)
 
     fun clear() {
-        drawFiguresView.clear()
+        graphDrawer.clear()
     }
 
     @SuppressLint("ClickableViewAccessibility")

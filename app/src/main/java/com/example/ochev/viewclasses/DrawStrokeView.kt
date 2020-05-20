@@ -43,9 +43,9 @@ class PathDrawer {
 }
 
 class StrokeDrawer(
-    private val drawStrokeView: DrawStrokeView
+    val drawStrokeView: DrawStrokeView
 ) {
-    private val stroke = Stroke()
+    val stroke = Stroke()
 
     fun add(x: Float, y: Float) {
         Log.i("StrokeDrawer", x.toString() + " " + y.toString())

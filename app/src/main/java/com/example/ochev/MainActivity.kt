@@ -7,6 +7,7 @@ import android.widget.RelativeLayout
 import androidx.appcompat.app.AppCompatActivity
 import com.example.ochev.ml.Classifier
 import com.example.ochev.viewclasses.DrawingMode
+import com.example.ochev.viewclasses.GraphDrawer
 import com.example.ochev.viewclasses.StrokeDrawer
 import kotlinx.android.synthetic.main.activity_main.*
 import com.example.ochev.viewclasses.StrokeInputView
@@ -24,9 +25,10 @@ class MainActivity : AppCompatActivity() {
         setContentView(R.layout.activity_main)
 
         val strokeDrawer = StrokeDrawer(drawStrokeId)
+        val graphDrawer = GraphDrawer(drawGraphId)
 
         if (strokeInput == null) {
-            strokeInput = StrokeInputView(this, null, strokeDrawer, drawGraphId, classifier)
+            strokeInput = StrokeInputView(this, null, strokeDrawer, graphDrawer, classifier)
             strokeInput?.alpha = 0F
         }
 
@@ -40,8 +42,6 @@ class MainActivity : AppCompatActivity() {
         clearButtonId.setOnClickListener {
             strokeInput?.clear()
         }
-
-
 
         classifier
             .initialize(Executor.executorService)

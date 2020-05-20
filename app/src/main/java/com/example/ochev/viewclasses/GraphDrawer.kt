@@ -3,14 +3,9 @@ package com.example.ochev.viewclasses
 import android.content.Context
 import android.graphics.*
 import android.util.AttributeSet
-import android.util.Log
 import android.view.View
-import com.example.ochev.baseclasses.EdgeFigure
 import com.example.ochev.baseclasses.Figure
-import com.example.ochev.baseclasses.VertexFigure
-import com.example.ochev.baseclasses.dataclasses.FigureContainer
-import com.example.ochev.baseclasses.dataclasses.Graph
-import com.example.ochev.baseclasses.dataclasses.Point
+import com.example.ochev.baseclasses.dataclasses.InformationForNormalizer
 import com.example.ochev.baseclasses.edgefigures.Line
 import com.example.ochev.baseclasses.editors.grapheditor.GraphEditor
 import com.example.ochev.baseclasses.vertexfigures.Circle
@@ -22,17 +17,12 @@ class DrawGraphView(
 ) : View(context, attrs) {
 
     val graphEditor = GraphEditor()
-    val drawGraphInteractor = DrawGraphInteractor()
-
-    fun clear() {
-        graphEditor.clear()
-        invalidate()
-    }
+    val figuresDrawer = FiguresDrawer()
 
     override fun onDraw(canvas: Canvas?) {
         canvas?.drawColor(Color.LTGRAY)
         for (figure in graphEditor.graph.figures.figuresSortedByHeights) {
-            drawGraphInteractor.draw(figure.first, canvas)
+            figuresDrawer.draw(figure.first, canvas)
         }
     }
 }
@@ -222,13 +212,12 @@ class LineDrawer : Drawer() {
     }
 }
 
-class DrawGraphInteractor {
+class FiguresDrawer {
     val circleDrawer = CircleDrawer()
     val rectangleDrawer = RectangleDrawer()
     val lineDrawer = LineDrawer()
 
     fun draw(figure: Figure, canvas: Canvas?) {
-
         when (figure) {
             is Circle -> {
                 circleDrawer.currentStyle = figure.drawingInformation.drawingMode.ordinal
@@ -244,6 +233,18 @@ class DrawGraphInteractor {
             }
         }
     }
-
 }
 
+class GraphDrawer(
+    val graphView: DrawGraphView
+) {
+    fun clear(){
+        graphView.graphEditor.clear()
+        graphView.invalidate()
+    }
+
+    fun modifyByStrokes(information: InformationForNormalizer) {
+        graphView.graphEditor.modifyByStrokes(information)
+    }
+
+}

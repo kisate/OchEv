@@ -4,13 +4,12 @@ import android.util.Log
 import android.view.MotionEvent
 import com.example.ochev.baseclasses.dataclasses.Point
 import com.example.ochev.ml.Classifier
-import com.example.ochev.viewclasses.DrawGraphView
-import com.example.ochev.viewclasses.DrawStrokeView
+import com.example.ochev.viewclasses.GraphDrawer
 import com.example.ochev.viewclasses.StrokeDrawer
 
 class ScrollingEventHandler(
     strokeDrawer: StrokeDrawer,
-    drawGraphView: DrawGraphView,
+    drawGraphView: GraphDrawer,
     classifier: Classifier
 ) : GestureEventHandler(strokeDrawer, drawGraphView, classifier) {
 
