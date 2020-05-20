@@ -53,7 +53,7 @@ class GestureHandler(
                 exitEditMode()
                 return null
             }
-            currentFigureEditor = clickedFigureEditor
+            enterEditMode(clickedFigureEditor)
             return null
         }
 
@@ -87,5 +87,9 @@ class GestureHandler(
             currentFigureEditor = null
             TODO("Knopka")
         }
+    }
+
+    private fun enterEditMode(clickedFigureEditor: VertexFigureEditor) {
+        currentFigureEditor = clickedFigureEditor
     }
 }
