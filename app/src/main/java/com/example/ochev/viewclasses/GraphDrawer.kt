@@ -7,7 +7,7 @@ import android.util.Log
 import android.view.View
 import com.example.ochev.baseclasses.Figure
 import com.example.ochev.baseclasses.dataclasses.InformationForNormalizer
-import com.example.ochev.baseclasses.edgefigures.Line
+import com.example.ochev.baseclasses.edgefigures.Edge
 import com.example.ochev.baseclasses.editors.grapheditor.GraphEditor
 import com.example.ochev.baseclasses.vertexfigures.Circle
 import com.example.ochev.baseclasses.vertexfigures.Rectangle
@@ -181,7 +181,7 @@ class RectangleDrawer : Drawer() {
     }
 }
 
-class LineDrawer : Drawer() {
+class EdgeDrawer : Drawer() {
 
     init {
         /*
@@ -204,7 +204,7 @@ class LineDrawer : Drawer() {
 
     override fun draw(figure: Figure, canvas: Canvas?) {
 
-        figure as Line
+        figure as Edge
 
         Log.i("EdgeDrawingDbg", figure.toString())
 
@@ -222,7 +222,7 @@ class LineDrawer : Drawer() {
 class FiguresDrawer {
     val circleDrawer = CircleDrawer()
     val rectangleDrawer = RectangleDrawer()
-    val lineDrawer = LineDrawer()
+    val edgeDrawer = EdgeDrawer()
 
     fun draw(figure: Figure, canvas: Canvas?) {
         when (figure) {
@@ -234,9 +234,9 @@ class FiguresDrawer {
                 rectangleDrawer.currentStyle = figure.drawingInformation.drawingMode.ordinal
                 rectangleDrawer.draw(figure, canvas)
             }
-            is Line -> {
-                lineDrawer.currentStyle = figure.drawingInformation.drawingMode.ordinal
-                lineDrawer.draw(figure, canvas)
+            is Edge -> {
+                edgeDrawer.currentStyle = figure.drawingInformation.drawingMode.ordinal
+                edgeDrawer.draw(figure, canvas)
             }
         }
     }

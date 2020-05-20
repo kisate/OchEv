@@ -1,13 +1,12 @@
 package com.example.ochev.baseclasses.edgefigures.normalizers
 
-import com.example.ochev.baseclasses.EdgeFigure
 import com.example.ochev.baseclasses.dataclasses.InformationForNormalizer
-import com.example.ochev.baseclasses.edgefigures.Line
+import com.example.ochev.baseclasses.edgefigures.Edge
 
 class EdgeFigureNormalizer {
 
 
-    fun normalizeAsTwoClosestFigures(information: InformationForNormalizer): EdgeFigure? {
+    fun normalizeAsTwoClosestFigures(information: InformationForNormalizer): Edge? {
         if (
             information.strokes == null ||
             information.graph == null
@@ -37,6 +36,9 @@ class EdgeFigureNormalizer {
             if (check.beginFigure == beginFigure && check.endFigure == endFigure) return null
         }
 
-        return Line(beginFigure, endFigure)
+        return Edge(
+            beginFigure,
+            endFigure
+        )
     }
 }
