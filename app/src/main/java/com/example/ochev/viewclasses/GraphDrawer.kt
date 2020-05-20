@@ -170,7 +170,7 @@ class RectangleDrawer : Drawer() {
         drawRect(figure, canvas, styles[currentStyle].fillPaint)
         drawRect(figure, canvas, styles[currentStyle].circuitPaint)
         if (drawingInformation.drawingMode == DrawingMode.EDIT)
-            for (point in figure.importantPoints) {
+            for (point in figure.getMovingPoints()) {
                 canvas?.drawCircle(
                     point.x,
                     point.y,
