@@ -1,5 +1,6 @@
 package com.example.ochev.baseclasses.editors.grapheditor
 
+import android.util.Log
 import com.example.ochev.baseclasses.EdgeFigure
 import com.example.ochev.baseclasses.Figure
 import com.example.ochev.baseclasses.FigureNormalizer
@@ -85,7 +86,7 @@ class GraphEditor(
 
     fun getFigureEditorByTouch(point: Point): VertexFigureEditor? {
         val bestFigure = graph.getFigureForEditing(point) ?: return null
-
+        Log.i("EditorDBG", bestFigure.toString())
         return when (bestFigure) {
             is VertexFigure ->
                 VertexFigureEditor(InformationForVertexEditor(bestFigure, this))
