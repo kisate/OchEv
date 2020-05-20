@@ -1,12 +1,17 @@
 package com.example.ochev.viewclasses.eventhandlers
 
+import android.app.Activity
+import android.content.Context
 import android.util.Log
 import android.view.MotionEvent
+import android.widget.Button
+import com.example.ochev.R
 import com.example.ochev.baseclasses.dataclasses.Point
 import com.example.ochev.baseclasses.editors.vertexeditor.VertexFigureEditor
 import com.example.ochev.ml.Classifier
 import com.example.ochev.viewclasses.GraphDrawer
 import com.example.ochev.viewclasses.StrokeDrawer
+import com.example.ochev.viewclasses.buttonshandler.ButtonsHandler
 
 abstract class GestureEventHandler(
     private val strokeDrawer: StrokeDrawer,
@@ -19,6 +24,7 @@ abstract class GestureEventHandler(
 class GestureHandler(
     private val strokeDrawer: StrokeDrawer,
     private val graphDrawer: GraphDrawer,
+    private val buttonsHandler: ButtonsHandler,
     private val classifier: Classifier
 ) {
 
@@ -27,7 +33,6 @@ class GestureHandler(
     private var currentFigureEditor: VertexFigureEditor? = null
 
     fun handle(gesture: Gesture, event: MotionEvent) {
-
         if (gestureEventHandler == null) {
             gestureEventHandler = chooseHandler(gesture, event)
         }
@@ -44,6 +49,7 @@ class GestureHandler(
         if (gesture.type == GestureType.SCROLL) return ScrollingEventHandler(
             strokeDrawer,
             graphDrawer,
+            buttonsHandler,
             classifier
         )
 
@@ -53,11 +59,13 @@ class GestureHandler(
             if (gesture.type == GestureType.MOVE) return DrawingEventHandler(
                 strokeDrawer,
                 graphDrawer,
+                buttonsHandler,
                 classifier
             )
         } else {
             return EditingEventHandler(
-                strokeDrawer, graphDrawer, classifier,
+                strokeDrawer, graphDrawer,
+                buttonsHandler, classifier,
                 currentFigureEditor!!
             )
         }

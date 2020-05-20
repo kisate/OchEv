@@ -11,6 +11,7 @@ import com.example.ochev.viewclasses.GraphDrawer
 import com.example.ochev.viewclasses.StrokeDrawer
 import kotlinx.android.synthetic.main.activity_main.*
 import com.example.ochev.viewclasses.StrokeInputView
+import com.example.ochev.viewclasses.buttonshandler.ButtonsHandler
 import java.util.concurrent.ExecutorService
 import java.util.concurrent.Executors
 
@@ -26,9 +27,10 @@ class MainActivity : AppCompatActivity() {
 
         val strokeDrawer = StrokeDrawer(drawStrokeId)
         val graphDrawer = GraphDrawer(drawGraphId)
+        val buttonsHandler = ButtonsHandler(clearButtonId, deleteButtonId, strokeDrawer, graphDrawer)
 
         if (strokeInput == null) {
-            strokeInput = StrokeInputView(this, null, strokeDrawer, graphDrawer, classifier)
+            strokeInput = StrokeInputView(this, null, strokeDrawer, graphDrawer, buttonsHandler, classifier)
             strokeInput?.alpha = 0F
         }
 
@@ -39,9 +41,7 @@ class MainActivity : AppCompatActivity() {
 
         frameId.addView(strokeInput, layoutParams)
 
-        clearButtonId.setOnClickListener {
-            strokeInput?.clear()
-        }
+
 
         classifier
             .initialize(Executor.executorService)

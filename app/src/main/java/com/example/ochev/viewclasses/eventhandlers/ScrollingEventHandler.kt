@@ -6,10 +6,12 @@ import com.example.ochev.baseclasses.dataclasses.Point
 import com.example.ochev.ml.Classifier
 import com.example.ochev.viewclasses.GraphDrawer
 import com.example.ochev.viewclasses.StrokeDrawer
+import com.example.ochev.viewclasses.buttonshandler.ButtonsHandler
 
 class ScrollingEventHandler(
     strokeDrawer: StrokeDrawer,
     drawGraphView: GraphDrawer,
+    buttonsHandler: ButtonsHandler,
     classifier: Classifier
 ) : GestureEventHandler(strokeDrawer, drawGraphView, classifier) {
 

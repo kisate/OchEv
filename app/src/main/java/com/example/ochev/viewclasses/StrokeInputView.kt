@@ -7,6 +7,7 @@ import android.util.Log
 import android.view.MotionEvent
 import android.view.View
 import com.example.ochev.ml.Classifier
+import com.example.ochev.viewclasses.buttonshandler.ButtonsHandler
 import com.example.ochev.viewclasses.eventhandlers.GestureDetector
 import com.example.ochev.viewclasses.eventhandlers.GestureHandler
 
@@ -17,12 +18,13 @@ class StrokeInputView(
     attrs: AttributeSet? = null,
     strokeDrawer: StrokeDrawer,
     private val graphDrawer: GraphDrawer,
+    buttonsHandler: ButtonsHandler,
     classifier: Classifier
 ) :
     View(context, attrs) {
 
     private val gestureDetector = GestureDetector()
-    private val gestureHandler = GestureHandler(strokeDrawer, graphDrawer, classifier)
+    private val gestureHandler = GestureHandler(strokeDrawer, graphDrawer, buttonsHandler, classifier )
 
     fun clear() {
         graphDrawer.clear()

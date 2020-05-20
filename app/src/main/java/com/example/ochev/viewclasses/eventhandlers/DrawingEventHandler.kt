@@ -9,12 +9,14 @@ import com.example.ochev.ml.Classifier
 import com.example.ochev.ml.Utils
 import com.example.ochev.viewclasses.GraphDrawer
 import com.example.ochev.viewclasses.StrokeDrawer
+import com.example.ochev.viewclasses.buttonshandler.ButtonsHandler
 import com.google.android.gms.tasks.Tasks
 import java.util.concurrent.Callable
 
 class DrawingEventHandler(
     private val strokeDrawer: StrokeDrawer,
     private val graphDrawer: GraphDrawer,
+    private  val buttonsHandler: ButtonsHandler,
     private val classifier: Classifier
 ) : GestureEventHandler(strokeDrawer, graphDrawer, classifier) {
 
