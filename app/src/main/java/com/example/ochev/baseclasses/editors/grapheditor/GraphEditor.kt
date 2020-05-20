@@ -86,7 +86,6 @@ class GraphEditor(
 
     fun getFigureEditorByTouch(point: Point): VertexFigureEditor? {
         val bestFigure = graph.getFigureForEditing(point) ?: return null
-        Log.i("EditorDBG", bestFigure.toString())
         return when (bestFigure) {
             is VertexFigure ->
                 VertexFigureEditor(InformationForVertexEditor(bestFigure, this))
@@ -155,8 +154,9 @@ class GraphEditor(
 
     fun zoomByPointAndFactor(point: Point, factor: Float) {
         val newGraph = Graph()
+        Log.i("ZoomDBG", factor.toString())
         val linker = getLinker {
-            it.movedByVector(Vector(point, it.center).multipliedByFloat(factor))
+            it.movedByVector(Vector(point, it.center).multipliedByFloat(factor - 1f))
                 .rescaledByFactor(factor)
         }
 

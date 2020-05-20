@@ -20,6 +20,6 @@ data class Vector(val x: Int = 0, val y: Int = 0) {
     }
 
     fun multipliedByFloat(c: Float): Vector {
-        return Vector(x * c.toInt(), y * c.toInt())
+        return Vector((x * c).toInt(), (y * c).toInt())
     }
 }
