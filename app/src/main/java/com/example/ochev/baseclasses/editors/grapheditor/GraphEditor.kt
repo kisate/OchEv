@@ -2,11 +2,11 @@ package com.example.ochev.baseclasses.editors.grapheditor
 
 import com.example.ochev.baseclasses.Figure
 import com.example.ochev.baseclasses.FigureNormalizer
-import com.example.ochev.baseclasses.VertexFigure
 import com.example.ochev.baseclasses.dataclasses.*
 import com.example.ochev.baseclasses.edgefigures.Edge
 import com.example.ochev.baseclasses.editors.drawingfigureseditor.DrawingFiguresEditor
 import com.example.ochev.baseclasses.editors.vertexeditor.VertexFigureEditor
+import com.example.ochev.baseclasses.vertexfigures.VertexFigure
 
 class GraphEditor(
     var graph: Graph = Graph(),
@@ -17,7 +17,6 @@ class GraphEditor(
             is VertexFigure -> deleteVertex(figure)
             is Edge -> deleteEdge(figure)
         }
-        drawingEditor.deleteFigure(figure)
     }
 
     private fun deleteEdge(edgeFigure: Edge) {
@@ -31,6 +30,7 @@ class GraphEditor(
         }
 
         graph = newGraph
+        drawingEditor.deleteFigure(edgeFigure)
     }
 
     private fun deleteVertex(vertexFigure: VertexFigure) {
@@ -39,12 +39,16 @@ class GraphEditor(
         graph.figures.vertexes.forEach {
             if (it.first != vertexFigure) newGraph.figures.vertexes.add(it)
         }
+
         graph.figures.edges.forEach {
             if (it.first.beginFigure != vertexFigure && it.first.endFigure != vertexFigure) {
                 newGraph.figures.edges.add(it)
+            } else {
+                drawingEditor.deleteFigure(it.first)
             }
         }
 
+        drawingEditor.deleteFigure(vertexFigure)
         graph = newGraph
     }
 
@@ -125,14 +129,12 @@ class GraphEditor(
     fun reconnectEdges(linker: HashMap<VertexFigure, VertexFigure>): MutableList<Pair<Edge, Int>> {
         val result: MutableList<Pair<Edge, Int>> = ArrayList()
         graph.figures.edges.forEach {
-
             val newLine = Edge(
                 linker[it.first.beginFigure]!!,
                 linker[it.first.endFigure]!!
             )
             result.add(Pair(newLine, it.second))
             drawingEditor.changeFigure(it.first, newLine)
-
         }
         return result
     }

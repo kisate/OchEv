@@ -1,7 +1,7 @@
 package com.example.ochev.baseclasses.vertexfigures.normalizers
 
-import com.example.ochev.baseclasses.VertexFigure
 import com.example.ochev.baseclasses.dataclasses.Stroke
+import com.example.ochev.baseclasses.vertexfigures.VertexFigure
 import com.example.ochev.baseclasses.vertexfigures.VertexFigureBuilder
 import com.example.ochev.baseclasses.vertexfigures.Vertexes
 

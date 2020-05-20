@@ -25,7 +25,7 @@ class DrawGraphView(
         canvas?.drawColor(Color.LTGRAY)
         for (figure in graphEditor.graph.figures.figuresSortedByHeights) {
             Log.i("ClassifyDbg", figure.toString())
-            figuresDrawer.draw(figure.first, canvas)
+            figuresDrawer.draw(figure.first, graphEditor.drawingEditor.getDrawingInformation(figure.first), canvas)
         }
     }
 }
@@ -64,7 +64,7 @@ abstract class Drawer {
         }
     }
 
-    abstract fun draw(figure: Figure, canvas: Canvas?)
+    abstract fun draw(figure: Figure, drawingInformation: DrawingInformation, canvas: Canvas?)
 }
 
 class CircleDrawer : Drawer() {
@@ -96,27 +96,27 @@ class CircleDrawer : Drawer() {
         styles[DrawingMode.EDIT_CORNERS.ordinal].circuitPaint.color = Color.parseColor("#FFC107")
     }
 
-    override fun draw(figure: Figure, canvas: Canvas?) {
+    override fun draw(figure: Figure, drawingInformation: DrawingInformation, canvas: Canvas?) {
 
         figure as Circle
 
-        canvas?.drawCircle(
-            figure.center.x.toFloat(),
-            figure.center.y.toFloat(),
-            figure.radius.toFloat(),
+        val drawCircle = canvas?.drawCircle(
+            figure.center.x,
+            figure.center.y,
+            figure.radius,
             styles[currentStyle].fillPaint
         )
         canvas?.drawCircle(
-            figure.center.x.toFloat(),
-            figure.center.y.toFloat(),
-            figure.radius.toFloat(),
+            figure.center.x,
+            figure.center.y,
+            figure.radius,
             styles[currentStyle].circuitPaint
         )
-        if (figure.drawingInformation.drawingMode == DrawingMode.EDIT)
+        if (drawingInformation.drawingMode == DrawingMode.EDIT)
             for (point in figure.getMovingPoints()) {
                 canvas?.drawCircle(
-                    point.x.toFloat(),
-                    point.y.toFloat(),
+                    point.x,
+                    point.y,
                     5f,
                     styles[DrawingMode.EDIT_CORNERS.ordinal].circuitPaint
                 )
@@ -157,23 +157,23 @@ class RectangleDrawer : Drawer() {
         Log.i("ClassifyDbg", rect.toString())
         Log.i("ClassifyDbg", rect.rightDownCorner.toString() + rect.leftUpCorner.toString())
         val path = Path()
-        path.moveTo(rect.rightDownCorner.x.toFloat(), rect.rightDownCorner.y.toFloat())
-        path.lineTo(rect.rightUpCorner.x.toFloat(), rect.rightUpCorner.y.toFloat())
-        path.lineTo(rect.leftUpCorner.x.toFloat(), rect.leftUpCorner.y.toFloat())
-        path.lineTo(rect.leftDownCorner.x.toFloat(), rect.leftDownCorner.y.toFloat())
+        path.moveTo(rect.rightDownCorner.x, rect.rightDownCorner.y)
+        path.lineTo(rect.rightUpCorner.x, rect.rightUpCorner.y)
+        path.lineTo(rect.leftUpCorner.x, rect.leftUpCorner.y)
+        path.lineTo(rect.leftDownCorner.x, rect.leftDownCorner.y)
         path.close()
         canvas?.drawPath(path, paint)
     }
 
-    override fun draw(figure: Figure, canvas: Canvas?) {
+    override fun draw(figure: Figure, drawingInformation: DrawingInformation, canvas: Canvas?) {
         figure as Rectangle
         drawRect(figure, canvas, styles[currentStyle].fillPaint)
         drawRect(figure, canvas, styles[currentStyle].circuitPaint)
-        if (figure.drawingInformation.drawingMode == DrawingMode.EDIT)
+        if (drawingInformation.drawingMode == DrawingMode.EDIT)
             for (point in figure.importantPoints) {
                 canvas?.drawCircle(
-                    point.x.toFloat(),
-                    point.y.toFloat(),
+                    point.x,
+                    point.y,
                     5f,
                     styles[DrawingMode.EDIT_CORNERS.ordinal].circuitPaint
                 )
@@ -202,7 +202,7 @@ class EdgeDrawer : Drawer() {
 
     }
 
-    override fun draw(figure: Figure, canvas: Canvas?) {
+    override fun draw(figure: Figure, drawingInformation: DrawingInformation, canvas: Canvas?) {
 
         figure as Edge
 
@@ -212,8 +212,8 @@ class EdgeDrawer : Drawer() {
         val from = figure.beginFigure.center
         val to = figure.endFigure.center
 
-        path.moveTo(from.x.toFloat(), from.y.toFloat())
-        path.lineTo(to.x.toFloat(), to.y.toFloat())
+        path.moveTo(from.x, from.y)
+        path.lineTo(to.x, to.y)
         canvas?.drawPath(path, styles[currentStyle].circuitPaint)
 //        canvas?.drawTextOnPath("Test Text 1234567", path, 100f, 100f, styles[DrawingMode.DEFAULT.ordinal].fontPaint)
     }
@@ -224,19 +224,19 @@ class FiguresDrawer {
     val rectangleDrawer = RectangleDrawer()
     val edgeDrawer = EdgeDrawer()
 
-    fun draw(figure: Figure, canvas: Canvas?) {
+    fun draw(figure: Figure, drawingInformation: DrawingInformation, canvas: Canvas?) {
         when (figure) {
             is Circle -> {
-                circleDrawer.currentStyle = figure.drawingInformation.drawingMode.ordinal
-                circleDrawer.draw(figure, canvas)
+                circleDrawer.currentStyle = drawingInformation.drawingMode.ordinal
+                circleDrawer.draw(figure, drawingInformation,canvas)
             }
             is Rectangle -> {
-                rectangleDrawer.currentStyle = figure.drawingInformation.drawingMode.ordinal
-                rectangleDrawer.draw(figure, canvas)
+                rectangleDrawer.currentStyle = drawingInformation.drawingMode.ordinal
+                rectangleDrawer.draw(figure, drawingInformation, canvas)
             }
             is Edge -> {
-                edgeDrawer.currentStyle = figure.drawingInformation.drawingMode.ordinal
-                edgeDrawer.draw(figure, canvas)
+                edgeDrawer.currentStyle = drawingInformation.drawingMode.ordinal
+                edgeDrawer.draw(figure, drawingInformation, canvas)
             }
         }
     }

@@ -1,8 +1,8 @@
 package com.example.ochev.baseclasses.dataclasses
 
 import com.example.ochev.baseclasses.Figure
-import com.example.ochev.baseclasses.VertexFigure
 import com.example.ochev.baseclasses.edgefigures.Edge
+import com.example.ochev.baseclasses.vertexfigures.VertexFigure
 import kotlin.math.abs
 
 
