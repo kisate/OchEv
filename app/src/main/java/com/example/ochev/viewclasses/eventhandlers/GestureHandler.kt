@@ -78,10 +78,10 @@ class GestureHandler(
             }
             if (clickedFigureEditor.shaper.shapingBegins(Point(event)))
             {
-                return ShapingEventHandler(strokeDrawer, graphDrawer, classifier)
+                return ShapingEventHandler(strokeDrawer, graphDrawer, classifier, clickedFigureEditor)
             } else if (clickedFigureEditor.mover.moveBegins(Point(event)))
             {
-                return MovingEventFigureHandler(strokeDrawer, graphDrawer, classifier)
+                return MovingEventFigureHandler(strokeDrawer, graphDrawer, classifier, clickedFigureEditor)
             }
         }
 
