@@ -12,7 +12,9 @@ class MovingEventFigureHandler(
     classifier: Classifier
 ) : GestureEventHandler(strokeDrawer, drawGraphView, classifier) {
     override fun handle(gesture: Gesture, event: MotionEvent) {
-        Log.d("Gestures", "Moving")
+
+
+
     }
 
 }

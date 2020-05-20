@@ -28,7 +28,7 @@ class MainActivity : AppCompatActivity() {
 
         val strokeDrawer = StrokeDrawer(drawStrokeId)
         val graphDrawer = GraphDrawer(drawGraphId)
-        val buttonsHandler = ButtonsHandler(clearButtonId, deleteButtonId, strokeDrawer, graphDrawer)
+        val buttonsHandler = ButtonsHandler(clearButtonId, deleteButtonId, graphDrawer)
 
         if (strokeInput == null) {
             strokeInput = StrokeInputView(this, null, strokeDrawer, graphDrawer, buttonsHandler, classifier)

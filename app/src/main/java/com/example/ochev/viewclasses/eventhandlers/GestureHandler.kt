@@ -2,9 +2,11 @@ package com.example.ochev.viewclasses.eventhandlers
 
 import android.util.Log
 import android.view.MotionEvent
+import com.example.ochev.baseclasses.VertexFigure
 import com.example.ochev.baseclasses.dataclasses.Point
 import com.example.ochev.baseclasses.editors.vertexeditor.VertexFigureEditor
 import com.example.ochev.ml.Classifier
+import com.example.ochev.viewclasses.DrawingMode
 import com.example.ochev.viewclasses.GraphDrawer
 import com.example.ochev.viewclasses.StrokeDrawer
 import com.example.ochev.viewclasses.buttonshandler.ButtonsHandler
@@ -89,14 +91,16 @@ class GestureHandler(
     private fun exitEditMode() {
         if (currentFigureEditor != null)
         {
-            currentFigureEditor = null
             buttonsHandler.closeEditing()
+            currentFigureEditor!!.figureUnderControl.drawingInformation.set(DrawingMode.DEFAULT)
+            currentFigureEditor = null
         }
     }
 
     private fun enterEditMode(clickedFigureEditor: VertexFigureEditor) {
         exitEditMode()
         currentFigureEditor = clickedFigureEditor
+        clickedFigureEditor.figureUnderControl.drawingInformation.set(DrawingMode.EDIT)
         buttonsHandler.enterEditing(clickedFigureEditor)
         Log.d("Gestures", "Entered")
     }
