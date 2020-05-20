@@ -74,13 +74,12 @@ class GestureHandler(
             {
                 return ConnectingEventHandler(strokeDrawer, graphDrawer, classifier)
             }
-            if (clickedFigureEditor.mover.moveBegins(Point(event)))
-            {
-                return MovingFigureHandler(strokeDrawer, graphDrawer, classifier)
-            }
-            else if (clickedFigureEditor.shaper.shapingBegins(Point(event)))
+            if (clickedFigureEditor.shaper.shapingBegins(Point(event)))
             {
                 return ShapingEventHandler(strokeDrawer, graphDrawer, classifier)
+            } else if (clickedFigureEditor.mover.moveBegins(Point(event)))
+            {
+                return MovingFigureHandler(strokeDrawer, graphDrawer, classifier)
             }
         }
 
