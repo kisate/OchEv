@@ -3,6 +3,7 @@ package com.example.ochev.baseclasses.editors.drawingfigureseditor
 import com.example.ochev.baseclasses.Figure
 import com.example.ochev.baseclasses.dataclasses.DrawingFigure
 import com.example.ochev.viewclasses.DrawingInformation
+import com.example.ochev.viewclasses.DrawingMode
 
 class DrawingFiguresEditor {
     val figures: MutableList<DrawingFigure> = ArrayList()
@@ -28,8 +29,23 @@ class DrawingFiguresEditor {
         }
     }
 
+    fun changeFiguresDrawingInformation(figure: Figure, drawingMode: DrawingMode) {
+        for (index in 0 until figures.size) {
+            if (figures[index].figure == figure) {
+                val drawingInformation = DrawingInformation()
+                drawingInformation.drawingMode = drawingMode
+                figures[index] = DrawingFigure(figure, drawingInformation)
+            }
+        }
+    }
+
     fun clear() {
         figures.clear()
     }
+
+    fun getDrawingInformation(figure: Figure): DrawingInformation {
+        return figures.find{it.figure == figure}!!.drawingInformation
+    }
+
 
 }

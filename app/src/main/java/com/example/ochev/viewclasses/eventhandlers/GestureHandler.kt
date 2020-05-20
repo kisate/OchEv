@@ -5,6 +5,7 @@ import android.view.MotionEvent
 import com.example.ochev.baseclasses.dataclasses.Point
 import com.example.ochev.baseclasses.editors.vertexeditor.VertexFigureEditor
 import com.example.ochev.ml.Classifier
+import com.example.ochev.viewclasses.DrawingInformation
 import com.example.ochev.viewclasses.DrawingMode
 import com.example.ochev.viewclasses.GraphDrawer
 import com.example.ochev.viewclasses.StrokeDrawer
@@ -91,16 +92,18 @@ class GestureHandler(
         if (currentFigureEditor != null)
         {
             buttonsHandler.closeEditing()
-            currentFigureEditor!!.figureUnderControl.drawingInformation.set(DrawingMode.DEFAULT)
+            graphDrawer.graphView.graphEditor.drawingEditor.changeFiguresDrawingInformation(currentFigureEditor!!.figureUnderControl, DrawingMode.DEFAULT)
             currentFigureEditor = null
+            graphDrawer.graphView.invalidate()
         }
     }
 
     private fun enterEditMode(clickedFigureEditor: VertexFigureEditor) {
         exitEditMode()
         currentFigureEditor = clickedFigureEditor
-        clickedFigureEditor.figureUnderControl.drawingInformation.set(DrawingMode.EDIT)
+        graphDrawer.graphView.graphEditor.drawingEditor.changeFiguresDrawingInformation(currentFigureEditor!!.figureUnderControl, DrawingMode.EDIT)
         buttonsHandler.enterEditing(clickedFigureEditor)
+        graphDrawer.graphView.invalidate()
         Log.d("Gestures", "Entered")
     }
 }
