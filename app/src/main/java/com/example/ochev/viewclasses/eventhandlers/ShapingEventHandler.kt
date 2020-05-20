@@ -6,13 +6,12 @@ import com.example.ochev.ml.Classifier
 import com.example.ochev.viewclasses.GraphDrawer
 import com.example.ochev.viewclasses.StrokeDrawer
 
-class MovingFigureHandler(
+class ShapingEventHandler(
     strokeDrawer: StrokeDrawer,
     drawGraphView: GraphDrawer,
     classifier: Classifier
 ) : GestureEventHandler(strokeDrawer, drawGraphView, classifier) {
     override fun handle(gesture: Gesture, event: MotionEvent) {
-        Log.d("Gestures", "Moving")
+        Log.d("Gestures", "Shaping")
     }
-
 }
