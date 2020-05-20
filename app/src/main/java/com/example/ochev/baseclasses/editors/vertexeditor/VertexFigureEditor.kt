@@ -1,7 +1,7 @@
 package com.example.ochev.baseclasses.editors.vertexeditor
 
-import com.example.ochev.baseclasses.VertexFigure
 import com.example.ochev.baseclasses.dataclasses.InformationForVertexEditor
+import com.example.ochev.baseclasses.vertexfigures.VertexFigure
 
 class VertexFigureEditor(
     information: InformationForVertexEditor

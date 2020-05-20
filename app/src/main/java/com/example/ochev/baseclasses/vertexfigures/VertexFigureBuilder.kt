@@ -1,6 +1,5 @@
 package com.example.ochev.baseclasses.vertexfigures
 
-import com.example.ochev.baseclasses.VertexFigure
 import com.example.ochev.baseclasses.dataclasses.Stroke
 
 class VertexFigureBuilder {

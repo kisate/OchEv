@@ -1,9 +1,9 @@
 package com.example.ochev.baseclasses.vertexfigures.normalizers
 
-import com.example.ochev.baseclasses.VertexFigure
 import com.example.ochev.baseclasses.dataclasses.InformationForNormalizer
 import com.example.ochev.baseclasses.dataclasses.Stroke.Companion.getStrokesRestrictions
 import com.example.ochev.baseclasses.dataclasses.Stroke.Companion.joinListOfStrokes
+import com.example.ochev.baseclasses.vertexfigures.VertexFigure
 import com.example.ochev.baseclasses.vertexfigures.VertexFigureBuilder
 
 class NormalizerByML {

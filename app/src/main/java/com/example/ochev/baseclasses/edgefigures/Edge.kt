@@ -1,8 +1,8 @@
 package com.example.ochev.baseclasses.edgefigures
 
 import com.example.ochev.baseclasses.Figure
-import com.example.ochev.baseclasses.VertexFigure
 import com.example.ochev.baseclasses.dataclasses.Point
+import com.example.ochev.baseclasses.vertexfigures.VertexFigure
 
 
 // Figure that connects information blocks
