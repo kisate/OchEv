@@ -4,7 +4,7 @@ import com.example.ochev.baseclasses.Figure
 import com.example.ochev.viewclasses.DrawingInformation
 
 data class DrawingFigure(
-    val figure: Figure? = null,
+    val figure: Figure,
     val drawingInformation: DrawingInformation = DrawingInformation()
 ) {
 }
