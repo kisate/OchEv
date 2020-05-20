@@ -4,12 +4,12 @@ import android.view.MotionEvent
 import kotlin.math.min
 import kotlin.math.sqrt
 
-data class Point(val x: Int = 0, val y: Int = 0) {
+data class Point(val x: Float = 0f, val y: Float = 0f) {
 
-    constructor(event: MotionEvent) : this(event.x.toInt(), event.y.toInt())
+    constructor(event: MotionEvent) : this(event.x, event.y)
 
     fun getDistanceToPoint(point: Point): Float {
-        return sqrt(((x - point.x) * (x - point.x) + (y - point.y) * (y - point.y)).toFloat())
+        return sqrt((x - point.x) * (x - point.x) + (y - point.y) * (y - point.y))
     }
 
     fun movedByVector(vector: Vector): Point {
@@ -39,7 +39,7 @@ data class Point(val x: Int = 0, val y: Int = 0) {
 
             val cosAngleCAB = vectorFromAToB.scalarProduct(vectorFromAToC) /
                     (vectorFromAToB.length * vectorFromAToC.length)
-            val sinAngleCAB = sqrt(1 - cosAngleCAB * cosAngleCAB)
+            val sinAngleCAB = sqrt(1f - cosAngleCAB * cosAngleCAB)
             return vectorFromAToC.length * sinAngleCAB
         }
 
