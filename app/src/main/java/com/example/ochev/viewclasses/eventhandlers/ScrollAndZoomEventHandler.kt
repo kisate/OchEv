@@ -59,7 +59,7 @@ class ScrollAndZoomEventHandler(
                     {
                         drawGraphView.graphView.graphEditor.zoomByPointAndFactor(
                             calcCenter(event),
-                            1 / factor
+                            factor
                         )
                     }
 
