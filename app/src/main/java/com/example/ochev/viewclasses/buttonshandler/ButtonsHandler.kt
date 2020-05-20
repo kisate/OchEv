@@ -18,7 +18,8 @@ class ButtonsHandler (
 
     init{
         buttonsContainer.clearButton.setOnClickListener {
-            strokeDrawer.clear()
+            closeEditing()
+            graphDrawer.clear()
             graphDrawer.graphView.invalidate()
         }
     }
@@ -31,6 +32,7 @@ class ButtonsHandler (
         showDeleteButton()
         buttonsContainer.deleteButton.setOnClickListener {
             figureEditor.graphEditor.deleteFigure(figureEditor.figureUnderControl)
+            closeEditing()
             graphDrawer.graphView.invalidate()
         }
     }
