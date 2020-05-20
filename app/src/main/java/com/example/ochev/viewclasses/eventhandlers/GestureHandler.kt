@@ -2,7 +2,6 @@ package com.example.ochev.viewclasses.eventhandlers
 
 import android.util.Log
 import android.view.MotionEvent
-import com.example.ochev.baseclasses.VertexFigure
 import com.example.ochev.baseclasses.dataclasses.Point
 import com.example.ochev.baseclasses.editors.vertexeditor.VertexFigureEditor
 import com.example.ochev.ml.Classifier
