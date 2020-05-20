@@ -6,7 +6,7 @@ import com.example.ochev.ml.Classifier
 import com.example.ochev.viewclasses.GraphDrawer
 import com.example.ochev.viewclasses.StrokeDrawer
 
-class MovingFigureHandler(
+class MovingEventFigureHandler(
     strokeDrawer: StrokeDrawer,
     drawGraphView: GraphDrawer,
     classifier: Classifier
