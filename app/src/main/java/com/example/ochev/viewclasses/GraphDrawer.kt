@@ -19,6 +19,7 @@ class DrawGraphView(
 
     val graphEditor = GraphEditor()
     val figuresDrawer = FiguresDrawer()
+    var scale = 1f
 
     override fun onDraw(canvas: Canvas?) {
         canvas?.drawColor(Color.LTGRAY)
