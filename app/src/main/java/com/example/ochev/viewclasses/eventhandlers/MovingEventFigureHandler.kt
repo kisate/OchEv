@@ -11,6 +11,7 @@ class MovingEventFigureHandler(
     drawGraphView: GraphDrawer,
     classifier: Classifier
 ) : GestureEventHandler(strokeDrawer, drawGraphView, classifier) {
+
     override fun handle(gesture: Gesture, event: MotionEvent) {
 
 
