@@ -1,6 +1,5 @@
 package com.example.ochev.baseclasses.editors.grapheditor
 
-import android.util.Log
 import com.example.ochev.baseclasses.EdgeFigure
 import com.example.ochev.baseclasses.Figure
 import com.example.ochev.baseclasses.FigureNormalizer
@@ -12,6 +11,8 @@ import com.example.ochev.baseclasses.editors.vertexeditor.VertexFigureEditor
 class GraphEditor(
     var graph: Graph = Graph()
 ) {
+    var scaler = 1.0
+
     fun deleteFigure(figure: Figure) {
         when (figure) {
             is VertexFigure -> deleteVertex(figure)
@@ -154,7 +155,9 @@ class GraphEditor(
 
     fun zoomByPointAndFactor(point: Point, factor: Float) {
         val newGraph = Graph()
-        Log.i("ZoomDBG", factor.toString())
+        if (scaler * factor !in 0.2..20.0) return
+        scaler *= factor
+
         val linker = getLinker {
             it.movedByVector(Vector(point, it.center).multipliedByFloat(factor - 1f))
                 .rescaledByFactor(factor)

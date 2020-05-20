@@ -11,7 +11,7 @@ import kotlin.math.max
 
 data class Circle(
     override val center: Point = Point(),
-    val radius: Int = 0
+    val radius: Float = 0f
 ) : VertexFigure() {
     val leftPoint: Point
         get() = Point(center.x - radius, center.y)
@@ -28,7 +28,7 @@ data class Circle(
         }
 
     override fun rescaledByFactor(factor: Float): VertexFigure {
-        return this.copy(radius = (radius * factor).toInt())
+        return this.copy(radius = radius * factor)
     }
 
     override fun getDistanceToPoint(point: Point): Float {
@@ -50,7 +50,7 @@ data class Circle(
         val result: MutableList<PointMover> = ArrayList()
         val points = getMovingPoints()
         val moveFun = { point: Point ->
-            this.copy(radius = center.getDistanceToPoint(point).toInt())
+            this.copy(radius = center.getDistanceToPoint(point))
         }
 
         points.forEach {
