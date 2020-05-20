@@ -7,6 +7,7 @@ import com.example.ochev.baseclasses.dataclasses.Vector
 import com.example.ochev.ml.Classifier
 import com.example.ochev.viewclasses.GraphDrawer
 import com.example.ochev.viewclasses.StrokeDrawer
+import kotlin.math.sqrt
 
 class ScrollAndZoomEventHandler(
     strokeDrawer: StrokeDrawer,
@@ -50,17 +51,11 @@ class ScrollAndZoomEventHandler(
 
                     if (factor > ZOOM_THRESHOLD)
                     {
-                        drawGraphView.graphView.graphEditor.zoomByPointAndFactor(
-                            calcCenter(event),
-                            factor
-                        )
+                        drawGraphView.graphView.graphEditor.zoomByPointAndFactor(calcCenter(event), factor)
                     }
                     if (factor < 1/ZOOM_THRESHOLD)
                     {
-                        drawGraphView.graphView.graphEditor.zoomByPointAndFactor(
-                            calcCenter(event),
-                            factor
-                        )
+                        drawGraphView.graphView.graphEditor.zoomByPointAndFactor(calcCenter(event), -(factor - 1))
                     }
 
                     drawGraphView.graphView.invalidate()
