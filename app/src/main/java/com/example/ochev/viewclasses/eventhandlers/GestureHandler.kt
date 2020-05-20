@@ -1,5 +1,6 @@
 package com.example.ochev.viewclasses.eventhandlers
 
+import android.util.Log
 import android.view.MotionEvent
 import com.example.ochev.baseclasses.dataclasses.Point
 import com.example.ochev.baseclasses.editors.vertexeditor.VertexFigureEditor
@@ -31,6 +32,7 @@ class GestureHandler(
 
         if (gestureEventHandler == null) {
             gestureEventHandler = chooseHandler(gesture, event)
+            Log.d("Gestures", "AA")
         }
 
         if (gestureEventHandler != null) gestureEventHandler!!.handle(gesture, event)
@@ -47,6 +49,8 @@ class GestureHandler(
         )
 
         val clickedFigureEditor = graphDrawer.graphView.graphEditor.getFigureEditorByTouch(Point(event))
+
+        Log.d("Gestures", clickedFigureEditor.toString())
 
         if (gesture.type == GestureType.TAP)
         {
@@ -92,7 +96,9 @@ class GestureHandler(
     }
 
     private fun enterEditMode(clickedFigureEditor: VertexFigureEditor) {
+        exitEditMode()
         currentFigureEditor = clickedFigureEditor
         buttonsHandler.enterEditing(clickedFigureEditor)
+        Log.d("Gestures", "Entered")
     }
 }
