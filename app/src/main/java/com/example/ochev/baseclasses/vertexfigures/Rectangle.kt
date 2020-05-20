@@ -18,7 +18,7 @@ data class Rectangle(
         get() = Point(leftDownCorner.x, rightUpCorner.y)
 
     val rightDownCorner: Point
-        get() = Point(leftDownCorner.y, rightUpCorner.x)
+        get() = Point(rightUpCorner.x, leftDownCorner.y)
 
     override val importantPoints: MutableList<Point>
         get() {
@@ -157,14 +157,13 @@ data class Rectangle(
             )
         })
 
-
         return result
     }
 
     override fun getMovingPoints(): MutableList<Point> {
         return (importantPoints + mutableListOf(
             Point(leftDownCorner.x, (leftDownCorner.y + leftUpCorner.y) / 2),
-            Point((leftUpCorner.x + rightUpCorner.x) / 2, leftUpCorner.x),
+            Point((leftUpCorner.x + rightUpCorner.x) / 2, leftUpCorner.y),
             Point(rightUpCorner.x, (rightUpCorner.y + rightDownCorner.y) / 2),
             Point((leftDownCorner.x + rightDownCorner.x) / 2, rightDownCorner.y)
         )).toMutableList()
@@ -187,7 +186,6 @@ fun VertexFigureBuilder.buildRectangle(strokes: MutableList<Stroke>): Rectangle 
     return Rectangle(
         leftDownCorner = Point(minX, minY),
         rightUpCorner = Point(maxX, maxY)
-
     )
 }
 

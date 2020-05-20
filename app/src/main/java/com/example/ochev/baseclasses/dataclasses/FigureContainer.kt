@@ -10,7 +10,7 @@ data class FigureContainer(
     val edges: MutableList<Pair<EdgeFigure, Int>> = ArrayList()
 ) {
 
-    class ComparatorByHeights() : Comparator<Pair<Figure, Int>> {
+    class ComparatorByHeights : Comparator<Pair<Figure, Int>> {
         override fun compare(o1: Pair<Figure, Int>?, o2: Pair<Figure, Int>?): Int {
             if (o1 == null && o2 == null) return 0
             if (o1 == null) return -1

@@ -34,10 +34,7 @@ class EdgeFigureNormalizer {
         if (beginFigure == endFigure) return null
         for (edge in graph.figures.edges) {
             val check = edge.first
-            when (check) {
-                is Line ->
-                    if (check.beginFigure == beginFigure && check.endFigure == endFigure) return null
-            }
+            if (check.beginFigure == beginFigure && check.endFigure == endFigure) return null
         }
 
         return Line(beginFigure, endFigure)
