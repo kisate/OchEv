@@ -10,22 +10,30 @@ class GraphChangeHistory(
 ) {
     fun revert() {
         if (past.isNotEmpty()) {
-            graphEditor.graph = past.last()
-            future.add(past.removeAt(past.lastIndex))
+            if (future.isNotEmpty()) {
+                future.add(graphEditor.graph.copy())
+                graphEditor.graph = past.last()
+                past.removeAt(past.lastIndex)
+            } else {
+                future.add(graphEditor.graph.copy())
+                graphEditor.graph = past.last()
+                past.removeAt(past.lastIndex)
+            }
         }
     }
 
     fun undoRevert() {
         if (future.isNotEmpty()) {
+            past.add(graphEditor.graph.copy())
             graphEditor.graph = future.last()
-            past.add(future.removeAt(future.lastIndex))
+            future.removeAt(future.lastIndex)
         }
     }
 
     fun saveState() {
         future.clear()
         if (past.size >= 50) past.removeAt(0)
-        past.add(graphEditor.graph)
+        past.add(graphEditor.graph.copy())
     }
 
     fun zoomByPointAndFactor(point: Point, factor: Float) {
