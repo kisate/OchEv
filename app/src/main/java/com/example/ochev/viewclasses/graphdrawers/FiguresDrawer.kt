@@ -5,6 +5,7 @@ import com.example.ochev.baseclasses.Figure
 import com.example.ochev.baseclasses.edgefigures.Edge
 import com.example.ochev.baseclasses.vertexfigures.Circle
 import com.example.ochev.baseclasses.vertexfigures.Rectangle
+import com.example.ochev.baseclasses.vertexfigures.VertexFigure
 import com.example.ochev.viewclasses.DrawingInformation
 
 class FiguresDrawer {

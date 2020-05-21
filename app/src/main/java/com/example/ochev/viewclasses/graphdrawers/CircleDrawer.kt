@@ -20,6 +20,9 @@ class CircleDrawer : Drawer() {
         styles[DrawingMode.DEFAULT.ordinal].circuitPaint.style = Paint.Style.STROKE
         styles[DrawingMode.DEFAULT.ordinal].circuitPaint.strokeWidth = 10f
         styles[DrawingMode.DEFAULT.ordinal].circuitPaint.color = Color.BLACK
+        styles[DrawingMode.DEFAULT.ordinal].fontPaint.style = Paint.Style.FILL
+        styles[DrawingMode.DEFAULT.ordinal].fontPaint.isAntiAlias = true
+        styles[DrawingMode.DEFAULT.ordinal].fontPaint.color = Color.BLACK
         /*
             editing style of circles
          */
@@ -29,6 +32,9 @@ class CircleDrawer : Drawer() {
         styles[DrawingMode.EDIT.ordinal].circuitPaint.style = Paint.Style.STROKE
         styles[DrawingMode.EDIT.ordinal].circuitPaint.strokeWidth = 10f
         styles[DrawingMode.EDIT.ordinal].circuitPaint.color = Color.BLACK
+        styles[DrawingMode.EDIT.ordinal].fontPaint.style = Paint.Style.FILL
+        styles[DrawingMode.EDIT.ordinal].fontPaint.isAntiAlias = true
+        styles[DrawingMode.EDIT.ordinal].fontPaint.color = Color.parseColor("#FFC107")
         /*
             editing corner style of circles
          */
@@ -53,6 +59,8 @@ class CircleDrawer : Drawer() {
             figure.radius,
             styles[drawingInformation.currentStyle].circuitPaint
         )
+        val textDrawingInformation = TextDrawingInformation(figure, drawingInformation.text, styles[drawingInformation.currentStyle].fontPaint)
+        canvas?.drawText(drawingInformation.text, 0, drawingInformation.text.length, textDrawingInformation.x, textDrawingInformation.y, textDrawingInformation.paint)
         if (drawingInformation.drawingMode == DrawingMode.EDIT) {
             for (point in figure.getMovingPoints()) {
                 canvas?.drawCircle(
@@ -66,12 +74,5 @@ class CircleDrawer : Drawer() {
 
     }
 
-    override fun drawText(
-        figure: Figure,
-        drawingInformation: DrawingInformation,
-        canvas: Canvas?,
-        fontPaint: Paint
-    ) {
 
-    }
 }

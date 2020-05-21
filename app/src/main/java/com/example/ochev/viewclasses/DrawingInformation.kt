@@ -10,7 +10,7 @@ enum class DrawingMode(value: Int){
 
 class DrawingInformation {
     var drawingMode = DrawingMode.DEFAULT
-    var text = "TEST"
+    var text = ""
     var currentStyle = DrawingMode.DEFAULT.ordinal
 
     fun enterMode(newDrawingMode: DrawingMode) {

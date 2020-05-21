@@ -3,11 +3,10 @@ package com.example.ochev.viewclasses.graphdrawers
 import android.graphics.Paint
 import android.graphics.Rect
 import com.example.ochev.baseclasses.Figure
+import com.example.ochev.baseclasses.vertexfigures.Circle
 import com.example.ochev.baseclasses.vertexfigures.Rectangle
 import com.example.ochev.baseclasses.vertexfigures.VertexFigure
-import kotlin.math.abs
-import kotlin.math.max
-import kotlin.math.min
+import kotlin.math.*
 
 class TextDrawingInformation(
     figure: VertexFigure,
@@ -49,6 +48,15 @@ class TextDrawingInformation(
                     max(figure.leftDownCorner.x, figure.rightDownCorner.x).toInt(),
                     min(figure.leftDownCorner.y, figure.leftUpCorner.y).toInt()
                 )
+            }
+            is Circle -> {
+                return Rect(
+                    0,
+                    (2 * sin(Math.PI / 180f * 45f) * figure.radius).toInt(),
+                    (2 * cos(Math.PI / 180f * 45f) * figure.radius).toInt(),
+                    0
+                )
+
             }
             else -> {
                 return Rect()

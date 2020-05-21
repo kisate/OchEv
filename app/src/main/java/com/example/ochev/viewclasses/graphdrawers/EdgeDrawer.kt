@@ -47,12 +47,5 @@ class EdgeDrawer : Drawer() {
 //        canvas?.drawTextOnPath("Test Text 1234567", path, 100f, 100f, styles[DrawingMode.DEFAULT.ordinal].fontPaint)
     }
 
-    override fun drawText(
-        figure: Figure,
-        drawingInformation: DrawingInformation,
-        canvas: Canvas?,
-        fontPaint: Paint
-    ) {
 
-    }
 }
