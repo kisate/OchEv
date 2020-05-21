@@ -52,8 +52,8 @@ class TextDrawingInformation(
             is Circle -> {
                 return Rect(
                     0,
-                    (2 * sin(Math.PI / 180f * 20f) * figure.radius).toInt(),
-                    (2 * cos(Math.PI / 180f * 20f) * figure.radius).toInt(),
+                    (2 * sin(Math.PI / 180f * 45f) * figure.radius).toInt(),
+                    (2 * cos(Math.PI / 180f * 45f) * figure.radius).toInt(),
                     0
                 )
 

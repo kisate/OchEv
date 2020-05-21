@@ -17,11 +17,9 @@ class FiguresDrawer {
         when (figure) {
             is Circle -> {
                 circleDrawer.draw(figure, drawingInformation,canvas)
-                circleDrawer.drawText(figure, drawingInformation, canvas, circleDrawer.styles[drawingInformation.currentStyle].fontPaint)
             }
             is Rectangle -> {
                 rectangleDrawer.draw(figure, drawingInformation, canvas)
-                rectangleDrawer.drawText(figure,drawingInformation,canvas,rectangleDrawer.styles[drawingInformation.currentStyle].fontPaint)
             }
             is Edge -> {
                 edgeDrawer.draw(figure, drawingInformation, canvas)

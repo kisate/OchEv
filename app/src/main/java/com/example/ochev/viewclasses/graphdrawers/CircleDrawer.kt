@@ -59,6 +59,8 @@ class CircleDrawer : Drawer() {
             figure.radius,
             styles[drawingInformation.currentStyle].circuitPaint
         )
+        val textDrawingInformation = TextDrawingInformation(figure, drawingInformation.text, styles[drawingInformation.currentStyle].fontPaint)
+        canvas?.drawText(drawingInformation.text, 0, drawingInformation.text.length, textDrawingInformation.x, textDrawingInformation.y, textDrawingInformation.paint)
         if (drawingInformation.drawingMode == DrawingMode.EDIT) {
             for (point in figure.getMovingPoints()) {
                 canvas?.drawCircle(
