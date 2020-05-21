@@ -1,10 +1,8 @@
 package com.example.ochev.viewclasses.buttonshandler
 
-import android.os.SystemClock
 import android.view.View
-import android.widget.Button
 import com.example.ochev.baseclasses.editors.vertexeditor.VertexFigureEditor
-import com.example.ochev.viewclasses.GraphDrawer
+import com.example.ochev.viewclasses.graphdrawers.GraphDrawer
 
 class ButtonsHandler (
     val buttonsContainer: ButtonsContainer,

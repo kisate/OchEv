@@ -1,19 +1,17 @@
 package com.example.ochev.viewclasses.eventhandlers
 
-import android.util.Log
 import android.view.MotionEvent
 import com.example.ochev.baseclasses.dataclasses.Point
 import com.example.ochev.baseclasses.dataclasses.Vector
 import com.example.ochev.ml.Classifier
-import com.example.ochev.viewclasses.GraphDrawer
-import com.example.ochev.viewclasses.StrokeDrawer
-import kotlin.math.sqrt
+import com.example.ochev.viewclasses.graphdrawers.GraphDrawer
+import com.example.ochev.viewclasses.strokedrawers.StrokeDrawer
 
 class ScrollAndZoomEventHandler(
     strokeDrawer: StrokeDrawer,
-    private val drawGraphView: GraphDrawer,
+    private val graphDrawer: GraphDrawer,
     classifier: Classifier
-) : GestureEventHandler(strokeDrawer, drawGraphView, classifier) {
+) : GestureEventHandler(strokeDrawer, graphDrawer, classifier) {
 
     private var lastCenter: Point? = null
     private var lastDistance: Float? = null
@@ -34,7 +32,7 @@ class ScrollAndZoomEventHandler(
                     secondPointerId = event.getPointerId(1)
                 }
                 GestureState.IN_PROGRESS -> {
-                    drawGraphView.graphView.graphEditor.moveGraphByVector(
+                    graphDrawer.graphView.graphEditor.moveGraphByVector(
                         Vector(
                             lastCenter!!,
                             calcCenter(event)
@@ -43,25 +41,25 @@ class ScrollAndZoomEventHandler(
 
                     val factor = calcDistance(event) / lastDistance!!
 
-                    if (factor >= ZOOM_THRESHOLD && drawGraphView.graphView.scale*factor < MAX_SCALE)
+                    if (factor >= ZOOM_THRESHOLD && graphDrawer.scale*factor < MAX_SCALE)
                     {
-                        drawGraphView.graphView.scale *= factor
-                        drawGraphView.graphView.graphEditor.zoomByPointAndFactor(
+                        graphDrawer.scale *= factor
+                        graphDrawer.graphView.graphEditor.zoomByPointAndFactor(
                             calcCenter(event),
                             factor
                         )
                     }
 
-                    if (factor <= 1/ ZOOM_THRESHOLD && drawGraphView.graphView.scale*factor > MIN_SCALE)
+                    if (factor <= 1/ ZOOM_THRESHOLD && graphDrawer.scale*factor > MIN_SCALE)
                     {
-                        drawGraphView.graphView.scale *= factor
-                        drawGraphView.graphView.graphEditor.zoomByPointAndFactor(
+                        graphDrawer.scale *= factor
+                        graphDrawer.graphView.graphEditor.zoomByPointAndFactor(
                             calcCenter(event),
                             factor
                         )
                     }
 
-                    drawGraphView.graphView.invalidate()
+                    graphDrawer.graphView.invalidate()
 
                     lastDistance = calcDistance(event)
                     lastCenter = calcCenter(event)

@@ -10,6 +10,8 @@ import com.example.ochev.ml.Classifier
 import com.example.ochev.viewclasses.buttonshandler.ButtonsHandler
 import com.example.ochev.viewclasses.eventhandlers.GestureDetector
 import com.example.ochev.viewclasses.eventhandlers.GestureHandler
+import com.example.ochev.viewclasses.graphdrawers.GraphDrawer
+import com.example.ochev.viewclasses.strokedrawers.StrokeDrawer
 
 
 @SuppressLint("ViewConstructor")

@@ -37,10 +37,10 @@
 
     <ImageButton
         android:id="@+id/forwardButtonId"
-        android:layout_width="56dp"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
 
-        android:layout_marginStart="30dp"
+        android:layout_marginStart="5sp"
         app:layout_constraintBottom_toBottomOf="parent"
 
         app:layout_constraintStart_toStartOf="@id/guideline"
@@ -50,7 +50,7 @@
         android:id="@+id/undoButtonId"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginEnd="30dp"
+        android:layout_marginEnd="5sp"
         app:layout_constraintBottom_toBottomOf="parent"
 
         app:layout_constraintEnd_toEndOf="@id/guideline"
@@ -61,7 +61,7 @@
         android:layout_height="wrap_content"
         android:id="@+id/guideline"
         android:orientation="vertical"
-        app:layout_constraintGuide_percent="0.5" />
+        app:layout_constraintGuide_percent="0.5"/>
 
     <Button
         android:id="@+id/clearButtonId"
