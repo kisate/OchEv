@@ -72,6 +72,11 @@ class GestureDetector {
             return currentGesture
         }
 
+        if (checkCanBeLongTap(event)) {
+            currentGesture = Gesture(GestureType.LONG_TAP, GestureState.START)
+            return currentGesture
+        }
+
         return Gesture()
     }
 
