@@ -50,26 +50,6 @@ class GraphEditor(
         graph = newGraph
     }
 
-    fun recalcEdgeHeights() {
-        val fastHeightAcces: HashMap<VertexFigure, Int> = HashMap()
-        graph.figures.vertices.forEach { fastHeightAcces[it.figure] = it.height }
-
-        val newGraph = Graph()
-        newGraph.figures.vertices += graph.figures.vertices
-
-        graph.figures.edges.forEach {
-            newGraph.figures.edges.add(
-                it.copy(
-                    height = kotlin.math.min(
-                        fastHeightAcces[it.figure.beginFigure]!!,
-                        fastHeightAcces[it.figure.endFigure]!!
-                    )
-                )
-            )
-        }
-
-        graph = newGraph
-    }
 
     fun modifyByStrokes(information: InformationForNormalizer) {
         val normalizer = FigureNormalizer()
@@ -90,10 +70,6 @@ class GraphEditor(
                 graph.figures.edges.add(
                     EdgeNode(
                         id = figureCounter++,
-                        height = kotlin.math.min(
-                            graph.figures.getHeight(result.beginFigure),
-                            graph.figures.getHeight(result.endFigure)
-                        ),
                         figure = result
                     )
                 )
@@ -169,7 +145,6 @@ class GraphEditor(
         moveVertexes(newGraph, linker)
 
         graph = newGraph
-        recalcEdgeHeights()
     }
 
     fun zoomByPointAndFactor(point: Point, factor: Float) {

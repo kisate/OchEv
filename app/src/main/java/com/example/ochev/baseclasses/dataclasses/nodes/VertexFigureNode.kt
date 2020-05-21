@@ -5,7 +5,7 @@ import com.example.ochev.viewclasses.DrawingInformation
 
 data class VertexFigureNode(
     override val id: Int = 0,
-    override val height: Int = 0,
     override val drawingInformation: DrawingInformation = DrawingInformation(),
-    override val figure: VertexFigure
+    override val figure: VertexFigure,
+    val height: Int = 0
 ) : FigureNode

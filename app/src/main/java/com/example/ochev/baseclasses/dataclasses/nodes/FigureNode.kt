@@ -5,7 +5,6 @@ import com.example.ochev.viewclasses.DrawingInformation
 
 interface FigureNode {
     val id: Int
-    val height: Int
     val drawingInformation: DrawingInformation
     val figure: Figure
 }
