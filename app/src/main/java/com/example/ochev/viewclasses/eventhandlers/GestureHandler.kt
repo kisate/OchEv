@@ -52,7 +52,7 @@ class GestureHandler(
         val clickedFigureEditor =
             graphDrawer.graphView.graphEditor.getFigureEditorByTouch(Point(event))
 
-        Log.d("Gestures", clickedFigureEditor.toString())
+        Log.d("Gestures", clickedFigureEditor?.figureId.toString())
 
         if (gesture.type == GestureType.TAP) {
             if (clickedFigureEditor == null) {
@@ -71,7 +71,7 @@ class GestureHandler(
                 return DrawingEventHandler(strokeDrawer, graphDrawer, classifier)
             }
             if (currentFigureEditor == null) {
-                return ConnectingEventHandler(strokeDrawer, graphDrawer, classifier)
+                return DrawingEventHandler(strokeDrawer, graphDrawer, classifier)
             }
             // is it right???
             if (clickedFigureEditor.figureId != currentFigureEditor!!.figureId) return null
