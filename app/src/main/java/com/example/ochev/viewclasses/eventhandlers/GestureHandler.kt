@@ -114,6 +114,7 @@ class GestureHandler(
         if (graphDrawer.graphView.graphEditor.getFigureNodeByIdOrNull(currentFigureEditor!!.figureId) != null) {
             graphDrawer.graphView.graphEditor.getFigureNodeByIdOrNull(currentFigureEditor!!.figureId)!!.drawingInformation.drawingMode =
                 DrawingMode.EDIT
+            graphDrawer.graphView.graphEditor.maximazeVertexHeightById(currentFigureEditor!!.figureId)
         }
         buttonsHandler.enterEditing(clickedFigureEditor)
         graphDrawer.graphView.invalidate()
