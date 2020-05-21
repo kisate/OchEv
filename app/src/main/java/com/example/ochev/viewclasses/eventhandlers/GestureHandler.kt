@@ -94,8 +94,9 @@ class GestureHandler(
     private fun exitEditMode() {
         if (currentFigureEditor != null) {
             buttonsHandler.closeEditing()
-            graphDrawer.graphView.graphEditor.getFigureNodeByIdOrNull(currentFigureEditor!!.figureId)!!.drawingInformation.drawingMode =
-                DrawingMode.DEFAULT
+            if (graphDrawer.graphView.graphEditor.getFigureNodeByIdOrNull(currentFigureEditor!!.figureId) != null){
+                graphDrawer.graphView.graphEditor.getFigureNodeByIdOrNull(currentFigureEditor!!.figureId)!!.drawingInformation.drawingMode = DrawingMode.DEFAULT
+            }
             currentFigureEditor = null
             graphDrawer.graphView.invalidate()
         }
@@ -104,8 +105,9 @@ class GestureHandler(
     private fun enterEditMode(clickedFigureEditor: VertexFigureEditor) {
         exitEditMode()
         currentFigureEditor = clickedFigureEditor
-        graphDrawer.graphView.graphEditor.getFigureNodeByIdOrNull(currentFigureEditor!!.figureId)!!.drawingInformation.drawingMode =
-            DrawingMode.EDIT
+        if (graphDrawer.graphView.graphEditor.getFigureNodeByIdOrNull(currentFigureEditor!!.figureId) != null){
+            graphDrawer.graphView.graphEditor.getFigureNodeByIdOrNull(currentFigureEditor!!.figureId)!!.drawingInformation.drawingMode = DrawingMode.EDIT
+        }
         buttonsHandler.enterEditing(clickedFigureEditor)
         graphDrawer.graphView.invalidate()
         Log.d("Gestures", "Entered")
