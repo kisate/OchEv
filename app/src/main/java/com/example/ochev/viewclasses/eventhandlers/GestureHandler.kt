@@ -1,11 +1,16 @@
 package com.example.ochev.viewclasses.eventhandlers
 
+import android.text.Editable
+import android.text.TextWatcher
 import android.util.Log
 import android.view.MotionEvent
+import android.view.View
+import android.widget.EditText
 import com.example.ochev.baseclasses.dataclasses.Point
 import com.example.ochev.baseclasses.editors.vertexeditor.VertexFigureEditor
 import com.example.ochev.ml.Classifier
 import com.example.ochev.viewclasses.DrawingMode
+import com.example.ochev.viewclasses.SmartEditText
 import com.example.ochev.viewclasses.graphdrawers.GraphDrawer
 import com.example.ochev.viewclasses.buttonshandler.ButtonsHandler
 import com.example.ochev.viewclasses.strokedrawers.StrokeDrawer
@@ -22,6 +27,7 @@ class GestureHandler(
     private val strokeDrawer: StrokeDrawer,
     private val graphDrawer: GraphDrawer,
     private val buttonsHandler: ButtonsHandler,
+    private val editText: SmartEditText,
     private val classifier: Classifier
 ) {
 
@@ -43,6 +49,8 @@ class GestureHandler(
     }
 
     private fun chooseHandler(gesture: Gesture, event: MotionEvent): GestureEventHandler? {
+
+        if(gesture.type != GestureType.NONE) exitEditTextMode()
 
         if (gesture.type == GestureType.SCROLL_AND_ZOOM) return ScrollAndZoomEventHandler(
             strokeDrawer,
@@ -74,7 +82,6 @@ class GestureHandler(
             if (currentFigureEditor == null) {
                 return DrawingEventHandler(strokeDrawer, graphDrawer, classifier)
             }
-            // is it right???
 
             when {
                 currentFigureEditor!!.shaper.shapingBegins(Point(event)) -> {
@@ -98,6 +105,11 @@ class GestureHandler(
                     return DrawingEventHandler(strokeDrawer, graphDrawer, classifier)
                 }
             }
+        }
+
+        if (gesture.type == GestureType.LONG_TAP && clickedFigureEditor != null)
+        {
+            enterEditTextMode(clickedFigureEditor)
         }
 
         return null
@@ -125,5 +137,15 @@ class GestureHandler(
         buttonsHandler.enterEditing(clickedFigureEditor)
         graphDrawer.graphView.invalidate()
         Log.d("Gestures", "Entered")
+    }
+
+    private fun enterEditTextMode(clickedFigureEditor: VertexFigureEditor) {
+        editText.visibility = View.VISIBLE
+        editText.setVertexEditor(clickedFigureEditor)
+    }
+
+    private fun exitEditTextMode()
+    {
+        editText.visibility = View.GONE
     }
 }

@@ -31,7 +31,7 @@ class MainActivity : AppCompatActivity() {
         val buttonsHandler = ButtonsHandler(ButtonsContainer(clearButtonId, deleteButtonId, undoButtonId, forwardButtonId),graphDrawer.graphView)
 
         if (strokeInput == null) {
-            strokeInput = StrokeInputView(this, null, strokeDrawer, graphDrawer, buttonsHandler, classifier)
+            strokeInput = StrokeInputView(this, null, strokeDrawer, graphDrawer, buttonsHandler, findViewById(R.id.editText), classifier)
             strokeInput?.alpha = 0F
         }
 

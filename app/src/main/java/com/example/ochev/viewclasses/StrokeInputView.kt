@@ -6,6 +6,7 @@ import android.util.AttributeSet
 import android.util.Log
 import android.view.MotionEvent
 import android.view.View
+import android.widget.EditText
 import com.example.ochev.ml.Classifier
 import com.example.ochev.viewclasses.buttonshandler.ButtonsHandler
 import com.example.ochev.viewclasses.eventhandlers.GestureDetector
@@ -21,12 +22,13 @@ class StrokeInputView(
     strokeDrawer: StrokeDrawer,
     private val graphDrawer: GraphDrawer,
     buttonsHandler: ButtonsHandler,
+    editText: SmartEditText,
     classifier: Classifier
 ) :
     View(context, attrs) {
 
     private val gestureDetector = GestureDetector()
-    private val gestureHandler = GestureHandler(strokeDrawer, graphDrawer, buttonsHandler,classifier )
+    private val gestureHandler = GestureHandler(strokeDrawer, graphDrawer, buttonsHandler, editText, classifier)
 
     @SuppressLint("ClickableViewAccessibility")
     override fun onTouchEvent(event: MotionEvent): Boolean {
