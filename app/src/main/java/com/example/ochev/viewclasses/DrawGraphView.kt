@@ -15,6 +15,7 @@ class DrawGraphView(
 ) : View(context, attrs) {
 
     val graphEditor = GraphEditor()
+
     val figuresDrawer =
         FiguresDrawer()
 

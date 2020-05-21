@@ -2,26 +2,34 @@ package com.example.ochev.viewclasses.buttonshandler
 
 import android.view.View
 import com.example.ochev.baseclasses.editors.vertexeditor.VertexFigureEditor
+import com.example.ochev.viewclasses.DrawGraphView
+import com.example.ochev.viewclasses.DrawingMode
 import com.example.ochev.viewclasses.graphdrawers.GraphDrawer
 
 class ButtonsHandler (
     val buttonsContainer: ButtonsContainer,
-    private val graphDrawer: GraphDrawer
+    private val graphView: DrawGraphView
 ) {
 
     init{
         buttonsContainer.clearButton.setOnClickListener {
             closeEditing()
-            graphDrawer.clear()
-            graphDrawer.graphView.invalidate()
+            graphView.graphEditor.clear()
+            graphView.invalidate()
         }
+
         buttonsContainer.undoButton.setOnClickListener {
-            graphDrawer.graphView.graphEditor.history.revert()
-            graphDrawer.graphView.invalidate()
+            graphView.graphEditor.history.revert()
+            graphView.graphEditor.graph.figures.edges.forEach{it.drawingInformation.drawingMode = DrawingMode.DEFAULT}
+            graphView.graphEditor.graph.figures.vertices.forEach{it.drawingInformation.drawingMode = DrawingMode.DEFAULT}
+            graphView.invalidate()
         }
+
         buttonsContainer.forwardButton.setOnClickListener {
-            graphDrawer.graphView.graphEditor.history.undoRevert()
-            graphDrawer.graphView.invalidate()
+            graphView.graphEditor.history.undoRevert()
+            graphView.graphEditor.graph.figures.edges.forEach{it.drawingInformation.drawingMode = DrawingMode.DEFAULT}
+            graphView.graphEditor.graph.figures.vertices.forEach{it.drawingInformation.drawingMode = DrawingMode.DEFAULT}
+            graphView.invalidate()
         }
     }
 
@@ -34,7 +42,7 @@ class ButtonsHandler (
         buttonsContainer.deleteButton.setOnClickListener {
             figureEditor.graphEditor.deleteFigure(figureEditor.currentFigureState)
             closeEditing()
-            graphDrawer.graphView.invalidate()
+            graphView.invalidate()
         }
     }
 

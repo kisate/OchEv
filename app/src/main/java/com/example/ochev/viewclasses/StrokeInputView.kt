@@ -28,10 +28,6 @@ class StrokeInputView(
     private val gestureDetector = GestureDetector()
     private val gestureHandler = GestureHandler(strokeDrawer, graphDrawer, buttonsHandler,classifier )
 
-    fun clear() {
-        graphDrawer.clear()
-    }
-
     @SuppressLint("ClickableViewAccessibility")
     override fun onTouchEvent(event: MotionEvent): Boolean {
 
