@@ -145,6 +145,7 @@ class GestureHandler(
     private fun enterEditTextMode(clickedFigureEditor: VertexFigureEditor) {
         editText.visibility = View.VISIBLE
         editText.setVertexEditor(clickedFigureEditor, graphDrawer.graphView)
+        enterEditMode(clickedFigureEditor)
     }
 
     private fun exitEditTextMode()
