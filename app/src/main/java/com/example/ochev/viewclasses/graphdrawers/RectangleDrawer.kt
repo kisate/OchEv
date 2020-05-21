@@ -32,7 +32,7 @@ class RectangleDrawer : Drawer() {
         styles[DrawingMode.EDIT.ordinal].circuitPaint.strokeWidth = 10f
         styles[DrawingMode.EDIT.ordinal].circuitPaint.color = Color.BLACK
         /*
-            editing corner style of rectabgles
+            editing corner style of rectangles
          */
         styles[DrawingMode.EDIT_CORNERS.ordinal].circuitPaint.style = Paint.Style.FILL_AND_STROKE
         styles[DrawingMode.EDIT_CORNERS.ordinal].circuitPaint.strokeWidth = 3f
