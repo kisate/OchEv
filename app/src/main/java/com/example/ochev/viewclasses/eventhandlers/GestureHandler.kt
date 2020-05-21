@@ -33,12 +33,13 @@ class GestureHandler(
 
         if (gestureEventHandler == null) {
             gestureEventHandler = chooseHandler(gesture, event)
-            Log.d("Gestures", "AA")
         }
 
         if (gestureEventHandler != null) gestureEventHandler!!.handle(gesture, event)
 
         if (gesture.state == GestureState.END) gestureEventHandler = null
+
+        Log.d("Gestures", gesture.toString())
     }
 
     private fun chooseHandler(gesture: Gesture, event: MotionEvent): GestureEventHandler? {
