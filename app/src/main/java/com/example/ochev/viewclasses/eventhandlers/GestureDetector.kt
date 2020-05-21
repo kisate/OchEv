@@ -72,6 +72,11 @@ class GestureDetector {
             return currentGesture
         }
 
+        if (checkCanBeLongTap(event)) {
+            currentGesture = Gesture(GestureType.LONG_TAP, GestureState.START)
+            return currentGesture
+        }
+
         return Gesture()
     }
 
@@ -110,6 +115,6 @@ class GestureDetector {
 
     companion object {
         private const val TAP_THRESHOLD = 50f
-        private const val LONG_TAP_THRESHOLD = 800
+        private const val LONG_TAP_THRESHOLD = 500
     }
 }

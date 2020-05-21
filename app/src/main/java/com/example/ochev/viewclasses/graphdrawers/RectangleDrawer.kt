@@ -60,22 +60,12 @@ class RectangleDrawer : Drawer() {
         canvas?.drawPath(path, paint)
     }
 
-    override fun drawText(
-        figure: Figure,
-        drawingInformation: DrawingInformation,
-        canvas: Canvas?,
-        fontPaint: Paint
-    ) {
-        figure as Rectangle
-        val textDrawingInformation = TextDrawingInformation(figure, drawingInformation.text, fontPaint)
-        canvas?.drawText(drawingInformation.text, textDrawingInformation.x,  textDrawingInformation.y,  textDrawingInformation.paint)
-    }
-
     override fun draw(figure: Figure, drawingInformation: DrawingInformation, canvas: Canvas?) {
         figure as Rectangle
         drawRect(figure, canvas, styles[drawingInformation.currentStyle].fillPaint)
         drawRect(figure, canvas, styles[drawingInformation.currentStyle].circuitPaint)
-        drawText(figure, drawingInformation, canvas, styles[drawingInformation.currentStyle].fontPaint)
+        val textDrawingInformation = TextDrawingInformation(figure, drawingInformation.text, styles[drawingInformation.currentStyle].fontPaint)
+        canvas?.drawText(drawingInformation.text, 0, drawingInformation.text.length, textDrawingInformation.x, textDrawingInformation.y, textDrawingInformation.paint)
         if (drawingInformation.drawingMode == DrawingMode.EDIT) {
             for (point in figure.getMovingPoints()) {
                 canvas?.drawCircle(

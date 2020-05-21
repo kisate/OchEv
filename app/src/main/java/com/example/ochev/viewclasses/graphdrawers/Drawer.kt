@@ -3,6 +3,7 @@ package com.example.ochev.viewclasses.graphdrawers
 import android.graphics.Canvas
 import android.graphics.Paint
 import com.example.ochev.baseclasses.dataclasses.Figure
+import com.example.ochev.baseclasses.dataclasses.vertexfigures.VertexFigure
 import com.example.ochev.viewclasses.DrawingInformation
 
 abstract class Drawer {
@@ -20,10 +21,15 @@ abstract class Drawer {
         canvas: Canvas?
     )
 
-    abstract fun drawText(
+    fun drawText(
         figure: Figure,
         drawingInformation: DrawingInformation,
         canvas: Canvas?,
         fontPaint: Paint
-    )
+    ) {
+        if (figure is VertexFigure) {
+            val textDrawingInformation = TextDrawingInformation(figure, drawingInformation.text, fontPaint)
+            canvas?.drawText(drawingInformation.text, 0, drawingInformation.text.length, textDrawingInformation.x, textDrawingInformation.y, textDrawingInformation.paint)
+        }
+    }
 }
