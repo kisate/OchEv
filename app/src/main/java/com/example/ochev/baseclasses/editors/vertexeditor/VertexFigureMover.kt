@@ -8,7 +8,8 @@ class VertexFigureMover(val editor: VertexFigureEditor) {
     lateinit var lastPoint: Point
 
     fun moveBegins(point: Point): Boolean {
-        return if (editor.figureUnderControl.checkIfFigureIsCloseEnough(point)) {
+        editor.updateFigure()
+        return if (editor.currentFigureState.checkIfFigureIsCloseEnough(point)) {
             lastPoint = point
             true
         } else {
@@ -20,7 +21,7 @@ class VertexFigureMover(val editor: VertexFigureEditor) {
         val move = Vector(lastPoint, point)
         lastPoint = point
 
-        editor.changeFigure(editor.figureUnderControl.movedByVector(move))
+        editor.changeFigure(editor.currentFigureState.movedByVector(move))
     }
 
 }

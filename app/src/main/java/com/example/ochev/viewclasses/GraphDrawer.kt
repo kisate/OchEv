@@ -1,7 +1,10 @@
 package com.example.ochev.viewclasses
 
 import android.content.Context
-import android.graphics.*
+import android.graphics.Canvas
+import android.graphics.Color
+import android.graphics.Paint
+import android.graphics.Path
 import android.util.AttributeSet
 import android.util.Log
 import android.view.View
@@ -25,7 +28,7 @@ class DrawGraphView(
         canvas?.drawColor(Color.LTGRAY)
         for (figure in graphEditor.graph.figures.figuresSortedByHeights) {
             Log.i("ClassifyDbg", figure.toString())
-            figuresDrawer.draw(figure.first, graphEditor.drawingEditor.getDrawingInformation(figure.first), canvas)
+            figuresDrawer.draw(figure.figure, figure.drawingInformation, canvas)
         }
     }
 }

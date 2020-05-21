@@ -3,14 +3,15 @@ package com.example.ochev.baseclasses.editors.grapheditor
 import com.example.ochev.baseclasses.Figure
 import com.example.ochev.baseclasses.FigureNormalizer
 import com.example.ochev.baseclasses.dataclasses.*
+import com.example.ochev.baseclasses.dataclasses.nodes.EdgeNode
+import com.example.ochev.baseclasses.dataclasses.nodes.VertexFigureNode
 import com.example.ochev.baseclasses.edgefigures.Edge
-import com.example.ochev.baseclasses.editors.drawingfigureseditor.DrawingFiguresEditor
 import com.example.ochev.baseclasses.editors.vertexeditor.VertexFigureEditor
 import com.example.ochev.baseclasses.vertexfigures.VertexFigure
 
 class GraphEditor(
     var graph: Graph = Graph(),
-    val drawingEditor: DrawingFiguresEditor = DrawingFiguresEditor()
+    var figureCounter: Int = 0
 ) {
     fun deleteFigure(figure: Figure) {
         when (figure) {
@@ -21,50 +22,46 @@ class GraphEditor(
 
     private fun deleteEdge(edgeFigure: Edge) {
         val newGraph = Graph()
-        newGraph.figures.vertexes += graph.figures.vertexes
+        newGraph.figures.vertices += graph.figures.vertices
 
         graph.figures.edges.forEach {
-            if (it.first != edgeFigure) {
+            if (it.figure != edgeFigure) {
                 newGraph.figures.edges.add(it)
             }
         }
 
         graph = newGraph
-        drawingEditor.deleteFigure(edgeFigure)
     }
 
     private fun deleteVertex(vertexFigure: VertexFigure) {
         val newGraph = Graph()
 
-        graph.figures.vertexes.forEach {
-            if (it.first != vertexFigure) newGraph.figures.vertexes.add(it)
+        graph.figures.vertices.forEach {
+            if (it.figure != vertexFigure) newGraph.figures.vertices.add(it)
         }
 
         graph.figures.edges.forEach {
-            if (it.first.beginFigure != vertexFigure && it.first.endFigure != vertexFigure) {
+            if (it.figure.beginFigure != vertexFigure && it.figure.endFigure != vertexFigure) {
                 newGraph.figures.edges.add(it)
-            } else {
-                drawingEditor.deleteFigure(it.first)
             }
         }
 
-        drawingEditor.deleteFigure(vertexFigure)
         graph = newGraph
     }
 
     fun recalcEdgeHeights() {
         val fastHeightAcces: HashMap<VertexFigure, Int> = HashMap()
-        graph.figures.vertexes.forEach { fastHeightAcces[it.first] = it.second }
+        graph.figures.vertices.forEach { fastHeightAcces[it.figure] = it.height }
 
         val newGraph = Graph()
-        newGraph.figures.vertexes += graph.figures.vertexes
+        newGraph.figures.vertices += graph.figures.vertices
 
         graph.figures.edges.forEach {
             newGraph.figures.edges.add(
-                Pair(
-                    it.first, kotlin.math.min(
-                        fastHeightAcces[it.first.beginFigure]!!,
-                        fastHeightAcces[it.first.endFigure]!!
+                it.copy(
+                    height = kotlin.math.min(
+                        fastHeightAcces[it.figure.beginFigure]!!,
+                        fastHeightAcces[it.figure.endFigure]!!
                     )
                 )
             )
@@ -79,24 +76,35 @@ class GraphEditor(
         val result = normalizer.normaliseStrokes(information) ?: return
 
         when (result) {
-            is VertexFigure -> graph.figures.addVertex(result, graph.figures.maxHeight + 1)
-            is Edge -> graph.figures.addEdge(
-                result,
-                kotlin.math.min(
-                    graph.figures.getHeight(result.beginFigure),
-                    graph.figures.getHeight(result.endFigure)
+            is VertexFigure -> {
+                graph.figures.vertices.add(
+                    VertexFigureNode(
+                        id = figureCounter++,
+                        height = graph.figures.maxHeight + 1,
+                        figure = result
+                    )
                 )
-            )
+            }
+            is Edge -> {
+                graph.figures.edges.add(
+                    EdgeNode(
+                        id = figureCounter++,
+                        height = kotlin.math.min(
+                            graph.figures.getHeight(result.beginFigure),
+                            graph.figures.getHeight(result.endFigure)
+                        ),
+                        figure = result
+                    )
+                )
+            }
         }
-
-        drawingEditor.addFigure(result)
     }
 
     fun getFigureEditorByTouch(point: Point): VertexFigureEditor? {
         val bestFigure = graph.getFigureForEditing(point) ?: return null
         return when (bestFigure) {
-            is VertexFigure ->
-                VertexFigureEditor(InformationForVertexEditor(bestFigure, this))
+            is VertexFigureNode ->
+                VertexFigureEditor(InformationForVertexEditor(bestFigure.id, this))
             else -> null
         }
     }
@@ -109,44 +117,46 @@ class GraphEditor(
             else it
         }
 
-        newGraph.figures.edges += reconnectEdges(linker)
+        reconnectEdges(newGraph, linker)
 
-        graph.figures.vertexes.forEach {
-            if (it.first == old) newGraph.figures.addVertex(new, it.second)
-            else newGraph.figures.vertexes.add(it)
+        graph.figures.vertices.forEach {
+            if (it.figure == old) newGraph.figures.vertices.add(
+                it.copy(figure = new)
+            )
+            else newGraph.figures.vertices.add(it)
         }
 
         graph = newGraph
-        drawingEditor.changeFigure(old, new)
     }
 
     fun getLinker(changeFun: (VertexFigure) -> VertexFigure): HashMap<VertexFigure, VertexFigure> {
         val linker: HashMap<VertexFigure, VertexFigure> = HashMap()
-        graph.figures.vertexes.forEach { linker[it.first] = changeFun(it.first) }
+        graph.figures.vertices.forEach { linker[it.figure] = changeFun(it.figure) }
         return linker
     }
 
-    fun reconnectEdges(linker: HashMap<VertexFigure, VertexFigure>): MutableList<Pair<Edge, Int>> {
-        val result: MutableList<Pair<Edge, Int>> = ArrayList()
-        graph.figures.edges.forEach {
-            val newLine = Edge(
-                linker[it.first.beginFigure]!!,
-                linker[it.first.endFigure]!!
-            )
-            result.add(Pair(newLine, it.second))
-            drawingEditor.changeFigure(it.first, newLine)
-        }
-        return result
-    }
-
-    fun moveVertexes(
-        oldGraph: Graph,
+    fun reconnectEdges(
         newGraph: Graph,
         linker: HashMap<VertexFigure, VertexFigure>
     ) {
-        oldGraph.figures.vertexes.forEach {
-            newGraph.figures.addVertex(linker[it.first]!!, it.second)
-            drawingEditor.changeFigure(it.first, linker[it.first]!!)
+        graph.figures.edges.forEach {
+            newGraph.figures.edges.add(
+                it.copy(
+                    figure = Edge(
+                        linker[it.figure.beginFigure]!!,
+                        linker[it.figure.endFigure]!!
+                    )
+                )
+            )
+        }
+    }
+
+    fun moveVertexes(
+        newGraph: Graph,
+        linker: HashMap<VertexFigure, VertexFigure>
+    ) {
+        graph.figures.vertices.forEach {
+            newGraph.figures.vertices.add(it.copy(figure = linker[it.figure]!!))
         }
     }
 
@@ -154,10 +164,11 @@ class GraphEditor(
         val newGraph = Graph()
         val linker = getLinker { it.movedByVector(vector) }
 
-        newGraph.figures.edges += reconnectEdges(linker)
-        moveVertexes(graph, newGraph, linker)
+        reconnectEdges(newGraph, linker)
+        moveVertexes(newGraph, linker)
 
         graph = newGraph
+        recalcEdgeHeights()
     }
 
     fun zoomByPointAndFactor(point: Point, factor: Float) {
@@ -168,15 +179,23 @@ class GraphEditor(
                 .rescaledByFactor(factor)
         }
 
-        newGraph.figures.edges += reconnectEdges(linker)
-        moveVertexes(graph, newGraph, linker)
+        reconnectEdges(newGraph, linker)
+        moveVertexes(newGraph, linker)
 
         graph = newGraph
     }
 
     fun clear() {
         graph = Graph()
-        drawingEditor.clear()
+        figureCounter = 0
+    }
+
+    fun getVertexFigureNodeByIdOrNull(id: Int): VertexFigureNode? {
+        return graph.figures.vertices.firstOrNull { it.id == id }
+    }
+
+    fun getEdgeNodeByIdOrNull(id: Int): EdgeNode? {
+        return graph.figures.edges.firstOrNull { it.id == id }
     }
 
 
