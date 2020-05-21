@@ -9,6 +9,7 @@ import com.example.ochev.baseclasses.dataclasses.nodes.VertexFigureNode
 import com.example.ochev.baseclasses.edgefigures.Edge
 import com.example.ochev.baseclasses.editors.vertexeditor.VertexFigureEditor
 import com.example.ochev.baseclasses.vertexfigures.VertexFigure
+import com.example.ochev.viewclasses.DrawingMode
 
 class GraphEditor(
     var graph: Graph = Graph(),
@@ -18,7 +19,7 @@ class GraphEditor(
 
     fun setDrawInfoToDefault() {
         graph.figures.figuresSortedByHeights.forEach {
-            it.drawingInformation.setDefault()
+            it.drawingInformation.enterMode(DrawingMode.DEFAULT)
         }
     }
 

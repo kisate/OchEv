@@ -1,5 +1,7 @@
 package com.example.ochev.viewclasses
 
+import com.example.ochev.viewclasses.graphdrawers.FigureStyle
+
 enum class DrawingMode(value: Int){
     DEFAULT(0),
     EDIT(1),
@@ -9,8 +11,11 @@ enum class DrawingMode(value: Int){
 class DrawingInformation {
     var drawingMode = DrawingMode.DEFAULT
     var text = "TEST"
+    var currentStyle = DrawingMode.DEFAULT.ordinal
 
-    fun setDefault() {
-        drawingMode = DrawingMode.DEFAULT
+    fun enterMode(newDrawingMode: DrawingMode) {
+        drawingMode = newDrawingMode
+        currentStyle = newDrawingMode.ordinal
     }
+
 }

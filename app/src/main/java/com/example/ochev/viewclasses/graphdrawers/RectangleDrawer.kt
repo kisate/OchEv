@@ -22,6 +22,10 @@ class RectangleDrawer : Drawer() {
         styles[DrawingMode.DEFAULT.ordinal].circuitPaint.style = Paint.Style.STROKE
         styles[DrawingMode.DEFAULT.ordinal].circuitPaint.strokeWidth = 10f
         styles[DrawingMode.DEFAULT.ordinal].circuitPaint.color = Color.BLACK
+        styles[DrawingMode.DEFAULT.ordinal].fontPaint.style = Paint.Style.FILL
+        styles[DrawingMode.DEFAULT.ordinal].fontPaint.isAntiAlias = true
+        styles[DrawingMode.DEFAULT.ordinal].fontPaint.color = Color.BLACK
+
         /*
             editing style of rectangles
          */
@@ -31,12 +35,17 @@ class RectangleDrawer : Drawer() {
         styles[DrawingMode.EDIT.ordinal].circuitPaint.style = Paint.Style.STROKE
         styles[DrawingMode.EDIT.ordinal].circuitPaint.strokeWidth = 10f
         styles[DrawingMode.EDIT.ordinal].circuitPaint.color = Color.BLACK
+        styles[DrawingMode.EDIT.ordinal].fontPaint.style = Paint.Style.FILL
+        styles[DrawingMode.EDIT.ordinal].fontPaint.isAntiAlias = true
+        styles[DrawingMode.EDIT.ordinal].fontPaint.color = Color.parseColor("#FFC107")
         /*
             editing corner style of rectangles
          */
         styles[DrawingMode.EDIT_CORNERS.ordinal].circuitPaint.style = Paint.Style.FILL_AND_STROKE
         styles[DrawingMode.EDIT_CORNERS.ordinal].circuitPaint.strokeWidth = 3f
         styles[DrawingMode.EDIT_CORNERS.ordinal].circuitPaint.color = Color.parseColor("#FFC107")
+
+
     }
 
     fun drawRect(rect: Rectangle, canvas: Canvas?, paint: Paint) {
@@ -51,11 +60,23 @@ class RectangleDrawer : Drawer() {
         canvas?.drawPath(path, paint)
     }
 
+    override fun drawText(
+        figure: Figure,
+        drawingInformation: DrawingInformation,
+        canvas: Canvas?,
+        fontPaint: Paint
+    ) {
+        figure as Rectangle
+        val textDrawingInformation = TextDrawingInformation(figure, drawingInformation.text, fontPaint)
+        canvas?.drawText(drawingInformation.text, textDrawingInformation.x,  textDrawingInformation.y,  textDrawingInformation.paint)
+    }
+
     override fun draw(figure: Figure, drawingInformation: DrawingInformation, canvas: Canvas?) {
         figure as Rectangle
-        drawRect(figure, canvas, styles[currentStyle].fillPaint)
-        drawRect(figure, canvas, styles[currentStyle].circuitPaint)
-        if (drawingInformation.drawingMode == DrawingMode.EDIT)
+        drawRect(figure, canvas, styles[drawingInformation.currentStyle].fillPaint)
+        drawRect(figure, canvas, styles[drawingInformation.currentStyle].circuitPaint)
+        drawText(figure, drawingInformation, canvas, styles[drawingInformation.currentStyle].fontPaint)
+        if (drawingInformation.drawingMode == DrawingMode.EDIT) {
             for (point in figure.getMovingPoints()) {
                 canvas?.drawCircle(
                     point.x,
@@ -64,5 +85,7 @@ class RectangleDrawer : Drawer() {
                     styles[DrawingMode.EDIT_CORNERS.ordinal].circuitPaint
                 )
             }
+        }
+
     }
 }

@@ -21,16 +21,16 @@ class ButtonsHandler (
         buttonsContainer.undoButton.setOnClickListener {
             closeEditing()
             graphView.graphEditor.history.revert()
-            graphView.graphEditor.graph.figures.edges.forEach{it.drawingInformation.drawingMode = DrawingMode.DEFAULT}
-            graphView.graphEditor.graph.figures.vertices.forEach{it.drawingInformation.drawingMode = DrawingMode.DEFAULT}
+            graphView.graphEditor.graph.figures.edges.forEach{it.drawingInformation.enterMode(DrawingMode.DEFAULT)}
+            graphView.graphEditor.graph.figures.vertices.forEach{it.drawingInformation.enterMode(DrawingMode.DEFAULT)}
             graphView.invalidate()
         }
 
         buttonsContainer.forwardButton.setOnClickListener {
             closeEditing()
             graphView.graphEditor.history.undoRevert()
-            graphView.graphEditor.graph.figures.edges.forEach{it.drawingInformation.drawingMode = DrawingMode.DEFAULT}
-            graphView.graphEditor.graph.figures.vertices.forEach{it.drawingInformation.drawingMode = DrawingMode.DEFAULT}
+            graphView.graphEditor.graph.figures.edges.forEach{it.drawingInformation.enterMode(DrawingMode.DEFAULT)}
+            graphView.graphEditor.graph.figures.vertices.forEach{it.drawingInformation.enterMode(DrawingMode.DEFAULT)}
             graphView.invalidate()
         }
     }

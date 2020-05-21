@@ -1,11 +1,11 @@
 package com.example.ochev.viewclasses.graphdrawers
 
 import android.graphics.Canvas
+import android.graphics.Paint
 import com.example.ochev.baseclasses.Figure
 import com.example.ochev.viewclasses.DrawingInformation
 
 abstract class Drawer {
-    var currentStyle = 0
     val styles: MutableList<FigureStyle> = ArrayList(3)
 
     init {
@@ -14,23 +14,16 @@ abstract class Drawer {
         styles.add(FigureStyle())
     }
 
-    fun setFontWidth(width: Float) {
-        for (style in styles) {
-            style.fontPaint.strokeWidth = width
-        }
-    }
+    abstract fun draw(
+        figure: Figure,
+        drawingInformation: DrawingInformation,
+        canvas: Canvas?
+    )
 
-    fun setCircuitWidth(width: Float) {
-        for (style in styles) {
-            style.circuitPaint.strokeWidth = width
-        }
-    }
-
-    fun setFillWidth(width: Float) {
-        for (style in styles) {
-            style.fillPaint.strokeWidth = width
-        }
-    }
-
-    abstract fun draw(figure: Figure, drawingInformation: DrawingInformation, canvas: Canvas?)
+    abstract fun drawText(
+        figure: Figure,
+        drawingInformation: DrawingInformation,
+        canvas: Canvas?,
+        fontPaint: Paint
+    )
 }

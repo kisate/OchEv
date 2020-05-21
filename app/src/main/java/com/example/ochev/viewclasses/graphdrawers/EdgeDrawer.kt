@@ -43,7 +43,16 @@ class EdgeDrawer : Drawer() {
 
         path.moveTo(from.x, from.y)
         path.lineTo(to.x, to.y)
-        canvas?.drawPath(path, styles[currentStyle].circuitPaint)
+        canvas?.drawPath(path, styles[drawingInformation.currentStyle].circuitPaint)
 //        canvas?.drawTextOnPath("Test Text 1234567", path, 100f, 100f, styles[DrawingMode.DEFAULT.ordinal].fontPaint)
+    }
+
+    override fun drawText(
+        figure: Figure,
+        drawingInformation: DrawingInformation,
+        canvas: Canvas?,
+        fontPaint: Paint
+    ) {
+
     }
 }

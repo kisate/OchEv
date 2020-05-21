@@ -45,13 +45,13 @@ class CircleDrawer : Drawer() {
             figure.center.x,
             figure.center.y,
             figure.radius,
-            styles[currentStyle].fillPaint
+            styles[drawingInformation.currentStyle].fillPaint
         )
         canvas?.drawCircle(
             figure.center.x,
             figure.center.y,
             figure.radius,
-            styles[currentStyle].circuitPaint
+            styles[drawingInformation.currentStyle].circuitPaint
         )
         if (drawingInformation.drawingMode == DrawingMode.EDIT) {
             for (point in figure.getMovingPoints()) {
@@ -63,6 +63,15 @@ class CircleDrawer : Drawer() {
                 )
             }
         }
+
+    }
+
+    override fun drawText(
+        figure: Figure,
+        drawingInformation: DrawingInformation,
+        canvas: Canvas?,
+        fontPaint: Paint
+    ) {
 
     }
 }
