@@ -8,9 +8,5 @@ enum class DrawingMode(value: Int){
 
 class DrawingInformation {
     var drawingMode = DrawingMode.DEFAULT
-
-    fun set(newDrawingMode: DrawingMode){
-        drawingMode = newDrawingMode
-    }
-
+    var text = "TEST"
 }

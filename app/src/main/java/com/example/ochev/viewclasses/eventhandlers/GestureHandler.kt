@@ -101,8 +101,7 @@ class GestureHandler(
         if (currentFigureEditor != null) {
             buttonsHandler.closeEditing()
             if (graphDrawer.graphView.graphEditor.getFigureNodeByIdOrNull(currentFigureEditor!!.figureId) != null) {
-                graphDrawer.graphView.graphEditor.getFigureNodeByIdOrNull(currentFigureEditor!!.figureId)!!.drawingInformation.drawingMode =
-                    DrawingMode.DEFAULT
+                graphDrawer.graphView.graphEditor.getFigureNodeByIdOrNull(currentFigureEditor!!.figureId)!!.drawingInformation.drawingMode = DrawingMode.DEFAULT
             }
             currentFigureEditor = null
             graphDrawer.graphView.invalidate()
@@ -113,8 +112,8 @@ class GestureHandler(
         exitEditMode()
         currentFigureEditor = clickedFigureEditor
         if (graphDrawer.graphView.graphEditor.getFigureNodeByIdOrNull(currentFigureEditor!!.figureId) != null) {
-            graphDrawer.graphView.graphEditor.getFigureNodeByIdOrNull(currentFigureEditor!!.figureId)!!.drawingInformation.drawingMode =
-                DrawingMode.EDIT
+            graphDrawer.graphView.graphEditor.getFigureNodeByIdOrNull(currentFigureEditor!!.figureId)!!.drawingInformation.drawingMode = DrawingMode.EDIT
+
             graphDrawer.graphView.graphEditor.maximazeVertexHeightById(currentFigureEditor!!.figureId)
         }
         buttonsHandler.enterEditing(clickedFigureEditor)
