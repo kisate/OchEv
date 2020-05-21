@@ -75,7 +75,7 @@ class GestureHandler(
                 return DrawingEventHandler(strokeDrawer, graphDrawer, classifier)
             }
             // is it right???
-            if (clickedFigureEditor.figureId != currentFigureEditor!!.figureId) return null
+            if (clickedFigureEditor.figureId != currentFigureEditor!!.figureId) return DrawingEventHandler(strokeDrawer, graphDrawer, classifier)
 
             if (clickedFigureEditor.shaper.shapingBegins(Point(event))) {
                 return ShapingEventHandler(
