@@ -1,4 +1,4 @@
-package com.example.ochev.baseclasses.dataclasses.vertexfigures.normalizers
+package com.example.ochev.baseclasses.normalizers
 
 import com.example.ochev.baseclasses.dataclasses.InformationForNormalizer
 import com.example.ochev.baseclasses.dataclasses.Stroke.Companion.getStrokesRestrictions

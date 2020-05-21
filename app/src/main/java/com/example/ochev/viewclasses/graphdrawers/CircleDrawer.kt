@@ -3,7 +3,7 @@ package com.example.ochev.viewclasses.graphdrawers
 import android.graphics.Canvas
 import android.graphics.Color
 import android.graphics.Paint
-import com.example.ochev.baseclasses.Figure
+import com.example.ochev.baseclasses.dataclasses.Figure
 import com.example.ochev.baseclasses.dataclasses.vertexfigures.Circle
 import com.example.ochev.viewclasses.DrawingInformation
 import com.example.ochev.viewclasses.DrawingMode

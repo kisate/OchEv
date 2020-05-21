@@ -1,6 +1,4 @@
-package com.example.ochev.baseclasses
-
-import com.example.ochev.baseclasses.dataclasses.Point
+package com.example.ochev.baseclasses.dataclasses
 
 // Base object of our scheme
 

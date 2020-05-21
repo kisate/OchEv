@@ -5,7 +5,7 @@ import android.graphics.Color
 import android.graphics.Paint
 import android.graphics.Path
 import android.util.Log
-import com.example.ochev.baseclasses.Figure
+import com.example.ochev.baseclasses.dataclasses.Figure
 import com.example.ochev.baseclasses.dataclasses.vertexfigures.Rectangle
 import com.example.ochev.viewclasses.DrawingInformation
 import com.example.ochev.viewclasses.DrawingMode

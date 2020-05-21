@@ -1,6 +1,6 @@
 package com.example.ochev.baseclasses.dataclasses.nodes
 
-import com.example.ochev.baseclasses.Figure
+import com.example.ochev.baseclasses.dataclasses.Figure
 import com.example.ochev.viewclasses.DrawingInformation
 
 abstract class FigureNode {

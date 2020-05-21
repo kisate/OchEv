@@ -1,7 +1,5 @@
 package com.example.ochev.baseclasses.editors.grapheditor
 
-import com.example.ochev.baseclasses.Figure
-import com.example.ochev.baseclasses.FigureNormalizer
 import com.example.ochev.baseclasses.dataclasses.*
 import com.example.ochev.baseclasses.dataclasses.edgefigures.Edge
 import com.example.ochev.baseclasses.dataclasses.nodes.EdgeNode
@@ -9,6 +7,7 @@ import com.example.ochev.baseclasses.dataclasses.nodes.FigureNode
 import com.example.ochev.baseclasses.dataclasses.nodes.VertexFigureNode
 import com.example.ochev.baseclasses.dataclasses.vertexfigures.VertexFigure
 import com.example.ochev.baseclasses.editors.vertexeditor.VertexFigureEditor
+import com.example.ochev.baseclasses.normalizers.FigureNormalizer
 import com.example.ochev.viewclasses.DrawingMode
 
 class GraphEditor(
@@ -62,7 +61,8 @@ class GraphEditor(
 
 
     fun modifyByStrokes(information: InformationForNormalizer) {
-        val normalizer = FigureNormalizer()
+        val normalizer =
+            FigureNormalizer()
         val result = normalizer.normaliseStrokes(information) ?: return
         history.saveState()
 

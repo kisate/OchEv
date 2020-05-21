@@ -1,4 +1,4 @@
-package com.example.ochev.baseclasses.dataclasses.edgefigures.normalizers
+package com.example.ochev.baseclasses.normalizers
 
 import com.example.ochev.baseclasses.dataclasses.InformationForNormalizer
 import com.example.ochev.baseclasses.dataclasses.edgefigures.Edge

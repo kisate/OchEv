@@ -1,6 +1,6 @@
 package com.example.ochev.baseclasses.dataclasses.vertexfigures
 
-import com.example.ochev.baseclasses.Figure
+import com.example.ochev.baseclasses.dataclasses.Figure
 import com.example.ochev.baseclasses.dataclasses.Point
 import com.example.ochev.baseclasses.dataclasses.Vector
 import com.example.ochev.baseclasses.editors.vertexeditor.PointMover

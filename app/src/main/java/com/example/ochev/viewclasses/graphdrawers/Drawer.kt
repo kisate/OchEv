@@ -2,7 +2,7 @@ package com.example.ochev.viewclasses.graphdrawers
 
 import android.graphics.Canvas
 import android.graphics.Paint
-import com.example.ochev.baseclasses.Figure
+import com.example.ochev.baseclasses.dataclasses.Figure
 import com.example.ochev.viewclasses.DrawingInformation
 
 abstract class Drawer {
