@@ -18,7 +18,6 @@ data class FigureContainer(
             if (o1 == null) return -1
             if (o2 == null) return 1
 
-
             if (o1.figure is VertexFigure && o2.figure is Edge) return 1
             if (o1.figure is Edge && o2.figure is VertexFigure) return -1
             if (o1 is VertexFigureNode && o2 is VertexFigureNode) {

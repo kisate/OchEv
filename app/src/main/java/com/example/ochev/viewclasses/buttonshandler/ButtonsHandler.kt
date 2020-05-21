@@ -15,7 +15,14 @@ class ButtonsHandler (
             graphDrawer.clear()
             graphDrawer.graphView.invalidate()
         }
-
+        buttonsContainer.undoButton.setOnClickListener {
+            graphDrawer.graphView.graphEditor.history.revert()
+            graphDrawer.graphView.invalidate()
+        }
+        buttonsContainer.forwardButton.setOnClickListener {
+            graphDrawer.graphView.graphEditor.history.undoRevert()
+            graphDrawer.graphView.invalidate()
+        }
     }
 
     fun showDeleteButton() {
