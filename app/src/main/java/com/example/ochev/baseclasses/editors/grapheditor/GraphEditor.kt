@@ -16,6 +16,12 @@ class GraphEditor(
 ) {
     val history: GraphChangeHistory = GraphChangeHistory(graphEditor = this)
 
+    fun setDrawInfoToDefault() {
+        graph.figures.figuresSortedByHeights.forEach {
+            it.drawingInformation.setDefault()
+        }
+    }
+
     fun deleteFigure(figure: Figure) {
         history.saveState()
         when (figure) {
@@ -135,12 +141,14 @@ class GraphEditor(
         newGraph: Graph,
         linker: HashMap<VertexFigure, VertexFigure>
     ) {
+
         graph.figures.vertices.forEach {
             newGraph.figures.vertices.add(it.copy(figure = linker[it.figure]!!))
         }
     }
 
     fun moveGraphByVector(vector: Vector) {
+        history.moveByVector(vector)
         val newGraph = Graph()
         val linker = getLinker { it.movedByVector(vector) }
 

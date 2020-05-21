@@ -2,6 +2,7 @@ package com.example.ochev.baseclasses.editors.grapheditor
 
 import com.example.ochev.baseclasses.dataclasses.Graph
 import com.example.ochev.baseclasses.dataclasses.Point
+import com.example.ochev.baseclasses.dataclasses.Vector
 
 class GraphChangeHistory(
     val past: MutableList<Graph> = ArrayList(),
@@ -13,10 +14,12 @@ class GraphChangeHistory(
             if (future.isNotEmpty()) {
                 future.add(graphEditor.graph.copy())
                 graphEditor.graph = past.last()
+                graphEditor.setDrawInfoToDefault()
                 past.removeAt(past.lastIndex)
             } else {
                 future.add(graphEditor.graph.copy())
                 graphEditor.graph = past.last()
+                graphEditor.setDrawInfoToDefault()
                 past.removeAt(past.lastIndex)
             }
         }
@@ -45,6 +48,19 @@ class GraphChangeHistory(
         future.replaceAll {
             val editor = GraphEditor(it)
             editor.zoomByPointAndFactor(point, factor)
+            editor.graph
+        }
+    }
+
+    fun moveByVector(vector: Vector) {
+        past.replaceAll {
+            val editor = GraphEditor(it)
+            editor.moveGraphByVector(vector)
+            editor.graph
+        }
+        future.replaceAll {
+            val editor = GraphEditor(it)
+            editor.moveGraphByVector(vector)
             editor.graph
         }
     }
