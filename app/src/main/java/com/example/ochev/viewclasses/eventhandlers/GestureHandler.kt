@@ -59,7 +59,9 @@ class GestureHandler(
                 exitEditMode()
                 return null
             }
+
             enterEditMode(clickedFigureEditor)
+
             return null
         }
 
@@ -71,6 +73,9 @@ class GestureHandler(
             if (currentFigureEditor == null) {
                 return ConnectingEventHandler(strokeDrawer, graphDrawer, classifier)
             }
+            // is it right???
+            if (clickedFigureEditor.figureId != currentFigureEditor!!.figureId) return null
+
             if (clickedFigureEditor.shaper.shapingBegins(Point(event))) {
                 return ShapingEventHandler(
                     strokeDrawer,
@@ -94,8 +99,9 @@ class GestureHandler(
     private fun exitEditMode() {
         if (currentFigureEditor != null) {
             buttonsHandler.closeEditing()
-            if (graphDrawer.graphView.graphEditor.getFigureNodeByIdOrNull(currentFigureEditor!!.figureId) != null){
-                graphDrawer.graphView.graphEditor.getFigureNodeByIdOrNull(currentFigureEditor!!.figureId)!!.drawingInformation.drawingMode = DrawingMode.DEFAULT
+            if (graphDrawer.graphView.graphEditor.getFigureNodeByIdOrNull(currentFigureEditor!!.figureId) != null) {
+                graphDrawer.graphView.graphEditor.getFigureNodeByIdOrNull(currentFigureEditor!!.figureId)!!.drawingInformation.drawingMode =
+                    DrawingMode.DEFAULT
             }
             currentFigureEditor = null
             graphDrawer.graphView.invalidate()
@@ -105,8 +111,9 @@ class GestureHandler(
     private fun enterEditMode(clickedFigureEditor: VertexFigureEditor) {
         exitEditMode()
         currentFigureEditor = clickedFigureEditor
-        if (graphDrawer.graphView.graphEditor.getFigureNodeByIdOrNull(currentFigureEditor!!.figureId) != null){
-            graphDrawer.graphView.graphEditor.getFigureNodeByIdOrNull(currentFigureEditor!!.figureId)!!.drawingInformation.drawingMode = DrawingMode.EDIT
+        if (graphDrawer.graphView.graphEditor.getFigureNodeByIdOrNull(currentFigureEditor!!.figureId) != null) {
+            graphDrawer.graphView.graphEditor.getFigureNodeByIdOrNull(currentFigureEditor!!.figureId)!!.drawingInformation.drawingMode =
+                DrawingMode.EDIT
         }
         buttonsHandler.enterEditing(clickedFigureEditor)
         graphDrawer.graphView.invalidate()
