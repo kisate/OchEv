@@ -7,7 +7,7 @@ import com.example.ochev.baseclasses.dataclasses.InformationForNormalizer
 import com.example.ochev.ml.Classifier
 import com.example.ochev.ml.Utils
 import com.example.ochev.viewclasses.graphdrawers.GraphDrawer
-import com.example.ochev.viewclasses.StrokeDrawer
+import com.example.ochev.viewclasses.strokedrawers.StrokeDrawer
 import com.google.android.gms.tasks.Tasks
 import java.util.concurrent.Callable
 

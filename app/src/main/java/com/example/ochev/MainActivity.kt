@@ -6,11 +6,11 @@ import android.widget.FrameLayout
 import androidx.appcompat.app.AppCompatActivity
 import com.example.ochev.ml.Classifier
 import com.example.ochev.viewclasses.graphdrawers.GraphDrawer
-import com.example.ochev.viewclasses.StrokeDrawer
 import kotlinx.android.synthetic.main.activity_main.*
 import com.example.ochev.viewclasses.StrokeInputView
 import com.example.ochev.viewclasses.buttonshandler.ButtonsContainer
 import com.example.ochev.viewclasses.buttonshandler.ButtonsHandler
+import com.example.ochev.viewclasses.strokedrawers.StrokeDrawer
 import java.util.concurrent.ExecutorService
 import java.util.concurrent.Executors
 
