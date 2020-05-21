@@ -1,16 +1,15 @@
 package com.example.ochev.viewclasses.buttonshandler
 
+import android.os.SystemClock
 import android.view.View
 import android.widget.Button
 import com.example.ochev.baseclasses.editors.vertexeditor.VertexFigureEditor
 import com.example.ochev.viewclasses.GraphDrawer
 
 class ButtonsHandler (
-    clearButton: Button,
-    deleteButton: Button,
+    val buttonsContainer: ButtonsContainer,
     private val graphDrawer: GraphDrawer
 ) {
-    val buttonsContainer = ButtonsContainer(clearButton, deleteButton)
 
     init{
         buttonsContainer.clearButton.setOnClickListener {
@@ -18,6 +17,7 @@ class ButtonsHandler (
             graphDrawer.clear()
             graphDrawer.graphView.invalidate()
         }
+
     }
 
     fun showDeleteButton() {
