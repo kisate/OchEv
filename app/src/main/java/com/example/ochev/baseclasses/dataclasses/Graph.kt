@@ -31,16 +31,9 @@ data class Graph(
     }
 
     fun getClosestToPointEdgeFigureOrNull(point: Point): EdgeNode? {
-        if (figures.edges.isEmpty()) return null
-
-        val bestDist = figures.edges.minBy {
+        return figures.edges.minBy {
             it.figure.getDistanceToPoint(point)
-        }!!.figure.getDistanceToPoint(point)
-
-        val lookFor = figures.edges.partition {
-            abs(it.figure.getDistanceToPoint(point) - bestDist) <= 0.0001
-        }.first
-        return lookFor.maxBy { it.height }!!
+        }
     }
 
     fun getClosestToPointFigureOrNull(point: Point): FigureNode? {
