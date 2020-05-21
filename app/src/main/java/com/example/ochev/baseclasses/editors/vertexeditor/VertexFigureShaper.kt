@@ -11,6 +11,7 @@ class VertexFigureShaper(val editor: VertexFigureEditor) {
         val bestMover = movers.minBy { it.point.getDistanceToPoint(point) }!!
 
         return if (bestMover.point.getDistanceToPoint(point) <= editor.currentFigureState.getDistanceToCountTouch()) {
+            editor.graphEditor.history.saveState()
             currentMover = bestMover
             true
         } else {
