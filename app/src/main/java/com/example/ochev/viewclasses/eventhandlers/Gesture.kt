@@ -10,7 +10,8 @@ enum class GestureType {
     NONE,
     TAP,
     MOVE,
-    SCROLL_AND_ZOOM;
+    SCROLL_AND_ZOOM,
+    LONG_TAP;
 }
 
 enum class GestureState {

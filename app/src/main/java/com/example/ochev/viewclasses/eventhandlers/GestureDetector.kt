@@ -10,6 +10,8 @@ class GestureDetector {
     private var canBeTap = true
     private var firstPoint: Point? = null
     private var currentGesture = Gesture()
+    private var tapStartTime: Long? = null
+    private var canBeLongTap = false
 
     fun detect(event: MotionEvent): Gesture {
         return when (event.action) {
@@ -32,6 +34,7 @@ class GestureDetector {
         canBeTap = true
         firstPoint = Point(event)
         currentGesture = Gesture()
+        tapStartTime = System.currentTimeMillis()
     }
 
     private fun onTouchDown(event: MotionEvent): Gesture {
@@ -78,8 +81,10 @@ class GestureDetector {
 
 
         gesture = if (gesture.type != GestureType.NONE) Gesture(gesture.type, GestureState.END)
-        else if (canBeTap && checkCanBeTap(event)) Gesture(GestureType.TAP, GestureState.END)
-        else Gesture()
+        else if (canBeTap && checkCanBeTap(event)) {
+            if (checkCanBeLongTap(event)) Gesture(GestureType.LONG_TAP, GestureState.END)
+            else Gesture(GestureType.TAP, GestureState.END)
+        } else Gesture()
 
         gestureEnd(event)
 
@@ -94,6 +99,10 @@ class GestureDetector {
         return event.pointerCount == 2
     }
 
+    private fun checkCanBeLongTap(event: MotionEvent): Boolean {
+        return System.currentTimeMillis() - tapStartTime!! >= LONG_TAP_THRESHOLD
+    }
+
     private fun gestureEnd(event: MotionEvent) {
         firstPoint = null
         currentGesture = Gesture()
@@ -101,5 +110,6 @@ class GestureDetector {
 
     companion object {
         private const val TAP_THRESHOLD = 50f
+        private const val LONG_TAP_THRESHOLD = 800
     }
 }
