@@ -22,7 +22,6 @@ class ShapingEventHandler(
         when (gesture.state) {
             GestureState.START -> {
                 firstPointerId = event.getPointerId(0)
-                vertexFigureEditor.shaper.shapingBegins(point)
             }
             GestureState.IN_PROGRESS -> {
                 vertexFigureEditor.shaper.nextPoint(point)

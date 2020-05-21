@@ -75,22 +75,28 @@ class GestureHandler(
                 return DrawingEventHandler(strokeDrawer, graphDrawer, classifier)
             }
             // is it right???
-            if (clickedFigureEditor.figureId != currentFigureEditor!!.figureId) return DrawingEventHandler(strokeDrawer, graphDrawer, classifier)
 
-            if (clickedFigureEditor.shaper.shapingBegins(Point(event))) {
-                return ShapingEventHandler(
-                    strokeDrawer,
-                    graphDrawer,
-                    classifier,
-                    clickedFigureEditor
-                )
-            } else if (clickedFigureEditor.mover.moveBegins(Point(event))) {
-                return MovingEventFigureHandler(
-                    strokeDrawer,
-                    graphDrawer,
-                    classifier,
-                    clickedFigureEditor
-                )
+            when {
+                currentFigureEditor!!.shaper.shapingBegins(Point(event)) -> {
+                    return ShapingEventHandler(
+                        strokeDrawer,
+                        graphDrawer,
+                        classifier,
+                        currentFigureEditor!!
+                    )
+                }
+                currentFigureEditor!!.mover.moveBegins(Point(event)) -> {
+                    return MovingEventFigureHandler(
+                        strokeDrawer,
+                        graphDrawer,
+                        classifier,
+                        currentFigureEditor!!
+                    )
+                }
+                clickedFigureEditor.figureId != currentFigureEditor!!.figureId -> {
+                    exitEditMode()
+                    return DrawingEventHandler(strokeDrawer, graphDrawer, classifier)
+                }
             }
         }
 

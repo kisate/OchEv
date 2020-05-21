@@ -22,7 +22,6 @@ class MovingEventFigureHandler(
         when (gesture.state) {
             GestureState.START -> {
                 firstPointerId = event.getPointerId(0)
-                vertexFigureEditor.mover.moveBegins(point)
             }
             GestureState.IN_PROGRESS -> {
                 vertexFigureEditor.mover.nextPoint(point)
