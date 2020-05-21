@@ -9,7 +9,7 @@ import android.util.Log
 import android.view.View
 import com.example.ochev.baseclasses.dataclasses.Point
 import com.example.ochev.baseclasses.dataclasses.Stroke
-
+import com.example.ochev.viewclasses.strokedrawers.PathDrawer
 
 class DrawStrokeView(
     context: Context?,
@@ -24,47 +24,5 @@ class DrawStrokeView(
     }
 }
 
-class PathDrawer {
-    private val paint = Paint()
-
-    init {
-        paint.style = Paint.Style.STROKE
-        paint.strokeWidth = 10f
-    }
-
-    fun draw(path: Path, canvas: Canvas?) {
-        canvas?.drawPath(path, paint)
-    }
-
-    fun setWidth(width: Float) {
-        paint.strokeWidth = width
-    }
-
-}
-
-class StrokeDrawer(
-    val drawStrokeView: DrawStrokeView
-) {
-    val stroke = Stroke()
-
-    fun add(x: Float, y: Float) {
-        Log.i("StrokeDrawer", x.toString() + " " + y.toString())
-        val point = Point(x, y)
-        if (stroke.points.size == 0) {
-            drawStrokeView.path.moveTo(x, y)
-        }
-        else {
-            drawStrokeView.path.lineTo(x, y)
-        }
-        stroke.addPoint(point)
-        drawStrokeView.invalidate()
-    }
-
-    fun clear() {
-        drawStrokeView.path.reset()
-        stroke.points.clear()
-        drawStrokeView.invalidate()
-    }
 
 
-}
