@@ -7,18 +7,15 @@ class VertexFigureEditor(
     information: InformationForVertexEditor
 ) {
     val figureId: Int = information.id
-    lateinit var currentFigureState: VertexFigure
+    val currentFigureState: VertexFigure
+        get() = graphEditor.getVertexFigureNodeByIdOrNull(figureId)!!.figure
     val graphEditor = information.graphEditor
 
-    fun updateFigure() {
-        currentFigureState = graphEditor.getVertexFigureNodeByIdOrNull(figureId)!!.figure
-    }
     fun changeFigure(newFigure: VertexFigure) {
         graphEditor.replaceVertex(
-            graphEditor.getVertexFigureNodeByIdOrNull(figureId)!!.figure,
+            currentFigureState,
             newFigure
         )
-        currentFigureState = newFigure
     }
 
     val mover = VertexFigureMover(this)

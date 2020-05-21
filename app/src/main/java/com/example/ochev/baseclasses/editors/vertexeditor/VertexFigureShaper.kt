@@ -7,7 +7,6 @@ class VertexFigureShaper(val editor: VertexFigureEditor) {
     lateinit var currentMover: PointMover
 
     fun shapingBegins(point: Point): Boolean {
-        editor.updateFigure()
         val movers = editor.currentFigureState.getPointMovers()
         val bestMover = movers.minBy { it.point.getDistanceToPoint(point) }!!
 
