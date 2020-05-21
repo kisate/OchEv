@@ -4,6 +4,7 @@ import com.example.ochev.baseclasses.Figure
 import com.example.ochev.baseclasses.FigureNormalizer
 import com.example.ochev.baseclasses.dataclasses.*
 import com.example.ochev.baseclasses.dataclasses.nodes.EdgeNode
+import com.example.ochev.baseclasses.dataclasses.nodes.FigureNode
 import com.example.ochev.baseclasses.dataclasses.nodes.VertexFigureNode
 import com.example.ochev.baseclasses.edgefigures.Edge
 import com.example.ochev.baseclasses.editors.vertexeditor.VertexFigureEditor
@@ -198,5 +199,8 @@ class GraphEditor(
         return graph.figures.edges.firstOrNull { it.id == id }
     }
 
+    fun getFigureNodeByIdOrNull(id: Int): FigureNode? {
+        return getVertexFigureNodeByIdOrNull(id) ?: getEdgeNodeByIdOrNull(id)
+    }
 
 }

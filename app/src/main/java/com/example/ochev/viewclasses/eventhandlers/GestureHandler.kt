@@ -5,6 +5,7 @@ import android.view.MotionEvent
 import com.example.ochev.baseclasses.dataclasses.Point
 import com.example.ochev.baseclasses.editors.vertexeditor.VertexFigureEditor
 import com.example.ochev.ml.Classifier
+import com.example.ochev.viewclasses.DrawingMode
 import com.example.ochev.viewclasses.GraphDrawer
 import com.example.ochev.viewclasses.StrokeDrawer
 import com.example.ochev.viewclasses.buttonshandler.ButtonsHandler
@@ -48,14 +49,13 @@ class GestureHandler(
             classifier
         )
 
-        val clickedFigureEditor = graphDrawer.graphView.graphEditor.getFigureEditorByTouch(Point(event))
+        val clickedFigureEditor =
+            graphDrawer.graphView.graphEditor.getFigureEditorByTouch(Point(event))
 
         Log.d("Gestures", clickedFigureEditor.toString())
 
-        if (gesture.type == GestureType.TAP)
-        {
-            if (clickedFigureEditor == null)
-            {
+        if (gesture.type == GestureType.TAP) {
+            if (clickedFigureEditor == null) {
                 exitEditMode()
                 return null
             }
@@ -63,23 +63,28 @@ class GestureHandler(
             return null
         }
 
-        if (gesture.type == GestureType.MOVE)
-        {
-            if (clickedFigureEditor == null)
-            {
+        if (gesture.type == GestureType.MOVE) {
+            if (clickedFigureEditor == null) {
                 exitEditMode()
                 return DrawingEventHandler(strokeDrawer, graphDrawer, classifier)
             }
-            if (currentFigureEditor == null)
-            {
+            if (currentFigureEditor == null) {
                 return ConnectingEventHandler(strokeDrawer, graphDrawer, classifier)
             }
-            if (clickedFigureEditor.shaper.shapingBegins(Point(event)))
-            {
-                return ShapingEventHandler(strokeDrawer, graphDrawer, classifier, clickedFigureEditor)
-            } else if (clickedFigureEditor.mover.moveBegins(Point(event)))
-            {
-                return MovingEventFigureHandler(strokeDrawer, graphDrawer, classifier, clickedFigureEditor)
+            if (clickedFigureEditor.shaper.shapingBegins(Point(event))) {
+                return ShapingEventHandler(
+                    strokeDrawer,
+                    graphDrawer,
+                    classifier,
+                    clickedFigureEditor
+                )
+            } else if (clickedFigureEditor.mover.moveBegins(Point(event))) {
+                return MovingEventFigureHandler(
+                    strokeDrawer,
+                    graphDrawer,
+                    classifier,
+                    clickedFigureEditor
+                )
             }
         }
 
@@ -87,10 +92,10 @@ class GestureHandler(
     }
 
     private fun exitEditMode() {
-        if (currentFigureEditor != null)
-        {
+        if (currentFigureEditor != null) {
             buttonsHandler.closeEditing()
-            // graphDrawer.graphView.graphEditor.drawingEditor.changeFiguresDrawingInformation(currentFigureEditor!!.figureUnderControl, DrawingMode.DEFAULT)
+            graphDrawer.graphView.graphEditor.getFigureNodeByIdOrNull(currentFigureEditor!!.figureId)!!.drawingInformation.drawingMode =
+                DrawingMode.DEFAULT
             currentFigureEditor = null
             graphDrawer.graphView.invalidate()
         }
@@ -99,7 +104,8 @@ class GestureHandler(
     private fun enterEditMode(clickedFigureEditor: VertexFigureEditor) {
         exitEditMode()
         currentFigureEditor = clickedFigureEditor
-        // graphDrawer.graphView.graphEditor.drawingEditor.changeFiguresDrawingInformation(currentFigureEditor!!.figureUnderControl, DrawingMode.EDIT)
+        graphDrawer.graphView.graphEditor.getFigureNodeByIdOrNull(currentFigureEditor!!.figureId)!!.drawingInformation.drawingMode =
+            DrawingMode.EDIT
         buttonsHandler.enterEditing(clickedFigureEditor)
         graphDrawer.graphView.invalidate()
         Log.d("Gestures", "Entered")
