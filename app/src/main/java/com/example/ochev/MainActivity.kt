@@ -2,14 +2,10 @@ package com.example.ochev
 
 import android.os.Bundle
 import android.util.Log
-import android.view.View
-import android.widget.Button
 import android.widget.FrameLayout
-import android.widget.RelativeLayout
 import androidx.appcompat.app.AppCompatActivity
 import com.example.ochev.ml.Classifier
-import com.example.ochev.viewclasses.DrawingMode
-import com.example.ochev.viewclasses.GraphDrawer
+import com.example.ochev.viewclasses.graphdrawers.GraphDrawer
 import com.example.ochev.viewclasses.StrokeDrawer
 import kotlinx.android.synthetic.main.activity_main.*
 import com.example.ochev.viewclasses.StrokeInputView
@@ -30,7 +26,8 @@ class MainActivity : AppCompatActivity() {
         setContentView(R.layout.activity_main)
 
         val strokeDrawer = StrokeDrawer(drawStrokeId)
-        val graphDrawer = GraphDrawer(drawGraphId)
+        val graphDrawer =
+            GraphDrawer(drawGraphId)
         val buttonsHandler = ButtonsHandler(ButtonsContainer(clearButtonId, deleteButtonId, undoButtonId, forwardButtonId),graphDrawer)
 
         if (strokeInput == null) {

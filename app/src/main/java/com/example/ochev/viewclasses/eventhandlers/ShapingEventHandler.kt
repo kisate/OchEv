@@ -1,11 +1,10 @@
 package com.example.ochev.viewclasses.eventhandlers
 
-import android.util.Log
 import android.view.MotionEvent
 import com.example.ochev.baseclasses.dataclasses.Point
 import com.example.ochev.baseclasses.editors.vertexeditor.VertexFigureEditor
 import com.example.ochev.ml.Classifier
-import com.example.ochev.viewclasses.GraphDrawer
+import com.example.ochev.viewclasses.graphdrawers.GraphDrawer
 import com.example.ochev.viewclasses.StrokeDrawer
 
 class ShapingEventHandler(
