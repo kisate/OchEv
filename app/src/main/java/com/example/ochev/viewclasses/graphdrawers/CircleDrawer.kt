@@ -41,7 +41,7 @@ class CircleDrawer : Drawer() {
 
         figure as Circle
 
-        val drawCircle = canvas?.drawCircle(
+        canvas?.drawCircle(
             figure.center.x,
             figure.center.y,
             figure.radius,
@@ -53,7 +53,7 @@ class CircleDrawer : Drawer() {
             figure.radius,
             styles[currentStyle].circuitPaint
         )
-        if (drawingInformation.drawingMode == DrawingMode.EDIT)
+        if (drawingInformation.drawingMode == DrawingMode.EDIT) {
             for (point in figure.getMovingPoints()) {
                 canvas?.drawCircle(
                     point.x,
@@ -62,5 +62,7 @@ class CircleDrawer : Drawer() {
                     styles[DrawingMode.EDIT_CORNERS.ordinal].circuitPaint
                 )
             }
+        }
+
     }
 }
