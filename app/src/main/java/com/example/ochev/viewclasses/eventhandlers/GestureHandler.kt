@@ -1,10 +1,13 @@
 package com.example.ochev.viewclasses.eventhandlers
 
+import android.app.Activity
+import android.content.Context
 import android.text.Editable
 import android.text.TextWatcher
 import android.util.Log
 import android.view.MotionEvent
 import android.view.View
+import android.view.inputmethod.InputMethodManager
 import android.widget.EditText
 import com.example.ochev.baseclasses.dataclasses.Point
 import com.example.ochev.baseclasses.editors.vertexeditor.VertexFigureEditor
@@ -146,6 +149,13 @@ class GestureHandler(
 
     private fun exitEditTextMode()
     {
+        val view = (editText.context as Activity).currentFocus
+        if (view != null)
+        {
+            val imm = (editText.context as Activity).getSystemService(Context.INPUT_METHOD_SERVICE) as? InputMethodManager
+            imm?.hideSoftInputFromWindow(editText.windowToken, 0)
+            view.clearFocus()
+        }
         editText.visibility = View.GONE
     }
 }
