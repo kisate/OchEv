@@ -11,9 +11,11 @@ import com.example.ochev.baseclasses.editors.vertexeditor.VertexFigureEditor
 class SmartEditText(context: Context?, attrs: AttributeSet?) :
     EditText(context, attrs) {
     private var vertexFigureEditor: VertexFigureEditor? = null
+    private var drawGraphView: DrawGraphView? = null
 
-    fun setVertexEditor(newVertexFigureEditor: VertexFigureEditor) {
+    fun setVertexEditor(newVertexFigureEditor: VertexFigureEditor, drawGraphView: DrawGraphView) {
         vertexFigureEditor = newVertexFigureEditor
+        this.drawGraphView = drawGraphView
         setText(newVertexFigureEditor.graphEditor.getFigureNodeByIdOrNull(newVertexFigureEditor.figureId)!!.drawingInformation.text)
 
     }
@@ -29,6 +31,8 @@ class SmartEditText(context: Context?, attrs: AttributeSet?) :
         {
             Log.d("text", text.toString())
             vertexFigureEditor!!.graphEditor.getFigureNodeByIdOrNull(vertexFigureEditor!!.figureId)!!.drawingInformation.text = text.toString()
+            drawGraphView?.invalidate()
         }
     }
+
 }
