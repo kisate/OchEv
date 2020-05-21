@@ -99,7 +99,7 @@ data class Rhombus(
     }
 
     override fun getDistanceToCountTouch(): Float {
-        return leftCorner.getDistanceToPoint(upCorner) / 4
+        return leftCorner.getDistanceToPoint(upCorner) / 3.5f
     }
 }
 

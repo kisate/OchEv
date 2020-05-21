@@ -21,6 +21,4 @@ class VertexFigureShaper(val editor: VertexFigureEditor) {
     fun nextPoint(point: Point) {
         editor.changeFigure(currentMover.moveFun(point))
     }
-
-
 }

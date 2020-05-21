@@ -203,4 +203,11 @@ class GraphEditor(
         return getVertexFigureNodeByIdOrNull(id) ?: getEdgeNodeByIdOrNull(id)
     }
 
+    fun maximazeVertexHeightById(id: Int) {
+        val vertex = getVertexFigureNodeByIdOrNull(id)!!
+        graph.figures.vertices.remove(vertex)
+        graph.figures.vertices.add(vertex.copy(height = graph.figures.maxHeight + 1))
+    }
+
+
 }

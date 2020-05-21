@@ -69,7 +69,7 @@ data class Circle(
     }
 
     override fun getDistanceToCountTouch(): Float {
-        return max(radius / 4f, 20f)
+        return max(radius / 3.5f, 20f)
     }
 
 }
