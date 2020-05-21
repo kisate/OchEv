@@ -8,4 +8,4 @@ data class VertexFigureNode(
     override val drawingInformation: DrawingInformation = DrawingInformation(),
     override val figure: VertexFigure,
     val height: Int = 0
-) : FigureNode
+) : FigureNode()
