@@ -1,4 +1,4 @@
-package com.example.ochev.baseclasses.vertexfigures
+package com.example.ochev.baseclasses.dataclasses.vertexfigures
 
 import com.example.ochev.baseclasses.dataclasses.Point
 import com.example.ochev.baseclasses.dataclasses.Stroke
@@ -173,7 +173,7 @@ data class Rectangle(
         val dX = kotlin.math.abs(leftDownCorner.x - rightDownCorner.x)
         val dY = kotlin.math.abs(leftDownCorner.y - leftUpCorner.y)
 
-        return max(min(dX, dY) / 3.5f, 20f)
+        return max(min(dX, dY) / 4f, 20f)
     }
 
 

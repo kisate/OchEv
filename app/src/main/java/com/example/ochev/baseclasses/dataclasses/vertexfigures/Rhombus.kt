@@ -1,4 +1,4 @@
-package com.example.ochev.baseclasses.vertexfigures
+package com.example.ochev.baseclasses.dataclasses.vertexfigures
 
 import com.example.ochev.baseclasses.dataclasses.Point
 import com.example.ochev.baseclasses.dataclasses.Stroke
@@ -99,7 +99,7 @@ data class Rhombus(
     }
 
     override fun getDistanceToCountTouch(): Float {
-        return leftCorner.getDistanceToPoint(upCorner) / 3.5f
+        return leftCorner.getDistanceToPoint(upCorner) / 4f
     }
 }
 

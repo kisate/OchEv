@@ -2,9 +2,8 @@ package com.example.ochev.viewclasses.graphdrawers
 
 import android.graphics.Paint
 import android.graphics.Rect
-import com.example.ochev.baseclasses.Figure
-import com.example.ochev.baseclasses.vertexfigures.Rectangle
-import com.example.ochev.baseclasses.vertexfigures.VertexFigure
+import com.example.ochev.baseclasses.dataclasses.vertexfigures.Rectangle
+import com.example.ochev.baseclasses.dataclasses.vertexfigures.VertexFigure
 import kotlin.math.abs
 import kotlin.math.max
 import kotlin.math.min

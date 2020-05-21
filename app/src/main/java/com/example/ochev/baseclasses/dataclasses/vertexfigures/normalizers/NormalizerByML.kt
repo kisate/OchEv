@@ -1,10 +1,10 @@
-package com.example.ochev.baseclasses.vertexfigures.normalizers
+package com.example.ochev.baseclasses.dataclasses.vertexfigures.normalizers
 
 import com.example.ochev.baseclasses.dataclasses.InformationForNormalizer
 import com.example.ochev.baseclasses.dataclasses.Stroke.Companion.getStrokesRestrictions
 import com.example.ochev.baseclasses.dataclasses.Stroke.Companion.joinListOfStrokes
-import com.example.ochev.baseclasses.vertexfigures.VertexFigure
-import com.example.ochev.baseclasses.vertexfigures.VertexFigureBuilder
+import com.example.ochev.baseclasses.dataclasses.vertexfigures.VertexFigure
+import com.example.ochev.baseclasses.dataclasses.vertexfigures.VertexFigureBuilder
 
 class NormalizerByML {
     fun normalizeByML(information: InformationForNormalizer): VertexFigure? {

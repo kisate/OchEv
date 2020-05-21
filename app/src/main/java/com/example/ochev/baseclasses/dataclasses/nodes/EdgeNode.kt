@@ -1,6 +1,6 @@
 package com.example.ochev.baseclasses.dataclasses.nodes
 
-import com.example.ochev.baseclasses.edgefigures.Edge
+import com.example.ochev.baseclasses.dataclasses.edgefigures.Edge
 import com.example.ochev.viewclasses.DrawingInformation
 
 data class EdgeNode(

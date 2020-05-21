@@ -1,4 +1,4 @@
-package com.example.ochev.baseclasses.vertexfigures
+package com.example.ochev.baseclasses.dataclasses.vertexfigures
 
 import com.example.ochev.baseclasses.Figure
 import com.example.ochev.baseclasses.dataclasses.Point

@@ -1,11 +1,11 @@
 package com.example.ochev.baseclasses.dataclasses
 
 import com.example.ochev.baseclasses.Figure
+import com.example.ochev.baseclasses.dataclasses.edgefigures.Edge
 import com.example.ochev.baseclasses.dataclasses.nodes.EdgeNode
 import com.example.ochev.baseclasses.dataclasses.nodes.FigureNode
 import com.example.ochev.baseclasses.dataclasses.nodes.VertexFigureNode
-import com.example.ochev.baseclasses.edgefigures.Edge
-import com.example.ochev.baseclasses.vertexfigures.VertexFigure
+import com.example.ochev.baseclasses.dataclasses.vertexfigures.VertexFigure
 
 data class FigureContainer(
     val vertices: MutableList<VertexFigureNode> = ArrayList(),

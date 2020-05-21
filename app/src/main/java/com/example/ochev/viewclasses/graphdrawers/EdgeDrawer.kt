@@ -6,7 +6,7 @@ import android.graphics.Paint
 import android.graphics.Path
 import android.util.Log
 import com.example.ochev.baseclasses.Figure
-import com.example.ochev.baseclasses.edgefigures.Edge
+import com.example.ochev.baseclasses.dataclasses.edgefigures.Edge
 import com.example.ochev.viewclasses.DrawingInformation
 import com.example.ochev.viewclasses.DrawingMode
 

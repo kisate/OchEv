@@ -1,4 +1,4 @@
-package com.example.ochev.baseclasses.vertexfigures
+package com.example.ochev.baseclasses.dataclasses.vertexfigures
 
 enum class Vertexes(val value: Int) {
     CIRCLE(0),

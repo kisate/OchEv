@@ -1,4 +1,4 @@
-package com.example.ochev.baseclasses.vertexfigures
+package com.example.ochev.baseclasses.dataclasses.vertexfigures
 
 import com.example.ochev.baseclasses.dataclasses.Point
 import com.example.ochev.baseclasses.dataclasses.Stroke
@@ -69,7 +69,7 @@ data class Circle(
     }
 
     override fun getDistanceToCountTouch(): Float {
-        return max(radius / 3.5f, 20f)
+        return max(radius / 3f, 20f)
     }
 
 }

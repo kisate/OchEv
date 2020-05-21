@@ -1,10 +1,10 @@
 package com.example.ochev.baseclasses
 
 import com.example.ochev.baseclasses.dataclasses.InformationForNormalizer
-import com.example.ochev.baseclasses.edgefigures.Edge
-import com.example.ochev.baseclasses.edgefigures.normalizers.EdgeFigureNormalizer
-import com.example.ochev.baseclasses.vertexfigures.VertexFigure
-import com.example.ochev.baseclasses.vertexfigures.normalizers.NormalizerByML
+import com.example.ochev.baseclasses.dataclasses.edgefigures.Edge
+import com.example.ochev.baseclasses.dataclasses.edgefigures.normalizers.EdgeFigureNormalizer
+import com.example.ochev.baseclasses.dataclasses.vertexfigures.VertexFigure
+import com.example.ochev.baseclasses.dataclasses.vertexfigures.normalizers.NormalizerByML
 
 class FigureNormalizer {
 

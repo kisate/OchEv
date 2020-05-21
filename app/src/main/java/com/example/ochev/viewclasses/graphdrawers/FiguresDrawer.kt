@@ -2,9 +2,9 @@ package com.example.ochev.viewclasses.graphdrawers
 
 import android.graphics.Canvas
 import com.example.ochev.baseclasses.Figure
-import com.example.ochev.baseclasses.edgefigures.Edge
-import com.example.ochev.baseclasses.vertexfigures.Circle
-import com.example.ochev.baseclasses.vertexfigures.Rectangle
+import com.example.ochev.baseclasses.dataclasses.edgefigures.Edge
+import com.example.ochev.baseclasses.dataclasses.vertexfigures.Circle
+import com.example.ochev.baseclasses.dataclasses.vertexfigures.Rectangle
 import com.example.ochev.viewclasses.DrawingInformation
 
 class FiguresDrawer {

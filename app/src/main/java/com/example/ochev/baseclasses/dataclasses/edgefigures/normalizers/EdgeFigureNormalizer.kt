@@ -1,7 +1,7 @@
-package com.example.ochev.baseclasses.edgefigures.normalizers
+package com.example.ochev.baseclasses.dataclasses.edgefigures.normalizers
 
 import com.example.ochev.baseclasses.dataclasses.InformationForNormalizer
-import com.example.ochev.baseclasses.edgefigures.Edge
+import com.example.ochev.baseclasses.dataclasses.edgefigures.Edge
 
 class EdgeFigureNormalizer {
 

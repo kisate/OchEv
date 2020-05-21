@@ -4,7 +4,7 @@ import android.content.Context
 import android.graphics.Bitmap
 import android.util.Log
 import com.example.ochev.baseclasses.dataclasses.Stroke
-import com.example.ochev.baseclasses.vertexfigures.Vertexes
+import com.example.ochev.baseclasses.dataclasses.vertexfigures.Vertexes
 import com.google.android.gms.tasks.Task
 import com.google.android.gms.tasks.Tasks.call
 import org.tensorflow.lite.Interpreter
