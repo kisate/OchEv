@@ -17,6 +17,7 @@ class GraphEditor(
     val history: GraphChangeHistory = GraphChangeHistory(graphEditor = this)
 
     fun deleteFigure(figure: Figure) {
+        history.saveState()
         when (figure) {
             is VertexFigure -> deleteVertex(figure)
             is Edge -> deleteEdge(figure)
@@ -54,10 +55,9 @@ class GraphEditor(
 
 
     fun modifyByStrokes(information: InformationForNormalizer) {
-        history.saveState()
         val normalizer = FigureNormalizer()
-
         val result = normalizer.normaliseStrokes(information) ?: return
+        history.saveState()
 
         when (result) {
             is VertexFigure -> {
@@ -151,6 +151,7 @@ class GraphEditor(
     }
 
     fun zoomByPointAndFactor(point: Point, factor: Float) {
+        history.zoomByPointAndFactor(point, factor)
         val newGraph = Graph()
 
         val linker = getLinker {

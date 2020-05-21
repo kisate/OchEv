@@ -10,6 +10,10 @@ data class Graph(
     val figures: FigureContainer = FigureContainer()
 ) {
 
+    fun copy(): Graph {
+        return Graph(figures.copy())
+    }
+
     fun getFigureForEditing(point: Point): FigureNode? {
         val bestFigure = getClosestToPointFigureOrNull(point)
         return if (bestFigure == null || !bestFigure.figure.checkIfFigureIsCloseEnough(point)) null

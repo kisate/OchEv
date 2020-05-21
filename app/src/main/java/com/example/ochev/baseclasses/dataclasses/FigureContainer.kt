@@ -12,6 +12,13 @@ data class FigureContainer(
     val edges: MutableList<EdgeNode> = ArrayList()
 ) {
 
+    fun copy(): FigureContainer {
+        return FigureContainer(
+            MutableList(vertices.size) { vertices[it] },
+            MutableList(edges.size) { edges[it] }
+        )
+    }
+
     class ComparatorByHeights : Comparator<FigureNode> {
         override fun compare(o1: FigureNode?, o2: FigureNode?): Int {
             if (o1 == null && o2 == null) return 0
