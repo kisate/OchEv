@@ -9,4 +9,8 @@ enum class DrawingMode(value: Int){
 class DrawingInformation {
     var drawingMode = DrawingMode.DEFAULT
     var text = "TEST"
+
+    fun setDefault() {
+        drawingMode = DrawingMode.DEFAULT
+    }
 }
