@@ -21,24 +21,25 @@ class EdgeFigureNormalizer {
         val beginFigure = graph.getClosestToPointVertexFigureOrNull(beginPoint)
         if (
             beginFigure == null ||
-            !beginFigure.checkIfFigureIsCloseEnough(beginPoint)
+            !beginFigure.figure.checkIfFigureIsCloseEnough(beginPoint)
         ) return null
 
         val endFigure = graph.getClosestToPointVertexFigureOrNull(endPoint)
         if (
             endFigure == null ||
-            !endFigure.checkIfFigureIsCloseEnough(endPoint)
+            !endFigure.figure.checkIfFigureIsCloseEnough(endPoint)
         ) return null
 
         if (beginFigure == endFigure) return null
         for (edge in graph.figures.edges) {
-            val check = edge.first
-            if (check.beginFigure == beginFigure && check.endFigure == endFigure) return null
+            if (edge.figure.beginFigure == beginFigure.figure &&
+                edge.figure.endFigure == endFigure.figure
+            ) return null
         }
 
         return Edge(
-            beginFigure,
-            endFigure
+            beginFigure.figure,
+            endFigure.figure
         )
     }
 }

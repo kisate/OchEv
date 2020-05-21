@@ -6,12 +6,19 @@ import com.example.ochev.baseclasses.vertexfigures.VertexFigure
 class VertexFigureEditor(
     information: InformationForVertexEditor
 ) {
-    var figureUnderControl = information.figure
+    val figureId: Int = information.id
+    lateinit var currentFigureState: VertexFigure
     val graphEditor = information.graphEditor
 
+    fun updateFigure() {
+        currentFigureState = graphEditor.getVertexFigureNodeByIdOrNull(figureId)!!.figure
+    }
     fun changeFigure(newFigure: VertexFigure) {
-        graphEditor.replaceVertex(figureUnderControl, newFigure)
-        figureUnderControl = newFigure
+        graphEditor.replaceVertex(
+            graphEditor.getVertexFigureNodeByIdOrNull(figureId)!!.figure,
+            newFigure
+        )
+        currentFigureState = newFigure
     }
 
     val mover = VertexFigureMover(this)
