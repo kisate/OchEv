@@ -93,7 +93,10 @@ class GestureHandler(
                         currentFigureEditor!!
                     )
                 }
-                clickedFigureEditor.figureId != currentFigureEditor!!.figureId -> return DrawingEventHandler(strokeDrawer, graphDrawer, classifier)
+                clickedFigureEditor.figureId != currentFigureEditor!!.figureId -> {
+                    exitEditMode()
+                    return DrawingEventHandler(strokeDrawer, graphDrawer, classifier)
+                }
             }
         }
 
