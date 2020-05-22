@@ -3,8 +3,6 @@ package com.example.ochev.viewclasses.buttonshandler
 import android.view.View
 import com.example.ochev.baseclasses.editors.vertexeditor.VertexFigureEditor
 import com.example.ochev.viewclasses.DrawGraphView
-import com.example.ochev.viewclasses.DrawingMode
-import com.example.ochev.viewclasses.graphdrawers.GraphDrawer
 
 class ButtonsHandler (
     val buttonsContainer: ButtonsContainer,
@@ -20,17 +18,13 @@ class ButtonsHandler (
 
         buttonsContainer.undoButton.setOnClickListener {
             closeEditing()
-            graphView.graphEditor.history.revert()
-            graphView.graphEditor.graph.figures.edges.forEach{it.drawingInformation.enterMode(DrawingMode.DEFAULT)}
-            graphView.graphEditor.graph.figures.vertices.forEach{it.drawingInformation.enterMode(DrawingMode.DEFAULT)}
+            graphView.graphEditor.revertChange()
             graphView.invalidate()
         }
 
         buttonsContainer.forwardButton.setOnClickListener {
             closeEditing()
-            graphView.graphEditor.history.undoRevert()
-            graphView.graphEditor.graph.figures.edges.forEach{it.drawingInformation.enterMode(DrawingMode.DEFAULT)}
-            graphView.graphEditor.graph.figures.vertices.forEach{it.drawingInformation.enterMode(DrawingMode.DEFAULT)}
+            graphView.graphEditor.undoRevertChange()
             graphView.invalidate()
         }
     }

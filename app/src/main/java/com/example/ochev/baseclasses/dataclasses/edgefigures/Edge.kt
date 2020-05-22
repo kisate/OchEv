@@ -11,6 +11,25 @@ data class Edge(
     val beginFigure: VertexFigure,
     val endFigure: VertexFigure
 ) : Figure() {
+    val beginPoint: Point
+        get() {
+            return beginFigure.getMovingPoints().minBy {
+                it.getDistanceToPoint(endFigure.center)
+            }!!
+        }
+    val endPoint: Point
+        get() {
+            return endFigure.getMovingPoints().minBy {
+                it.getDistanceToPoint(beginFigure.center)
+            }!!
+        }
+
+    override val center: Point
+        get() = Point(
+            (beginPoint.x + endPoint.x) / 2,
+            (beginPoint.y + endPoint.y) / 2
+        )
+
     override fun checkIfFigureIsCloseEnough(point: Point): Boolean {
         return getDistanceToPoint(point) <= getDistanceToCountTouch()
     }

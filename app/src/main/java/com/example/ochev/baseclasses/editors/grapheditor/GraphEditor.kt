@@ -6,6 +6,8 @@ import com.example.ochev.baseclasses.dataclasses.nodes.EdgeNode
 import com.example.ochev.baseclasses.dataclasses.nodes.FigureNode
 import com.example.ochev.baseclasses.dataclasses.nodes.VertexFigureNode
 import com.example.ochev.baseclasses.dataclasses.vertexfigures.VertexFigure
+import com.example.ochev.baseclasses.editors.FigureEditor
+import com.example.ochev.baseclasses.editors.edgeeditor.EdgeEditor
 import com.example.ochev.baseclasses.editors.vertexeditor.VertexFigureEditor
 import com.example.ochev.baseclasses.normalizers.FigureNormalizer
 import com.example.ochev.viewclasses.DrawingMode
@@ -15,6 +17,16 @@ class GraphEditor(
     var figureCounter: Int = 0
 ) {
     val history: GraphChangeHistory = GraphChangeHistory(graphEditor = this)
+
+    fun revertChange() {
+        graph = history.revert()
+        setDrawInfoToDefault()
+    }
+
+    fun undoRevertChange() {
+        graph = history.undoRevert()
+        setDrawInfoToDefault()
+    }
 
     fun setDrawInfoToDefault() {
         graph.figures.figuresSortedByHeights.forEach {
@@ -87,11 +99,13 @@ class GraphEditor(
         }
     }
 
-    fun getFigureEditorByTouch(point: Point): VertexFigureEditor? {
+    fun getFigureEditorByTouch(point: Point): FigureEditor? {
         val bestFigure = graph.getFigureForEditing(point) ?: return null
         return when (bestFigure) {
             is VertexFigureNode ->
                 VertexFigureEditor(InformationForVertexEditor(bestFigure.id, this))
+            is EdgeNode ->
+                EdgeEditor(InformationForEdgeEditor(bestFigure.id, this))
             else -> null
         }
     }

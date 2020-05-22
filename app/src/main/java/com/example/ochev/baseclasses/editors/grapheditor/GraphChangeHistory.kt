@@ -9,28 +9,29 @@ class GraphChangeHistory(
     val future: MutableList<Graph> = ArrayList(),
     val graphEditor: GraphEditor
 ) {
-    fun revert() {
-        if (past.isNotEmpty()) {
+    fun revert(): Graph {
+        return if (past.isNotEmpty()) {
             if (future.isNotEmpty()) {
                 future.add(graphEditor.graph.copy())
-                graphEditor.graph = past.last()
-                graphEditor.setDrawInfoToDefault()
+                val value = past.last()
                 past.removeAt(past.lastIndex)
+                value
             } else {
                 future.add(graphEditor.graph.copy())
-                graphEditor.graph = past.last()
-                graphEditor.setDrawInfoToDefault()
+                val value = past.last()
                 past.removeAt(past.lastIndex)
+                value
             }
-        }
+        } else graphEditor.graph
     }
 
-    fun undoRevert() {
-        if (future.isNotEmpty()) {
+    fun undoRevert(): Graph {
+        return if (future.isNotEmpty()) {
             past.add(graphEditor.graph.copy())
-            graphEditor.graph = future.last()
+            val value = future.last()
             future.removeAt(future.lastIndex)
-        }
+            value
+        } else graphEditor.graph
     }
 
     fun saveState() {

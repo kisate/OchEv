@@ -2,14 +2,15 @@ package com.example.ochev.baseclasses.editors.vertexeditor
 
 import com.example.ochev.baseclasses.dataclasses.InformationForVertexEditor
 import com.example.ochev.baseclasses.dataclasses.vertexfigures.VertexFigure
+import com.example.ochev.baseclasses.editors.FigureEditor
 
 class VertexFigureEditor(
     information: InformationForVertexEditor
-) {
-    val figureId: Int = information.id
-    val currentFigureState: VertexFigure
+) : FigureEditor {
+    override val figureId: Int = information.id
+    override val currentFigureState: VertexFigure
         get() = graphEditor.getVertexFigureNodeByIdOrNull(figureId)!!.figure
-    val graphEditor = information.graphEditor
+    override val graphEditor = information.graphEditor
 
     fun changeFigure(newFigure: VertexFigure) {
         graphEditor.replaceVertex(
