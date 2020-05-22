@@ -14,7 +14,7 @@ data class Edge(
     val realBeginPoint: Point?
         get() {
             beginFigure.getIntersectionWithLineSegment(beginFigure.center, endFigure.center).let {
-                return if (it.size == 1) it.first()
+                return if (it.size >= 1) it.first()
                 else null
             }
         }
@@ -22,7 +22,7 @@ data class Edge(
     val realEndPoint: Point?
         get() {
             endFigure.getIntersectionWithLineSegment(beginFigure.center, endFigure.center).let {
-                return if (it.size == 1) it.first()
+                return if (it.size >= 1) it.first()
                 else null
             }
         }

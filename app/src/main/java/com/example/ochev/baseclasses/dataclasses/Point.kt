@@ -1,5 +1,6 @@
 package com.example.ochev.baseclasses.dataclasses
 
+import android.util.Log
 import android.view.MotionEvent
 import kotlin.math.abs
 import kotlin.math.min
@@ -52,20 +53,26 @@ data class Point(val x: Float = 0f, val y: Float = 0f) {
 
     companion object{
         fun intersectTwoSegments(p1: Point, p2: Point, p3: Point, p4: Point): Point? {
-            val v1 = Vector(p1, p2)
-            val v2 = Vector(p3, p4)
-            if (abs(v1.vectorProduct(v2)) <= 0.000001f){
-                return null;
+            Log.i("intersection.pro", p1.toString() + " " + p2.toString() + " " + p3.toString() + " " + p4.toString() )
+            val v12 = Vector(p1, p2)
+            val v34 = Vector(p3, p4)
+
+            if (abs(v12.vectorProduct(v34)) <= 0.001f){
+                return null
             }
 
-            val b = (p1.x*v1.y + p3.x*v1.x - p1.y*v1.x - p3.x*v1.y) / (v2.x*v1.y - v2.y*v1.x)
-            var a = 0f
-            if (abs(v1.x) <= 0.000001f)a = (b*v2.x + p3.x - p1.x)/v1.x
-            else a = (b*v2.y + p3.y - p1.y)/v1.y
+            Log.i("intersection.pro.dbg2", (p1.x*v12.y + p3.y*v12.x - p1.y*v12.x - p3.x*v12.y).toString() )
 
-            val interestingPoint = Point(p1.x + v1.x * a, p1.y + v1.y * a)
+            Log.i("intersection.pro.dbg3", (v34.x*v12.y - v34.y*v12.x).toString() )
 
-            if (abs(interestingPoint.getDistanceToPoint(p1) + interestingPoint.getDistanceToPoint(p2) - p1.getDistanceToPoint(p2)) <= 0.000001f ) {
+            val b = (p1.x*v12.y + p3.y*v12.x - p1.y*v12.x - p3.x*v12.y) / (v34.x*v12.y - v34.y*v12.x)
+
+            Log.i("intersection.pro.dbg4", b.toString() )
+
+
+            val interestingPoint = Point(p3.x + v34.x * b, p3.y + v34.y * b)
+
+            if (abs(p3.getDistanceToPoint(p4) - interestingPoint.getDistanceToPoint(p3) - interestingPoint.getDistanceToPoint(p4)) <= 0.001f) {
                 return interestingPoint
             }
             return null
