@@ -38,8 +38,8 @@ class EdgeDrawer : Drawer() {
         Log.i("EdgeDrawingDbg", figure.toString())
 
         val path = Path()
-        val from = figure.beginFigure.center
-        val to = figure.endFigure.center
+        val from = figure.beginPoint
+        val to = figure.endPoint
 
         path.moveTo(from.x, from.y)
         path.lineTo(to.x, to.y)
