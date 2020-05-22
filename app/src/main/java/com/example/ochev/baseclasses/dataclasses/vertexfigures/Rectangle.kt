@@ -24,6 +24,16 @@ data class Rectangle(
             return mutableListOf(leftDownCorner, leftUpCorner, rightUpCorner, rightDownCorner)
         }
 
+    override fun getIntersectionWithLineSegment(a: Point, b: Point): MutableList<Point> {
+        val result: MutableList<Point> = ArrayList()
+        val points = importantPoints
+        for (i in points.indices) {
+            Point.intersectTwoSegments(a, b, points[i], points[(i + 1) % points.size])
+                ?.let { result.add(it) }
+        }
+        return result
+    }
+
     override fun rescaledByFactor(factor: Float): VertexFigure {
         return this.copy(
             leftDownCorner = center.movedByVector(

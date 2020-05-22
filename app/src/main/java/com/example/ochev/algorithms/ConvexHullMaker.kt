@@ -1,4 +1,4 @@
-package com.example.ochev.algorithms.convexhull
+package com.example.ochev.algorithms
 
 import com.example.ochev.baseclasses.dataclasses.Stroke
 

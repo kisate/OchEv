@@ -26,6 +26,10 @@ data class Circle(
             return mutableListOf(leftPoint, upPoint, rightPoint, downPoint)
         }
 
+    override fun getIntersectionWithLineSegment(a: Point, b: Point): MutableList<Point> {
+
+    }
+
     override fun rescaledByFactor(factor: Float): VertexFigure {
         return this.copy(radius = radius * factor)
     }

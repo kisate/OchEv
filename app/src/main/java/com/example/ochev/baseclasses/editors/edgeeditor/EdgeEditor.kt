@@ -2,6 +2,7 @@ package com.example.ochev.baseclasses.editors.edgeeditor
 
 import com.example.ochev.baseclasses.dataclasses.Figure
 import com.example.ochev.baseclasses.dataclasses.InformationForEdgeEditor
+import com.example.ochev.baseclasses.dataclasses.nodes.FigureNode
 import com.example.ochev.baseclasses.editors.FigureEditor
 import com.example.ochev.baseclasses.editors.grapheditor.GraphEditor
 
@@ -12,4 +13,6 @@ class EdgeEditor(
     override val currentFigureState: Figure
         get() = graphEditor.getEdgeNodeByIdOrNull(figureId)!!.figure
     override val graphEditor: GraphEditor = information.graphEditor
+    override val figureNode: FigureNode
+        get() = graphEditor.getEdgeNodeByIdOrNull(figureId)!!
 }
