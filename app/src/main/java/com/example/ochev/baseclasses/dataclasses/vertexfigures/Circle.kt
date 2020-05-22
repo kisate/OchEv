@@ -1,5 +1,6 @@
 package com.example.ochev.baseclasses.dataclasses.vertexfigures
 
+import com.example.ochev.algorithms.QuadraticEquasionSolver
 import com.example.ochev.baseclasses.dataclasses.Point
 import com.example.ochev.baseclasses.dataclasses.Stroke
 import com.example.ochev.baseclasses.dataclasses.Stroke.Companion.getStrokesRestrictions
@@ -27,7 +28,38 @@ data class Circle(
         }
 
     override fun getIntersectionWithLineSegment(a: Point, b: Point): MutableList<Point> {
+        val result: MutableList<Point> = ArrayList()
 
+        val (maxX, maxY, minX, minY) = getStrokesRestrictions(
+            mutableListOf(Stroke(mutableListOf(a, b)))
+        )
+
+        if (maxX - minX <= 1) {
+            val solutions = QuadraticEquasionSolver.solveEquasion(
+                1f,
+                -2 * center.y,
+                maxX * maxX + center.x * center.x - 2 * maxX * center.x + center.y * center.y - radius * radius
+            )
+            solutions.forEach {
+                if (it in minY..maxY) result.add(Point(maxX, it))
+            }
+            return result
+        } else {
+            // line is y = kx + d
+            val k = (a.y - b.y) / (a.x - b.x)
+            val d = a.y - k * a.x
+
+            val solutions = QuadraticEquasionSolver.solveEquasion(
+                (1 + k * k),
+                -2 * center.x + 2 * k * d - 2 * k * center.y,
+                center.x * center.x + d * d - 2 * d * center.y + center.y * center.y - radius * radius
+            )
+            solutions.forEach {
+                if (it in minX..maxX && (k * it + d) in minY..maxY)
+                    result.add(Point(it, k * it + d))
+            }
+            return result
+        }
     }
 
     override fun rescaledByFactor(factor: Float): VertexFigure {

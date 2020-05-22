@@ -11,6 +11,21 @@ data class Edge(
     val beginFigure: VertexFigure,
     val endFigure: VertexFigure
 ) : Figure() {
+    val realBeginPoint: Point?
+        get() {
+            beginFigure.getIntersectionWithLineSegment(beginFigure.center, endFigure.center).let {
+                return if (it.size == 1) it.first()
+                else null
+            }
+        }
+
+    val realEndPoint: Point?
+        get() {
+            endFigure.getIntersectionWithLineSegment(beginFigure.center, endFigure.center).let {
+                return if (it.size == 1) it.first()
+                else null
+            }
+        }
 
 
     override val center: Point
