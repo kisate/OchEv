@@ -66,55 +66,57 @@ class GestureHandler(
 
         Log.d("Gestures", clickedFigureEditor?.figureId.toString())
 
-        if (gesture.type == GestureType.TAP) {
-            if (clickedFigureEditor == null) {
-                exitEditMode()
+        if (clickedFigureEditor is VertexFigureEditor?)
+        {
+            if (gesture.type == GestureType.TAP) {
+                if (clickedFigureEditor == null) {
+                    exitEditMode()
+                    return null
+                }
+
+                enterEditMode(clickedFigureEditor)
+
                 return null
             }
 
-            enterEditMode(clickedFigureEditor)
-
-            return null
-        }
-
-        if (gesture.type == GestureType.MOVE) {
-            if (clickedFigureEditor == null) {
-                exitEditMode()
-                return DrawingEventHandler(strokeDrawer, graphDrawer, classifier)
-            }
-            if (currentFigureEditor == null) {
-                return DrawingEventHandler(strokeDrawer, graphDrawer, classifier)
-            }
-
-            when {
-                currentFigureEditor!!.shaper.shapingBegins(Point(event)) -> {
-                    return ShapingEventHandler(
-                        strokeDrawer,
-                        graphDrawer,
-                        classifier,
-                        currentFigureEditor!!
-                    )
-                }
-                currentFigureEditor!!.mover.moveBegins(Point(event)) -> {
-                    return MovingEventFigureHandler(
-                        strokeDrawer,
-                        graphDrawer,
-                        classifier,
-                        currentFigureEditor!!
-                    )
-                }
-                clickedFigureEditor.figureId != currentFigureEditor!!.figureId -> {
+            if (gesture.type == GestureType.MOVE) {
+                if (clickedFigureEditor == null) {
                     exitEditMode()
                     return DrawingEventHandler(strokeDrawer, graphDrawer, classifier)
                 }
+                if (currentFigureEditor == null) {
+                    return DrawingEventHandler(strokeDrawer, graphDrawer, classifier)
+                }
+
+                when {
+                    currentFigureEditor!!.shaper.shapingBegins(Point(event)) -> {
+                        return ShapingEventHandler(
+                            strokeDrawer,
+                            graphDrawer,
+                            classifier,
+                            currentFigureEditor!!
+                        )
+                    }
+                    currentFigureEditor!!.mover.moveBegins(Point(event)) -> {
+                        return MovingEventFigureHandler(
+                            strokeDrawer,
+                            graphDrawer,
+                            classifier,
+                            currentFigureEditor!!
+                        )
+                    }
+                    clickedFigureEditor.figureId != currentFigureEditor!!.figureId -> {
+                        exitEditMode()
+                        return DrawingEventHandler(strokeDrawer, graphDrawer, classifier)
+                    }
+                }
+            }
+
+            if (gesture.type == GestureType.LONG_TAP && clickedFigureEditor != null)
+            {
+                enterEditTextMode(clickedFigureEditor)
             }
         }
-
-        if (gesture.type == GestureType.LONG_TAP && clickedFigureEditor != null)
-        {
-            enterEditTextMode(clickedFigureEditor)
-        }
-
         return null
     }
 
