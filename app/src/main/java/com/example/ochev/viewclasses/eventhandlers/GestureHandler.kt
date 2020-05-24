@@ -117,6 +117,7 @@ class GestureHandler(
                 enterEditTextMode(clickedFigureEditor)
             }
         }
+
         return null
     }
 

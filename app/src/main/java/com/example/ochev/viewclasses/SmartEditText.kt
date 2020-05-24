@@ -27,10 +27,8 @@ class SmartEditText(context: Context?, attrs: AttributeSet?) :
         lengthAfter: Int
     ) {
         super.onTextChanged(text, start, lengthBefore, lengthAfter)
-        Log.d("text", lengthAfter.toString())
         if (vertexFigureEditor != null)
         {
-            Log.d("text", text.toString())
             vertexFigureEditor!!.graphEditor.getFigureNodeByIdOrNull(vertexFigureEditor!!.figureId)!!.drawingInformation.text = text.toString()
             drawGraphView?.invalidate()
         }

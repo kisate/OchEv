@@ -2,6 +2,7 @@ package com.example.ochev.viewclasses.graphdrawers
 
 import android.graphics.Paint
 import android.graphics.Rect
+import android.util.Log
 import com.example.ochev.baseclasses.dataclasses.vertexfigures.Circle
 import com.example.ochev.baseclasses.dataclasses.vertexfigures.Rectangle
 import com.example.ochev.baseclasses.dataclasses.vertexfigures.VertexFigure
@@ -13,28 +14,16 @@ class TextDrawingInformation(
     val paint: Paint
 ) {
 
-    var coveringRect = Rect()
+    private var coveringRect = Rect()
     var x = 0f
     var y = 0f
 
     init {
         coveringRect = calcRect(figure)
-        paint.textSize = 0f
-        if (!text.isEmpty()) {
-            val rect = Rect()
-            while (true) {
-                paint.getTextBounds(text, 0, text.length, rect)
-                if (abs(coveringRect.width()) < abs(rect.width()) || abs(coveringRect.height()) < abs(
-                        rect.height()
-                    )
-                ) {
-                    break
-                }
-                paint.textSize++
-            }
-            val textWidth = paint.measureText(text)
-            x = figure.center.x - textWidth / 2
-            y = figure.center.y + abs(rect.height()) / 2
+        paint.textSize = 50f
+        if (text.isNotEmpty()) {
+            x = coveringRect.left.toFloat()
+            y = coveringRect.bottom.toFloat()
         }
     }
 
@@ -63,5 +52,28 @@ class TextDrawingInformation(
         }
     }
 
+    private fun buildText(paint: Paint, words: List<String>, width: Int): List<String>? {
+        val res = mutableListOf<String>()
+        var currentLine = ""
+        var added = false
+        for (word in words) {
+            if (paint.measureText("$currentLine $word") < width)
+            {
+                currentLine += word
+                currentLine += " "
+                added = true
+            }
+            else
+            {
+                res.add(currentLine)
+                currentLine = ""
+            }
+        }
+        res.add(currentLine)
+
+        if (!added) return null
+
+        return  res
+    }
 
 }
