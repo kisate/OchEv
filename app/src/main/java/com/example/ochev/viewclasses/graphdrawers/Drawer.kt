@@ -85,7 +85,7 @@ abstract class Drawer {
         drawingInformation: DrawingInformation
     ): StaticLayout {
         val paint = TextPaint(styles[drawingInformation.currentStyle].fontPaint)
-        paint.textSize = 50f
+        paint.textSize = DEFAULT_TEXT_SIZE
         var staticLayout = buildStaticLayout(figure, drawingInformation, paint)
         val bounds = calcRect(figure)
         while (staticLayout.height < abs(bounds.height())) {
@@ -125,5 +125,6 @@ abstract class Drawer {
 
     companion object {
         private const val MIN_BOUNDS_HEIGHT = 10f
+        private const val DEFAULT_TEXT_SIZE = 50f
     }
 }
