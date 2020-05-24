@@ -41,12 +41,15 @@ abstract class Drawer {
             if (drawingInformation.text.isNotEmpty()) {
 
                 val bounds = calcRect(figure)
-                val staticLayout = generateStaticLayout(figure, drawingInformation)
+                if (abs(bounds.height()) > MIN_BOUNDS_HEIGHT)
+                {
+                    val staticLayout = generateStaticLayout(figure, drawingInformation)
 
-                Log.d("text", staticLayout.height.toString())
+                    Log.d("text", staticLayout.height.toString())
 
-                canvas?.withTranslation(bounds.left.toFloat(), bounds.bottom.toFloat()) {
-                    staticLayout.draw(canvas)
+                    canvas?.withTranslation(bounds.left.toFloat(), bounds.bottom.toFloat()) {
+                        staticLayout.draw(canvas)
+                    }
                 }
             }
         }
@@ -118,5 +121,9 @@ abstract class Drawer {
             .setLineSpacing(0f, 1f)
             .setBreakStrategy(Layout.BREAK_STRATEGY_BALANCED)
             .build()
+    }
+
+    companion object {
+        private const val MIN_BOUNDS_HEIGHT = 10f
     }
 }
