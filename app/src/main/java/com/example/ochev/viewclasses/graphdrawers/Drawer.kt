@@ -89,13 +89,26 @@ abstract class Drawer {
         paint.textSize = DEFAULT_TEXT_SIZE
         val bounds = calcRect(figure)
 
-        while (approximateHeight(paint, drawingInformation, bounds) < abs(bounds.height()))
+        var count = 0
+
+        var approximatedHeight = approximateHeight(paint, drawingInformation, bounds)
+
+        paint.textSize = DEFAULT_TEXT_SIZE*abs(bounds.height())/approximatedHeight
+        approximatedHeight = approximateHeight(paint, drawingInformation, bounds)
+
+        while (approximatedHeight < abs(bounds.height()) && paint.textSize < MAX_TEXT_SIZE)
         {
-            paint.textSize++
+            if (paint.textSize * sqrt(abs(bounds.height())/approximatedHeight) - paint.textSize < 1) paint.textSize++
+            else paint.textSize*= sqrt(abs(bounds.height())/approximatedHeight)
+            approximatedHeight = approximateHeight(paint, drawingInformation, bounds)
+            count++
         }
-        while (approximateHeight(paint, drawingInformation, bounds) > abs(bounds.height()))
+        while (approximatedHeight > abs(bounds.height()) && paint.textSize > MIN_TEXT_SIZE)
         {
-            paint.textSize--
+            if (paint.textSize - paint.textSize* sqrt(abs(bounds.height())/approximatedHeight) < 1) paint.textSize--
+            else paint.textSize *= sqrt(abs(bounds.height())/approximatedHeight)
+            approximatedHeight = approximateHeight(paint, drawingInformation, bounds)
+            count++
         }
 
         paint.textSize = max(MIN_TEXT_SIZE, min(MAX_TEXT_SIZE, paint.textSize))
@@ -139,7 +152,7 @@ abstract class Drawer {
     companion object {
         private const val MIN_BOUNDS_HEIGHT = 10f
         private const val DEFAULT_TEXT_SIZE = 50f
-        private const val MAX_TEXT_SIZE = 200f
+        private const val MAX_TEXT_SIZE = 2000f
         private const val MIN_TEXT_SIZE = 0.5f
         private const val LINE_SIZE_COEFFICIENT = 1f
         private const val LINE_SIZE_COEFFICIENT_DELTA = 0.13f
