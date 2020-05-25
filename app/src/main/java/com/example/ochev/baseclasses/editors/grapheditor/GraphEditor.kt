@@ -72,10 +72,10 @@ class GraphEditor(
     }
 
 
-    fun modifyByStrokes(information: InformationForNormalizer) {
+    fun modifyByStrokes(information: InformationForNormalizer): Boolean {
         val normalizer =
             FigureNormalizer()
-        val result = normalizer.normaliseStrokes(information) ?: return
+        val result = normalizer.normaliseStrokes(information) ?: return false
         history.saveState()
 
         when (result) {
@@ -97,6 +97,8 @@ class GraphEditor(
                 )
             }
         }
+
+        return true
     }
 
     fun getFigureEditorByTouch(point: Point): FigureEditor? {
