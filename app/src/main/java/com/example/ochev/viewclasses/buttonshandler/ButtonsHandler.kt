@@ -46,5 +46,18 @@ class ButtonsHandler (
         buttonsContainer.deleteButton.visibility = View.INVISIBLE
     }
 
+    fun disableAll() {
+        buttonsContainer.forwardButton.isClickable = false
+        buttonsContainer.undoButton.isClickable = false
+        buttonsContainer.clearButton.isClickable = false
+        buttonsContainer.deleteButton.isClickable = false
+    }
+
+    fun activateAll() {
+        buttonsContainer.forwardButton.isClickable = true
+        buttonsContainer.undoButton.isClickable = true
+        buttonsContainer.clearButton.isClickable = true
+        buttonsContainer.deleteButton.isClickable = true
+    }
 
 }
