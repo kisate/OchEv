@@ -46,7 +46,13 @@ data class Edge(
     }
 
     override fun getDistanceToCountTouch(): Float {
-        return 30f
+        return 40f
     }
+
+    // returns 0 if begin is closer, 1 otherwise, -1 if both points are far away
+
+    /* fun getIndexOfClosestEnd(point: Point): Int {
+         val
+     }*/
 
 }

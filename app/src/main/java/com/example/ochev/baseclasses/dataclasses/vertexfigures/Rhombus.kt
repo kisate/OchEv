@@ -12,6 +12,9 @@ data class Rhombus(
     val leftCorner: Point = Point(),
     val upCorner: Point = Point()
 ) : VertexFigure() {
+    override val center: Point
+        get() = Point(upCorner.x, leftCorner.y)
+
     val rightCorner: Point
         get() = Point(
             upCorner.x - (leftCorner.x - upCorner.x),
@@ -50,8 +53,6 @@ data class Rhombus(
         )
     }
 
-    override val center: Point
-        get() = Point(upCorner.x, leftCorner.y)
 
     override fun movedByVector(vector: Vector): VertexFigure {
         return this.copy(
