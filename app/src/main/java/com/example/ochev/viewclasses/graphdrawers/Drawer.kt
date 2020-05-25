@@ -6,6 +6,7 @@ import android.text.*
 import android.util.Log
 import androidx.core.graphics.withTranslation
 import com.example.ochev.baseclasses.dataclasses.Figure
+import com.example.ochev.baseclasses.dataclasses.Vector
 import com.example.ochev.baseclasses.dataclasses.vertexfigures.Circle
 import com.example.ochev.baseclasses.dataclasses.vertexfigures.Rectangle
 import com.example.ochev.baseclasses.dataclasses.vertexfigures.VertexFigure
@@ -60,11 +61,17 @@ abstract class Drawer {
                 )
             }
             is Circle -> {
+
+                val component = (figure.radius / sqrt(2.0)).toFloat()
+
+                val leftBottomCorner = figure.center.movedByVector(Vector(-component, -component))
+                val rightTopCorner = figure.center.movedByVector(Vector(component, component))
+
                 return Rect(
-                    0,
-                    (2 * sin(Math.PI / 180f * 45f) * figure.radius).toInt(),
-                    (2 * cos(Math.PI / 180f * 45f) * figure.radius).toInt(),
-                    0
+                    leftBottomCorner.x.toInt(),
+                    rightTopCorner.y.toInt(),
+                    rightTopCorner.x.toInt(),
+                    leftBottomCorner.y.toInt()
                 )
 
             }
