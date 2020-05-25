@@ -1,13 +1,8 @@
 package com.example.ochev.viewclasses.graphdrawers
 
 import android.graphics.Canvas
-import android.graphics.Paint
 import android.graphics.Rect
-import android.text.Layout
-import android.text.StaticLayout
-import android.text.TextDirectionHeuristics
-import android.text.TextPaint
-import android.util.Log
+import android.text.*
 import androidx.core.graphics.withTranslation
 import com.example.ochev.baseclasses.dataclasses.Figure
 import com.example.ochev.baseclasses.dataclasses.vertexfigures.Circle
@@ -44,8 +39,6 @@ abstract class Drawer {
                 if (abs(bounds.height()) > MIN_BOUNDS_HEIGHT)
                 {
                     val staticLayout = generateStaticLayout(figure, drawingInformation)
-
-                    Log.d("text", staticLayout.height.toString())
 
                     canvas?.withTranslation(bounds.left.toFloat(), bounds.bottom.toFloat()) {
                         staticLayout.draw(canvas)
@@ -86,20 +79,20 @@ abstract class Drawer {
     ): StaticLayout {
         val paint = TextPaint(styles[drawingInformation.currentStyle].fontPaint)
         paint.textSize = DEFAULT_TEXT_SIZE
-        var staticLayout = buildStaticLayout(figure, drawingInformation, paint)
         val bounds = calcRect(figure)
-        while (staticLayout.height < abs(bounds.height())) {
+
+        while (paint.measureText(drawingInformation.text)/abs(bounds.width())*paint.textSize* HEURISTIC_CONST < abs(bounds.height()))
+        {
             paint.textSize++
-            staticLayout = buildStaticLayout(figure, drawingInformation, paint)
-            Log.d("text", staticLayout.height.toString())
         }
-        while (staticLayout.height > abs(bounds.height())) {
+        while (paint.measureText(drawingInformation.text)/abs(bounds.width())*paint.textSize* HEURISTIC_CONST > abs(bounds.height()))
+        {
             paint.textSize--
-            staticLayout = buildStaticLayout(figure, drawingInformation, paint)
-            Log.d("text", "${staticLayout.height.toString()} ${bounds.height()}")
         }
 
-        return staticLayout
+        paint.textSize = max(MIN_TEXT_SIZE, min(MAX_TEXT_SIZE, paint.textSize))
+
+        return buildStaticLayout(figure, drawingInformation, paint)
     }
 
     private fun buildStaticLayout(
@@ -126,5 +119,8 @@ abstract class Drawer {
     companion object {
         private const val MIN_BOUNDS_HEIGHT = 10f
         private const val DEFAULT_TEXT_SIZE = 50f
+        private const val MAX_TEXT_SIZE = 200f
+        private const val MIN_TEXT_SIZE = 10f
+        private const val HEURISTIC_CONST = 1.8f
     }
 }
