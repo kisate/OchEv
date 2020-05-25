@@ -160,6 +160,7 @@ class GestureHandler(
             v?.vibrate(100);
         }
 
+        buttonsHandler.disableAll()
     }
 
     private fun exitEditTextMode()
@@ -172,5 +173,6 @@ class GestureHandler(
             view.clearFocus()
         }
         editText.visibility = View.GONE
+        buttonsHandler.activateAll()
     }
 }
