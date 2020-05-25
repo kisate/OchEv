@@ -5,6 +5,8 @@ import com.example.ochev.baseclasses.dataclasses.Stroke
 import com.example.ochev.baseclasses.dataclasses.Stroke.Companion.getStrokesRestrictions
 import com.example.ochev.baseclasses.dataclasses.Vector
 import com.example.ochev.baseclasses.editors.vertexeditor.PointMover
+import kotlin.math.abs
+import kotlin.math.sign
 
 data class Rhombus(
     val leftCorner: Point = Point(),
@@ -67,7 +69,7 @@ data class Rhombus(
             side.vectorProduct(vectorToPoint)
         }
 
-        signes.forEach { if (it != signes.first()) return false }
+        signes.forEach { if (abs(it.sign - signes.first().sign) >= 0.00001) return false }
         return true
     }
 
@@ -117,6 +119,6 @@ fun VertexFigureBuilder.buildRhombus(strokes: MutableList<Stroke>): Rhombus {
     val (maxX, maxY, minX, minY) = getStrokesRestrictions(strokes)
     return Rhombus(
         leftCorner = Point(minX, (maxY + minY) / 2),
-        upCorner = Point(maxY, (maxX + minX) / 2)
+        upCorner = Point((maxX + minX) / 2, maxY)
     )
 }
