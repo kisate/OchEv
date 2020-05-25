@@ -2,21 +2,23 @@ package com.example.ochev.viewclasses.eventhandlers
 
 import android.app.Activity
 import android.content.Context
-import android.text.Editable
-import android.text.TextWatcher
+import android.os.Build
+import android.os.VibrationEffect
+import android.os.Vibrator
 import android.util.Log
 import android.view.MotionEvent
 import android.view.View
 import android.view.inputmethod.InputMethodManager
-import android.widget.EditText
+import androidx.core.content.ContextCompat.getSystemService
 import com.example.ochev.baseclasses.dataclasses.Point
 import com.example.ochev.baseclasses.editors.vertexeditor.VertexFigureEditor
 import com.example.ochev.ml.Classifier
 import com.example.ochev.viewclasses.DrawingMode
 import com.example.ochev.viewclasses.SmartEditText
-import com.example.ochev.viewclasses.graphdrawers.GraphDrawer
 import com.example.ochev.viewclasses.buttonshandler.ButtonsHandler
+import com.example.ochev.viewclasses.graphdrawers.GraphDrawer
 import com.example.ochev.viewclasses.strokedrawers.StrokeDrawer
+
 
 abstract class GestureEventHandler(
     private val strokeDrawer: StrokeDrawer,
@@ -149,6 +151,15 @@ class GestureHandler(
         editText.visibility = View.VISIBLE
         editText.setVertexEditor(clickedFigureEditor, graphDrawer.graphView)
         enterEditMode(clickedFigureEditor)
+
+        val v =
+             graphDrawer.graphView.context.getSystemService(Context.VIBRATOR_SERVICE) as Vibrator?
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            v?.vibrate(VibrationEffect.createOneShot(100, VibrationEffect.DEFAULT_AMPLITUDE));
+        } else {
+            v?.vibrate(100);
+        }
+
     }
 
     private fun exitEditTextMode()
