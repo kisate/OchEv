@@ -114,7 +114,7 @@ class GestureHandler(
                 }
             }
 
-            if (gesture.type == GestureType.LONG_TAP && clickedFigureEditor != null)
+            if (gesture.type == GestureType.LONG_TAP && gesture.state == GestureState.START && clickedFigureEditor != null)
             {
                 enterEditTextMode(clickedFigureEditor)
             }
