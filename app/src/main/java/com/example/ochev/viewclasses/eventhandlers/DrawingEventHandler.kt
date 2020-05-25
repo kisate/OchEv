@@ -2,6 +2,7 @@ package com.example.ochev.viewclasses.eventhandlers
 
 import android.util.Log
 import android.view.MotionEvent
+import android.widget.Toast
 import com.example.ochev.MainActivity
 import com.example.ochev.baseclasses.dataclasses.InformationForNormalizer
 import com.example.ochev.ml.Classifier
@@ -50,6 +51,7 @@ class DrawingEventHandler(
                 graphDrawer.modifyByStrokes(information)
             })
             .addOnSuccessListener {
+                if (!it) Toast.makeText(graphDrawer.graphView.context, "Could not recognize.", Toast.LENGTH_LONG).show()
                 graphDrawer.invalidate()
             }
             .addOnFailureListener { e -> Log.i("Modify", "Error modifying", e) }
