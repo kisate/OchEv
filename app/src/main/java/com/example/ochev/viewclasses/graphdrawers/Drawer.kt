@@ -82,15 +82,13 @@ abstract class Drawer {
         paint.textSize = DEFAULT_TEXT_SIZE
         val bounds = calcRect(figure)
 
-        while (paint.measureText(drawingInformation.text)/abs(bounds.width())*abs(paint.fontMetrics.top - paint.fontMetrics.bottom)* HEURISTIC_CONST < abs(bounds.height()))
+        while (approximateHeight(paint, drawingInformation, bounds) < abs(bounds.height()))
         {
             paint.textSize++
-            Log.d("text", "${paint.fontMetrics.top - paint.fontMetrics.bottom} ${paint.textSize}")
         }
-        while (paint.measureText(drawingInformation.text)/abs(bounds.width())*abs(paint.fontMetrics.top - paint.fontMetrics.bottom)* HEURISTIC_CONST > abs(bounds.height()))
+        while (approximateHeight(paint, drawingInformation, bounds) > abs(bounds.height()))
         {
             paint.textSize--
-            Log.d("text", "${paint.fontMetrics.top - paint.fontMetrics.bottom} ${paint.textSize}")
         }
 
         paint.textSize = max(MIN_TEXT_SIZE, min(MAX_TEXT_SIZE, paint.textSize))
@@ -119,11 +117,25 @@ abstract class Drawer {
             .build()
     }
 
+    private fun approximateHeight(paint: TextPaint, drawingInformation: DrawingInformation, bounds: Rect): Float {
+
+        val lines = paint.measureText(drawingInformation.text)/abs(bounds.width())
+
+        val fontSize = abs(paint.fontMetrics.ascent - paint.fontMetrics.descent)
+
+        val spacingHeight = ceil(lines)*fontSize* max(
+            MIN_LINE_SIZE_COEFFICIENT, (LINE_SIZE_COEFFICIENT - ceil(lines)* LINE_SIZE_COEFFICIENT_DELTA))
+
+        return fontSize*lines + spacingHeight
+    }
+
     companion object {
         private const val MIN_BOUNDS_HEIGHT = 10f
         private const val DEFAULT_TEXT_SIZE = 50f
         private const val MAX_TEXT_SIZE = 200f
-        private const val MIN_TEXT_SIZE = 10f
-        private const val HEURISTIC_CONST = 1.5f
+        private const val MIN_TEXT_SIZE = 0.5f
+        private const val LINE_SIZE_COEFFICIENT = 1f
+        private const val LINE_SIZE_COEFFICIENT_DELTA = 0.13f
+        private const val MIN_LINE_SIZE_COEFFICIENT = 0.2f
     }
 }
