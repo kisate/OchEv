@@ -3,6 +3,7 @@ package com.example.ochev.viewclasses.graphdrawers
 import android.graphics.Canvas
 import android.graphics.Rect
 import android.text.*
+import android.util.Log
 import androidx.core.graphics.withTranslation
 import com.example.ochev.baseclasses.dataclasses.Figure
 import com.example.ochev.baseclasses.dataclasses.vertexfigures.Circle
@@ -81,13 +82,15 @@ abstract class Drawer {
         paint.textSize = DEFAULT_TEXT_SIZE
         val bounds = calcRect(figure)
 
-        while (paint.measureText(drawingInformation.text)/abs(bounds.width())*paint.textSize* HEURISTIC_CONST < abs(bounds.height()))
+        while (paint.measureText(drawingInformation.text)/abs(bounds.width())*abs(paint.fontMetrics.top - paint.fontMetrics.bottom)* HEURISTIC_CONST < abs(bounds.height()))
         {
             paint.textSize++
+            Log.d("text", "${paint.fontMetrics.top - paint.fontMetrics.bottom} ${paint.textSize}")
         }
-        while (paint.measureText(drawingInformation.text)/abs(bounds.width())*paint.textSize* HEURISTIC_CONST > abs(bounds.height()))
+        while (paint.measureText(drawingInformation.text)/abs(bounds.width())*abs(paint.fontMetrics.top - paint.fontMetrics.bottom)* HEURISTIC_CONST > abs(bounds.height()))
         {
             paint.textSize--
+            Log.d("text", "${paint.fontMetrics.top - paint.fontMetrics.bottom} ${paint.textSize}")
         }
 
         paint.textSize = max(MIN_TEXT_SIZE, min(MAX_TEXT_SIZE, paint.textSize))
@@ -121,6 +124,6 @@ abstract class Drawer {
         private const val DEFAULT_TEXT_SIZE = 50f
         private const val MAX_TEXT_SIZE = 200f
         private const val MIN_TEXT_SIZE = 10f
-        private const val HEURISTIC_CONST = 1.8f
+        private const val HEURISTIC_CONST = 1.5f
     }
 }
