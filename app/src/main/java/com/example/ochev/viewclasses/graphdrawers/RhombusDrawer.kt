@@ -14,9 +14,6 @@ import com.example.ochev.viewclasses.DrawingMode
 class RhombusDrawer: Drawer() {
 
     init {
-        /*
-            default style of rectangles
-         */
         styles[DrawingMode.DEFAULT.ordinal].fillPaint.style = Paint.Style.FILL
         styles[DrawingMode.DEFAULT.ordinal].fillPaint.strokeWidth = 0f
         styles[DrawingMode.DEFAULT.ordinal].fillPaint.color = Color.WHITE
@@ -27,9 +24,6 @@ class RhombusDrawer: Drawer() {
         styles[DrawingMode.DEFAULT.ordinal].fontPaint.isAntiAlias = true
         styles[DrawingMode.DEFAULT.ordinal].fontPaint.color = Color.BLACK
 
-        /*
-            editing style of rectangles
-         */
         styles[DrawingMode.EDIT.ordinal].fillPaint.style = Paint.Style.FILL
         styles[DrawingMode.EDIT.ordinal].fillPaint.strokeWidth = 0f
         styles[DrawingMode.EDIT.ordinal].fillPaint.color = Color.GRAY
@@ -39,14 +33,10 @@ class RhombusDrawer: Drawer() {
         styles[DrawingMode.EDIT.ordinal].fontPaint.style = Paint.Style.FILL
         styles[DrawingMode.EDIT.ordinal].fontPaint.isAntiAlias = true
         styles[DrawingMode.EDIT.ordinal].fontPaint.color = Color.parseColor("#FFC107")
-        /*
-            editing corner style of rectangles
-         */
+
         styles[DrawingMode.EDIT_CORNERS.ordinal].circuitPaint.style = Paint.Style.FILL_AND_STROKE
         styles[DrawingMode.EDIT_CORNERS.ordinal].circuitPaint.strokeWidth = 3f
         styles[DrawingMode.EDIT_CORNERS.ordinal].circuitPaint.color = Color.parseColor("#FFC107")
-
-
     }
 
     fun drawRhombus(rhombus: Rhombus, canvas: Canvas?, paint: Paint) {
@@ -63,7 +53,6 @@ class RhombusDrawer: Drawer() {
         figure as Rhombus
         drawRhombus(figure, canvas, styles[drawingInformation.currentStyle].fillPaint)
         drawRhombus(figure, canvas, styles[drawingInformation.currentStyle].circuitPaint)
-        val textDrawingInformation = TextDrawingInformation(figure, drawingInformation.text, styles[drawingInformation.currentStyle].fontPaint)
         drawMultiLineText(figure, drawingInformation, canvas)
 //        canvas?.drawText(drawingInformation.text, 0, drawingInformation.text.length, textDrawingInformation.x, textDrawingInformation.y, textDrawingInformation.paint)
         if (drawingInformation.drawingMode == DrawingMode.EDIT) {
