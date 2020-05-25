@@ -112,7 +112,7 @@ abstract class Drawer {
                 paint,
                 bounds.width()
             )
-            .setAlignment(Layout.Alignment.ALIGN_NORMAL)
+            .setAlignment(Layout.Alignment.ALIGN_CENTER)
             .setTextDirection(TextDirectionHeuristics.LTR)
             .setLineSpacing(0f, 1f)
             .setBreakStrategy(Layout.BREAK_STRATEGY_BALANCED)
