@@ -14,10 +14,10 @@ class DrawGraphView(
     attrs: AttributeSet? = null
 ) : View(context, attrs) {
 
-    val figuresDrawer =
+    private val figuresDrawer =
         FiguresDrawer()
 
-    var currentGraph = GraphEditor()
+    private var currentGraph = GraphEditor()
 
     fun invalidate(graphEditor: GraphEditor) {
         currentGraph = graphEditor

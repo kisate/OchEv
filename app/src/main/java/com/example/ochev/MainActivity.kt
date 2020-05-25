@@ -26,8 +26,7 @@ class MainActivity : AppCompatActivity() {
         setContentView(R.layout.activity_main)
 
         val strokeDrawer = StrokeDrawer(drawStrokeId)
-        val graphDrawer =
-            GraphDrawer(drawGraphId)
+        graphDrawer.graphView = drawGraphId
         val buttonsHandler = ButtonsHandler(ButtonsContainer(clearButtonId, deleteButtonId, undoButtonId, forwardButtonId),graphDrawer)
 
         if (strokeInput == null) {
@@ -55,7 +54,16 @@ class MainActivity : AppCompatActivity() {
             }
     }
 
+    override fun onResume() {
+        super.onResume()
+        graphDrawer.invalidate()
+    }
+
     object Executor {
         val executorService: ExecutorService = Executors.newCachedThreadPool()
+    }
+
+    companion object {
+        val graphDrawer = GraphDrawer()
     }
 }
