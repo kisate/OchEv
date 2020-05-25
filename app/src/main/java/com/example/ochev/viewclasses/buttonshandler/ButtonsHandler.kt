@@ -3,29 +3,30 @@ package com.example.ochev.viewclasses.buttonshandler
 import android.view.View
 import com.example.ochev.baseclasses.editors.vertexeditor.VertexFigureEditor
 import com.example.ochev.viewclasses.DrawGraphView
+import com.example.ochev.viewclasses.graphdrawers.GraphDrawer
 
 class ButtonsHandler (
     val buttonsContainer: ButtonsContainer,
-    private val graphView: DrawGraphView
+    private val graphDrawer: GraphDrawer
 ) {
 
     init{
         buttonsContainer.clearButton.setOnClickListener {
             closeEditing()
-            graphView.graphEditor.clear()
-            graphView.invalidate()
+            graphDrawer.graphEditor.clear()
+            graphDrawer.invalidate()
         }
 
         buttonsContainer.undoButton.setOnClickListener {
             closeEditing()
-            graphView.graphEditor.revertChange()
-            graphView.invalidate()
+            graphDrawer.graphEditor.revertChange()
+            graphDrawer.invalidate()
         }
 
         buttonsContainer.forwardButton.setOnClickListener {
             closeEditing()
-            graphView.graphEditor.undoRevertChange()
-            graphView.invalidate()
+            graphDrawer.graphEditor.undoRevertChange()
+            graphDrawer.invalidate()
         }
     }
 
@@ -38,7 +39,7 @@ class ButtonsHandler (
         buttonsContainer.deleteButton.setOnClickListener {
             figureEditor.graphEditor.deleteFigure(figureEditor.currentFigureState)
             closeEditing()
-            graphView.invalidate()
+            graphDrawer.invalidate()
         }
     }
 

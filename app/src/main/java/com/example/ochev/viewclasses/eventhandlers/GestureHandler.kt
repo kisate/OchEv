@@ -64,7 +64,7 @@ class GestureHandler(
         )
 
         val clickedFigureEditor =
-            graphDrawer.graphView.graphEditor.getFigureEditorByTouch(Point(event))
+            graphDrawer.graphEditor.getFigureEditorByTouch(Point(event))
 
         Log.d("Gestures", clickedFigureEditor?.figureId.toString())
 
@@ -126,24 +126,24 @@ class GestureHandler(
     private fun exitEditMode() {
         if (currentFigureEditor != null) {
             buttonsHandler.closeEditing()
-            if (graphDrawer.graphView.graphEditor.getFigureNodeByIdOrNull(currentFigureEditor!!.figureId) != null) {
-                graphDrawer.graphView.graphEditor.getFigureNodeByIdOrNull(currentFigureEditor!!.figureId)!!.drawingInformation.enterMode(DrawingMode.DEFAULT)
+            if (graphDrawer.graphEditor.getFigureNodeByIdOrNull(currentFigureEditor!!.figureId) != null) {
+                graphDrawer.graphEditor.getFigureNodeByIdOrNull(currentFigureEditor!!.figureId)!!.drawingInformation.enterMode(DrawingMode.DEFAULT)
             }
             currentFigureEditor = null
-            graphDrawer.graphView.invalidate()
+            graphDrawer.invalidate()
         }
     }
 
     private fun enterEditMode(clickedFigureEditor: VertexFigureEditor) {
         exitEditMode()
         currentFigureEditor = clickedFigureEditor
-        if (graphDrawer.graphView.graphEditor.getFigureNodeByIdOrNull(currentFigureEditor!!.figureId) != null) {
-            graphDrawer.graphView.graphEditor.getFigureNodeByIdOrNull(currentFigureEditor!!.figureId)!!.drawingInformation.enterMode(DrawingMode.EDIT)
+        if (graphDrawer.graphEditor.getFigureNodeByIdOrNull(currentFigureEditor!!.figureId) != null) {
+            graphDrawer.graphEditor.getFigureNodeByIdOrNull(currentFigureEditor!!.figureId)!!.drawingInformation.enterMode(DrawingMode.EDIT)
 
-            graphDrawer.graphView.graphEditor.maximazeVertexHeightById(currentFigureEditor!!.figureId)
+            graphDrawer.graphEditor.maximazeVertexHeightById(currentFigureEditor!!.figureId)
         }
         buttonsHandler.enterEditing(clickedFigureEditor)
-        graphDrawer.graphView.invalidate()
+        graphDrawer.invalidate()
         Log.d("Gestures", "Entered")
     }
 

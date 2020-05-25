@@ -32,7 +32,7 @@ class ScrollAndZoomEventHandler(
                     secondPointerId = event.getPointerId(1)
                 }
                 GestureState.IN_PROGRESS -> {
-                    graphDrawer.graphView.graphEditor.moveGraphByVector(
+                    graphDrawer.graphEditor.moveGraphByVector(
                         Vector(
                             lastCenter!!,
                             calcCenter(event)
@@ -44,7 +44,7 @@ class ScrollAndZoomEventHandler(
                     if (factor >= ZOOM_THRESHOLD && graphDrawer.scale*factor < MAX_SCALE)
                     {
                         graphDrawer.scale *= factor
-                        graphDrawer.graphView.graphEditor.zoomByPointAndFactor(
+                        graphDrawer.graphEditor.zoomByPointAndFactor(
                             calcCenter(event),
                             factor
                         )
@@ -53,13 +53,13 @@ class ScrollAndZoomEventHandler(
                     if (factor <= 1/ ZOOM_THRESHOLD && graphDrawer.scale*factor > MIN_SCALE)
                     {
                         graphDrawer.scale *= factor
-                        graphDrawer.graphView.graphEditor.zoomByPointAndFactor(
+                        graphDrawer.graphEditor.zoomByPointAndFactor(
                             calcCenter(event),
                             factor
                         )
                     }
 
-                    graphDrawer.graphView.invalidate()
+                    graphDrawer.invalidate()
 
                     lastDistance = calcDistance(event)
                     lastCenter = calcCenter(event)

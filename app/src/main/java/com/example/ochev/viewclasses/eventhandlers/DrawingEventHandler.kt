@@ -41,7 +41,7 @@ class DrawingEventHandler(
         val information = InformationForNormalizer(
             classifier,
             bitmap,
-            graphDrawer.graphView.graphEditor.graph,
+            graphDrawer.graphEditor.graph,
             mutableListOf(strokeDrawer.stroke.copy())
         )
         Tasks.call(
@@ -50,7 +50,7 @@ class DrawingEventHandler(
                 graphDrawer.modifyByStrokes(information)
             })
             .addOnSuccessListener {
-                graphDrawer.graphView.invalidate()
+                graphDrawer.invalidate()
             }
             .addOnFailureListener { e -> Log.i("Modify", "Error modifying", e) }
     }

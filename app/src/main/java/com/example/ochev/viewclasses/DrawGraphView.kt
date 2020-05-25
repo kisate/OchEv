@@ -14,14 +14,19 @@ class DrawGraphView(
     attrs: AttributeSet? = null
 ) : View(context, attrs) {
 
-    val graphEditor = GraphEditor()
-
     val figuresDrawer =
         FiguresDrawer()
 
+    var currentGraph = GraphEditor()
+
+    fun invalidate(graphEditor: GraphEditor) {
+        currentGraph = graphEditor
+        invalidate()
+    }
+
     override fun onDraw(canvas: Canvas?) {
         canvas?.drawColor(Color.LTGRAY)
-        for (figure in graphEditor.graph.figures.figuresSortedByHeights) {
+        for (figure in currentGraph.graph.figures.figuresSortedByHeights) {
             Log.i("ClassifyDbg", figure.toString())
             figuresDrawer.draw(figure.figure, figure.drawingInformation, canvas)
         }

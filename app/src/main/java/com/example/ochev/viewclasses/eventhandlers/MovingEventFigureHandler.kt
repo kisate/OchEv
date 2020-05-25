@@ -9,10 +9,10 @@ import com.example.ochev.viewclasses.strokedrawers.StrokeDrawer
 
 class MovingEventFigureHandler(
     strokeDrawer: StrokeDrawer,
-    private val drawGraphView: GraphDrawer,
+    private val graphDrawer: GraphDrawer,
     classifier: Classifier,
     private val vertexFigureEditor: VertexFigureEditor
-) : GestureEventHandler(strokeDrawer, drawGraphView, classifier) {
+) : GestureEventHandler(strokeDrawer, graphDrawer, classifier) {
 
     private var firstPointerId: Int? = null
 
@@ -34,7 +34,7 @@ class MovingEventFigureHandler(
 
             }
         }
-        drawGraphView.graphView.invalidate()
+        graphDrawer.invalidate()
     }
 
 }
