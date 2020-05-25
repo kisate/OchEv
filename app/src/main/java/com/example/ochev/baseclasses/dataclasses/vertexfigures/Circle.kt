@@ -34,7 +34,7 @@ data class Circle(
             mutableListOf(Stroke(mutableListOf(a, b)))
         )
 
-        if (maxX - minX <= 1) {
+        if (maxX - minX <= 5) {
             val solutions = QuadraticEquationSolver.solveEquation(
                 1f,
                 -2 * center.y,
