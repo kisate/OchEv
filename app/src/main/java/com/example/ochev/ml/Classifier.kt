@@ -129,7 +129,7 @@ class Classifier(private val context: Context){
     }
 
     companion object {
-        private const val MODEL_FILE = "model5.tflite"
+        private const val MODEL_FILE = "model7.tflite"
 
         private const val TAG = "StrokeClassifier"
 
