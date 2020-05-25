@@ -9,6 +9,7 @@ import com.example.ochev.baseclasses.dataclasses.Figure
 import com.example.ochev.baseclasses.dataclasses.Vector
 import com.example.ochev.baseclasses.dataclasses.vertexfigures.Circle
 import com.example.ochev.baseclasses.dataclasses.vertexfigures.Rectangle
+import com.example.ochev.baseclasses.dataclasses.vertexfigures.Rhombus
 import com.example.ochev.baseclasses.dataclasses.vertexfigures.VertexFigure
 import com.example.ochev.viewclasses.DrawingInformation
 import kotlin.math.*
@@ -61,7 +62,6 @@ abstract class Drawer {
                 )
             }
             is Circle -> {
-
                 val component = (figure.radius / sqrt(2.0)).toFloat()
 
                 val leftBottomCorner = figure.center.movedByVector(Vector(-component, -component))
@@ -73,8 +73,10 @@ abstract class Drawer {
                     rightTopCorner.x.toInt(),
                     leftBottomCorner.y.toInt()
                 )
-
             }
+            //is Rhombus -> {
+                //TODO()
+           // }
             else -> {
                 return Rect()
             }
