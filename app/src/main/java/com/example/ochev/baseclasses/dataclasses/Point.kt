@@ -72,7 +72,8 @@ data class Point(val x: Float = 0f, val y: Float = 0f) {
 
             val interestingPoint = Point(p3.x + v34.x * b, p3.y + v34.y * b)
 
-            if (abs(p3.getDistanceToPoint(p4) - interestingPoint.getDistanceToPoint(p3) - interestingPoint.getDistanceToPoint(p4)) <= 0.001f) {
+            if (abs(p1.getDistanceToPoint(p2) - interestingPoint.getDistanceToPoint(p1) - interestingPoint.getDistanceToPoint(p2)) <= 0.001f &&
+                abs(p3.getDistanceToPoint(p4) - interestingPoint.getDistanceToPoint(p3) - interestingPoint.getDistanceToPoint(p4)) <= 0.001f) {
                 return interestingPoint
             }
             return null

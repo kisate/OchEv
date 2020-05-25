@@ -1,6 +1,6 @@
 package com.example.ochev.baseclasses.dataclasses.vertexfigures
 
-import com.example.ochev.algorithms.QuadraticEquasionSolver
+import com.example.ochev.algorithms.QuadraticEquationSolver
 import com.example.ochev.baseclasses.dataclasses.Point
 import com.example.ochev.baseclasses.dataclasses.Stroke
 import com.example.ochev.baseclasses.dataclasses.Stroke.Companion.getStrokesRestrictions
@@ -35,7 +35,7 @@ data class Circle(
         )
 
         if (maxX - minX <= 1) {
-            val solutions = QuadraticEquasionSolver.solveEquasion(
+            val solutions = QuadraticEquationSolver.solveEquation(
                 1f,
                 -2 * center.y,
                 maxX * maxX + center.x * center.x - 2 * maxX * center.x + center.y * center.y - radius * radius
@@ -49,7 +49,7 @@ data class Circle(
             val k = (a.y - b.y) / (a.x - b.x)
             val d = a.y - k * a.x
 
-            val solutions = QuadraticEquasionSolver.solveEquasion(
+            val solutions = QuadraticEquationSolver.solveEquation(
                 (1 + k * k),
                 -2 * center.x + 2 * k * d - 2 * k * center.y,
                 center.x * center.x + d * d - 2 * d * center.y + center.y * center.y - radius * radius

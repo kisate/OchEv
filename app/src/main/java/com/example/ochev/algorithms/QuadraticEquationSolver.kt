@@ -3,9 +3,9 @@ package com.example.ochev.algorithms
 import kotlin.math.abs
 import kotlin.math.sqrt
 
-class QuadraticEquasionSolver {
+class QuadraticEquationSolver {
     companion object {
-        fun solveEquasion(a: Float, b: Float, c: Float): MutableList<Float> {
+        fun solveEquation(a: Float, b: Float, c: Float): MutableList<Float> {
             if (abs(a) <= 0.00001) {
                 return if (abs(b) <= 0.00001) ArrayList()
                 else mutableListOf(-c / b)

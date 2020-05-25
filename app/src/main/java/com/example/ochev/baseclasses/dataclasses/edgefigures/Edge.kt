@@ -1,5 +1,6 @@
 package com.example.ochev.baseclasses.dataclasses.edgefigures
 
+import android.util.Log
 import com.example.ochev.baseclasses.dataclasses.Figure
 import com.example.ochev.baseclasses.dataclasses.Point
 import com.example.ochev.baseclasses.dataclasses.vertexfigures.VertexFigure
@@ -14,6 +15,7 @@ data class Edge(
     val realBeginPoint: Point?
         get() {
             beginFigure.getIntersectionWithLineSegment(beginFigure.center, endFigure.center).let {
+                Log.i("EdgeDebugBegin", it.toString())
                 return if (it.size >= 1) it.first()
                 else null
             }
@@ -22,6 +24,7 @@ data class Edge(
     val realEndPoint: Point?
         get() {
             endFigure.getIntersectionWithLineSegment(beginFigure.center, endFigure.center).let {
+                Log.i("EdgeDebugEnd", it.toString())
                 return if (it.size >= 1) it.first()
                 else null
             }
