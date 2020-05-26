@@ -13,16 +13,13 @@ class VertexFigureEditor(
 ) : FigureEditor {
     override val figureId: Int = information.id
     override val currentFigureState: VertexFigure
-        get() = graphEditor.getVertexFigureNodeByIdOrNull(figureId)!!.figure
+        get() = graphEditor.graph.getVertexFigureNodeByIdOrNull(figureId)!!.figure
     override val graphEditor = information.graphEditor
     override val figureNode: FigureNode
-        get() = graphEditor.getVertexFigureNodeByIdOrNull(figureId)!!
+        get() = graphEditor.graph.getVertexFigureNodeByIdOrNull(figureId)!!
 
     fun changeFigure(newFigure: VertexFigure) {
-        graphEditor.replaceVertex(
-            currentFigureState,
-            newFigure
-        )
+        graphEditor.replaceVertex(figureId, newFigure)
     }
 
     fun createCopy(canvasCenter: Point = Point()) {

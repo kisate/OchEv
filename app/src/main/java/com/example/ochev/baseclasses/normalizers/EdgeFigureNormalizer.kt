@@ -1,7 +1,7 @@
 package com.example.ochev.baseclasses.normalizers
 
 import com.example.ochev.baseclasses.dataclasses.InformationForNormalizer
-import com.example.ochev.baseclasses.dataclasses.edgefigures.Edge
+import com.example.ochev.baseclasses.editors.edgefigures.Edge
 
 class EdgeFigureNormalizer {
 
@@ -18,28 +18,31 @@ class EdgeFigureNormalizer {
         val beginPoint = strokes[0].points[0]
         val endPoint = strokes.last().points.last()
 
-        val beginFigure = graphEditor.getClosestToPointVertexFigureOrNull(beginPoint)
+        val beginFigure = graphEditor.graph.getClosestToPointVertexFigureOrNull(beginPoint)
         if (
             beginFigure == null ||
             !beginFigure.figure.checkIfFigureIsCloseEnough(beginPoint)
         ) return null
 
-        val endFigure = graphEditor.getClosestToPointVertexFigureOrNull(endPoint)
+        val endFigure = graphEditor.graph.getClosestToPointVertexFigureOrNull(endPoint)
         if (
             endFigure == null ||
             !endFigure.figure.checkIfFigureIsCloseEnough(endPoint)
         ) return null
 
-        if (beginFigure == endFigure) return null
+        if (beginFigure.id == endFigure.id) return null
         for (edge in graphEditor.allEdges) {
-            if ((edge.figure.beginFigure == beginFigure.figure && edge.figure.endFigure == endFigure.figure) ||
-                (edge.figure.beginFigure == endFigure.figure && edge.figure.endFigure == beginFigure.figure)
+            if ((edge.figure.beginFigureNode.figure == beginFigure.figure &&
+                        edge.figure.endFigureNode.figure == endFigure.figure) ||
+                (edge.figure.beginFigureNode.figure == endFigure.figure &&
+                        edge.figure.endFigureNode.figure == beginFigure.figure)
             ) return null
         }
 
         return Edge(
-            beginFigure.figure,
-            endFigure.figure
+            beginFigure.id,
+            endFigure.id,
+            graphEditor
         )
     }
 }

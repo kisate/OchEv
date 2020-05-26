@@ -11,8 +11,8 @@ class EdgeEditor(
 ) : FigureEditor {
     override val figureId: Int = information.id
     override val currentFigureState: Figure
-        get() = graphEditor.getEdgeNodeByIdOrNull(figureId)!!.figure
+        get() = graphEditor.graph.getEdgeNodeByIdOrNull(figureId)!!.figure
     override val graphEditor: GraphEditor = information.graphEditor
     override val figureNode: FigureNode
-        get() = graphEditor.getEdgeNodeByIdOrNull(figureId)!!
+        get() = graphEditor.graph.getEdgeNodeByIdOrNull(figureId)!!
 }

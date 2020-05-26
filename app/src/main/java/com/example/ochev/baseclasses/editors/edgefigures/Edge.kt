@@ -1,24 +1,29 @@
-package com.example.ochev.baseclasses.dataclasses.edgefigures
+package com.example.ochev.baseclasses.editors.edgefigures
 
 import android.util.Log
 import com.example.ochev.baseclasses.dataclasses.Figure
 import com.example.ochev.baseclasses.dataclasses.LineSegment
 import com.example.ochev.baseclasses.dataclasses.Point
-import com.example.ochev.baseclasses.dataclasses.vertexfigures.VertexFigure
+import com.example.ochev.baseclasses.editors.grapheditor.GraphEditor
 
 
 // Figure that connects information blocks
 
-data class Edge(
-    val beginFigure: VertexFigure,
-    val endFigure: VertexFigure
+class Edge(
+    val beginId: Int,
+    val endId: Int,
+    val graphEditor: GraphEditor
 ) : Figure() {
+    val beginFigureNode
+        get() = graphEditor.graph.getVertexFigureNodeByIdOrNull(beginId)!!
+    val endFigureNode
+        get() = graphEditor.graph.getVertexFigureNodeByIdOrNull(endId)!!
     val realBeginPoint: Point?
         get() {
-            beginFigure.getIntersectionWithLineSegment(
+            beginFigureNode.figure.getIntersectionWithLineSegment(
                 LineSegment(
-                    beginFigure.center,
-                    endFigure.center
+                    beginFigureNode.figure.center,
+                    endFigureNode.figure.center
                 )
             ).let {
                 Log.i("EdgeDebugBegin", it.toString())
@@ -29,8 +34,8 @@ data class Edge(
 
     val realEndPoint: Point?
         get() {
-            endFigure.getIntersectionWithLineSegment(
-                LineSegment(beginFigure.center, endFigure.center)
+            endFigureNode.figure.getIntersectionWithLineSegment(
+                LineSegment(beginFigureNode.figure.center, endFigureNode.figure.center)
             ).let {
                 Log.i("EdgeDebugEnd", it.toString())
                 return if (it.size >= 1) it.first()
@@ -41,8 +46,8 @@ data class Edge(
 
     override val center: Point
         get() = Point(
-            (beginFigure.center.x + endFigure.center.x) / 2,
-            (beginFigure.center.y + endFigure.center.y) / 2
+            (beginFigureNode.figure.center.x + endFigureNode.figure.center.x) / 2,
+            (beginFigureNode.figure.center.y + endFigureNode.figure.center.y) / 2
         )
 
     override fun checkIfFigureIsCloseEnough(point: Point): Boolean {
@@ -51,7 +56,7 @@ data class Edge(
 
     override fun getDistanceToPoint(point: Point): Float {
         return point.getDistanceToLineSegment(
-            LineSegment(beginFigure.center, endFigure.center)
+            LineSegment(beginFigureNode.figure.center, endFigureNode.figure.center)
         )
     }
 

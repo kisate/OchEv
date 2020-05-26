@@ -64,7 +64,7 @@ class ButtonsHandler (
     private fun initDeleteButton(figureEditor: FigureEditor) {
         showDeleteButton()
         buttonsContainer.deleteButton.setOnClickListener {
-            figureEditor.graphEditor.deleteFigure(figureEditor.currentFigureState)
+            figureEditor.graphEditor.deleteFigure(figureEditor.figureId)
             hideDeleteButton()
             graphDrawer.invalidate()
         }

@@ -70,11 +70,19 @@ class GestureHandler(
         val clickedFigureEditor =
             graphDrawer.graphEditor.getFigureEditorByTouch(Point(event))
 
-        if (currentEdgeEditor != null && graphDrawer.graphEditor.getEdgeNodeByIdOrNull(currentEdgeEditor!!.figureId) != null && gesture.type == GestureType.TAP)
+        if (currentEdgeEditor != null && graphDrawer.graphEditor.graph.getEdgeNodeByIdOrNull(
+                currentEdgeEditor!!.figureId
+            ) != null && gesture.type == GestureType.TAP
+        )
         {
-            val clickedEnd = graphDrawer.graphEditor.getEdgeNodeByIdOrNull(currentEdgeEditor!!.figureId)!!.figure.getIndexOfClosestEnd(Point(event))
+            val clickedEnd =
+                graphDrawer.graphEditor.graph.getEdgeNodeByIdOrNull(currentEdgeEditor!!.figureId)!!.figure.getIndexOfClosestEnd(
+                    Point(event)
+                )
             if (clickedEnd != -1) {
-                graphDrawer.graphEditor.getEdgeNodeByIdOrNull(currentEdgeEditor!!.figureId)!!.drawingInformation.switchTypeToNext(clickedEnd)
+                graphDrawer.graphEditor.graph.getEdgeNodeByIdOrNull(currentEdgeEditor!!.figureId)!!.drawingInformation.switchTypeToNext(
+                    clickedEnd
+                )
                 graphDrawer.invalidate()
                 Log.d("GEG", clickedEnd.toString())
                 return null
@@ -189,8 +197,8 @@ class GestureHandler(
         if (currentFigureEditor != null) {
             buttonsHandler.hideDeleteButton()
             buttonsHandler.hideCopyButton()
-            if (graphDrawer.graphEditor.getFigureNodeByIdOrNull(currentFigureEditor!!.figureId) != null) {
-                graphDrawer.graphEditor.getFigureNodeByIdOrNull(currentFigureEditor!!.figureId)!!.drawingInformation.enterMode(
+            if (graphDrawer.graphEditor.graph.getFigureNodeByIdOrNull(currentFigureEditor!!.figureId) != null) {
+                graphDrawer.graphEditor.graph.getFigureNodeByIdOrNull(currentFigureEditor!!.figureId)!!.drawingInformation.enterMode(
                     DrawingMode.DEFAULT
                 )
             }
@@ -207,8 +215,8 @@ class GestureHandler(
         exitEditMode()
 
         currentFigureEditor = clickedFigureEditor
-        if (graphDrawer.graphEditor.getFigureNodeByIdOrNull(currentFigureEditor!!.figureId) != null) {
-            graphDrawer.graphEditor.getFigureNodeByIdOrNull(currentFigureEditor!!.figureId)!!.drawingInformation.enterMode(
+        if (graphDrawer.graphEditor.graph.getFigureNodeByIdOrNull(currentFigureEditor!!.figureId) != null) {
+            graphDrawer.graphEditor.graph.getFigureNodeByIdOrNull(currentFigureEditor!!.figureId)!!.drawingInformation.enterMode(
                 DrawingMode.EDIT
             )
 
@@ -250,8 +258,8 @@ class GestureHandler(
         exitEditMode()
         currentEdgeEditor = clickedEdgeEditor
 
-        if (graphDrawer.graphEditor.getEdgeNodeByIdOrNull(clickedEdgeEditor.figureId) != null) {
-            graphDrawer.graphEditor.getEdgeNodeByIdOrNull(clickedEdgeEditor.figureId) !!.drawingInformation.enterMode(
+        if (graphDrawer.graphEditor.graph.getEdgeNodeByIdOrNull(clickedEdgeEditor.figureId) != null) {
+            graphDrawer.graphEditor.graph.getEdgeNodeByIdOrNull(clickedEdgeEditor.figureId)!!.drawingInformation.enterMode(
                 DrawingMode.EDIT
             )
         }
@@ -270,8 +278,8 @@ class GestureHandler(
             buttonsHandler.hideDeleteButton()
             buttonsHandler.hideCopyButton()
 
-            if (graphDrawer.graphEditor.getEdgeNodeByIdOrNull(currentEdgeEditor!!.figureId) != null) {
-                graphDrawer.graphEditor.getEdgeNodeByIdOrNull(currentEdgeEditor!!.figureId)!!.drawingInformation.enterMode(
+            if (graphDrawer.graphEditor.graph.getEdgeNodeByIdOrNull(currentEdgeEditor!!.figureId) != null) {
+                graphDrawer.graphEditor.graph.getEdgeNodeByIdOrNull(currentEdgeEditor!!.figureId)!!.drawingInformation.enterMode(
                     DrawingMode.DEFAULT
                 )
             }

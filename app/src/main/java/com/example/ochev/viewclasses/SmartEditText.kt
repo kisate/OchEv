@@ -3,7 +3,6 @@ package com.example.ochev.viewclasses
 import android.annotation.SuppressLint
 import android.content.Context
 import android.util.AttributeSet
-import android.util.Log
 import android.widget.EditText
 import com.example.ochev.baseclasses.editors.vertexeditor.VertexFigureEditor
 
@@ -16,7 +15,11 @@ class SmartEditText(context: Context?, attrs: AttributeSet?) :
     fun setVertexEditor(newVertexFigureEditor: VertexFigureEditor, drawGraphView: DrawGraphView) {
         vertexFigureEditor = newVertexFigureEditor
         this.drawGraphView = drawGraphView
-        setText(newVertexFigureEditor.graphEditor.getFigureNodeByIdOrNull(newVertexFigureEditor.figureId)!!.drawingInformation.text)
+        setText(
+            newVertexFigureEditor.graphEditor.graph.getFigureNodeByIdOrNull(
+                newVertexFigureEditor.figureId
+            )!!.drawingInformation.text
+        )
 
     }
 
@@ -29,7 +32,8 @@ class SmartEditText(context: Context?, attrs: AttributeSet?) :
         super.onTextChanged(text, start, lengthBefore, lengthAfter)
         if (vertexFigureEditor != null)
         {
-            vertexFigureEditor!!.graphEditor.getFigureNodeByIdOrNull(vertexFigureEditor!!.figureId)!!.drawingInformation.text = text.toString().trim()
+            vertexFigureEditor!!.graphEditor.graph.getFigureNodeByIdOrNull(vertexFigureEditor!!.figureId)!!.drawingInformation.text =
+                text.toString().trim()
             drawGraphView?.invalidate()
         }
     }
