@@ -7,7 +7,7 @@ import com.example.ochev.baseclasses.dataclasses.Vector
 class MoverHelper(
     val editor: VertexFigureEditor
 ) {
-    fun getPossibleLines(): MutableList<LineSegment> {
+    fun getPossibleLines(): LineSegment? {
         val result: MutableList<LineSegment> = ArrayList()
         editor.graphEditor.allVertexes.forEach {
             if (it.figure != editor.currentFigureState)
@@ -17,13 +17,11 @@ class MoverHelper(
             editor.currentFigureState.center.getDistanceToLineSegment(it) >
                     editor.currentFigureState.getDistanceToCountTouch()
         }
-        return result.subList(0, 5)
+        return result.minBy { editor.currentFigureState.center.getDistanceToLineSegment(it) }
     }
 
     fun tryToHelp() {
-        val bestLine = getPossibleLines().minBy {
-            editor.currentFigureState.center.getDistanceToLineSegment(it)
-        }
+        val bestLine = getPossibleLines()
         if (bestLine != null) {
             val segmentToLine = Point.getOptimalSegment(
                 bestLine,
