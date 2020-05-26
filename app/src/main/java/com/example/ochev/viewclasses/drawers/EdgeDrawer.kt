@@ -1,12 +1,9 @@
 package com.example.ochev.viewclasses.drawers
 
 import android.graphics.Canvas
-import android.graphics.Paint
 import android.graphics.Path
 import android.util.Log
-import com.example.ochev.algorithms.ArrowGetter
 import com.example.ochev.baseclasses.dataclasses.Figure
-import com.example.ochev.baseclasses.dataclasses.Point
 import com.example.ochev.baseclasses.dataclasses.edgefigures.Edge
 import com.example.ochev.viewclasses.drawers.drawinginformations.DrawingInformation
 import com.example.ochev.viewclasses.drawers.drawinginformations.DrawingMode
@@ -15,6 +12,8 @@ import com.example.ochev.viewclasses.drawers.drawinginformations.EdgeDrawingInfo
 class EdgeDrawer : Drawer() {
 
     private val arrowheadDrawer = ArrowheadDrawer()
+    private val editingArrowheadDrawer = EditingArrowheadDrawer()
+
 
     override fun draw(figure: Figure, drawingInformation: DrawingInformation, canvas: Canvas?) {
 
@@ -36,23 +35,11 @@ class EdgeDrawer : Drawer() {
         }
         if (drawingInformation.types[0] == 1){
             arrowheadDrawer.draw(to, from, canvas)
-            canvas?.drawPath(ArrowGetter().getPathOfArrow(to, from), Paint())
         }
-
-
         if (drawingInformation.drawingMode == DrawingMode.EDIT) {
-            drawingInformation.enterMode(DrawingMode.EDIT_CORNERS)
-            for (point in mutableListOf(figure.realBeginPoint!!, figure.realEndPoint!!)) {
-                canvas?.drawCircle(
-                    point.x,
-                    point.y,
-                    5f,
-                    drawingInformation.style.circuitPaint
-                )
-            }
-            drawingInformation.enterMode(DrawingMode.EDIT)
+            editingArrowheadDrawer.draw(from, to, canvas)
+            editingArrowheadDrawer.draw(to, from, canvas)
         }
-
     }
 
 
