@@ -6,6 +6,7 @@ import com.example.ochev.baseclasses.dataclasses.Stroke
 import com.example.ochev.baseclasses.dataclasses.Stroke.Companion.getStrokesRestrictions
 import com.example.ochev.baseclasses.dataclasses.Vector
 import com.example.ochev.baseclasses.editors.vertexeditor.PointMover
+import java.lang.Float.min
 import kotlin.math.abs
 import kotlin.math.max
 import kotlin.math.sign
@@ -120,7 +121,12 @@ data class Rhombus(
     }
 
     override fun getDistanceToCountTouch(): Float {
-        return max(leftCorner.getDistanceToPoint(upCorner) / 3.33f, 40f)
+        return max(
+            min(
+                leftCorner.getDistanceToPoint(rightCorner),
+                upCorner.getDistanceToPoint(downCorner)
+            ) / 3.33f, 40f
+        )
     }
 }
 

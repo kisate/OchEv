@@ -12,10 +12,11 @@ import com.example.ochev.baseclasses.editors.vertexeditor.VertexFigureEditor
 import com.example.ochev.baseclasses.normalizers.FigureNormalizer
 import com.example.ochev.viewclasses.drawers.drawinginformations.DrawingInformation
 import com.example.ochev.viewclasses.drawers.drawinginformations.DrawingMode
+import kotlin.math.abs
 
 class GraphEditor(
     var graph: Graph = Graph(),
-    private var figureCounter: Int = 0
+    var figureCounter: Int = 0
 ) {
     val history: GraphChangeHistory = GraphChangeHistory(graphEditor = this)
     val allFiguresSortedByHeights
@@ -72,7 +73,7 @@ class GraphEditor(
     }
 
     fun getFigureEditorByTouch(point: Point): FigureEditor? {
-        val bestFigure = graph.getFigureForEditing(point) ?: return null
+        val bestFigure = getFigureForEditing(point) ?: return null
         return when (bestFigure) {
             is VertexFigureNode ->
                 VertexFigureEditor(InformationForVertexEditor(bestFigure.id, this))
@@ -151,11 +152,59 @@ class GraphEditor(
         return getVertexFigureNodeByIdOrNull(id) ?: getEdgeNodeByIdOrNull(id)
     }
 
-    fun maximazeVertexHeightById(id: Int) {
+    fun maximizeVertexHeightById(id: Int) {
         val vertex = getVertexFigureNodeByIdOrNull(id)!!
         graph.figures.vertices.remove(vertex)
         graph.figures.vertices.add(vertex.copy(height = graph.figures.maxHeight + 1))
     }
 
+    fun getGraphRestrictions(): MutableList<Float>? {
+        val allPoints: MutableList<Point> = ArrayList()
+        allVertexes.forEach {
+            allPoints += it.figure.importantPoints
+        }
+        if (allPoints.isEmpty()) return null
+        return Stroke.getStrokesRestrictions(mutableListOf(Stroke(allPoints)))
+    }
 
+    private fun getFigureForEditing(point: Point): FigureNode? {
+        val bestFigure = getClosestToPointFigureOrNull(point)
+        return if (bestFigure == null || !bestFigure.figure.checkIfFigureIsCloseEnough(point)) null
+        else bestFigure
+    }
+
+
+    private fun getClosestToPointVertexFigureOrNull(point: Point): VertexFigureNode? {
+        if (allVertexes.isEmpty()) return null
+
+        val bestDist = allVertexes.minBy {
+            it.figure.getDistanceToPointOrZeroIfInside(point)
+        }!!.figure.getDistanceToPointOrZeroIfInside(point)
+
+        val lookFor = allVertexes.partition {
+            abs(it.figure.getDistanceToPointOrZeroIfInside(point) - bestDist) <= 0.0001
+        }.first
+        return lookFor.maxBy { it.height }!!
+    }
+
+    private fun getClosestToPointEdgeFigureOrNull(point: Point): EdgeNode? {
+        return allEdges.minBy {
+            it.figure.getDistanceToPoint(point)
+        }
+    }
+
+    private fun getClosestToPointFigureOrNull(point: Point): FigureNode? {
+        val bestVertex = getClosestToPointVertexFigureOrNull(point)
+        val bestEdge = getClosestToPointEdgeFigureOrNull(point)
+
+        if (bestVertex == null) return bestEdge
+        if (bestEdge == null) return bestVertex
+
+        if (bestVertex.figure.checkIfPointIsInside(point)) return bestVertex
+
+        return if (bestVertex.figure.getDistanceToPointOrZeroIfInside(point)
+            <= bestEdge.figure.getDistanceToPoint(point)
+        ) bestVertex
+        else bestEdge
+    }
 }

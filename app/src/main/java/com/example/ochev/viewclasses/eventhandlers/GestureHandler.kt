@@ -13,11 +13,11 @@ import com.example.ochev.baseclasses.dataclasses.Point
 import com.example.ochev.baseclasses.editors.edgeeditor.EdgeEditor
 import com.example.ochev.baseclasses.editors.vertexeditor.VertexFigureEditor
 import com.example.ochev.ml.Classifier
-import com.example.ochev.viewclasses.drawers.drawinginformations.DrawingMode
 import com.example.ochev.viewclasses.SmartEditText
 import com.example.ochev.viewclasses.buttonshandler.ButtonsHandler
 import com.example.ochev.viewclasses.drawers.GraphDrawer
 import com.example.ochev.viewclasses.drawers.LinesDrawer
+import com.example.ochev.viewclasses.drawers.drawinginformations.DrawingMode
 import com.example.ochev.viewclasses.strokedrawers.StrokeDrawer
 
 
@@ -211,7 +211,7 @@ class GestureHandler(
                 DrawingMode.EDIT
             )
 
-            graphDrawer.graphEditor.maximazeVertexHeightById(currentFigureEditor!!.figureId)
+            graphDrawer.graphEditor.maximizeVertexHeightById(currentFigureEditor!!.figureId)
         }
         buttonsHandler.enterEditing(clickedFigureEditor)
         graphDrawer.invalidate()

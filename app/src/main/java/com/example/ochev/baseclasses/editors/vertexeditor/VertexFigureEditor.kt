@@ -1,6 +1,7 @@
 package com.example.ochev.baseclasses.editors.vertexeditor
 
 import com.example.ochev.baseclasses.dataclasses.InformationForVertexEditor
+import com.example.ochev.baseclasses.dataclasses.Point
 import com.example.ochev.baseclasses.dataclasses.nodes.FigureNode
 import com.example.ochev.baseclasses.dataclasses.vertexfigures.VertexFigure
 import com.example.ochev.baseclasses.editors.FigureEditor
@@ -20,6 +21,10 @@ class VertexFigureEditor(
             currentFigureState,
             newFigure
         )
+    }
+
+    fun createCopy(canvasCenter: Point = Point()) {
+        graphEditor.addFigure(currentFigureState.copy())
     }
 
     val mover = VertexFigureMover(this)
