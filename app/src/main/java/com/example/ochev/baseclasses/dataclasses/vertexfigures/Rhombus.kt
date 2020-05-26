@@ -7,6 +7,7 @@ import com.example.ochev.baseclasses.dataclasses.Stroke.Companion.getStrokesRest
 import com.example.ochev.baseclasses.dataclasses.Vector
 import com.example.ochev.baseclasses.editors.vertexeditor.PointMover
 import kotlin.math.abs
+import kotlin.math.max
 import kotlin.math.sign
 
 data class Rhombus(
@@ -38,10 +39,11 @@ data class Rhombus(
         val points = importantPoints
         for (i in points.indices) {
             Point.intersectTwoSegments(
-                segment.A,
-                segment.B,
-                points[i],
-                points[(i + 1) % points.size]
+                segment,
+                LineSegment(
+                    points[i],
+                    points[(i + 1) % points.size]
+                )
             )
                 ?.let { result.add(it) }
         }
@@ -113,12 +115,12 @@ data class Rhombus(
         val points = importantPoints
 
         return MutableList(points.size) {
-            point.getDistanceToLineSegment(points[it], points[(it + 1) % points.size])
+            point.getDistanceToLineSegment(LineSegment(points[it], points[(it + 1) % points.size]))
         }.min()!!
     }
 
     override fun getDistanceToCountTouch(): Float {
-        return leftCorner.getDistanceToPoint(upCorner) / 4f
+        return max(leftCorner.getDistanceToPoint(upCorner) / 3.33f, 40f)
     }
 }
 

@@ -109,6 +109,11 @@ class GraphEditor(
         )
     }
 
+    fun deleteFigure(figure: Figure) {
+        history.saveState()
+        graph = graph.withDeletedFigure(figure)
+    }
+
     fun replaceVertex(old: VertexFigure, new: VertexFigure) {
         // redirecting edges
         graph = graph.replacedVertex(old, new)

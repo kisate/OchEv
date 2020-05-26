@@ -30,10 +30,11 @@ data class Rectangle(
         val points = importantPoints
         for (i in points.indices) {
             Point.intersectTwoSegments(
-                segment.A,
-                segment.B,
-                points[i],
-                points[(i + 1) % points.size]
+                segment,
+                LineSegment(
+                    points[i],
+                    points[(i + 1) % points.size]
+                )
             )
                 ?.let { result.add(it) }
         }
@@ -71,13 +72,13 @@ data class Rectangle(
         // A - leftDown, B - leftUp, C - rightUp, D - rightDown
 
         // leftDown -> leftUp
-        val tillAB = point.getDistanceToLineSegment(leftDownCorner, leftUpCorner)
+        val tillAB = point.getDistanceToLineSegment(LineSegment(leftDownCorner, leftUpCorner))
         // leftUp -> rightUp
-        val tillBC = point.getDistanceToLineSegment(leftUpCorner, rightUpCorner)
+        val tillBC = point.getDistanceToLineSegment(LineSegment(leftUpCorner, rightUpCorner))
         // rightUp -> rightDown
-        val tillCD = point.getDistanceToLineSegment(rightUpCorner, rightDownCorner)
+        val tillCD = point.getDistanceToLineSegment(LineSegment(rightUpCorner, rightDownCorner))
         // rightDown -> leftDown
-        val tillAD = point.getDistanceToLineSegment(rightDownCorner, leftDownCorner)
+        val tillAD = point.getDistanceToLineSegment(LineSegment(rightDownCorner, leftDownCorner))
 
         return listOf(tillAB, tillBC, tillCD, tillAD).min()!!
     }
@@ -189,7 +190,7 @@ data class Rectangle(
         val dX = kotlin.math.abs(leftDownCorner.x - rightDownCorner.x)
         val dY = kotlin.math.abs(leftDownCorner.y - leftUpCorner.y)
 
-        return max(min(dX, dY) / 4f, 20f)
+        return max(min(dX, dY) / 3.33f, 40f)
     }
 
 
