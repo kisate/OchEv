@@ -10,10 +10,10 @@ import com.example.ochev.baseclasses.dataclasses.vertexfigures.VertexFigure
 import com.example.ochev.viewclasses.drawers.drawinginformations.DrawingInformation
 
 class FiguresDrawer {
-    val circleDrawer = CircleDrawer()
-    val rectangleDrawer = RectangleDrawer()
-    val edgeDrawer = EdgeDrawer()
-    val rhombusDrawer = RhombusDrawer()
+    private val circleDrawer = CircleDrawer()
+    private val rectangleDrawer = RectangleDrawer()
+    private val edgeDrawer = EdgeDrawer()
+    private val rhombusDrawer = RhombusDrawer()
 
     fun draw(figure: Figure, drawingInformation: DrawingInformation, canvas: Canvas?) {
         when (figure) {
@@ -21,22 +21,21 @@ class FiguresDrawer {
                 when (figure) {
                     is Circle -> {
                         circleDrawer.draw(figure, drawingInformation, canvas)
-                        circleDrawer.drawEditingPoints(drawingInformation, figure.getMovingPoints(), canvas)
+                        circleDrawer.drawEditingPoints(drawingInformation, figure.getMovingPoints(), figure, canvas)
                     }
                     is Rectangle -> {
                         rectangleDrawer.draw(figure, drawingInformation, canvas)
-                        rectangleDrawer.drawEditingPoints(drawingInformation, figure.getMovingPoints(), canvas)
+                        rectangleDrawer.drawEditingPoints(drawingInformation, figure.getMovingPoints(), figure, canvas)
                     }
-
                     is Rhombus -> {
                         rhombusDrawer.draw(figure, drawingInformation, canvas)
-                        rhombusDrawer.drawEditingPoints(drawingInformation, figure.getMovingPoints(), canvas)
+                        rhombusDrawer.drawEditingPoints(drawingInformation, figure.getMovingPoints(), figure, canvas)
                     }
                 }
             }
             is Edge -> {
                 edgeDrawer.draw(figure, drawingInformation, canvas)
-                edgeDrawer.drawEditingPoints(drawingInformation, mutableListOf(figure.realBeginPoint!!, figure.realEndPoint!!), canvas)
+                edgeDrawer.drawEditingPoints(drawingInformation, mutableListOf(figure.realBeginPoint!!, figure.realEndPoint!!), figure, canvas)
             }
         }
     }
