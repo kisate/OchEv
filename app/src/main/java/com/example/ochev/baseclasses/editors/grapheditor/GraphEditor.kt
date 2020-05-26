@@ -10,7 +10,8 @@ import com.example.ochev.baseclasses.editors.FigureEditor
 import com.example.ochev.baseclasses.editors.edgeeditor.EdgeEditor
 import com.example.ochev.baseclasses.editors.vertexeditor.VertexFigureEditor
 import com.example.ochev.baseclasses.normalizers.FigureNormalizer
-import com.example.ochev.viewclasses.DrawingMode
+import com.example.ochev.viewclasses.graphdrawers.drawinginformations.DrawingInformation
+import com.example.ochev.viewclasses.graphdrawers.drawinginformations.DrawingMode
 
 class GraphEditor(
     var graph: Graph = Graph(),
@@ -83,6 +84,7 @@ class GraphEditor(
                 graph.figures.vertices.add(
                     VertexFigureNode(
                         id = figureCounter++,
+                        drawingInformation = DrawingInformation.getVertexDrawingInformation(result)!!,
                         height = graph.figures.maxHeight + 1,
                         figure = result
                     )
@@ -92,12 +94,12 @@ class GraphEditor(
                 graph.figures.edges.add(
                     EdgeNode(
                         id = figureCounter++,
+                        drawingInformation = DrawingInformation.getEdgeDrawingInformation()!!,
                         figure = result
                     )
                 )
             }
         }
-
         return true
     }
 

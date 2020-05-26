@@ -52,6 +52,15 @@ data class Point(val x: Float = 0f, val y: Float = 0f) {
     }
 
     companion object{
+        fun centre(arr: MutableList<Point>): Point {
+            var ret = Point()
+            for (point in arr) {
+                ret = Point(ret.x + point.x, ret.y + point.y)
+            }
+            ret = Point(ret.x / arr.size, ret.y / arr.size)
+            return ret
+        }
+
         fun intersectTwoSegments(p1: Point, p2: Point, p3: Point, p4: Point): Point? {
             Log.i("intersection.pro", p1.toString() + " " + p2.toString() + " " + p3.toString() + " " + p4.toString() )
             val v12 = Vector(p1, p2)

@@ -3,25 +3,19 @@ package com.example.ochev.viewclasses.graphdrawers
 import android.graphics.Canvas
 import android.graphics.Rect
 import android.text.*
-import android.util.Log
 import androidx.core.graphics.withTranslation
 import com.example.ochev.baseclasses.dataclasses.Figure
+import com.example.ochev.baseclasses.dataclasses.Point
 import com.example.ochev.baseclasses.dataclasses.Vector
 import com.example.ochev.baseclasses.dataclasses.vertexfigures.Circle
 import com.example.ochev.baseclasses.dataclasses.vertexfigures.Rectangle
 import com.example.ochev.baseclasses.dataclasses.vertexfigures.Rhombus
 import com.example.ochev.baseclasses.dataclasses.vertexfigures.VertexFigure
-import com.example.ochev.viewclasses.DrawingInformation
+import com.example.ochev.viewclasses.graphdrawers.drawinginformations.DrawingInformation
 import kotlin.math.*
 
 abstract class Drawer {
-    val styles: MutableList<FigureStyle> = ArrayList(3)
 
-    init {
-        styles.add(FigureStyle())
-        styles.add(FigureStyle())
-        styles.add(FigureStyle())
-    }
 
     abstract fun draw(
         figure: Figure,
@@ -39,8 +33,7 @@ abstract class Drawer {
             if (drawingInformation.text.isNotEmpty()) {
 
                 val bounds = calcRect(figure)
-                if (abs(bounds.height()) > MIN_BOUNDS_HEIGHT)
-                {
+                if (abs(bounds.height()) > MIN_BOUNDS_HEIGHT) {
                     val staticLayout = generateStaticLayout(figure, drawingInformation)
 
                     canvas?.withTranslation(bounds.left.toFloat(), bounds.bottom.toFloat()) {
@@ -74,9 +67,14 @@ abstract class Drawer {
                     leftBottomCorner.y.toInt()
                 )
             }
-            //is Rhombus -> {
-                //TODO()
-           // }
+            is Rhombus -> {
+                return Rect(
+                    Point.centre(mutableListOf(figure.leftCorner, figure.upCorner)).x.toInt(),
+                    Point.centre(mutableListOf(figure.leftCorner, figure.upCorner)).y.toInt(),
+                    Point.centre(mutableListOf(figure.rightCorner, figure.upCorner)).x.toInt(),
+                    Point.centre(mutableListOf(figure.rightCorner, figure.downCorner)).y.toInt()
+                )
+            }
             else -> {
                 return Rect()
             }
@@ -87,7 +85,7 @@ abstract class Drawer {
         figure: VertexFigure,
         drawingInformation: DrawingInformation
     ): StaticLayout {
-        val paint = TextPaint(styles[drawingInformation.currentStyle].fontPaint)
+        val paint = TextPaint(drawingInformation.style.fontPaint)
         paint.textSize = DEFAULT_TEXT_SIZE
         val bounds = calcRect(figure)
 
@@ -95,20 +93,18 @@ abstract class Drawer {
 
         var approximatedHeight = approximateHeight(paint, drawingInformation, bounds)
 
-        paint.textSize = DEFAULT_TEXT_SIZE*abs(bounds.height())/approximatedHeight
+        paint.textSize = DEFAULT_TEXT_SIZE * abs(bounds.height()) / approximatedHeight
         approximatedHeight = approximateHeight(paint, drawingInformation, bounds)
 
-        while (approximatedHeight < abs(bounds.height()) && paint.textSize < MAX_TEXT_SIZE)
-        {
-            if (paint.textSize * sqrt(abs(bounds.height())/approximatedHeight) - paint.textSize < 1) paint.textSize++
-            else paint.textSize*= sqrt(abs(bounds.height())/approximatedHeight)
+        while (approximatedHeight < abs(bounds.height()) && paint.textSize < MAX_TEXT_SIZE) {
+            if (paint.textSize * sqrt(abs(bounds.height()) / approximatedHeight) - paint.textSize < 1) paint.textSize++
+            else paint.textSize *= sqrt(abs(bounds.height()) / approximatedHeight)
             approximatedHeight = approximateHeight(paint, drawingInformation, bounds)
             count++
         }
-        while (approximatedHeight > abs(bounds.height()) && paint.textSize > MIN_TEXT_SIZE)
-        {
-            if (paint.textSize - paint.textSize* sqrt(abs(bounds.height())/approximatedHeight) < 1) paint.textSize--
-            else paint.textSize *= sqrt(abs(bounds.height())/approximatedHeight)
+        while (approximatedHeight > abs(bounds.height()) && paint.textSize > MIN_TEXT_SIZE) {
+            if (paint.textSize - paint.textSize * sqrt(abs(bounds.height()) / approximatedHeight) < 1) paint.textSize--
+            else paint.textSize *= sqrt(abs(bounds.height()) / approximatedHeight)
             approximatedHeight = approximateHeight(paint, drawingInformation, bounds)
             count++
         }
@@ -139,16 +135,22 @@ abstract class Drawer {
             .build()
     }
 
-    private fun approximateHeight(paint: TextPaint, drawingInformation: DrawingInformation, bounds: Rect): Float {
+    private fun approximateHeight(
+        paint: TextPaint,
+        drawingInformation: DrawingInformation,
+        bounds: Rect
+    ): Float {
 
-        val lines = paint.measureText(drawingInformation.text)/abs(bounds.width())
+        val lines = paint.measureText(drawingInformation.text) / abs(bounds.width())
 
         val fontSize = abs(paint.fontMetrics.ascent - paint.fontMetrics.descent)
 
-        val spacingHeight = ceil(lines)*fontSize* max(
-            MIN_LINE_SIZE_COEFFICIENT, (LINE_SIZE_COEFFICIENT - ceil(lines)* LINE_SIZE_COEFFICIENT_DELTA))
+        val spacingHeight = ceil(lines) * fontSize * max(
+            MIN_LINE_SIZE_COEFFICIENT,
+            (LINE_SIZE_COEFFICIENT - ceil(lines) * LINE_SIZE_COEFFICIENT_DELTA)
+        )
 
-        return fontSize*lines + spacingHeight
+        return fontSize * lines + spacingHeight
     }
 
     companion object {

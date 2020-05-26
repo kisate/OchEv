@@ -7,7 +7,8 @@ class ButtonsContainer(
     val clearButton: Button,
     val deleteButton: Button,
     val undoButton: ImageButton,
-    val forwardButton: ImageButton
+    val forwardButton: ImageButton,
+    val saveButton: Button
 ) {
 
 }

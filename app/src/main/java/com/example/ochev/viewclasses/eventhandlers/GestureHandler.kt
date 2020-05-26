@@ -9,11 +9,10 @@ import android.util.Log
 import android.view.MotionEvent
 import android.view.View
 import android.view.inputmethod.InputMethodManager
-import androidx.core.content.ContextCompat.getSystemService
 import com.example.ochev.baseclasses.dataclasses.Point
 import com.example.ochev.baseclasses.editors.vertexeditor.VertexFigureEditor
 import com.example.ochev.ml.Classifier
-import com.example.ochev.viewclasses.DrawingMode
+import com.example.ochev.viewclasses.graphdrawers.drawinginformations.DrawingMode
 import com.example.ochev.viewclasses.SmartEditText
 import com.example.ochev.viewclasses.buttonshandler.ButtonsHandler
 import com.example.ochev.viewclasses.graphdrawers.GraphDrawer
@@ -114,10 +113,21 @@ class GestureHandler(
                 }
             }
 
-            if (gesture.type == GestureType.LONG_TAP && gesture.state == GestureState.START && clickedFigureEditor != null)
+            if (gesture.type == GestureType.LONG_TAP  && clickedFigureEditor != null)
             {
                 enterEditTextMode(clickedFigureEditor)
+                if (gesture.state == GestureState.START)
+                {
+                    val v =
+                        graphDrawer.graphView.context.getSystemService(Context.VIBRATOR_SERVICE) as Vibrator?
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                        v?.vibrate(VibrationEffect.createOneShot(100, VibrationEffect.DEFAULT_AMPLITUDE))
+                    } else {
+                        v?.vibrate(100)
+                    }
+                }
             }
+
         }
 
         return null
@@ -127,7 +137,8 @@ class GestureHandler(
         if (currentFigureEditor != null) {
             buttonsHandler.closeEditing()
             if (graphDrawer.graphEditor.getFigureNodeByIdOrNull(currentFigureEditor!!.figureId) != null) {
-                graphDrawer.graphEditor.getFigureNodeByIdOrNull(currentFigureEditor!!.figureId)!!.drawingInformation.enterMode(DrawingMode.DEFAULT)
+                graphDrawer.graphEditor.getFigureNodeByIdOrNull(currentFigureEditor!!.figureId)!!.drawingInformation.enterMode(
+                    DrawingMode.DEFAULT)
             }
             currentFigureEditor = null
             graphDrawer.invalidate()
@@ -138,7 +149,8 @@ class GestureHandler(
         exitEditMode()
         currentFigureEditor = clickedFigureEditor
         if (graphDrawer.graphEditor.getFigureNodeByIdOrNull(currentFigureEditor!!.figureId) != null) {
-            graphDrawer.graphEditor.getFigureNodeByIdOrNull(currentFigureEditor!!.figureId)!!.drawingInformation.enterMode(DrawingMode.EDIT)
+            graphDrawer.graphEditor.getFigureNodeByIdOrNull(currentFigureEditor!!.figureId)!!.drawingInformation.enterMode(
+                DrawingMode.EDIT)
 
             graphDrawer.graphEditor.maximazeVertexHeightById(currentFigureEditor!!.figureId)
         }
@@ -151,14 +163,6 @@ class GestureHandler(
         editText.visibility = View.VISIBLE
         editText.setVertexEditor(clickedFigureEditor, graphDrawer.graphView)
         enterEditMode(clickedFigureEditor)
-
-        val v =
-             graphDrawer.graphView.context.getSystemService(Context.VIBRATOR_SERVICE) as Vibrator?
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            v?.vibrate(VibrationEffect.createOneShot(100, VibrationEffect.DEFAULT_AMPLITUDE));
-        } else {
-            v?.vibrate(100);
-        }
 
         buttonsHandler.disableAll()
     }

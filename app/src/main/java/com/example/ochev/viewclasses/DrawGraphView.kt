@@ -25,8 +25,12 @@ class DrawGraphView(
     }
 
     override fun onDraw(canvas: Canvas?) {
+        drawGraphOnCanvas(currentGraph, canvas)
+    }
+
+    fun drawGraphOnCanvas(graphEditor: GraphEditor, canvas: Canvas?) {
         canvas?.drawColor(Color.LTGRAY)
-        for (figure in currentGraph.graph.figures.figuresSortedByHeights) {
+        for (figure in graphEditor.graph.figures.figuresSortedByHeights) {
             Log.i("ClassifyDbg", figure.toString())
             figuresDrawer.draw(figure.figure, figure.drawingInformation, canvas)
         }

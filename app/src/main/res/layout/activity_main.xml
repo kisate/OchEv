@@ -44,7 +44,8 @@
         app:layout_constraintBottom_toBottomOf="parent"
 
         app:layout_constraintStart_toStartOf="@id/guideline"
-        app:srcCompat="@android:drawable/ic_media_next" />
+        app:srcCompat="@android:drawable/ic_media_next"
+        tools:ignore="ContentDescription" />
 
     <ImageButton
         android:id="@+id/undoButtonId"
@@ -54,7 +55,8 @@
         app:layout_constraintBottom_toBottomOf="parent"
 
         app:layout_constraintEnd_toEndOf="@id/guideline"
-        app:srcCompat="@android:drawable/ic_media_previous" />
+        app:srcCompat="@android:drawable/ic_media_previous"
+        tools:ignore="ContentDescription" />
 
     <androidx.constraintlayout.widget.Guideline
         android:layout_width="wrap_content"
@@ -73,12 +75,21 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintBottom_toBottomOf="parent"/>
 
+    <Button
+        android:id="@+id/saveButtonId"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/saveButtonName"
+        tools:ignore="MissingConstraints,RelativeOverlap"
+        app:layout_constraintEnd_toEndOf="parent"
+        />
+
     <com.example.ochev.viewclasses.SmartEditText
         android:id="@+id/editText"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:ems="10"
-        android:hint="Enter figure text"
+        android:hint="@string/enter_figure_text"
         android:inputType="textPersonName|text"
         android:visibility="gone"
         app:layout_constraintEnd_toEndOf="parent"

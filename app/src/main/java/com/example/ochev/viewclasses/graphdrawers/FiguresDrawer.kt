@@ -6,7 +6,7 @@ import com.example.ochev.baseclasses.dataclasses.edgefigures.Edge
 import com.example.ochev.baseclasses.dataclasses.vertexfigures.Circle
 import com.example.ochev.baseclasses.dataclasses.vertexfigures.Rectangle
 import com.example.ochev.baseclasses.dataclasses.vertexfigures.Rhombus
-import com.example.ochev.viewclasses.DrawingInformation
+import com.example.ochev.viewclasses.graphdrawers.drawinginformations.DrawingInformation
 
 class FiguresDrawer {
     val circleDrawer = CircleDrawer()
