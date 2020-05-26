@@ -28,9 +28,6 @@ data class Circle(
             return mutableListOf(leftPoint, upPoint, rightPoint, downPoint)
         }
 
-    override fun copy(): VertexFigure {
-        return this.copy()
-    }
 
 
     override fun getIntersectionWithLineSegment(segment: LineSegment): MutableList<Point> {

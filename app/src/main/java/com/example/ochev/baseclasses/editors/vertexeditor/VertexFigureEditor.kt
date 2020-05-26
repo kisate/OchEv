@@ -24,7 +24,7 @@ class VertexFigureEditor(
     }
 
     fun createCopy(canvasCenter: Point = Point()) {
-        graphEditor.addFigure(currentFigureState.copy())
+        graphEditor.addFigure(currentFigureState)
     }
 
     val mover = VertexFigureMover(this)
