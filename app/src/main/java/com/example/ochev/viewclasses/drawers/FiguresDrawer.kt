@@ -35,7 +35,7 @@ class FiguresDrawer {
             }
             is Edge -> {
                 edgeDrawer.draw(figure, drawingInformation, canvas)
-
+                if (figure.realBeginPoint == null || figure.realEndPoint == null)return
                 edgeDrawer.drawEditingPoints(drawingInformation, mutableListOf(figure.realBeginPoint!!, figure.realEndPoint!!), figure, canvas)
             }
         }
