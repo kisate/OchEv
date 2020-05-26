@@ -29,17 +29,17 @@ class EdgeDrawer : Drawer() {
         path.moveTo(from.x, from.y)
         path.lineTo(to.x, to.y)
         canvas?.drawPath(path, drawingInformation.style.circuitPaint)
-
+        if (drawingInformation.drawingMode == DrawingMode.EDIT) {
+            editingArrowheadDrawer.draw(from, to, canvas)
+            editingArrowheadDrawer.draw(to, from, canvas)
+        }
         if (drawingInformation.types[1] == 1) {
             arrowheadDrawer.draw(from, to, canvas)
         }
         if (drawingInformation.types[0] == 1){
             arrowheadDrawer.draw(to, from, canvas)
         }
-        if (drawingInformation.drawingMode == DrawingMode.EDIT) {
-            editingArrowheadDrawer.draw(from, to, canvas)
-            editingArrowheadDrawer.draw(to, from, canvas)
-        }
+
     }
 
 

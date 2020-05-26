@@ -6,7 +6,7 @@ import android.graphics.Paint
 class EditingArrowheadDrawer: ArrowheadDrawer() {
     init {
         style.fillPaint.style = Paint.Style.FILL_AND_STROKE
-        style.fillPaint.strokeWidth = 4f
+        style.fillPaint.strokeWidth = 10f
         style.fillPaint.color = Color.parseColor("#FFC107")
     }
 }
