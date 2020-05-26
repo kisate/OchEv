@@ -25,6 +25,10 @@ data class Rectangle(
             return mutableListOf(leftDownCorner, leftUpCorner, rightUpCorner, rightDownCorner)
         }
 
+    override fun clone(): VertexFigure {
+        return this.copy()
+    }
+
     override fun getIntersectionWithLineSegment(segment: LineSegment): MutableList<Point> {
         val result: MutableList<Point> = ArrayList()
         val points = importantPoints

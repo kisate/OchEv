@@ -14,6 +14,7 @@ abstract class VertexFigure : Figure() {
 
     abstract val importantPoints: MutableList<Point>
 
+    abstract fun clone(): VertexFigure
     abstract fun getIntersectionWithLineSegment(segment: LineSegment): MutableList<Point>
     abstract fun rescaledByFactor(factor: Float): VertexFigure
     abstract fun movedByVector(vector: Vector): VertexFigure

@@ -1,7 +1,9 @@
 package com.example.ochev.baseclasses.editors.vertexeditor
 
+import android.util.Log
 import com.example.ochev.baseclasses.dataclasses.InformationForVertexEditor
 import com.example.ochev.baseclasses.dataclasses.Point
+import com.example.ochev.baseclasses.dataclasses.Vector
 import com.example.ochev.baseclasses.dataclasses.nodes.FigureNode
 import com.example.ochev.baseclasses.dataclasses.vertexfigures.VertexFigure
 import com.example.ochev.baseclasses.editors.FigureEditor
@@ -24,7 +26,11 @@ class VertexFigureEditor(
     }
 
     fun createCopy(canvasCenter: Point = Point()) {
-        graphEditor.addFigure(currentFigureState)
+        graphEditor.addFigure(
+            currentFigureState.clone()
+                .movedByVector(Vector(currentFigureState.center, canvasCenter))
+        )
+        Log.i("CopyDBG", graphEditor.allVertexes.toString())
     }
 
     val mover = VertexFigureMover(this)
