@@ -254,6 +254,15 @@ class GestureHandler(
         if (currentEdgeEditor != null)
         {
             buttonsHandler.exitEditing()
+
+            if (graphDrawer.graphEditor.getEdgeNodeByIdOrNull(currentFigureEditor!!.figureId) != null) {
+                graphDrawer.graphEditor.getEdgeNodeByIdOrNull(currentFigureEditor!!.figureId)!!.drawingInformation.enterMode(
+                    DrawingMode.DEFAULT
+                )
+            }
+
+            graphDrawer.invalidate()
+
             currentEdgeEditor = null
 
             Log.d("GEG", "left")
