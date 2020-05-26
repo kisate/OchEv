@@ -1,4 +1,4 @@
-package com.example.ochev.viewclasses.graphdrawers
+package com.example.ochev.viewclasses.drawers
 
 import android.graphics.Canvas
 import com.example.ochev.baseclasses.dataclasses.Figure
@@ -6,7 +6,7 @@ import com.example.ochev.baseclasses.dataclasses.edgefigures.Edge
 import com.example.ochev.baseclasses.dataclasses.vertexfigures.Circle
 import com.example.ochev.baseclasses.dataclasses.vertexfigures.Rectangle
 import com.example.ochev.baseclasses.dataclasses.vertexfigures.Rhombus
-import com.example.ochev.viewclasses.graphdrawers.drawinginformations.DrawingInformation
+import com.example.ochev.viewclasses.drawers.drawinginformations.DrawingInformation
 
 class FiguresDrawer {
     val circleDrawer = CircleDrawer()

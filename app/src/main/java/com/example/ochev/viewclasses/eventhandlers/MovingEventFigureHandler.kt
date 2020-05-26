@@ -4,12 +4,14 @@ import android.view.MotionEvent
 import com.example.ochev.baseclasses.dataclasses.Point
 import com.example.ochev.baseclasses.editors.vertexeditor.VertexFigureEditor
 import com.example.ochev.ml.Classifier
-import com.example.ochev.viewclasses.graphdrawers.GraphDrawer
+import com.example.ochev.viewclasses.drawers.GraphDrawer
+import com.example.ochev.viewclasses.drawers.LinesDrawer
 import com.example.ochev.viewclasses.strokedrawers.StrokeDrawer
 
 class MovingEventFigureHandler(
     strokeDrawer: StrokeDrawer,
     private val graphDrawer: GraphDrawer,
+    private val linesDrawer: LinesDrawer,
     classifier: Classifier,
     private val vertexFigureEditor: VertexFigureEditor
 ) : GestureEventHandler(strokeDrawer, graphDrawer, classifier) {

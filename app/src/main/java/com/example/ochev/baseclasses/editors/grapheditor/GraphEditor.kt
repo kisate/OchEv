@@ -10,8 +10,8 @@ import com.example.ochev.baseclasses.editors.FigureEditor
 import com.example.ochev.baseclasses.editors.edgeeditor.EdgeEditor
 import com.example.ochev.baseclasses.editors.vertexeditor.VertexFigureEditor
 import com.example.ochev.baseclasses.normalizers.FigureNormalizer
-import com.example.ochev.viewclasses.graphdrawers.drawinginformations.DrawingInformation
-import com.example.ochev.viewclasses.graphdrawers.drawinginformations.DrawingMode
+import com.example.ochev.viewclasses.drawers.drawinginformations.DrawingInformation
+import com.example.ochev.viewclasses.drawers.drawinginformations.DrawingMode
 
 class GraphEditor(
     var graph: Graph = Graph(),

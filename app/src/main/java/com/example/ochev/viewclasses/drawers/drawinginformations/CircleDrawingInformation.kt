@@ -1,10 +1,10 @@
-package com.example.ochev.viewclasses.graphdrawers.drawinginformations
+package com.example.ochev.viewclasses.drawers.drawinginformations
 
 import android.graphics.Color
 import android.graphics.Paint
-import com.example.ochev.viewclasses.graphdrawers.FigureStyle
+import com.example.ochev.viewclasses.drawers.FigureStyle
 
-class RhombusDrawingInformation: VertexDrawingInformation {
+class CircleDrawingInformation : VertexDrawingInformation {
     override var text: String = ""
     override var style: FigureStyle = FigureStyle()
     override var drawingMode: DrawingMode = DrawingMode.DEFAULT

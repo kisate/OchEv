@@ -10,12 +10,14 @@ import android.view.MotionEvent
 import android.view.View
 import android.view.inputmethod.InputMethodManager
 import com.example.ochev.baseclasses.dataclasses.Point
+import com.example.ochev.baseclasses.editors.edgeeditor.EdgeEditor
 import com.example.ochev.baseclasses.editors.vertexeditor.VertexFigureEditor
 import com.example.ochev.ml.Classifier
-import com.example.ochev.viewclasses.graphdrawers.drawinginformations.DrawingMode
+import com.example.ochev.viewclasses.drawers.drawinginformations.DrawingMode
 import com.example.ochev.viewclasses.SmartEditText
 import com.example.ochev.viewclasses.buttonshandler.ButtonsHandler
-import com.example.ochev.viewclasses.graphdrawers.GraphDrawer
+import com.example.ochev.viewclasses.drawers.GraphDrawer
+import com.example.ochev.viewclasses.drawers.LinesDrawer
 import com.example.ochev.viewclasses.strokedrawers.StrokeDrawer
 
 
@@ -30,6 +32,7 @@ abstract class GestureEventHandler(
 class GestureHandler(
     private val strokeDrawer: StrokeDrawer,
     private val graphDrawer: GraphDrawer,
+    private val linesDrawer: LinesDrawer,
     private val buttonsHandler: ButtonsHandler,
     private val editText: SmartEditText,
     private val classifier: Classifier
@@ -38,6 +41,8 @@ class GestureHandler(
     private var gestureEventHandler: GestureEventHandler? = null
 
     private var currentFigureEditor: VertexFigureEditor? = null
+
+    private var currentEdgeEditor: EdgeEditor? = null
 
     fun handle(gesture: Gesture, event: MotionEvent) {
 
@@ -54,7 +59,7 @@ class GestureHandler(
 
     private fun chooseHandler(gesture: Gesture, event: MotionEvent): GestureEventHandler? {
 
-        if(gesture.type != GestureType.NONE) exitEditTextMode()
+        if (gesture.type != GestureType.NONE) exitEditTextMode()
 
         if (gesture.type == GestureType.SCROLL_AND_ZOOM) return ScrollAndZoomEventHandler(
             strokeDrawer,
@@ -65,71 +70,115 @@ class GestureHandler(
         val clickedFigureEditor =
             graphDrawer.graphEditor.getFigureEditorByTouch(Point(event))
 
+        if (currentEdgeEditor != null)
+        {
+            val clickedEnd = graphDrawer.graphEditor.getEdgeNodeByIdOrNull(currentEdgeEditor!!.figureId)!!.figure.getIndexOfClosestEnd(Point(event))
+            if (clickedEnd != -1) {
+//                graphDrawer.graphEditor.getEdgeNodeByIdOrNull(currentEdgeEditor!!.figureId)!!.drawingInformation.
+            }
+            return null
+        }
+
+
         Log.d("Gestures", clickedFigureEditor?.figureId.toString())
 
-        if (clickedFigureEditor is VertexFigureEditor?)
+        if (clickedFigureEditor is VertexFigureEditor?) return handleVertexClick(gesture, event, clickedFigureEditor)
+        else if (clickedFigureEditor is EdgeEditor?)
         {
-            if (gesture.type == GestureType.TAP) {
-                if (clickedFigureEditor == null) {
-                    exitEditMode()
-                    return null
-                }
+            handleEdgeClick(gesture, event, clickedFigureEditor)
+        }
 
-                enterEditMode(clickedFigureEditor)
+        return null
+    }
 
+    private fun handleEdgeClick(
+        gesture: Gesture,
+        event: MotionEvent,
+        clickedEdgeEditor: EdgeEditor?
+    ): GestureEventHandler? {
+
+        if (gesture.type == GestureType.TAP) {
+
+            if(clickedEdgeEditor == null) {
+                exitAll()
                 return null
             }
 
-            if (gesture.type == GestureType.MOVE) {
-                if (clickedFigureEditor == null) {
-                    exitEditMode()
-                    return DrawingEventHandler(strokeDrawer, graphDrawer, classifier)
-                }
-                if (currentFigureEditor == null) {
-                    return DrawingEventHandler(strokeDrawer, graphDrawer, classifier)
-                }
+            enterEditEdgeMode(clickedEdgeEditor)
 
-                when {
-                    currentFigureEditor!!.shaper.shapingBegins(Point(event)) -> {
-                        return ShapingEventHandler(
-                            strokeDrawer,
-                            graphDrawer,
-                            classifier,
-                            currentFigureEditor!!
-                        )
-                    }
-                    currentFigureEditor!!.mover.moveBegins(Point(event)) -> {
-                        return MovingEventFigureHandler(
-                            strokeDrawer,
-                            graphDrawer,
-                            classifier,
-                            currentFigureEditor!!
-                        )
-                    }
-                    clickedFigureEditor.figureId != currentFigureEditor!!.figureId -> {
-                        exitEditMode()
-                        return DrawingEventHandler(strokeDrawer, graphDrawer, classifier)
-                    }
-                }
-            }
-
-            if (gesture.type == GestureType.LONG_TAP  && clickedFigureEditor != null)
-            {
-                enterEditTextMode(clickedFigureEditor)
-                if (gesture.state == GestureState.START)
-                {
-                    val v =
-                        graphDrawer.graphView.context.getSystemService(Context.VIBRATOR_SERVICE) as Vibrator?
-                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-                        v?.vibrate(VibrationEffect.createOneShot(100, VibrationEffect.DEFAULT_AMPLITUDE))
-                    } else {
-                        v?.vibrate(100)
-                    }
-                }
-            }
-
+            return null
         }
 
+        return null
+    }
+
+    private fun handleVertexClick(
+        gesture: Gesture,
+        event: MotionEvent,
+        clickedFigureEditor: VertexFigureEditor?
+    ): GestureEventHandler? {
+        if (gesture.type == GestureType.TAP) {
+            if (clickedFigureEditor == null) {
+                exitAll()
+                return null
+            }
+
+            enterEditMode(clickedFigureEditor)
+
+            return null
+        }
+
+        if (gesture.type == GestureType.MOVE) {
+            if (clickedFigureEditor == null) {
+                exitAll()
+                return DrawingEventHandler(strokeDrawer, graphDrawer, classifier)
+            }
+            if (currentFigureEditor == null) {
+                return DrawingEventHandler(strokeDrawer, graphDrawer, classifier)
+            }
+
+            when {
+                currentFigureEditor!!.shaper.shapingBegins(Point(event)) -> {
+                    return ShapingEventHandler(
+                        strokeDrawer,
+                        graphDrawer,
+                        classifier,
+                        currentFigureEditor!!
+                    )
+                }
+                currentFigureEditor!!.mover.moveBegins(Point(event)) -> {
+                    return MovingEventFigureHandler(
+                        strokeDrawer,
+                        graphDrawer,
+                        linesDrawer,
+                        classifier,
+                        currentFigureEditor!!
+                    )
+                }
+                clickedFigureEditor.figureId != currentFigureEditor!!.figureId -> {
+                    exitAll()
+                    return DrawingEventHandler(strokeDrawer, graphDrawer, classifier)
+                }
+            }
+        }
+
+        if (gesture.type == GestureType.LONG_TAP && clickedFigureEditor != null) {
+            enterEditTextMode(clickedFigureEditor)
+            if (gesture.state == GestureState.START) {
+                val v =
+                    graphDrawer.graphView.context.getSystemService(Context.VIBRATOR_SERVICE) as Vibrator?
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                    v?.vibrate(
+                        VibrationEffect.createOneShot(
+                            100,
+                            VibrationEffect.DEFAULT_AMPLITUDE
+                        )
+                    )
+                } else {
+                    v?.vibrate(100)
+                }
+            }
+        }
         return null
     }
 
@@ -138,7 +187,8 @@ class GestureHandler(
             buttonsHandler.closeEditing()
             if (graphDrawer.graphEditor.getFigureNodeByIdOrNull(currentFigureEditor!!.figureId) != null) {
                 graphDrawer.graphEditor.getFigureNodeByIdOrNull(currentFigureEditor!!.figureId)!!.drawingInformation.enterMode(
-                    DrawingMode.DEFAULT)
+                    DrawingMode.DEFAULT
+                )
             }
             currentFigureEditor = null
             graphDrawer.invalidate()
@@ -146,11 +196,12 @@ class GestureHandler(
     }
 
     private fun enterEditMode(clickedFigureEditor: VertexFigureEditor) {
-        exitEditMode()
+        exitAll()
         currentFigureEditor = clickedFigureEditor
         if (graphDrawer.graphEditor.getFigureNodeByIdOrNull(currentFigureEditor!!.figureId) != null) {
             graphDrawer.graphEditor.getFigureNodeByIdOrNull(currentFigureEditor!!.figureId)!!.drawingInformation.enterMode(
-                DrawingMode.EDIT)
+                DrawingMode.EDIT
+            )
 
             graphDrawer.graphEditor.maximazeVertexHeightById(currentFigureEditor!!.figureId)
         }
@@ -167,16 +218,43 @@ class GestureHandler(
         buttonsHandler.disableAll()
     }
 
-    private fun exitEditTextMode()
-    {
+    private fun exitEditTextMode() {
         val view = (editText.context as Activity).currentFocus
-        if (view != null)
-        {
-            val imm = (editText.context as Activity).getSystemService(Context.INPUT_METHOD_SERVICE) as? InputMethodManager
+        if (view != null) {
+            val imm =
+                (editText.context as Activity).getSystemService(Context.INPUT_METHOD_SERVICE) as? InputMethodManager
             imm?.hideSoftInputFromWindow(editText.windowToken, 0)
             view.clearFocus()
         }
         editText.visibility = View.GONE
         buttonsHandler.activateAll()
+    }
+
+    private fun enterEditEdgeMode(clickedEdgeEditor: EdgeEditor) {
+
+        exitAll()
+        currentEdgeEditor = clickedEdgeEditor
+
+        if (graphDrawer.graphEditor.getEdgeNodeByIdOrNull(clickedEdgeEditor.figureId) != null) {
+            graphDrawer.graphEditor.getEdgeNodeByIdOrNull(clickedEdgeEditor.figureId) !!.drawingInformation.enterMode(
+                DrawingMode.EDIT
+            )
+        }
+
+        buttonsHandler.enterEditing(clickedEdgeEditor)
+        graphDrawer.invalidate()
+    }
+
+    private fun exitEditEdgeMode() {
+        if (currentEdgeEditor != null)
+        {
+            buttonsHandler.closeEditing()
+        }
+    }
+
+    private fun exitAll() {
+        exitEditMode()
+        exitEditEdgeMode()
+        exitEditTextMode()
     }
 }

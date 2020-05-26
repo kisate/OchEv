@@ -5,11 +5,12 @@ import android.util.Log
 import android.widget.FrameLayout
 import androidx.appcompat.app.AppCompatActivity
 import com.example.ochev.ml.Classifier
-import com.example.ochev.viewclasses.graphdrawers.GraphDrawer
+import com.example.ochev.viewclasses.drawers.GraphDrawer
 import kotlinx.android.synthetic.main.activity_main.*
 import com.example.ochev.viewclasses.StrokeInputView
 import com.example.ochev.viewclasses.buttonshandler.ButtonsContainer
 import com.example.ochev.viewclasses.buttonshandler.ButtonsHandler
+import com.example.ochev.viewclasses.drawers.LinesDrawer
 import com.example.ochev.viewclasses.strokedrawers.StrokeDrawer
 import java.util.concurrent.ExecutorService
 import java.util.concurrent.Executors
@@ -27,10 +28,12 @@ class MainActivity : AppCompatActivity() {
 
         val strokeDrawer = StrokeDrawer(drawStrokeId)
         graphDrawer.graphView = drawGraphId
+        linesDrawer.linesView = drawLinesId
+
         val buttonsHandler = ButtonsHandler(ButtonsContainer(clearButtonId, deleteButtonId, undoButtonId, forwardButtonId, saveButtonId),graphDrawer)
 
         if (strokeInput == null) {
-            strokeInput = StrokeInputView(this, null, strokeDrawer, graphDrawer, buttonsHandler, findViewById(R.id.editText), classifier)
+            strokeInput = StrokeInputView(this, null, strokeDrawer, graphDrawer, linesDrawer,buttonsHandler, findViewById(R.id.editText), classifier)
             strokeInput?.alpha = 0F
         }
 
@@ -65,5 +68,6 @@ class MainActivity : AppCompatActivity() {
 
     companion object {
         val graphDrawer = GraphDrawer()
+        val linesDrawer = LinesDrawer()
     }
 }
