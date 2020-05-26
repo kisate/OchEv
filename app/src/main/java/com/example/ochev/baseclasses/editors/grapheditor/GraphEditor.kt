@@ -174,7 +174,7 @@ class GraphEditor(
     }
 
 
-    private fun getClosestToPointVertexFigureOrNull(point: Point): VertexFigureNode? {
+    fun getClosestToPointVertexFigureOrNull(point: Point): VertexFigureNode? {
         if (allVertexes.isEmpty()) return null
 
         val bestDist = allVertexes.minBy {

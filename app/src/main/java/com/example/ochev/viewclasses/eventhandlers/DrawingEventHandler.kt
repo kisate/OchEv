@@ -42,7 +42,7 @@ class DrawingEventHandler(
         val information = InformationForNormalizer(
             classifier,
             bitmap,
-            graphDrawer.graphEditor.graph,
+            graphDrawer.graphEditor,
             mutableListOf(strokeDrawer.stroke.copy())
         )
         Tasks.call(
