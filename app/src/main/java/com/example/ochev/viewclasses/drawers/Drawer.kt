@@ -27,7 +27,6 @@ abstract class Drawer {
     fun drawEditingPoints(
         drawingInformation: DrawingInformation,
         points: MutableList<Point>,
-        figure: Figure,
         canvas: Canvas?
     ) {
         if (drawingInformation.drawingMode != DrawingMode.EDIT) return
@@ -38,8 +37,6 @@ abstract class Drawer {
         for (point in points) {
             drawingInfo?.style?.circuitPaint?.let { canvas?.drawCircle(point.x, point.y, 12f, it) }
         }
-
-        drawingInfo?.style?.circuitPaint?.let { canvas?.drawCircle(figure.center.x, figure.center.y, 12f, it) }
     }
 
     fun drawMultiLineText(

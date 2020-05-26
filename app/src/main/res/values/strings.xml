@@ -4,4 +4,5 @@
     <string name="deleteButtonName">Delete</string>
     <string name="enter_figure_text">Enter figure text</string>
     <string name="saveButtonName">Save</string>
+    <string name="copyButtonName">Copy</string>
 </resources>

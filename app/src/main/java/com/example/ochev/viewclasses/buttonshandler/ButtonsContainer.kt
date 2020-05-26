@@ -8,7 +8,8 @@ class ButtonsContainer(
     val deleteButton: Button,
     val undoButton: ImageButton,
     val forwardButton: ImageButton,
-    val saveButton: Button
+    val saveButton: Button,
+    val copyButton: Button
 ) {
 
 }

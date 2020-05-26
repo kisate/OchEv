@@ -187,7 +187,8 @@ class GestureHandler(
     private fun exitEditMode() {
 
         if (currentFigureEditor != null) {
-            buttonsHandler.exitEditing()
+            buttonsHandler.hideDeleteButton()
+            buttonsHandler.hideCopyButton()
             if (graphDrawer.graphEditor.getFigureNodeByIdOrNull(currentFigureEditor!!.figureId) != null) {
                 graphDrawer.graphEditor.getFigureNodeByIdOrNull(currentFigureEditor!!.figureId)!!.drawingInformation.enterMode(
                     DrawingMode.DEFAULT
@@ -266,7 +267,8 @@ class GestureHandler(
 
         if (currentEdgeEditor != null)
         {
-            buttonsHandler.exitEditing()
+            buttonsHandler.hideDeleteButton()
+            buttonsHandler.hideCopyButton()
 
             if (graphDrawer.graphEditor.getEdgeNodeByIdOrNull(currentEdgeEditor!!.figureId) != null) {
                 graphDrawer.graphEditor.getEdgeNodeByIdOrNull(currentEdgeEditor!!.figureId)!!.drawingInformation.enterMode(

@@ -2,32 +2,36 @@ package com.example.ochev.viewclasses.buttonshandler
 
 import android.view.View
 import com.example.ochev.baseclasses.editors.FigureEditor
+import com.example.ochev.baseclasses.editors.edgeeditor.EdgeEditor
+import com.example.ochev.baseclasses.editors.vertexeditor.VertexFigureEditor
 import com.example.ochev.viewclasses.drawers.GraphDrawer
 
 class ButtonsHandler (
-    val buttonsContainer: ButtonsContainer,
+    private val buttonsContainer: ButtonsContainer,
     private val graphDrawer: GraphDrawer
 ) {
 
     init{
         buttonsContainer.clearButton.setOnClickListener {
-            exitEditing()
+            hideDeleteButton()
+            hideCopyButton()
             graphDrawer.graphEditor.clear()
             graphDrawer.invalidate()
         }
 
         buttonsContainer.undoButton.setOnClickListener {
-            exitEditing()
+            hideDeleteButton()
+            hideCopyButton()
             graphDrawer.graphEditor.revertChange()
             graphDrawer.invalidate()
         }
 
         buttonsContainer.forwardButton.setOnClickListener {
-            exitEditing()
+            hideDeleteButton()
+            hideCopyButton()
             graphDrawer.graphEditor.undoRevertChange()
             graphDrawer.invalidate()
         }
-
         buttonsContainer.saveButton.setOnClickListener {
             //TODO()
         }
@@ -36,18 +40,42 @@ class ButtonsHandler (
     fun showDeleteButton() {
         buttonsContainer.deleteButton.visibility = View.VISIBLE
     }
+    fun showCopyButton() {
+        buttonsContainer.copyButton.visibility = View.VISIBLE
+    }
 
-    fun enterEditing(figureEditor: FigureEditor) {
+    fun hideDeleteButton() {
+        buttonsContainer.deleteButton.visibility = View.INVISIBLE
+    }
+
+    fun hideCopyButton() {
+        buttonsContainer.copyButton.visibility = View.INVISIBLE
+    }
+
+    fun enterEditing(vertexFigureEditor: VertexFigureEditor) {
+        initDeleteButton(vertexFigureEditor)
+        initCopyButton(vertexFigureEditor)
+    }
+
+    fun enterEditing(edgeEditor: EdgeEditor) {
+        initDeleteButton(edgeEditor)
+    }
+
+    private fun initDeleteButton(figureEditor: FigureEditor) {
         showDeleteButton()
         buttonsContainer.deleteButton.setOnClickListener {
             figureEditor.graphEditor.deleteFigure(figureEditor.currentFigureState)
-            exitEditing()
+            hideDeleteButton()
             graphDrawer.invalidate()
         }
     }
 
-    fun exitEditing() {
-        buttonsContainer.deleteButton.visibility = View.INVISIBLE
+    private fun initCopyButton(figureEditor: VertexFigureEditor) {
+        showCopyButton()
+        buttonsContainer.copyButton.setOnClickListener {
+            figureEditor.createCopy()
+            graphDrawer.invalidate()
+        }
     }
 
     fun disableAll() {
@@ -56,6 +84,7 @@ class ButtonsHandler (
         buttonsContainer.clearButton.isClickable = false
         buttonsContainer.deleteButton.isClickable = false
         buttonsContainer.saveButton.isClickable = false
+        buttonsContainer.copyButton.isClickable = false
     }
 
     fun enableAll() {
@@ -64,6 +93,7 @@ class ButtonsHandler (
         buttonsContainer.clearButton.isClickable = true
         buttonsContainer.deleteButton.isClickable = true
         buttonsContainer.saveButton.isClickable = true
+        buttonsContainer.copyButton.isClickable = true
     }
 
 }
