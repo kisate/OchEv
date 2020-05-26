@@ -91,8 +91,7 @@ data class Point(val x: Float = 0f, val y: Float = 0f) {
             Log.i("intersection.pro.dbg4", b.toString())
 
 
-            val interestingPoint = Point(p3.x + v34.x * b, p3.y + v34.y * b)
-            return interestingPoint
+            return Point(p3.x + v34.x * b, p3.y + v34.y * b)
         }
 
         fun intersectTwoSegments(firstSegment: LineSegment, secondSegment: LineSegment): Point? {
@@ -121,7 +120,6 @@ data class Point(val x: Float = 0f, val y: Float = 0f) {
         private fun isPointInside(segment: LineSegment, point: Point): Boolean {
             val v1 = Vector(segment.A, segment.B)
             val v2 = Vector(segment.A, point)
-            val v3 = Vector(v1.y, -v1.x)
             return if (abs(v1.vectorProduct(v2)) <= 0.00001f) {
                 abs(
                     point.getDistanceToPoint(segment.A) + point.getDistanceToPoint(segment.B) - segment.A.getDistanceToPoint(

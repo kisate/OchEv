@@ -64,13 +64,11 @@ class Graph(
     }
 
     fun replacedVertex(old: VertexFigure, new: VertexFigure): Graph {
-        // redirecting edges
         val newGraph = Graph()
         val linker = getLinker {
             if (it == old) new
             else it
         }
-
         reconnectEdges(newGraph, linker)
 
         figures.vertices.forEach {
@@ -79,7 +77,6 @@ class Graph(
             )
             else newGraph.figures.vertices.add(it)
         }
-
         return newGraph
     }
 

@@ -14,8 +14,7 @@ class MoverHelper(
                 result += it.figure.getLinesToHelpMoving()
         }
         result.removeIf {
-            editor.currentFigureState.center.getDistanceToLineSegment(it) >
-                    editor.currentFigureState.getDistanceToCountTouch()
+            editor.currentFigureState.center.getDistanceToLineSegment(it) > 50f
         }
         return result.minBy { editor.currentFigureState.center.getDistanceToLineSegment(it) }
     }
