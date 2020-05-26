@@ -185,6 +185,7 @@ class GestureHandler(
     }
 
     private fun exitEditMode() {
+
         if (currentFigureEditor != null) {
             buttonsHandler.exitEditing()
             if (graphDrawer.graphEditor.getFigureNodeByIdOrNull(currentFigureEditor!!.figureId) != null) {
@@ -198,7 +199,12 @@ class GestureHandler(
     }
 
     private fun enterEditMode(clickedFigureEditor: VertexFigureEditor) {
-        exitAll()
+
+        Log.d("GEG", "Entered edit")
+
+        exitEditEdgeMode()
+        exitEditMode()
+
         currentFigureEditor = clickedFigureEditor
         if (graphDrawer.graphEditor.getFigureNodeByIdOrNull(currentFigureEditor!!.figureId) != null) {
             graphDrawer.graphEditor.getFigureNodeByIdOrNull(currentFigureEditor!!.figureId)!!.drawingInformation.enterMode(
@@ -209,10 +215,12 @@ class GestureHandler(
         }
         buttonsHandler.enterEditing(clickedFigureEditor)
         graphDrawer.invalidate()
-        Log.d("Gestures", "Entered")
     }
 
     private fun enterEditTextMode(clickedFigureEditor: VertexFigureEditor) {
+
+        Log.d("GEG", "Entered text")
+
         editText.visibility = View.VISIBLE
         editText.setVertexEditor(clickedFigureEditor, graphDrawer.graphView)
         enterEditMode(clickedFigureEditor)
@@ -221,6 +229,7 @@ class GestureHandler(
     }
 
     private fun exitEditTextMode() {
+        Log.d("GEG", "Left text")
         val view = (editText.context as Activity).currentFocus
         if (view != null) {
             val imm =
@@ -233,8 +242,11 @@ class GestureHandler(
     }
 
     private fun enterEditEdgeMode(clickedEdgeEditor: EdgeEditor) {
+        Log.d("GEG", "Entered edge")
 
-        exitAll()
+
+        exitEditEdgeMode()
+        exitEditMode()
         currentEdgeEditor = clickedEdgeEditor
 
         if (graphDrawer.graphEditor.getEdgeNodeByIdOrNull(clickedEdgeEditor.figureId) != null) {
@@ -245,12 +257,13 @@ class GestureHandler(
 
         buttonsHandler.enterEditing(clickedEdgeEditor)
 
-        Log.d("GEG", "entered")
-
         graphDrawer.invalidate()
     }
 
     private fun exitEditEdgeMode() {
+
+        Log.d("GEG", "Left edge")
+
         if (currentEdgeEditor != null)
         {
             buttonsHandler.exitEditing()
@@ -265,7 +278,6 @@ class GestureHandler(
 
             currentEdgeEditor = null
 
-            Log.d("GEG", "left")
         }
     }
 
