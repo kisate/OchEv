@@ -52,7 +52,7 @@ data class Point(val x: Float = 0f, val y: Float = 0f) {
         )
     }
 
-    companion object{
+    companion object {
         fun centre(arr: MutableList<Point>): Point {
             var ret = Point()
             for (point in arr) {
@@ -62,7 +62,10 @@ data class Point(val x: Float = 0f, val y: Float = 0f) {
             return ret
         }
 
-        private fun intersectTwoLines(firstSegment: LineSegment, secondSegment: LineSegment): Point? {
+        private fun intersectTwoLines(
+            firstSegment: LineSegment,
+            secondSegment: LineSegment
+        ): Point? {
             val p1 = firstSegment.A
             val p2 = firstSegment.B
             val p3 = secondSegment.A
@@ -71,17 +74,21 @@ data class Point(val x: Float = 0f, val y: Float = 0f) {
             val v12 = Vector(p1, p2)
             val v34 = Vector(p3, p4)
 
-            if (abs(v12.vectorProduct(v34)) <= 0.001f){
+            if (abs(v12.vectorProduct(v34)) <= 0.001f) {
                 return null
             }
 
-            Log.i("intersection.pro.dbg2", (p1.x*v12.y + p3.y*v12.x - p1.y*v12.x - p3.x*v12.y).toString() )
+            Log.i(
+                "intersection.pro.dbg2",
+                (p1.x * v12.y + p3.y * v12.x - p1.y * v12.x - p3.x * v12.y).toString()
+            )
 
-            Log.i("intersection.pro.dbg3", (v34.x*v12.y - v34.y*v12.x).toString() )
+            Log.i("intersection.pro.dbg3", (v34.x * v12.y - v34.y * v12.x).toString())
 
-            val b = (p1.x*v12.y + p3.y*v12.x - p1.y*v12.x - p3.x*v12.y) / (v34.x*v12.y - v34.y*v12.x)
+            val b =
+                (p1.x * v12.y + p3.y * v12.x - p1.y * v12.x - p3.x * v12.y) / (v34.x * v12.y - v34.y * v12.x)
 
-            Log.i("intersection.pro.dbg4", b.toString() )
+            Log.i("intersection.pro.dbg4", b.toString())
 
 
             val interestingPoint = Point(p3.x + v34.x * b, p3.y + v34.y * b)
@@ -94,8 +101,17 @@ data class Point(val x: Float = 0f, val y: Float = 0f) {
             val p3 = secondSegment.A
             val p4 = secondSegment.B
             val interestingPoint = intersectTwoLines(firstSegment, secondSegment)
-            if (abs(p1.getDistanceToPoint(p2) - interestingPoint!!.getDistanceToPoint(p1) - interestingPoint.getDistanceToPoint(p2)) <= 0.001f &&
-                abs(p3.getDistanceToPoint(p4) - interestingPoint.getDistanceToPoint(p3) - interestingPoint.getDistanceToPoint(p4)) <= 0.001f) {
+            if (abs(
+                    p1.getDistanceToPoint(p2) - interestingPoint!!.getDistanceToPoint(p1) - interestingPoint.getDistanceToPoint(
+                        p2
+                    )
+                ) <= 0.001f &&
+                abs(
+                    p3.getDistanceToPoint(p4) - interestingPoint.getDistanceToPoint(p3) - interestingPoint.getDistanceToPoint(
+                        p4
+                    )
+                ) <= 0.001f
+            ) {
                 return interestingPoint
             }
             return null
@@ -105,16 +121,14 @@ data class Point(val x: Float = 0f, val y: Float = 0f) {
             val v1 = Vector(segment.A, segment.B)
             val v2 = Vector(segment.A, point)
             val v3 = Vector(v1.y, -v1.x)
-            if (abs(v1.vectorProduct(v2)) <= 0.00001f) {
-                if (abs(point.getDistanceToPoint(segment.A) + point.getDistanceToPoint(segment.B) - segment.A.getDistanceToPoint(segment.B)) <= 0.0001f){
-                    return true
-                }
-                else {
-                    return false
-                }
-            }
-            else {
-                return false
+            return if (abs(v1.vectorProduct(v2)) <= 0.00001f) {
+                abs(
+                    point.getDistanceToPoint(segment.A) + point.getDistanceToPoint(segment.B) - segment.A.getDistanceToPoint(
+                        segment.B
+                    )
+                ) <= 0.0001f
+            } else {
+                false
             }
         }
 
@@ -123,29 +137,35 @@ data class Point(val x: Float = 0f, val y: Float = 0f) {
             val v2 = Vector(segment.A, point)
             val v3 = Vector(v1.y, -v1.x)
             if (abs(v1.vectorProduct(v2)) <= 0.00001f) {
-                if (abs(point.getDistanceToPoint(segment.A) + point.getDistanceToPoint(segment.B) - segment.A.getDistanceToPoint(segment.B)) <= 0.0001f){
-                    return LineSegment(point, point)
-                }
-                else {
-                    if (point.getDistanceToPoint(segment.A) <= point.getDistanceToPoint(segment.B)){
-                        return LineSegment(point, segment.A)
+                return if (abs(
+                        point.getDistanceToPoint(segment.A) + point.getDistanceToPoint(segment.B) - segment.A.getDistanceToPoint(
+                            segment.B
+                        )
+                    ) <= 0.0001f
+                ) {
+                    LineSegment(point, point)
+                } else {
+                    if (point.getDistanceToPoint(segment.A) <= point.getDistanceToPoint(segment.B)) {
+                        LineSegment(point, segment.A)
+                    } else {
+                        LineSegment(point, segment.B)
                     }
-                    else {
-                        return LineSegment(point, segment.B)
-                    }
                 }
-            }
-            else {
-                val interestingPoint = intersectTwoLines(LineSegment(point, Point(v3.x + point.x, v3.y + point.y)), segment)
+            } else {
+                val interestingPoint = intersectTwoLines(
+                    LineSegment(point, Point(v3.x + point.x, v3.y + point.y)),
+                    segment
+                )
                 if (isPointInside(segment, interestingPoint!!)) {
                     return LineSegment(point, interestingPoint)
 
-                }
-                else {
-                    if (interestingPoint.getDistanceToPoint(segment.A) <= interestingPoint.getDistanceToPoint(segment.B)){
+                } else {
+                    if (interestingPoint.getDistanceToPoint(segment.A) <= interestingPoint.getDistanceToPoint(
+                            segment.B
+                        )
+                    ) {
                         return LineSegment(point, segment.A)
-                    }
-                    else {
+                    } else {
                         return LineSegment(point, segment.B)
                     }
                 }

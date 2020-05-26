@@ -28,6 +28,7 @@ data class Circle(
             return mutableListOf(leftPoint, upPoint, rightPoint, downPoint)
         }
 
+
     override fun getIntersectionWithLineSegment(segment: LineSegment): MutableList<Point> {
         val result: MutableList<Point> = ArrayList()
 

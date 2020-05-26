@@ -12,7 +12,7 @@ import com.example.ochev.baseclasses.dataclasses.vertexfigures.VertexFigure
 import kotlin.math.abs
 
 
-data class Graph(
+class Graph(
     val figures: FigureContainer = FigureContainer()
 ) {
 

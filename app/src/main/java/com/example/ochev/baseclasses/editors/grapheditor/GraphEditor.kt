@@ -15,9 +15,15 @@ import com.example.ochev.viewclasses.drawers.drawinginformations.DrawingMode
 
 class GraphEditor(
     var graph: Graph = Graph(),
-    var figureCounter: Int = 0
+    private var figureCounter: Int = 0
 ) {
     val history: GraphChangeHistory = GraphChangeHistory(graphEditor = this)
+    val allFiguresSortedByHeights
+        get() = graph.figures.figuresSortedByHeights
+    val allVertexes
+        get() = graph.figures.vertices
+    val allEdges
+        get() = graph.figures.edges
 
     fun revertChange() {
         graph = history.revert()

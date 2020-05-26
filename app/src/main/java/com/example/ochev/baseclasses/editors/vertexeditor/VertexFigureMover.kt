@@ -5,6 +5,8 @@ import com.example.ochev.baseclasses.dataclasses.Vector
 
 
 class VertexFigureMover(val editor: VertexFigureEditor) {
+    val helper: MoverHelper = MoverHelper(editor)
+
     lateinit var lastPoint: Point
 
     fun moveBegins(point: Point): Boolean {
@@ -22,6 +24,10 @@ class VertexFigureMover(val editor: VertexFigureEditor) {
         lastPoint = point
 
         editor.changeFigure(editor.currentFigureState.movedByVector(move))
+    }
+
+    fun moveEnds() {
+        helper.tryToHelp()
     }
 
 }
