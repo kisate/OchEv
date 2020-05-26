@@ -62,7 +62,7 @@ data class Point(val x: Float = 0f, val y: Float = 0f) {
             return ret
         }
 
-        fun intersectTwoSegments(firstSegment: LineSegment, secondSegment: LineSegment): Point? {
+        private fun intersectTwoLines(firstSegment: LineSegment, secondSegment: LineSegment): Point? {
             val p1 = firstSegment.A
             val p2 = firstSegment.B
             val p3 = secondSegment.A
@@ -85,12 +85,71 @@ data class Point(val x: Float = 0f, val y: Float = 0f) {
 
 
             val interestingPoint = Point(p3.x + v34.x * b, p3.y + v34.y * b)
+            return interestingPoint
+        }
 
-            if (abs(p1.getDistanceToPoint(p2) - interestingPoint.getDistanceToPoint(p1) - interestingPoint.getDistanceToPoint(p2)) <= 0.001f &&
+        fun intersectTwoSegments(firstSegment: LineSegment, secondSegment: LineSegment): Point? {
+            val p1 = firstSegment.A
+            val p2 = firstSegment.B
+            val p3 = secondSegment.A
+            val p4 = secondSegment.B
+            val interestingPoint = intersectTwoLines(firstSegment, secondSegment)
+            if (abs(p1.getDistanceToPoint(p2) - interestingPoint!!.getDistanceToPoint(p1) - interestingPoint.getDistanceToPoint(p2)) <= 0.001f &&
                 abs(p3.getDistanceToPoint(p4) - interestingPoint.getDistanceToPoint(p3) - interestingPoint.getDistanceToPoint(p4)) <= 0.001f) {
                 return interestingPoint
             }
             return null
+        }
+
+        private fun isPointInside(segment: LineSegment, point: Point): Boolean {
+            val v1 = Vector(segment.A, segment.B)
+            val v2 = Vector(segment.A, point)
+            val v3 = Vector(v1.y, -v1.x)
+            if (abs(v1.vectorProduct(v2)) <= 0.00001f) {
+                if (abs(point.getDistanceToPoint(segment.A) + point.getDistanceToPoint(segment.B) - segment.A.getDistanceToPoint(segment.B)) <= 0.0001f){
+                    return true
+                }
+                else {
+                    return false
+                }
+            }
+            else {
+                return false
+            }
+        }
+
+        fun getOptimalSegment(segment: LineSegment, point: Point): LineSegment {
+            val v1 = Vector(segment.A, segment.B)
+            val v2 = Vector(segment.A, point)
+            val v3 = Vector(v1.y, -v1.x)
+            if (abs(v1.vectorProduct(v2)) <= 0.00001f) {
+                if (abs(point.getDistanceToPoint(segment.A) + point.getDistanceToPoint(segment.B) - segment.A.getDistanceToPoint(segment.B)) <= 0.0001f){
+                    return LineSegment(point, point)
+                }
+                else {
+                    if (point.getDistanceToPoint(segment.A) <= point.getDistanceToPoint(segment.B)){
+                        return LineSegment(point, segment.A)
+                    }
+                    else {
+                        return LineSegment(point, segment.B)
+                    }
+                }
+            }
+            else {
+                val interestingPoint = intersectTwoLines(LineSegment(point, Point(v3.x + point.x, v3.y + point.y)), segment)
+                if (isPointInside(segment, interestingPoint!!)) {
+                    return LineSegment(point, interestingPoint)
+
+                }
+                else {
+                    if (interestingPoint.getDistanceToPoint(segment.A) <= interestingPoint.getDistanceToPoint(segment.B)){
+                        return LineSegment(point, segment.A)
+                    }
+                    else {
+                        return LineSegment(point, segment.B)
+                    }
+                }
+            }
         }
     }
 }
