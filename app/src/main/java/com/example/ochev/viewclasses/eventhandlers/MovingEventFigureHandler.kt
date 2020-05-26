@@ -27,10 +27,12 @@ class MovingEventFigureHandler(
             }
             GestureState.IN_PROGRESS -> {
                 vertexFigureEditor.mover.nextPoint(point)
+                linesDrawer.invalidate(mutableListOf(Pair(Point(100f, 200f), Point(400f, 500f))))
             }
             GestureState.END -> {
                 firstPointerId = null
                 vertexFigureEditor.mover.nextPoint(point)
+                linesDrawer.clear()
             }
             else -> {
 

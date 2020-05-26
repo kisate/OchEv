@@ -16,4 +16,8 @@ class LinesDrawer {
         linesView.drawLinesOnCanvas(currentLines, canvas)
     }
 
+    fun clear() {
+        invalidate(mutableListOf())
+    }
+
 }

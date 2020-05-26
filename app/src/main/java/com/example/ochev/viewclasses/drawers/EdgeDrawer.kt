@@ -9,12 +9,14 @@ import com.example.ochev.baseclasses.dataclasses.Point
 import com.example.ochev.baseclasses.dataclasses.edgefigures.Edge
 import com.example.ochev.viewclasses.drawers.drawinginformations.DrawingInformation
 import com.example.ochev.viewclasses.drawers.drawinginformations.DrawingMode
+import com.example.ochev.viewclasses.drawers.drawinginformations.EdgeDrawingInformation
 
 class EdgeDrawer : Drawer() {
 
     override fun draw(figure: Figure, drawingInformation: DrawingInformation, canvas: Canvas?) {
 
         figure as Edge
+        drawingInformation as EdgeDrawingInformation
 
         Log.i("EdgeDrawingDbg", figure.toString())
 
@@ -24,7 +26,9 @@ class EdgeDrawer : Drawer() {
         if (from == null || to == null) return
         path.moveTo(from.x, from.y)
         path.lineTo(to.x, to.y)
-        path.addPath(ArrowGetter().getPathOfArrow(from, to))
+        if (drawingInformation.types[0] == 1)
+            path.addPath(ArrowGetter().getPathOfArrow(from, to))
+        if (drawingInformation.types[1] == 1)
         path.addPath(ArrowGetter().getPathOfArrow(to, from))
 
         if (drawingInformation.drawingMode == DrawingMode.EDIT) {

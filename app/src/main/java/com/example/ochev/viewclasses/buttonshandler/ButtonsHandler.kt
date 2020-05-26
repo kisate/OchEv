@@ -2,7 +2,6 @@ package com.example.ochev.viewclasses.buttonshandler
 
 import android.view.View
 import com.example.ochev.baseclasses.editors.FigureEditor
-import com.example.ochev.baseclasses.editors.vertexeditor.VertexFigureEditor
 import com.example.ochev.viewclasses.drawers.GraphDrawer
 
 class ButtonsHandler (
@@ -12,19 +11,19 @@ class ButtonsHandler (
 
     init{
         buttonsContainer.clearButton.setOnClickListener {
-            closeEditing()
+            exitEditing()
             graphDrawer.graphEditor.clear()
             graphDrawer.invalidate()
         }
 
         buttonsContainer.undoButton.setOnClickListener {
-            closeEditing()
+            exitEditing()
             graphDrawer.graphEditor.revertChange()
             graphDrawer.invalidate()
         }
 
         buttonsContainer.forwardButton.setOnClickListener {
-            closeEditing()
+            exitEditing()
             graphDrawer.graphEditor.undoRevertChange()
             graphDrawer.invalidate()
         }
@@ -42,12 +41,12 @@ class ButtonsHandler (
         showDeleteButton()
         buttonsContainer.deleteButton.setOnClickListener {
             figureEditor.graphEditor.deleteFigure(figureEditor.currentFigureState)
-            closeEditing()
+            exitEditing()
             graphDrawer.invalidate()
         }
     }
 
-    fun closeEditing() {
+    fun exitEditing() {
         buttonsContainer.deleteButton.visibility = View.INVISIBLE
     }
 
@@ -59,7 +58,7 @@ class ButtonsHandler (
         buttonsContainer.saveButton.isClickable = false
     }
 
-    fun activateAll() {
+    fun enableAll() {
         buttonsContainer.forwardButton.isClickable = true
         buttonsContainer.undoButton.isClickable = true
         buttonsContainer.clearButton.isClickable = true

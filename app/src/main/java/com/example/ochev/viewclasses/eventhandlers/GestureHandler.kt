@@ -75,8 +75,8 @@ class GestureHandler(
             val clickedEnd = graphDrawer.graphEditor.getEdgeNodeByIdOrNull(currentEdgeEditor!!.figureId)!!.figure.getIndexOfClosestEnd(Point(event))
             if (clickedEnd != -1) {
 //                graphDrawer.graphEditor.getEdgeNodeByIdOrNull(currentEdgeEditor!!.figureId)!!.drawingInformation.
+                return null
             }
-            return null
         }
 
 
@@ -184,7 +184,7 @@ class GestureHandler(
 
     private fun exitEditMode() {
         if (currentFigureEditor != null) {
-            buttonsHandler.closeEditing()
+            buttonsHandler.exitEditing()
             if (graphDrawer.graphEditor.getFigureNodeByIdOrNull(currentFigureEditor!!.figureId) != null) {
                 graphDrawer.graphEditor.getFigureNodeByIdOrNull(currentFigureEditor!!.figureId)!!.drawingInformation.enterMode(
                     DrawingMode.DEFAULT
@@ -227,7 +227,7 @@ class GestureHandler(
             view.clearFocus()
         }
         editText.visibility = View.GONE
-        buttonsHandler.activateAll()
+        buttonsHandler.enableAll()
     }
 
     private fun enterEditEdgeMode(clickedEdgeEditor: EdgeEditor) {
@@ -248,7 +248,7 @@ class GestureHandler(
     private fun exitEditEdgeMode() {
         if (currentEdgeEditor != null)
         {
-            buttonsHandler.closeEditing()
+            buttonsHandler.exitEditing()
         }
     }
 
