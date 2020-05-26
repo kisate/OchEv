@@ -54,8 +54,23 @@ data class Edge(
 
     // returns 0 if begin is closer, 1 otherwise, -1 if both points are far away
 
-    /* fun getIndexOfClosestEnd(point: Point): Int {
-         val
-     }*/
+    fun getIndexOfClosestEnd(point: Point): Int {
+        val checker = { it: Point ->
+            it.getDistanceToPoint(point) <= this.getDistanceToCountTouch()
+        }
+
+        if (realBeginPoint == null || realEndPoint == null) return -1
+
+        return if (realBeginPoint!!.getDistanceToPoint(point) <= realEndPoint!!.getDistanceToPoint(
+                point
+            )
+        ) {
+            if (checker(realBeginPoint!!)) 0
+            else -1
+        } else {
+            if (checker(realEndPoint!!)) 1
+            else -1
+        }
+    }
 
 }
