@@ -1,5 +1,9 @@
-package com.example.ochev.baseclasses.dataclasses
+package com.example.ochev.baseclasses.editors.grapheditor
 
+import com.example.ochev.baseclasses.dataclasses.Figure
+import com.example.ochev.baseclasses.dataclasses.FigureContainer
+import com.example.ochev.baseclasses.dataclasses.Point
+import com.example.ochev.baseclasses.dataclasses.Vector
 import com.example.ochev.baseclasses.dataclasses.edgefigures.Edge
 import com.example.ochev.baseclasses.dataclasses.nodes.EdgeNode
 import com.example.ochev.baseclasses.dataclasses.nodes.FigureNode
@@ -124,7 +128,12 @@ data class Graph(
         val newGraph = Graph()
 
         val linker = getLinker {
-            it.movedByVector(Vector(point, it.center).multipliedByFloat(factor - 1f))
+            it.movedByVector(
+                Vector(
+                    point,
+                    it.center
+                ).multipliedByFloat(factor - 1f)
+            )
                 .rescaledByFactor(factor)
         }
 

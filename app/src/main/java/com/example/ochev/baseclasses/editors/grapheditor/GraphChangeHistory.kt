@@ -1,6 +1,5 @@
 package com.example.ochev.baseclasses.editors.grapheditor
 
-import com.example.ochev.baseclasses.dataclasses.Graph
 import com.example.ochev.baseclasses.dataclasses.Point
 import com.example.ochev.baseclasses.dataclasses.Vector
 
