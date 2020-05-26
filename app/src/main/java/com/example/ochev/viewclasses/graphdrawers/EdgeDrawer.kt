@@ -7,6 +7,7 @@ import android.graphics.Path
 import android.util.Log
 import com.example.ochev.algorithms.ArrowGetter
 import com.example.ochev.baseclasses.dataclasses.Figure
+import com.example.ochev.baseclasses.dataclasses.Point
 import com.example.ochev.baseclasses.dataclasses.edgefigures.Edge
 import com.example.ochev.viewclasses.DrawingInformation
 import com.example.ochev.viewclasses.DrawingMode
@@ -54,6 +55,16 @@ class EdgeDrawer : Drawer() {
         path.addPath(ArrowGetter().getPathOfArrow(from, to))
         path.addPath(ArrowGetter().getPathOfArrow(to, from))
 
+        if (drawingInformation.drawingMode == DrawingMode.EDIT) {
+            for (point in mutableListOf<Point>(figure.realBeginPoint!!, figure.realEndPoint!!)) {
+                canvas?.drawCircle(
+                    point.x,
+                    point.y,
+                    5f,
+                    styles[DrawingMode.EDIT_CORNERS.ordinal].circuitPaint
+                )
+            }
+        }
         canvas?.drawPath(path, styles[drawingInformation.currentStyle].circuitPaint)
 //        canvas?.drawTextOnPath("Test Text 1234567", path, 100f, 100f, styles[DrawingMode.DEFAULT.ordinal].fontPaint)
     }
