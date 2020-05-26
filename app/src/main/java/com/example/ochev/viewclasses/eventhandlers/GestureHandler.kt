@@ -255,8 +255,8 @@ class GestureHandler(
         {
             buttonsHandler.exitEditing()
 
-            if (graphDrawer.graphEditor.getEdgeNodeByIdOrNull(currentFigureEditor!!.figureId) != null) {
-                graphDrawer.graphEditor.getEdgeNodeByIdOrNull(currentFigureEditor!!.figureId)!!.drawingInformation.enterMode(
+            if (graphDrawer.graphEditor.getEdgeNodeByIdOrNull(currentEdgeEditor!!.figureId) != null) {
+                graphDrawer.graphEditor.getEdgeNodeByIdOrNull(currentEdgeEditor!!.figureId)!!.drawingInformation.enterMode(
                     DrawingMode.DEFAULT
                 )
             }
