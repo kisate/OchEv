@@ -70,11 +70,13 @@ class GestureHandler(
         val clickedFigureEditor =
             graphDrawer.graphEditor.getFigureEditorByTouch(Point(event))
 
-        if (currentEdgeEditor != null)
+        if (currentEdgeEditor != null && graphDrawer.graphEditor.getEdgeNodeByIdOrNull(currentEdgeEditor!!.figureId) != null && gesture.type == GestureType.TAP)
         {
             val clickedEnd = graphDrawer.graphEditor.getEdgeNodeByIdOrNull(currentEdgeEditor!!.figureId)!!.figure.getIndexOfClosestEnd(Point(event))
             if (clickedEnd != -1) {
-//                graphDrawer.graphEditor.getEdgeNodeByIdOrNull(currentEdgeEditor!!.figureId)!!.drawingInformation.
+                graphDrawer.graphEditor.getEdgeNodeByIdOrNull(currentEdgeEditor!!.figureId)!!.drawingInformation.switchTypeToNext(clickedEnd)
+                graphDrawer.invalidate()
+                Log.d("GEG", clickedEnd.toString())
                 return null
             }
         }
@@ -242,6 +244,9 @@ class GestureHandler(
         }
 
         buttonsHandler.enterEditing(clickedEdgeEditor)
+
+        Log.d("GEG", "entered")
+
         graphDrawer.invalidate()
     }
 
@@ -249,6 +254,9 @@ class GestureHandler(
         if (currentEdgeEditor != null)
         {
             buttonsHandler.exitEditing()
+            currentEdgeEditor = null
+
+            Log.d("GEG", "left")
         }
     }
 
