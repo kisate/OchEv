@@ -40,9 +40,6 @@ abstract class Drawer {
         }
 
         drawingInfo?.style?.circuitPaint?.let { canvas?.drawCircle(figure.center.x, figure.center.y, 12f, it) }
-
-
-
     }
 
     fun drawMultiLineText(

@@ -32,7 +32,7 @@ class MovingEventFigureHandler(
             GestureState.END -> {
                 firstPointerId = null
                 vertexFigureEditor.mover.nextPoint(point)
-                vertexFigureEditor.mover.helper.tryToHelp()
+                vertexFigureEditor.mover.moveEnds()
                 linesDrawer.clear()
             }
             else -> {
