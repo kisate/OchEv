@@ -75,8 +75,8 @@ class GestureHandler(
             val clickedEnd = graphDrawer.graphEditor.getEdgeNodeByIdOrNull(currentEdgeEditor!!.figureId)!!.figure.getIndexOfClosestEnd(Point(event))
             if (clickedEnd != -1) {
 //                graphDrawer.graphEditor.getEdgeNodeByIdOrNull(currentEdgeEditor!!.figureId)!!.drawingInformation.
+                return null
             }
-            return null
         }
 
 
