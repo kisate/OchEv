@@ -11,7 +11,7 @@ class StrokeDrawer(
     val stroke = Stroke()
 
     fun add(x: Float, y: Float) {
-        Log.i("StrokeDrawer", x.toString() + " " + y.toString())
+        Log.i("StrokeDrawer", "$x $y")
         val point = Point(x, y)
         if (stroke.points.size == 0) {
             drawStrokeView.path.moveTo(x, y)
