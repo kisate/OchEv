@@ -1,7 +1,9 @@
 package com.example.ochev.viewclasses.drawers.drawinginformations
 
 import android.graphics.Color
+import android.graphics.DashPathEffect
 import android.graphics.Paint
+import android.graphics.PathEffect
 import com.example.ochev.viewclasses.drawers.FigureStyle
 
 class EdgeDrawingInformation : DrawingInformation {
@@ -17,11 +19,12 @@ class EdgeDrawingInformation : DrawingInformation {
 
     init {
         types.add(0)
-        types.add(0)
+        types.add(1)
         enterMode(DrawingMode.DEFAULT)
     }
 
     override fun enterMode(newDrawingMode: DrawingMode) {
+        style = FigureStyle()
         drawingMode = newDrawingMode
         when (newDrawingMode) {
             DrawingMode.DEFAULT -> {
@@ -36,9 +39,7 @@ class EdgeDrawingInformation : DrawingInformation {
                 style.fontPaint.color = Color.BLACK
             }
             DrawingMode.EDIT -> {
-                style.fillPaint.style = Paint.Style.FILL
-                style.fillPaint.strokeWidth = 0f
-                style.fillPaint.color = Color.GRAY
+                style.circuitPaint.setPathEffect(DashPathEffect(floatArrayOf(30f, 10f), 20f));
                 style.circuitPaint.style = Paint.Style.STROKE
                 style.circuitPaint.strokeWidth = 10f
                 style.circuitPaint.color = Color.BLACK

@@ -1,6 +1,7 @@
 package com.example.ochev.viewclasses.drawers
 
 import android.graphics.Canvas
+import android.graphics.Paint
 import android.graphics.Path
 import android.util.Log
 import com.example.ochev.algorithms.ArrowGetter
@@ -12,6 +13,8 @@ import com.example.ochev.viewclasses.drawers.drawinginformations.DrawingMode
 import com.example.ochev.viewclasses.drawers.drawinginformations.EdgeDrawingInformation
 
 class EdgeDrawer : Drawer() {
+
+    private val arrowheadDrawer = ArrowheadDrawer()
 
     override fun draw(figure: Figure, drawingInformation: DrawingInformation, canvas: Canvas?) {
 
@@ -26,14 +29,20 @@ class EdgeDrawer : Drawer() {
         if (from == null || to == null) return
         path.moveTo(from.x, from.y)
         path.lineTo(to.x, to.y)
-        if (drawingInformation.types[0] == 1)
-            path.addPath(ArrowGetter().getPathOfArrow(from, to))
-        if (drawingInformation.types[1] == 1)
-        path.addPath(ArrowGetter().getPathOfArrow(to, from))
+        canvas?.drawPath(path, drawingInformation.style.circuitPaint)
+
+        if (drawingInformation.types[1] == 1) {
+            arrowheadDrawer.draw(from, to, canvas)
+        }
+        if (drawingInformation.types[0] == 1){
+            arrowheadDrawer.draw(to, from, canvas)
+            canvas?.drawPath(ArrowGetter().getPathOfArrow(to, from), Paint())
+        }
+
 
         if (drawingInformation.drawingMode == DrawingMode.EDIT) {
             drawingInformation.enterMode(DrawingMode.EDIT_CORNERS)
-            for (point in mutableListOf<Point>(figure.realBeginPoint!!, figure.realEndPoint!!)) {
+            for (point in mutableListOf(figure.realBeginPoint!!, figure.realEndPoint!!)) {
                 canvas?.drawCircle(
                     point.x,
                     point.y,
@@ -43,7 +52,7 @@ class EdgeDrawer : Drawer() {
             }
             drawingInformation.enterMode(DrawingMode.EDIT)
         }
-        canvas?.drawPath(path, drawingInformation.style.circuitPaint)
+
     }
 
 
