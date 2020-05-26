@@ -28,6 +28,10 @@ class ButtonsHandler (
             graphDrawer.graphEditor.undoRevertChange()
             graphDrawer.invalidate()
         }
+
+        buttonsContainer.saveButton.setOnClickListener {
+            //TODO()
+        }
     }
 
     fun showDeleteButton() {
@@ -52,6 +56,7 @@ class ButtonsHandler (
         buttonsContainer.undoButton.isClickable = false
         buttonsContainer.clearButton.isClickable = false
         buttonsContainer.deleteButton.isClickable = false
+        buttonsContainer.saveButton.isClickable = false
     }
 
     fun activateAll() {
@@ -59,6 +64,7 @@ class ButtonsHandler (
         buttonsContainer.undoButton.isClickable = true
         buttonsContainer.clearButton.isClickable = true
         buttonsContainer.deleteButton.isClickable = true
+        buttonsContainer.saveButton.isClickable = true
     }
 
 }

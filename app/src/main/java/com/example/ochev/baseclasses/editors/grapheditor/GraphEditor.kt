@@ -100,7 +100,6 @@ class GraphEditor(
                 )
             }
         }
-
         return true
     }
 

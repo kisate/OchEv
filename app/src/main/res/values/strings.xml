@@ -2,4 +2,6 @@
     <string name="app_name">OchEv</string>
     <string name="clearButtonName">Clear</string>
     <string name="deleteButtonName">Delete</string>
+    <string name="enter_figure_text">Enter figure text</string>
+    <string name="saveButtonName">Save</string>
 </resources>
