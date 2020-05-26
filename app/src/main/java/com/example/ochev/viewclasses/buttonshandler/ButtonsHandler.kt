@@ -1,6 +1,7 @@
 package com.example.ochev.viewclasses.buttonshandler
 
 import android.view.View
+import com.example.ochev.baseclasses.editors.FigureEditor
 import com.example.ochev.baseclasses.editors.vertexeditor.VertexFigureEditor
 import com.example.ochev.viewclasses.drawers.GraphDrawer
 
@@ -37,7 +38,7 @@ class ButtonsHandler (
         buttonsContainer.deleteButton.visibility = View.VISIBLE
     }
 
-    fun enterEditing(figureEditor: VertexFigureEditor) {
+    fun enterEditing(figureEditor: FigureEditor) {
         showDeleteButton()
         buttonsContainer.deleteButton.setOnClickListener {
             figureEditor.graphEditor.deleteFigure(figureEditor.currentFigureState)
