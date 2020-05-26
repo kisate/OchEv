@@ -9,7 +9,15 @@ class EdgeDrawingInformation : DrawingInformation {
     override var text: String = ""
     override var style: FigureStyle = FigureStyle()
 
+    var types: MutableList<Int> = ArrayList()
+
+    fun switchTypeToNext(index: Int) {
+        types[index] = types[index] xor 1
+    }
+
     init {
+        types.add(0)
+        types.add(0)
         enterMode(DrawingMode.DEFAULT)
     }
 
