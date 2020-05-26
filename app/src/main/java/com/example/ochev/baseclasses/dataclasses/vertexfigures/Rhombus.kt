@@ -1,12 +1,13 @@
 package com.example.ochev.baseclasses.dataclasses.vertexfigures
 
-import android.util.Log
+import com.example.ochev.baseclasses.dataclasses.LineSegment
 import com.example.ochev.baseclasses.dataclasses.Point
 import com.example.ochev.baseclasses.dataclasses.Stroke
 import com.example.ochev.baseclasses.dataclasses.Stroke.Companion.getStrokesRestrictions
 import com.example.ochev.baseclasses.dataclasses.Vector
 import com.example.ochev.baseclasses.editors.vertexeditor.PointMover
 import kotlin.math.abs
+import kotlin.math.max
 import kotlin.math.sign
 
 data class Rhombus(
@@ -33,13 +34,17 @@ data class Rhombus(
             return mutableListOf(leftCorner, upCorner, rightCorner, downCorner)
         }
 
-    override fun getIntersectionWithLineSegment(a: Point, b: Point): MutableList<Point> {
+    override fun getIntersectionWithLineSegment(segment: LineSegment): MutableList<Point> {
         val result: MutableList<Point> = ArrayList()
         val points = importantPoints
         for (i in points.indices) {
-
-            Log.i("intersection.pro_dbg", a.toString() + " " + b.toString() + " " + points[i].toString() +  " " + points[(i + 1) % points.size].toString())
-            Point.intersectTwoSegments(a, b, points[i], points[(i + 1) % points.size])
+            Point.intersectTwoSegments(
+                segment,
+                LineSegment(
+                    points[i],
+                    points[(i + 1) % points.size]
+                )
+            )
                 ?.let { result.add(it) }
         }
         return result
@@ -110,12 +115,12 @@ data class Rhombus(
         val points = importantPoints
 
         return MutableList(points.size) {
-            point.getDistanceToLineSegment(points[it], points[(it + 1) % points.size])
+            point.getDistanceToLineSegment(LineSegment(points[it], points[(it + 1) % points.size]))
         }.min()!!
     }
 
     override fun getDistanceToCountTouch(): Float {
-        return leftCorner.getDistanceToPoint(upCorner) / 4f
+        return max(leftCorner.getDistanceToPoint(upCorner) / 3.33f, 40f)
     }
 }
 

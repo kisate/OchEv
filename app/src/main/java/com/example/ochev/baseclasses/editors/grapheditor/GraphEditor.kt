@@ -35,44 +35,6 @@ class GraphEditor(
         }
     }
 
-    fun deleteFigure(figure: Figure) {
-        history.saveState()
-        when (figure) {
-            is VertexFigure -> deleteVertex(figure)
-            is Edge -> deleteEdge(figure)
-        }
-    }
-
-    private fun deleteEdge(edgeFigure: Edge) {
-        val newGraph = Graph()
-        newGraph.figures.vertices += graph.figures.vertices
-
-        graph.figures.edges.forEach {
-            if (it.figure != edgeFigure) {
-                newGraph.figures.edges.add(it)
-            }
-        }
-
-        graph = newGraph
-    }
-
-    private fun deleteVertex(vertexFigure: VertexFigure) {
-        val newGraph = Graph()
-
-        graph.figures.vertices.forEach {
-            if (it.figure != vertexFigure) newGraph.figures.vertices.add(it)
-        }
-
-        graph.figures.edges.forEach {
-            if (it.figure.beginFigure != vertexFigure && it.figure.endFigure != vertexFigure) {
-                newGraph.figures.edges.add(it)
-            }
-        }
-
-        graph = newGraph
-    }
-
-
     fun modifyByStrokes(information: InformationForNormalizer): Boolean {
         val normalizer =
             FigureNormalizer()
@@ -114,9 +76,47 @@ class GraphEditor(
         }
     }
 
+    fun addFigure(figure: Figure) {
+        history.saveState()
+        when (figure) {
+            is VertexFigure -> {
+                addVertexFigure(figure)
+            }
+            is Edge -> {
+                addEdge(figure)
+            }
+        }
+    }
+
+    private fun addVertexFigure(vertexFigure: VertexFigure) {
+        graph.addVertexNode(
+            VertexFigureNode(
+                id = figureCounter++,
+                height = graph.figures.maxHeight,
+                figure = vertexFigure,
+                drawingInformation = DrawingInformation.getVertexDrawingInformation(vertexFigure)!!
+            )
+        )
+    }
+
+    private fun addEdge(edge: Edge) {
+        graph.addEdgeNode(
+            EdgeNode(
+                id = figureCounter++,
+                figure = edge,
+                drawingInformation = DrawingInformation.getEdgeDrawingInformation()!!
+            )
+        )
+    }
+
+    fun deleteFigure(figure: Figure) {
+        history.saveState()
+        graph = graph.withDeletedFigure(figure)
+    }
+
     fun replaceVertex(old: VertexFigure, new: VertexFigure) {
         // redirecting edges
-        graph = graph.replaceVertex(old, new)
+        graph = graph.replacedVertex(old, new)
     }
 
     fun moveGraphByVector(vector: Vector) {

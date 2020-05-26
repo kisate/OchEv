@@ -9,4 +9,8 @@ interface FigureEditor {
     val graphEditor: GraphEditor
     val currentFigureState: Figure
     val figureNode: FigureNode
+
+    fun deleteFigure() {
+        graphEditor.deleteFigure(currentFigureState)
+    }
 }

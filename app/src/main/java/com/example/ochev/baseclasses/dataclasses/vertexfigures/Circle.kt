@@ -1,6 +1,7 @@
 package com.example.ochev.baseclasses.dataclasses.vertexfigures
 
 import com.example.ochev.algorithms.QuadraticEquationSolver
+import com.example.ochev.baseclasses.dataclasses.LineSegment
 import com.example.ochev.baseclasses.dataclasses.Point
 import com.example.ochev.baseclasses.dataclasses.Stroke
 import com.example.ochev.baseclasses.dataclasses.Stroke.Companion.getStrokesRestrictions
@@ -27,11 +28,11 @@ data class Circle(
             return mutableListOf(leftPoint, upPoint, rightPoint, downPoint)
         }
 
-    override fun getIntersectionWithLineSegment(a: Point, b: Point): MutableList<Point> {
+    override fun getIntersectionWithLineSegment(segment: LineSegment): MutableList<Point> {
         val result: MutableList<Point> = ArrayList()
 
         val (maxX, maxY, minX, minY) = getStrokesRestrictions(
-            mutableListOf(Stroke(mutableListOf(a, b)))
+            mutableListOf(Stroke(mutableListOf(segment.A, segment.B)))
         )
 
         if (maxX - minX <= 5) {
@@ -46,8 +47,8 @@ data class Circle(
             return result
         } else {
             // line is y = kx + d
-            val k = (a.y - b.y) / (a.x - b.x)
-            val d = a.y - k * a.x
+            val k = (segment.A.y - segment.B.y) / (segment.A.x - segment.B.x)
+            val d = segment.A.y - k * segment.A.x
 
             val solutions = QuadraticEquationSolver.solveEquation(
                 (1 + k * k),
@@ -105,7 +106,7 @@ data class Circle(
     }
 
     override fun getDistanceToCountTouch(): Float {
-        return max(radius / 3f, 20f)
+        return max(radius / 3.33f, 40f)
     }
 
 }

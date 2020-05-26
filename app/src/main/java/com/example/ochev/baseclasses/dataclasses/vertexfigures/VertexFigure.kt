@@ -1,6 +1,7 @@
 package com.example.ochev.baseclasses.dataclasses.vertexfigures
 
 import com.example.ochev.baseclasses.dataclasses.Figure
+import com.example.ochev.baseclasses.dataclasses.LineSegment
 import com.example.ochev.baseclasses.dataclasses.Point
 import com.example.ochev.baseclasses.dataclasses.Vector
 import com.example.ochev.baseclasses.editors.vertexeditor.PointMover
@@ -13,7 +14,7 @@ abstract class VertexFigure : Figure() {
 
     abstract val importantPoints: MutableList<Point>
 
-    abstract fun getIntersectionWithLineSegment(a: Point, b: Point): MutableList<Point>
+    abstract fun getIntersectionWithLineSegment(segment: LineSegment): MutableList<Point>
     abstract fun rescaledByFactor(factor: Float): VertexFigure
     abstract fun movedByVector(vector: Vector): VertexFigure
     abstract fun checkIfPointIsInside(point: Point): Boolean
