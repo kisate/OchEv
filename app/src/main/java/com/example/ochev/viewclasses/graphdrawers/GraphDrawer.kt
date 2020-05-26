@@ -1,6 +1,6 @@
 package com.example.ochev.viewclasses.graphdrawers
 
-import android.widget.Toast
+import android.graphics.Canvas
 import com.example.ochev.baseclasses.dataclasses.InformationForNormalizer
 import com.example.ochev.baseclasses.editors.grapheditor.GraphEditor
 import com.example.ochev.viewclasses.DrawGraphView
@@ -18,6 +18,10 @@ class GraphDrawer(
 
     fun invalidate() {
         graphView.invalidate(graphEditor)
+    }
+
+    fun drawGraphOnCanvas(graphEditor: GraphEditor, canvas: Canvas?) {
+        graphView.drawGraphOnCanvas(graphEditor, canvas)
     }
 
 }
