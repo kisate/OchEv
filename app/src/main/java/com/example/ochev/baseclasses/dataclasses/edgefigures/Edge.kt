@@ -42,7 +42,7 @@ data class Edge(
     override val center: Point
         get() = Point(
             (beginFigure.center.x + endFigure.center.x) / 2,
-            (endFigure.center.y + endFigure.center.y) / 2
+            (beginFigure.center.y + endFigure.center.y) / 2
         )
 
     override fun checkIfFigureIsCloseEnough(point: Point): Boolean {
