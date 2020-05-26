@@ -6,7 +6,7 @@ import android.graphics.Color
 import android.graphics.Paint
 import android.util.AttributeSet
 import android.view.View
-import com.example.ochev.baseclasses.dataclasses.Point
+import com.example.ochev.baseclasses.dataclasses.LineSegment
 
 class DrawLinesView(
     context: Context?,
@@ -18,33 +18,35 @@ class DrawLinesView(
 
     init {
         paint.style = Paint.Style.STROKE
-        paint.strokeWidth = 4f
+        paint.strokeWidth = 7f
         paint.color = Color.parseColor("#FFC107")
     }
 
-    private var currentLines: MutableList<Pair<Point, Point>> = ArrayList()
+    private var currentLines: LineSegment? = null
 
-    fun invalidate(newCurrentLines: MutableList<Pair<Point, Point>>) {
-        currentLines = newCurrentLines
+    fun invalidate(segment: LineSegment?) {
+        currentLines = segment
         invalidate()
     }
 
     override fun onDraw(canvas: Canvas?) {
-        drawLinesOnCanvas(currentLines, canvas)
+        drawLinesOnCanvas(mutableListOf(currentLines), canvas)
     }
 
-    fun drawLinesOnCanvas(currentLines: MutableList<Pair<Point, Point>>, canvas: Canvas?) {
+    fun drawLinesOnCanvas(currentLines: MutableList<LineSegment?>, canvas: Canvas?) {
         for (segment in currentLines) {
+
             drawLine(segment, canvas)
         }
     }
 
-    private fun drawLine(segment: Pair<Point, Point>, canvas: Canvas?) {
+    private fun drawLine(segment: LineSegment?, canvas: Canvas?) {
+        if (segment == null)return
         canvas?.drawLine(
-            segment.first.x,
-            segment.first.y,
-            segment.second.x,
-            segment.second.y,
+            segment.A.x,
+            segment.A.y,
+            segment.B.x,
+            segment.B.y,
             paint
         )
     }
