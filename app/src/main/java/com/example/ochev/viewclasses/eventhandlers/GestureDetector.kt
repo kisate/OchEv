@@ -114,7 +114,7 @@ class GestureDetector {
     }
 
     companion object {
-        private const val TAP_THRESHOLD = 50f
-        private const val LONG_TAP_THRESHOLD = 300
+        private const val TAP_THRESHOLD = 100f
+        private const val LONG_TAP_THRESHOLD = 500
     }
 }

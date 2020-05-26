@@ -117,7 +117,18 @@ class GestureHandler(
             if (gesture.type == GestureType.LONG_TAP  && clickedFigureEditor != null)
             {
                 enterEditTextMode(clickedFigureEditor)
+                if (gesture.state == GestureState.START)
+                {
+                    val v =
+                        graphDrawer.graphView.context.getSystemService(Context.VIBRATOR_SERVICE) as Vibrator?
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                        v?.vibrate(VibrationEffect.createOneShot(100, VibrationEffect.DEFAULT_AMPLITUDE))
+                    } else {
+                        v?.vibrate(100)
+                    }
+                }
             }
+
         }
 
         return null
@@ -151,14 +162,6 @@ class GestureHandler(
         editText.visibility = View.VISIBLE
         editText.setVertexEditor(clickedFigureEditor, graphDrawer.graphView)
         enterEditMode(clickedFigureEditor)
-
-        val v =
-             graphDrawer.graphView.context.getSystemService(Context.VIBRATOR_SERVICE) as Vibrator?
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            v?.vibrate(VibrationEffect.createOneShot(100, VibrationEffect.DEFAULT_AMPLITUDE))
-        } else {
-            v?.vibrate(100)
-        }
 
         buttonsHandler.disableAll()
     }
