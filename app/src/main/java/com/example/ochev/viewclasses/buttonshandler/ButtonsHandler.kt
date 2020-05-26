@@ -2,8 +2,7 @@ package com.example.ochev.viewclasses.buttonshandler
 
 import android.view.View
 import com.example.ochev.baseclasses.editors.vertexeditor.VertexFigureEditor
-import com.example.ochev.viewclasses.DrawGraphView
-import com.example.ochev.viewclasses.graphdrawers.GraphDrawer
+import com.example.ochev.viewclasses.drawers.GraphDrawer
 
 class ButtonsHandler (
     val buttonsContainer: ButtonsContainer,

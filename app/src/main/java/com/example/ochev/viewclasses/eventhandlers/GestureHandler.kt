@@ -12,10 +12,11 @@ import android.view.inputmethod.InputMethodManager
 import com.example.ochev.baseclasses.dataclasses.Point
 import com.example.ochev.baseclasses.editors.vertexeditor.VertexFigureEditor
 import com.example.ochev.ml.Classifier
-import com.example.ochev.viewclasses.graphdrawers.drawinginformations.DrawingMode
+import com.example.ochev.viewclasses.drawers.drawinginformations.DrawingMode
 import com.example.ochev.viewclasses.SmartEditText
 import com.example.ochev.viewclasses.buttonshandler.ButtonsHandler
-import com.example.ochev.viewclasses.graphdrawers.GraphDrawer
+import com.example.ochev.viewclasses.drawers.GraphDrawer
+import com.example.ochev.viewclasses.drawers.LinesDrawer
 import com.example.ochev.viewclasses.strokedrawers.StrokeDrawer
 
 
@@ -30,6 +31,7 @@ abstract class GestureEventHandler(
 class GestureHandler(
     private val strokeDrawer: StrokeDrawer,
     private val graphDrawer: GraphDrawer,
+    private val linesDrawer: LinesDrawer,
     private val buttonsHandler: ButtonsHandler,
     private val editText: SmartEditText,
     private val classifier: Classifier
@@ -102,6 +104,7 @@ class GestureHandler(
                         return MovingEventFigureHandler(
                             strokeDrawer,
                             graphDrawer,
+                            linesDrawer,
                             classifier,
                             currentFigureEditor!!
                         )

@@ -1,34 +1,29 @@
-package com.example.ochev.viewclasses.graphdrawers
+package com.example.ochev.viewclasses.drawers
 
 import android.graphics.Canvas
-import android.graphics.Color
 import android.graphics.Paint
 import android.graphics.Path
-import android.util.Log
 import com.example.ochev.baseclasses.dataclasses.Figure
-import com.example.ochev.baseclasses.dataclasses.vertexfigures.Rectangle
-import com.example.ochev.viewclasses.graphdrawers.drawinginformations.DrawingInformation
-import com.example.ochev.viewclasses.graphdrawers.drawinginformations.DrawingMode
+import com.example.ochev.baseclasses.dataclasses.vertexfigures.Rhombus
+import com.example.ochev.viewclasses.drawers.drawinginformations.DrawingInformation
+import com.example.ochev.viewclasses.drawers.drawinginformations.DrawingMode
 
-class RectangleDrawer : Drawer() {
+class RhombusDrawer: Drawer() {
 
-
-    fun drawRect(rect: Rectangle, canvas: Canvas?, paint: Paint) {
-        Log.i("ClassifyDbg", rect.toString())
-        Log.i("ClassifyDbg", rect.rightDownCorner.toString() + rect.leftUpCorner.toString())
+    fun drawRhombus(rhombus: Rhombus, canvas: Canvas?, paint: Paint) {
         val path = Path()
-        path.moveTo(rect.rightDownCorner.x, rect.rightDownCorner.y)
-        path.lineTo(rect.rightUpCorner.x, rect.rightUpCorner.y)
-        path.lineTo(rect.leftUpCorner.x, rect.leftUpCorner.y)
-        path.lineTo(rect.leftDownCorner.x, rect.leftDownCorner.y)
+        path.moveTo(rhombus.leftCorner.x, rhombus.leftCorner.y)
+        path.lineTo(rhombus.upCorner.x, rhombus.upCorner.y)
+        path.lineTo(rhombus.rightCorner.x, rhombus.rightCorner.y)
+        path.lineTo(rhombus.downCorner.x, rhombus.downCorner.y)
         path.close()
         canvas?.drawPath(path, paint)
     }
 
     override fun draw(figure: Figure, drawingInformation: DrawingInformation, canvas: Canvas?) {
-        figure as Rectangle
-        drawRect(figure, canvas, drawingInformation.style.fillPaint)
-        drawRect(figure, canvas, drawingInformation.style.circuitPaint)
+        figure as Rhombus
+        drawRhombus(figure, canvas, drawingInformation.style.fillPaint)
+        drawRhombus(figure, canvas, drawingInformation.style.circuitPaint)
         drawMultiLineText(figure, drawingInformation, canvas)
 //        canvas?.drawText(drawingInformation.text, 0, drawingInformation.text.length, textDrawingInformation.x, textDrawingInformation.y, textDrawingInformation.paint)
         if (drawingInformation.drawingMode == DrawingMode.EDIT) {
@@ -45,4 +40,5 @@ class RectangleDrawer : Drawer() {
         }
 
     }
+
 }

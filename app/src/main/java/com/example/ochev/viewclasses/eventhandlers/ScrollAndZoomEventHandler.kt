@@ -4,7 +4,7 @@ import android.view.MotionEvent
 import com.example.ochev.baseclasses.dataclasses.Point
 import com.example.ochev.baseclasses.dataclasses.Vector
 import com.example.ochev.ml.Classifier
-import com.example.ochev.viewclasses.graphdrawers.GraphDrawer
+import com.example.ochev.viewclasses.drawers.GraphDrawer
 import com.example.ochev.viewclasses.strokedrawers.StrokeDrawer
 
 class ScrollAndZoomEventHandler(

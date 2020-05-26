@@ -1,10 +1,10 @@
-package com.example.ochev.viewclasses.graphdrawers.drawinginformations
+package com.example.ochev.viewclasses.drawers.drawinginformations
 
 import com.example.ochev.baseclasses.dataclasses.vertexfigures.Circle
 import com.example.ochev.baseclasses.dataclasses.vertexfigures.Rectangle
 import com.example.ochev.baseclasses.dataclasses.vertexfigures.Rhombus
 import com.example.ochev.baseclasses.dataclasses.vertexfigures.VertexFigure
-import com.example.ochev.viewclasses.graphdrawers.FigureStyle
+import com.example.ochev.viewclasses.drawers.FigureStyle
 
 enum class DrawingMode {
     DEFAULT,

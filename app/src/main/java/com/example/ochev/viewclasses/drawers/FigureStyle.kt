@@ -1,4 +1,4 @@
-package com.example.ochev.viewclasses.graphdrawers
+package com.example.ochev.viewclasses.drawers
 
 import android.graphics.Paint
 

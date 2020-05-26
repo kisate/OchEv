@@ -1,13 +1,11 @@
-package com.example.ochev.viewclasses.graphdrawers
+package com.example.ochev.viewclasses.drawers
 
 import android.graphics.Canvas
-import android.graphics.Color
-import android.graphics.Paint
 import com.example.ochev.baseclasses.dataclasses.Figure
 import com.example.ochev.baseclasses.dataclasses.vertexfigures.Circle
-import com.example.ochev.viewclasses.graphdrawers.drawinginformations.CircleDrawingInformation
-import com.example.ochev.viewclasses.graphdrawers.drawinginformations.DrawingInformation
-import com.example.ochev.viewclasses.graphdrawers.drawinginformations.DrawingMode
+import com.example.ochev.viewclasses.drawers.drawinginformations.CircleDrawingInformation
+import com.example.ochev.viewclasses.drawers.drawinginformations.DrawingInformation
+import com.example.ochev.viewclasses.drawers.drawinginformations.DrawingMode
 
 class CircleDrawer : Drawer() {
 
