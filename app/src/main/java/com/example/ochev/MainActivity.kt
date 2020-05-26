@@ -4,6 +4,9 @@ import android.os.Bundle
 import android.util.Log
 import android.widget.FrameLayout
 import androidx.appcompat.app.AppCompatActivity
+import com.example.ochev.baseclasses.dataclasses.LineSegment
+import com.example.ochev.baseclasses.dataclasses.Point
+import com.example.ochev.baseclasses.dataclasses.Point.Companion.getOptimalSegment
 import com.example.ochev.ml.Classifier
 import com.example.ochev.viewclasses.drawers.GraphDrawer
 import kotlinx.android.synthetic.main.activity_main.*
@@ -43,7 +46,6 @@ class MainActivity : AppCompatActivity() {
         )
 
         frameId.addView(strokeInput, layoutParams)
-
 
 
         classifier
