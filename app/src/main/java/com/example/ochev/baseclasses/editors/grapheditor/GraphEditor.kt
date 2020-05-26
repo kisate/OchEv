@@ -114,80 +114,17 @@ class GraphEditor(
 
     fun replaceVertex(old: VertexFigure, new: VertexFigure) {
         // redirecting edges
-        val newGraph = Graph()
-        val linker = getLinker {
-            if (it == old) new
-            else it
-        }
-
-        reconnectEdges(newGraph, linker)
-
-        graph.figures.vertices.forEach {
-            if (it.figure == old) newGraph.figures.vertices.add(
-                it.copy(figure = new)
-            )
-            else newGraph.figures.vertices.add(it)
-        }
-
-        graph = newGraph
-    }
-
-    fun getLinker(changeFun: (VertexFigure) -> VertexFigure): HashMap<VertexFigure, VertexFigure> {
-        val linker: HashMap<VertexFigure, VertexFigure> = HashMap()
-        graph.figures.vertices.forEach { linker[it.figure] = changeFun(it.figure) }
-        return linker
-    }
-
-    fun reconnectEdges(
-        newGraph: Graph,
-        linker: HashMap<VertexFigure, VertexFigure>
-    ) {
-        graph.figures.edges.forEach {
-            newGraph.figures.edges.add(
-                it.copy(
-                    figure = Edge(
-                        linker[it.figure.beginFigure]!!,
-                        linker[it.figure.endFigure]!!
-                    )
-                )
-            )
-        }
-    }
-
-    fun moveVertexes(
-        newGraph: Graph,
-        linker: HashMap<VertexFigure, VertexFigure>
-    ) {
-
-        graph.figures.vertices.forEach {
-            newGraph.figures.vertices.add(it.copy(figure = linker[it.figure]!!))
-        }
+        graph = graph.replaceVertex(old, new)
     }
 
     fun moveGraphByVector(vector: Vector) {
         history.moveByVector(vector)
-        val newGraph = Graph()
-        val linker = getLinker { it.movedByVector(vector) }
-
-        reconnectEdges(newGraph, linker)
-        moveVertexes(newGraph, linker)
-
-        graph = newGraph
+        graph = graph.movedByVector(vector)
     }
 
     fun zoomByPointAndFactor(point: Point, factor: Float) {
         history.zoomByPointAndFactor(point, factor)
-        val newGraph = Graph()
-
-        val linker = getLinker {
-            it.movedByVector(Vector(point, it.center).multipliedByFloat(factor - 1f))
-                .rescaledByFactor(factor)
-        }
-
-        reconnectEdges(newGraph, linker)
-        moveVertexes(newGraph, linker)
-
-        graph = newGraph
+        graph = graph.zoomedByPointAndFactor(point, factor)
     }
 
     fun clear() {

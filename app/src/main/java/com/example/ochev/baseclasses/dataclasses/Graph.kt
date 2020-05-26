@@ -1,8 +1,10 @@
 package com.example.ochev.baseclasses.dataclasses
 
+import com.example.ochev.baseclasses.dataclasses.edgefigures.Edge
 import com.example.ochev.baseclasses.dataclasses.nodes.EdgeNode
 import com.example.ochev.baseclasses.dataclasses.nodes.FigureNode
 import com.example.ochev.baseclasses.dataclasses.nodes.VertexFigureNode
+import com.example.ochev.baseclasses.dataclasses.vertexfigures.VertexFigure
 import kotlin.math.abs
 
 
@@ -55,6 +57,81 @@ data class Graph(
             <= bestEdge.figure.getDistanceToPoint(point)
         ) bestVertex
         else bestEdge
+    }
+
+    fun replaceVertex(old: VertexFigure, new: VertexFigure): Graph {
+        // redirecting edges
+        val newGraph = Graph()
+        val linker = getLinker {
+            if (it == old) new
+            else it
+        }
+
+        reconnectEdges(newGraph, linker)
+
+        figures.vertices.forEach {
+            if (it.figure == old) newGraph.figures.vertices.add(
+                it.copy(figure = new)
+            )
+            else newGraph.figures.vertices.add(it)
+        }
+
+        return newGraph
+    }
+
+    fun getLinker(changeFun: (VertexFigure) -> VertexFigure): HashMap<VertexFigure, VertexFigure> {
+        val linker: HashMap<VertexFigure, VertexFigure> = HashMap()
+        figures.vertices.forEach { linker[it.figure] = changeFun(it.figure) }
+        return linker
+    }
+
+    fun reconnectEdges(
+        newGraph: Graph,
+        linker: HashMap<VertexFigure, VertexFigure>
+    ) {
+        figures.edges.forEach {
+            newGraph.figures.edges.add(
+                it.copy(
+                    figure = Edge(
+                        linker[it.figure.beginFigure]!!,
+                        linker[it.figure.endFigure]!!
+                    )
+                )
+            )
+        }
+    }
+
+    fun moveVertexes(
+        newGraph: Graph,
+        linker: HashMap<VertexFigure, VertexFigure>
+    ) {
+        figures.vertices.forEach {
+            newGraph.figures.vertices.add(it.copy(figure = linker[it.figure]!!))
+        }
+    }
+
+    fun movedByVector(vector: Vector): Graph {
+        val newGraph = Graph()
+        val linker = getLinker { it.movedByVector(vector) }
+
+        reconnectEdges(newGraph, linker)
+        moveVertexes(newGraph, linker)
+
+        return newGraph
+    }
+
+    fun zoomedByPointAndFactor(point: Point, factor: Float): Graph {
+        val newGraph = Graph()
+
+        val linker = getLinker {
+            it.movedByVector(Vector(point, it.center).multipliedByFloat(factor - 1f))
+                .rescaledByFactor(factor)
+        }
+
+        reconnectEdges(newGraph, linker)
+        moveVertexes(newGraph, linker)
+
+        return newGraph
     }
 
 
