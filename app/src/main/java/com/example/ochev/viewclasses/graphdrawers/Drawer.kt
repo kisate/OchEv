@@ -3,7 +3,6 @@ package com.example.ochev.viewclasses.graphdrawers
 import android.graphics.Canvas
 import android.graphics.Rect
 import android.text.*
-import android.util.Log
 import androidx.core.graphics.withTranslation
 import com.example.ochev.baseclasses.dataclasses.Figure
 import com.example.ochev.baseclasses.dataclasses.Point
@@ -12,17 +11,11 @@ import com.example.ochev.baseclasses.dataclasses.vertexfigures.Circle
 import com.example.ochev.baseclasses.dataclasses.vertexfigures.Rectangle
 import com.example.ochev.baseclasses.dataclasses.vertexfigures.Rhombus
 import com.example.ochev.baseclasses.dataclasses.vertexfigures.VertexFigure
-import com.example.ochev.viewclasses.DrawingInformation
+import com.example.ochev.viewclasses.graphdrawers.drawinginformations.DrawingInformation
 import kotlin.math.*
 
 abstract class Drawer {
-    val styles: MutableList<FigureStyle> = ArrayList(3)
 
-    init {
-        styles.add(FigureStyle())
-        styles.add(FigureStyle())
-        styles.add(FigureStyle())
-    }
 
     abstract fun draw(
         figure: Figure,
@@ -92,7 +85,7 @@ abstract class Drawer {
         figure: VertexFigure,
         drawingInformation: DrawingInformation
     ): StaticLayout {
-        val paint = TextPaint(styles[drawingInformation.currentStyle].fontPaint)
+        val paint = TextPaint(drawingInformation.style.fontPaint)
         paint.textSize = DEFAULT_TEXT_SIZE
         val bounds = calcRect(figure)
 
