@@ -32,8 +32,8 @@ class EdgeFigureNormalizer {
 
         if (beginFigure == endFigure) return null
         for (edge in graph.figures.edges) {
-            if (edge.figure.beginFigure == beginFigure.figure &&
-                edge.figure.endFigure == endFigure.figure
+            if ((edge.figure.beginFigure == beginFigure.figure && edge.figure.endFigure == endFigure.figure) ||
+                (edge.figure.beginFigure == endFigure.figure && edge.figure.endFigure == beginFigure.figure)
             ) return null
         }
 
