@@ -12,6 +12,7 @@ import com.example.ochev.baseclasses.dataclasses.vertexfigures.Rectangle
 import com.example.ochev.baseclasses.dataclasses.vertexfigures.Rhombus
 import com.example.ochev.baseclasses.dataclasses.vertexfigures.VertexFigure
 import com.example.ochev.viewclasses.drawers.drawinginformations.DrawingInformation
+import com.example.ochev.viewclasses.drawers.drawinginformations.DrawingMode
 import kotlin.math.*
 
 abstract class Drawer {
@@ -22,6 +23,21 @@ abstract class Drawer {
         drawingInformation: DrawingInformation,
         canvas: Canvas?
     )
+
+    fun drawEditingPoints(
+        drawingInformation: DrawingInformation,
+        points: MutableList<Point>,
+        canvas: Canvas?
+    ) {
+        if (drawingInformation.drawingMode != DrawingMode.EDIT) return
+
+        val drawingInfo = DrawingInformation.getEdgeDrawingInformation()
+        drawingInfo?.enterMode(DrawingMode.EDIT_CORNERS)
+
+        for (point in points) {
+            drawingInfo?.style?.circuitPaint?.let { canvas?.drawCircle(point.x, point.y, 8f, it) }
+        }
+    }
 
     fun drawMultiLineText(
         figure: Figure,

@@ -27,18 +27,6 @@ class CircleDrawer : Drawer() {
             drawingInformation.style.circuitPaint
         )
         drawMultiLineText(figure, drawingInformation, canvas)
-        if (drawingInformation.drawingMode == DrawingMode.EDIT) {
-            drawingInformation.enterMode(DrawingMode.EDIT_CORNERS)
-            for (point in figure.getMovingPoints()) {
-                canvas?.drawCircle(
-                    point.x,
-                    point.y,
-                    5f,
-                    drawingInformation.style.circuitPaint
-                )
-            }
-            drawingInformation.enterMode(DrawingMode.EDIT)
-        }
 
     }
 
