@@ -35,7 +35,7 @@ abstract class Drawer {
         drawingInfo?.enterMode(DrawingMode.EDIT_CORNERS)
 
         for (point in points) {
-            drawingInfo?.style?.circuitPaint?.let { canvas?.drawCircle(point.x, point.y, 15f, it) }
+            drawingInfo?.style?.circuitPaint?.let { canvas?.drawCircle(point.x, point.y, 12f, it) }
         }
     }
 
