@@ -1,5 +1,6 @@
 package com.example.ochev.baseclasses.dataclasses.vertexfigures
 
+import com.example.ochev.baseclasses.dataclasses.LineSegment
 import com.example.ochev.baseclasses.dataclasses.Point
 import com.example.ochev.baseclasses.dataclasses.Stroke
 import com.example.ochev.baseclasses.dataclasses.Stroke.Companion.getStrokesRestrictions
@@ -24,11 +25,16 @@ data class Rectangle(
             return mutableListOf(leftDownCorner, leftUpCorner, rightUpCorner, rightDownCorner)
         }
 
-    override fun getIntersectionWithLineSegment(a: Point, b: Point): MutableList<Point> {
+    override fun getIntersectionWithLineSegment(segment: LineSegment): MutableList<Point> {
         val result: MutableList<Point> = ArrayList()
         val points = importantPoints
         for (i in points.indices) {
-            Point.intersectTwoSegments(a, b, points[i], points[(i + 1) % points.size])
+            Point.intersectTwoSegments(
+                segment.A,
+                segment.B,
+                points[i],
+                points[(i + 1) % points.size]
+            )
                 ?.let { result.add(it) }
         }
         return result

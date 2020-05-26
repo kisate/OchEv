@@ -19,10 +19,11 @@ data class Point(val x: Float = 0f, val y: Float = 0f) {
     }
 
     fun getDistanceToLineSegment(
-        linePointA: Point,
-        linePointB: Point
+        segment: LineSegment
     ): Float {
         // we have triangle on 3 vertexes : A,B lies on line segment, С ( this ) is alone
+        val linePointA = segment.A
+        val linePointB = segment.B
 
         val vectorFromAToC = Vector(this.x - linePointA.x, this.y - linePointA.y)
         val vectorFromAToB = Vector(linePointB.x - linePointA.x, linePointB.y - linePointA.y)
@@ -61,8 +62,12 @@ data class Point(val x: Float = 0f, val y: Float = 0f) {
             return ret
         }
 
-        fun intersectTwoSegments(p1: Point, p2: Point, p3: Point, p4: Point): Point? {
-            Log.i("intersection.pro", p1.toString() + " " + p2.toString() + " " + p3.toString() + " " + p4.toString() )
+        fun intersectTwoSegments(firstSegment: LineSegment, secondSegment: LineSegment): Point? {
+            val p1 = firstSegment.A
+            val p2 = firstSegment.B
+            val p3 = secondSegment.A
+            val p4 = secondSegment.B
+            Log.i("intersection.pro", "$p1 $p2 $p3 $p4")
             val v12 = Vector(p1, p2)
             val v34 = Vector(p3, p4)
 

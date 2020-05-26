@@ -59,7 +59,7 @@ data class Graph(
         else bestEdge
     }
 
-    fun replaceVertex(old: VertexFigure, new: VertexFigure): Graph {
+    fun replacedVertex(old: VertexFigure, new: VertexFigure): Graph {
         // redirecting edges
         val newGraph = Graph()
         val linker = getLinker {
@@ -79,13 +79,13 @@ data class Graph(
         return newGraph
     }
 
-    fun getLinker(changeFun: (VertexFigure) -> VertexFigure): HashMap<VertexFigure, VertexFigure> {
+    private fun getLinker(changeFun: (VertexFigure) -> VertexFigure): HashMap<VertexFigure, VertexFigure> {
         val linker: HashMap<VertexFigure, VertexFigure> = HashMap()
         figures.vertices.forEach { linker[it.figure] = changeFun(it.figure) }
         return linker
     }
 
-    fun reconnectEdges(
+    private fun reconnectEdges(
         newGraph: Graph,
         linker: HashMap<VertexFigure, VertexFigure>
     ) {
@@ -101,7 +101,7 @@ data class Graph(
         }
     }
 
-    fun moveVertexes(
+    private fun moveVertexes(
         newGraph: Graph,
         linker: HashMap<VertexFigure, VertexFigure>
     ) {
@@ -134,5 +134,47 @@ data class Graph(
         return newGraph
     }
 
+    fun withDeletedFigure(figure: Figure): Graph {
+        return when (figure) {
+            is VertexFigure -> withDeletedVertex(figure)
+            is Edge -> withDeletedEdge(figure)
+            else -> Graph()
+        }
+    }
 
+    private fun withDeletedEdge(edgeFigure: Edge): Graph {
+        val newGraph = Graph()
+        newGraph.figures.vertices += figures.vertices
+        figures.edges.forEach {
+            if (it.figure != edgeFigure) {
+                newGraph.figures.edges.add(it)
+            }
+        }
+
+        return newGraph
+    }
+
+    fun withDeletedVertex(vertexFigure: VertexFigure): Graph {
+        val newGraph = Graph()
+
+        figures.vertices.forEach {
+            if (it.figure != vertexFigure) newGraph.figures.vertices.add(it)
+        }
+
+        figures.edges.forEach {
+            if (it.figure.beginFigure != vertexFigure && it.figure.endFigure != vertexFigure) {
+                newGraph.figures.edges.add(it)
+            }
+        }
+
+        return newGraph
+    }
+
+    fun addVertexNode(node: VertexFigureNode) {
+        figures.vertices.add(node)
+    }
+
+    fun addEdgeNode(node: EdgeNode) {
+        figures.edges.add(node)
+    }
 }
