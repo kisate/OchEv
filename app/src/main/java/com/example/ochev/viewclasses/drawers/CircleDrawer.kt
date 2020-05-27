@@ -27,7 +27,7 @@ class CircleDrawer : Drawer() {
             drawingInformation.style.circuitPaint
         )
         drawMultiLineText(figure, drawingInformation, canvas)
-
+        drawEditingPoints(drawingInformation, figure.getMovingPoints(), canvas)
     }
 
 

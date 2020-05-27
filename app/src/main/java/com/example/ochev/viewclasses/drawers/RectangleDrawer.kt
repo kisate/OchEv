@@ -29,7 +29,6 @@ class RectangleDrawer : Drawer() {
         drawRect(figure, canvas, drawingInformation.style.fillPaint)
         drawRect(figure, canvas, drawingInformation.style.circuitPaint)
         drawMultiLineText(figure, drawingInformation, canvas)
-//        canvas?.drawText(drawingInformation.text, 0, drawingInformation.text.length, textDrawingInformation.x, textDrawingInformation.y, textDrawingInformation.paint)
-
+        drawEditingPoints(drawingInformation, figure.getMovingPoints(), canvas)
     }
 }

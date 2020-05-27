@@ -25,6 +25,7 @@ class RhombusDrawer: Drawer() {
         drawRhombus(figure, canvas, drawingInformation.style.fillPaint)
         drawRhombus(figure, canvas, drawingInformation.style.circuitPaint)
         drawMultiLineText(figure, drawingInformation, canvas)
+        drawEditingPoints(drawingInformation, figure.getMovingPoints(), canvas)
     }
 
 }

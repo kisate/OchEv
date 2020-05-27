@@ -21,22 +21,17 @@ class FiguresDrawer {
                 when (figure) {
                     is Circle -> {
                         circleDrawer.draw(figure, drawingInformation, canvas)
-                        circleDrawer.drawEditingPoints(drawingInformation, figure.getMovingPoints(), canvas)
                     }
                     is Rectangle -> {
                         rectangleDrawer.draw(figure, drawingInformation, canvas)
-                        rectangleDrawer.drawEditingPoints(drawingInformation, figure.getMovingPoints(), canvas)
                     }
                     is Rhombus -> {
                         rhombusDrawer.draw(figure, drawingInformation, canvas)
-                        rhombusDrawer.drawEditingPoints(drawingInformation, figure.getMovingPoints(), canvas)
                     }
                 }
             }
             is Edge -> {
                 edgeDrawer.draw(figure, drawingInformation, canvas)
-                if (figure.realBeginPoint == null || figure.realEndPoint == null)return
-                edgeDrawer.drawEditingPoints(drawingInformation, mutableListOf(figure.realBeginPoint!!, figure.realEndPoint!!), canvas)
             }
         }
     }

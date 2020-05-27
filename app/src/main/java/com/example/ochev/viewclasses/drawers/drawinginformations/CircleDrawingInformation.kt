@@ -34,9 +34,6 @@ class CircleDrawingInformation : VertexDrawingInformation {
                 style.circuitPaint.style = Paint.Style.STROKE
                 style.circuitPaint.strokeWidth = 10f
                 style.circuitPaint.color = Color.BLACK
-                style.fontPaint.style = Paint.Style.FILL
-                style.fontPaint.isAntiAlias = true
-                style.fontPaint.color = Color.parseColor("#FFC107")
             }
             DrawingMode.EDIT_CORNERS -> {
                 style.circuitPaint.style = Paint.Style.FILL_AND_STROKE

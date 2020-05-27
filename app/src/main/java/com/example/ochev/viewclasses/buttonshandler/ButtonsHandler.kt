@@ -6,6 +6,7 @@ import com.example.ochev.baseclasses.editors.FigureEditor
 import com.example.ochev.baseclasses.editors.edgeeditor.EdgeEditor
 import com.example.ochev.baseclasses.editors.vertexeditor.VertexFigureEditor
 import com.example.ochev.viewclasses.drawers.GraphDrawer
+import com.example.ochev.viewclasses.eventhandlers.GestureHandler
 
 class ButtonsHandler (
     private val buttonsContainer: ButtonsContainer,
@@ -67,6 +68,7 @@ class ButtonsHandler (
         buttonsContainer.deleteButton.setOnClickListener {
             figureEditor.graphEditor.deleteFigure(figureEditor.figureId)
             hideDeleteButton()
+            hideCopyButton()
             graphDrawer.invalidate()
         }
     }

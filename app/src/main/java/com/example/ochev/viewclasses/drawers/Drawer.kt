@@ -24,7 +24,7 @@ abstract class Drawer {
         canvas: Canvas?
     )
 
-    fun drawEditingPoints(
+    protected fun drawEditingPoints(
         drawingInformation: DrawingInformation,
         points: MutableList<Point>,
         canvas: Canvas?
