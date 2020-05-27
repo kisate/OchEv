@@ -1,5 +1,6 @@
 package com.example.ochev.viewclasses.buttonshandler
 
+import android.util.Log
 import android.view.View
 import com.example.ochev.baseclasses.editors.FigureEditor
 import com.example.ochev.baseclasses.editors.edgeeditor.EdgeEditor
@@ -73,7 +74,9 @@ class ButtonsHandler (
     private fun initCopyButton(figureEditor: VertexFigureEditor) {
         showCopyButton()
         buttonsContainer.copyButton.setOnClickListener {
-            figureEditor.createCopy()
+            Log.i("COPYDBG1", graphDrawer.graphEditor.graph.figures.vertices.toString())
+            figureEditor.createCopy(graphDrawer.getCentre())
+            Log.i("COPYDBG1", graphDrawer.graphEditor.graph.figures.vertices.toString())
             graphDrawer.invalidate()
         }
     }
