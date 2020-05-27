@@ -11,6 +11,7 @@ import android.net.Uri
 import android.provider.MediaStore
 import android.util.Log
 import android.view.View
+import android.widget.Toast
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import com.example.ochev.MainActivity
@@ -92,11 +93,11 @@ class Utils {
 
                 val contentResolver = activity.contentResolver
 
-                writeBitmapToGallery(bitmap, contentResolver, values)
+                writeBitmapToGallery(bitmap, contentResolver, values, activity)
             }
         }
 
-        private fun writeBitmapToGallery(bitmap: Bitmap, contentResolver: ContentResolver, values: ContentValues)
+        private fun writeBitmapToGallery(bitmap: Bitmap, contentResolver: ContentResolver, values: ContentValues, context: Context)
         {
             var url: Uri? = null
 
@@ -111,7 +112,7 @@ class Utils {
                     imageOut.use {
                         bitmap.compress(Bitmap.CompressFormat.PNG, 100, it)
                     }
-                    val id = ContentUris.parseId(url)
+                    Toast.makeText(context, "Saved graph to gallery", Toast.LENGTH_LONG).show()
                 }
             } catch (e: Exception) {
                 if (url != null) {
