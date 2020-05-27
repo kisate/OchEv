@@ -4,7 +4,7 @@ import android.util.Log
 import com.example.ochev.baseclasses.dataclasses.Figure
 import com.example.ochev.baseclasses.dataclasses.LineSegment
 import com.example.ochev.baseclasses.dataclasses.Point
-import com.example.ochev.baseclasses.editors.grapheditor.GraphEditor
+import com.example.ochev.baseclasses.editors.grapheditor.Graph
 
 
 // Figure that connects information blocks
@@ -12,12 +12,12 @@ import com.example.ochev.baseclasses.editors.grapheditor.GraphEditor
 class Edge(
     val beginId: Int,
     val endId: Int,
-    val graphEditor: GraphEditor
+    val graph: Graph
 ) : Figure() {
     val beginFigureNode
-        get() = graphEditor.graph.getVertexFigureNodeByIdOrNull(beginId)!!
+        get() = graph.getVertexFigureNodeByIdOrNull(beginId)!!
     val endFigureNode
-        get() = graphEditor.graph.getVertexFigureNodeByIdOrNull(endId)!!
+        get() = graph.getVertexFigureNodeByIdOrNull(endId)!!
     val realBeginPoint: Point?
         get() {
             beginFigureNode.figure.getIntersectionWithLineSegment(

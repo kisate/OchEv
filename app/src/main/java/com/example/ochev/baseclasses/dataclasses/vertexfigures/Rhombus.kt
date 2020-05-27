@@ -130,7 +130,7 @@ data class Rhombus(
             min(
                 leftCorner.getDistanceToPoint(rightCorner),
                 upCorner.getDistanceToPoint(downCorner)
-            ) / 3.33f, 40f
+            ) / 3.33f, 27f
         )
     }
 }

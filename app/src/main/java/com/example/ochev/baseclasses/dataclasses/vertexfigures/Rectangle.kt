@@ -194,7 +194,7 @@ data class Rectangle(
         val dX = kotlin.math.abs(leftDownCorner.x - rightDownCorner.x)
         val dY = kotlin.math.abs(leftDownCorner.y - leftUpCorner.y)
 
-        return max(min(dX, dY) / 3.33f, 40f)
+        return max(min(dX, dY) / 3.33f, 27f)
     }
 
 
