@@ -47,9 +47,11 @@ class Utils {
 
         private var counter = 0
 
-        fun saveBitmap(bitmap: Bitmap, context: Context) {
+        fun saveBitmap(bitmap: Bitmap, context: Context, filename: String? = null) {
             try {
-                val file = File(context.getExternalFilesDir(null), "bmp${counter.toString().padStart(4, '0')}.png")
+
+                val file = if (filename == null) File(context.getExternalFilesDir(null), "bmp${counter.toString().padStart(4, '0')}.png")
+                else File(context.getExternalFilesDir(null), filename)
                 FileOutputStream(file).use { out ->
                     bitmap.compress(Bitmap.CompressFormat.PNG, 100, out) // bmp is your Bitmap instance
                 }

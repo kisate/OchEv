@@ -44,6 +44,10 @@ class GestureHandler(
 
     private var currentEdgeEditor: EdgeEditor? = null
 
+    init {
+        buttonsHandler.gestureHandler = this
+    }
+
     fun handle(gesture: Gesture, event: MotionEvent) {
 
         if (gestureEventHandler == null) {
@@ -291,7 +295,7 @@ class GestureHandler(
         }
     }
 
-    private fun exitAll() {
+    fun exitAll() {
         exitEditMode()
         exitEditEdgeMode()
         exitEditTextMode()

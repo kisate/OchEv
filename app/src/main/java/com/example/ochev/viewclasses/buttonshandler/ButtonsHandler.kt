@@ -13,8 +13,11 @@ class ButtonsHandler (
     private val graphDrawer: GraphDrawer
 ) {
 
+    lateinit var gestureHandler: GestureHandler
+
     init{
         buttonsContainer.clearButton.setOnClickListener {
+            gestureHandler.exitAll()
             hideDeleteButton()
             hideCopyButton()
             graphDrawer.graphEditor.clear()
@@ -22,6 +25,7 @@ class ButtonsHandler (
         }
 
         buttonsContainer.undoButton.setOnClickListener {
+            gestureHandler.exitAll()
             hideDeleteButton()
             hideCopyButton()
             graphDrawer.graphEditor.revertChange()
@@ -29,13 +33,14 @@ class ButtonsHandler (
         }
 
         buttonsContainer.forwardButton.setOnClickListener {
+            gestureHandler.exitAll()
             hideDeleteButton()
             hideCopyButton()
             graphDrawer.graphEditor.undoRevertChange()
             graphDrawer.invalidate()
         }
         buttonsContainer.saveButton.setOnClickListener {
-            //TODO()
+            graphDrawer.saveToPng()
         }
     }
 
@@ -66,6 +71,7 @@ class ButtonsHandler (
     private fun initDeleteButton(figureEditor: FigureEditor) {
         showDeleteButton()
         buttonsContainer.deleteButton.setOnClickListener {
+            gestureHandler.exitAll()
             figureEditor.graphEditor.deleteFigure(figureEditor.figureId)
             hideDeleteButton()
             hideCopyButton()
