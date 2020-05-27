@@ -74,8 +74,7 @@ class Graph(
 
 
     fun withDeletedFigure(id: Int): Graph {
-        val nodeToDelete = getFigureNodeByIdOrNull(id)
-        return when (nodeToDelete) {
+        return when (getFigureNodeByIdOrNull(id)) {
             is VertexFigureNode -> withDeletedVertex(id)
             is EdgeNode -> withDeletedEdge(id)
             else -> Graph()
@@ -87,7 +86,11 @@ class Graph(
         newGraph.figures.vertices += figures.vertices
         figures.edges.forEach {
             if (it.id != id) {
-                newGraph.figures.edges.add(it)
+                newGraph.figures.edges.add(
+                    it.copy(
+                        figure = it.figure.withNewGraph(newGraph)
+                    )
+                )
             }
         }
 
@@ -103,7 +106,11 @@ class Graph(
 
         figures.edges.forEach {
             if (it.figure.beginFigureNode.id != id && it.figure.endFigureNode.id != id) {
-                newGraph.figures.edges.add(it)
+                newGraph.figures.edges.add(
+                    it.copy(
+                        figure = it.figure.withNewGraph(newGraph)
+                    )
+                )
             }
         }
 

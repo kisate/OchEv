@@ -9,7 +9,7 @@ import com.example.ochev.baseclasses.editors.grapheditor.Graph
 
 // Figure that connects information blocks
 
-class Edge(
+data class Edge(
     val beginId: Int,
     val endId: Int,
     val graph: Graph
@@ -49,6 +49,10 @@ class Edge(
             (beginFigureNode.figure.center.x + endFigureNode.figure.center.x) / 2,
             (beginFigureNode.figure.center.y + endFigureNode.figure.center.y) / 2
         )
+
+    fun withNewGraph(graph: Graph): Edge {
+        return this.copy(graph = graph)
+    }
 
     override fun checkIfFigureIsCloseEnough(point: Point): Boolean {
         return getDistanceToPoint(point) <= getDistanceToCountTouch()
