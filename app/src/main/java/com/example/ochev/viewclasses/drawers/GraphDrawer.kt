@@ -67,11 +67,15 @@ class GraphDrawer(
 
             canvas.withTranslation (-minX + PNG_BORDERS, -minY + PNG_BORDERS) { drawGraphOnCanvas(graphEditor, this) }
 
-            Utils.saveBitmapToGallery(bitmap, graphView.context as MainActivity, "graph.png")
+            val scale = max(1f, max(width/ MAX_WIDTH, height/ MAX_HEIGHT))
+
+            Utils.saveBitmapToGallery(Bitmap.createScaledBitmap(bitmap, (width/scale).toInt(), (height/scale).toInt(), true), graphView.context as MainActivity, "graph.png")
         }
     }
 
     companion object {
         private const val PNG_BORDERS = 50f
+        private const val MAX_WIDTH = 2000f
+        private const val MAX_HEIGHT = 2000f
     }
 }
