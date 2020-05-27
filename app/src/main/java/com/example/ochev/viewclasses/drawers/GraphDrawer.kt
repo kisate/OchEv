@@ -4,6 +4,7 @@ import android.graphics.Bitmap
 import android.graphics.Canvas
 import android.util.Log
 import androidx.core.graphics.withTranslation
+import com.example.ochev.MainActivity
 import com.example.ochev.baseclasses.dataclasses.InformationForNormalizer
 import com.example.ochev.baseclasses.dataclasses.Point
 import com.example.ochev.baseclasses.editors.grapheditor.GraphEditor
@@ -66,7 +67,7 @@ class GraphDrawer(
 
             canvas.withTranslation (-minX + PNG_BORDERS, -minY + PNG_BORDERS) { drawGraphOnCanvas(graphEditor, this) }
 
-            Utils.saveBitmap(bitmap, graphView.context, "graph.png")
+            Utils.saveBitmapToGallery(bitmap, graphView.context as MainActivity, "graph.png")
         }
     }
 

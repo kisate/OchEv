@@ -1,12 +1,24 @@
 package com.example.ochev.ml
 
+import android.content.ContentResolver
+import android.content.ContentUris
+import android.content.ContentValues
 import android.content.Context
+import android.content.pm.PackageManager
 import android.graphics.Bitmap
 import android.graphics.Canvas
+import android.net.Uri
+import android.provider.MediaStore
+import android.util.Log
 import android.view.View
+import androidx.core.app.ActivityCompat
+import androidx.core.content.ContextCompat
+import com.example.ochev.MainActivity
 import java.io.File
 import java.io.FileOutputStream
 import java.io.IOException
+import java.lang.Exception
+import java.util.jar.Manifest
 
 
 class Utils {
@@ -58,6 +70,54 @@ class Utils {
                 counter++
             } catch (e: IOException) {
                 e.printStackTrace()
+            }
+        }
+
+        fun saveBitmapToGallery(bitmap: Bitmap, activity: MainActivity, title: String) {
+
+            if (ContextCompat.checkSelfPermission(activity, android.Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED)
+            {
+                ActivityCompat.requestPermissions(activity, arrayOf(android.Manifest.permission.WRITE_EXTERNAL_STORAGE), 0)
+            }
+
+            else
+            {
+                val values = ContentValues()
+                values.put(MediaStore.Images.Media.TITLE, title)
+                values.put(MediaStore.Images.Media.DISPLAY_NAME, title)
+                values.put(MediaStore.Images.Media.DESCRIPTION, "")
+                values.put(MediaStore.Images.Media.MIME_TYPE, "image/png")
+                values.put(MediaStore.Images.Media.DATE_ADDED, System.currentTimeMillis())
+                values.put(MediaStore.Images.Media.DATE_TAKEN, System.currentTimeMillis())
+
+                val contentResolver = activity.contentResolver
+
+                writeBitmapToGallery(bitmap, contentResolver, values)
+            }
+        }
+
+        private fun writeBitmapToGallery(bitmap: Bitmap, contentResolver: ContentResolver, values: ContentValues)
+        {
+            var url: Uri? = null
+
+            try {
+                url = contentResolver.insert(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, values)
+
+                Log.d("saving", url.toString())
+
+                if (url != null)
+                {
+                    val imageOut = contentResolver.openOutputStream(url)
+                    imageOut.use {
+                        bitmap.compress(Bitmap.CompressFormat.PNG, 100, it)
+                    }
+                    val id = ContentUris.parseId(url)
+                }
+            } catch (e: Exception) {
+                if (url != null) {
+                    contentResolver.delete(url, null, null)
+                }
+                Log.e("saving", e.toString())
             }
         }
     }

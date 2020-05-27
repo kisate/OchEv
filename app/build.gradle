@@ -50,4 +50,5 @@ dependencies {
     implementation 'com.google.android.material:material:1.1.0'
     // TF Lite
     implementation('org.tensorflow:tensorflow-lite:0.0.0-nightly') { changing = true }
+
 }
