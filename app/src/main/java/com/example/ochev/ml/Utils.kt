@@ -15,10 +15,12 @@ import android.widget.Toast
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import com.example.ochev.MainActivity
+import com.google.android.gms.tasks.Tasks
 import java.io.File
 import java.io.FileOutputStream
 import java.io.IOException
 import java.lang.Exception
+import java.util.concurrent.Callable
 import java.util.jar.Manifest
 
 
@@ -63,10 +65,17 @@ class Utils {
         fun saveBitmap(bitmap: Bitmap, context: Context, filename: String? = null) {
             try {
 
-                val file = if (filename == null) File(context.getExternalFilesDir(null), "bmp${counter.toString().padStart(4, '0')}.png")
+                val file = if (filename == null) File(
+                    context.getExternalFilesDir(null),
+                    "bmp${counter.toString().padStart(4, '0')}.png"
+                )
                 else File(context.getExternalFilesDir(null), filename)
                 FileOutputStream(file).use { out ->
-                    bitmap.compress(Bitmap.CompressFormat.PNG, 100, out) // bmp is your Bitmap instance
+                    bitmap.compress(
+                        Bitmap.CompressFormat.PNG,
+                        100,
+                        out
+                    ) // bmp is your Bitmap instance
                 }
                 counter++
             } catch (e: IOException) {
@@ -76,13 +85,17 @@ class Utils {
 
         fun saveBitmapToGallery(bitmap: Bitmap, activity: MainActivity, title: String) {
 
-            if (ContextCompat.checkSelfPermission(activity, android.Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED)
-            {
-                ActivityCompat.requestPermissions(activity, arrayOf(android.Manifest.permission.WRITE_EXTERNAL_STORAGE), 0)
-            }
-
-            else
-            {
+            if (ContextCompat.checkSelfPermission(
+                    activity,
+                    android.Manifest.permission.WRITE_EXTERNAL_STORAGE
+                ) != PackageManager.PERMISSION_GRANTED
+            ) {
+                ActivityCompat.requestPermissions(
+                    activity,
+                    arrayOf(android.Manifest.permission.WRITE_EXTERNAL_STORAGE),
+                    0
+                )
+            } else {
                 val values = ContentValues()
                 values.put(MediaStore.Images.Media.TITLE, title)
                 values.put(MediaStore.Images.Media.DISPLAY_NAME, title)
@@ -93,12 +106,24 @@ class Utils {
 
                 val contentResolver = activity.contentResolver
 
-                writeBitmapToGallery(bitmap, contentResolver, values, activity)
+                Tasks.call(
+                    MainActivity.Executor.executorService,
+                    Callable {
+                        writeBitmapToGallery(bitmap, contentResolver, values)
+                    }
+                )
+                    .addOnSuccessListener {
+                        if (it) Toast.makeText(activity, "Saved to gallery", Toast.LENGTH_LONG)
+                            .show()
+                    }
             }
         }
 
-        private fun writeBitmapToGallery(bitmap: Bitmap, contentResolver: ContentResolver, values: ContentValues, context: Context)
-        {
+        private fun writeBitmapToGallery(
+            bitmap: Bitmap,
+            contentResolver: ContentResolver,
+            values: ContentValues
+        ): Boolean {
             var url: Uri? = null
 
             try {
@@ -106,13 +131,12 @@ class Utils {
 
                 Log.d("saving", url.toString())
 
-                if (url != null)
-                {
+                if (url != null) {
                     val imageOut = contentResolver.openOutputStream(url)
                     imageOut.use {
                         bitmap.compress(Bitmap.CompressFormat.PNG, 100, it)
                     }
-                    Toast.makeText(context, "Saved graph to gallery", Toast.LENGTH_LONG).show()
+                    return true
                 }
             } catch (e: Exception) {
                 if (url != null) {
@@ -120,6 +144,7 @@ class Utils {
                 }
                 Log.e("saving", e.toString())
             }
+            return false
         }
     }
 }
