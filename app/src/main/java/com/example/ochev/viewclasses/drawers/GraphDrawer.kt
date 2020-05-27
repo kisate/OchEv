@@ -2,6 +2,7 @@ package com.example.ochev.viewclasses.drawers
 
 import android.graphics.Bitmap
 import android.graphics.Canvas
+import android.util.Log
 import androidx.core.graphics.withTranslation
 import com.example.ochev.baseclasses.dataclasses.InformationForNormalizer
 import com.example.ochev.baseclasses.dataclasses.Point
@@ -42,30 +43,30 @@ class GraphDrawer(
     }
 
     fun saveToPng() {
-//        val restrictions = graphEditor.getGraphRestrictions()
-//        if (restrictions != null)
-//        {
-//            val maxX = restrictions[0]
-//            val maxY = restrictions[1]
-//            val minX = restrictions[2]
-//            val minY = restrictions[3]
-//
-//            val width = maxX - minX
-//            val height = maxY - minY
-//
-//            val bitmap = Bitmap.createBitmap(
-//                width.toInt(),
-//                height.toInt(),
-//                Bitmap.Config.ARGB_8888
-//            )
-//
-//            val canvas = Canvas(bitmap)
-//
-//            graphView.layout(minX.toInt(), maxY.toInt(), maxX.toInt(), minY.toInt())
-//
-//            canvas.withTranslation (max(0f, -minX), max(0f, -minY)) { drawGraphOnCanvas(graphEditor, this) }
-//
-//            Utils.saveBitmap(bitmap, graphView.context, "graph.png")
-//        }
+        val restrictions = graphEditor.graph.getGraphRestrictions()
+        if (restrictions != null)
+        {
+            val maxX = restrictions[0]
+            val maxY = restrictions[1]
+            val minX = restrictions[2]
+            val minY = restrictions[3]
+
+            Log.d("Restrictions", restrictions.joinToString(" "))
+
+            val width = maxX - minX
+            val height = maxY - minY
+
+            val bitmap = Bitmap.createBitmap(
+                width.toInt(),
+                height.toInt(),
+                Bitmap.Config.ARGB_8888
+            )
+
+            val canvas = Canvas(bitmap)
+
+            canvas.withTranslation (-minX, -minY) { drawGraphOnCanvas(graphEditor, this) }
+
+            Utils.saveBitmap(bitmap, graphView.context, "graph.png")
+        }
     }
 }
