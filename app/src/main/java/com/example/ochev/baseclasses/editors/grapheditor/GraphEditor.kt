@@ -44,6 +44,7 @@ class GraphEditor(
         val normalizer =
             FigureNormalizer()
         val result = normalizer.normaliseStrokes(information) ?: return false
+
         history.saveState()
 
         when (result) {

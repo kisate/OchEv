@@ -20,22 +20,22 @@ class Graph(
         return Graph(figures.copy())
     }
 
-    private fun getLinker(changeFun: (VertexFigureNode) -> VertexFigureNode): HashMap<VertexFigureNode, VertexFigureNode> {
-        val linker: HashMap<VertexFigureNode, VertexFigureNode> = HashMap()
-        figures.vertices.forEach { linker[it] = changeFun(it) }
+    private fun getLinker(changeFun: (VertexFigureNode) -> VertexFigureNode): HashMap<Int, VertexFigureNode> {
+        val linker: HashMap<Int, VertexFigureNode> = HashMap()
+        figures.vertices.forEach { linker[it.id] = changeFun(it) }
         return linker
     }
 
     private fun reconnectEdges(
         newGraph: Graph,
-        linker: HashMap<VertexFigureNode, VertexFigureNode>
+        linker: HashMap<Int, VertexFigureNode>
     ) {
         figures.edges.forEach {
             newGraph.figures.edges.add(
                 it.copy(
                     figure = Edge(
-                        linker[it.figure.beginFigureNode]!!.id,
-                        linker[it.figure.endFigureNode]!!.id,
+                        linker[it.figure.beginFigureNode.id]!!.id,
+                        linker[it.figure.endFigureNode.id]!!.id,
                         newGraph
                     )
                 )
@@ -45,10 +45,10 @@ class Graph(
 
     private fun moveVertexes(
         newGraph: Graph,
-        linker: HashMap<VertexFigureNode, VertexFigureNode>
+        linker: HashMap<Int, VertexFigureNode>
     ) {
         figures.vertices.forEach {
-            newGraph.figures.vertices.add(linker[it]!!)
+            newGraph.figures.vertices.add(linker[it.id]!!)
         }
     }
 
