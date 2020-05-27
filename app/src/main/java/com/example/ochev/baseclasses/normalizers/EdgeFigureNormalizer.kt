@@ -42,7 +42,7 @@ class EdgeFigureNormalizer {
         return Edge(
             beginFigure.id,
             endFigure.id,
-            graphEditor
+            graphEditor.graph
         )
     }
 }

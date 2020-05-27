@@ -145,6 +145,4 @@ class GraphEditor(
         graph.figures.vertices.remove(vertex)
         graph.figures.vertices.add(vertex.copy(height = graph.figures.maxHeight + 1))
     }
-
-
 }

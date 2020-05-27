@@ -36,7 +36,7 @@ class Graph(
                     figure = Edge(
                         linker[it.figure.beginFigureNode]!!.id,
                         linker[it.figure.endFigureNode]!!.id,
-                        it.figure.graphEditor
+                        newGraph
                     )
                 )
             )
