@@ -53,8 +53,8 @@ class GraphDrawer(
 
             Log.d("Restrictions", restrictions.joinToString(" "))
 
-            val width = maxX - minX
-            val height = maxY - minY
+            val width = maxX - minX + PNG_BORDERS*2
+            val height = maxY - minY + PNG_BORDERS*2
 
             val bitmap = Bitmap.createBitmap(
                 width.toInt(),
@@ -64,9 +64,13 @@ class GraphDrawer(
 
             val canvas = Canvas(bitmap)
 
-            canvas.withTranslation (-minX, -minY) { drawGraphOnCanvas(graphEditor, this) }
+            canvas.withTranslation (-minX + PNG_BORDERS, -minY + PNG_BORDERS) { drawGraphOnCanvas(graphEditor, this) }
 
             Utils.saveBitmap(bitmap, graphView.context, "graph.png")
         }
+    }
+
+    companion object {
+        private const val PNG_BORDERS = 50f
     }
 }
