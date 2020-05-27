@@ -45,12 +45,12 @@
 
     <ImageButton
         android:id="@+id/forwardButtonId"
-        style="@style/Widget.MaterialComponents.Button.TextButton"
-        android:layout_width="wrap_content"
+        android:layout_width="50sp"
         android:rotation="180"
-        android:layout_height="wrap_content"
+        android:layout_height="45sp"
+        android:background="@null"
 
-        android:layout_marginStart="1.5sp"
+        android:layout_marginStart="10sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="@id/guideline"
         app:srcCompat="?attr/homeAsUpIndicator"
@@ -58,11 +58,10 @@
 
     <ImageButton
         android:id="@+id/undoButtonId"
-        style="@style/Widget.MaterialComponents.Button.TextButton"
-        android:layout_width="wrap_content"
-
-        android:layout_height="wrap_content"
-        android:layout_marginEnd="1.5sp"
+        android:layout_width="50sp"
+        android:background="@null"
+        android:layout_height="45sp"
+        android:layout_marginEnd="10sp"
         app:layout_constraintBottom_toBottomOf="parent"
 
         app:layout_constraintEnd_toEndOf="@id/guideline"
