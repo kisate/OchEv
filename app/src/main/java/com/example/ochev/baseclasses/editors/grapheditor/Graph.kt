@@ -97,7 +97,7 @@ class Graph(
         return newGraph
     }
 
-    fun withDeletedVertex(id: Int): Graph {
+    private fun withDeletedVertex(id: Int): Graph {
         val newGraph = Graph()
 
         figures.vertices.forEach {

@@ -142,8 +142,10 @@ class GraphEditor(
     }
 
     fun maximizeVertexHeightById(id: Int) {
-        val vertex = graph.getVertexFigureNodeByIdOrNull(id)!!
-        graph.figures.vertices.remove(vertex)
-        graph.figures.vertices.add(vertex.copy(height = graph.figures.maxHeight + 1))
+        val value = graph.figures.maxHeight + 1
+        graph.figures.vertices.replaceAll {
+            if (it.id != id) it
+            else it.copy(height = value)
+        }
     }
 }
