@@ -52,7 +52,7 @@ abstract class Drawer {
                 if (abs(bounds.height()) > MIN_BOUNDS_HEIGHT) {
                     val staticLayout = generateStaticLayout(figure, drawingInformation)
 
-                    canvas?.withTranslation(bounds.left.toFloat(), bounds.bottom.toFloat()) {
+                    canvas?.withTranslation(min(bounds.right.toFloat(), bounds.left.toFloat()), min(bounds.top.toFloat(), bounds.bottom.toFloat())) {
                         staticLayout.draw(canvas)
                     }
                 }
