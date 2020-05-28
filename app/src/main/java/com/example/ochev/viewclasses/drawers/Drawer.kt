@@ -142,7 +142,7 @@ abstract class Drawer {
                 0,
                 drawingInformation.text.length,
                 paint,
-                bounds.width()
+                abs(bounds.width())
             )
             .setAlignment(Layout.Alignment.ALIGN_CENTER)
             .setTextDirection(TextDirectionHeuristics.LTR)
