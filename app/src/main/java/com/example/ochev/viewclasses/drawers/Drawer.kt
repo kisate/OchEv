@@ -84,12 +84,18 @@ abstract class Drawer {
                 )
             }
             is Rhombus -> {
+                val points: MutableList<Point> = mutableListOf(Point.centre(mutableListOf(figure.leftCorner, figure.upCorner)),
+                    Point.centre(mutableListOf(figure.leftCorner, figure.downCorner)),
+                    Point.centre(mutableListOf(figure.rightCorner, figure.downCorner)),
+                    Point.centre(mutableListOf(figure.rightCorner, figure.upCorner)))
+
                 return Rect(
-                    Point.centre(mutableListOf(figure.leftCorner, figure.upCorner)).x.toInt(),
-                    Point.centre(mutableListOf(figure.leftCorner, figure.upCorner)).y.toInt(),
-                    Point.centre(mutableListOf(figure.rightCorner, figure.upCorner)).x.toInt(),
-                    Point.centre(mutableListOf(figure.rightCorner, figure.downCorner)).y.toInt()
+                    points.minBy { it.x}!!.x.toInt(),
+                    points.maxBy { it.y }!!.y.toInt(),
+                    points.maxBy { it.x }!!.x.toInt(),
+                    points.minBy { it.y }!!.y.toInt()
                 )
+
             }
             else -> {
                 return Rect()
