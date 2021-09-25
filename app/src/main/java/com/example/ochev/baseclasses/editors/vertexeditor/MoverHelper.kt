@@ -16,7 +16,7 @@ class MoverHelper(
         result.removeIf {
             editor.currentFigureState.center.getDistanceToLineSegment(it) > 50f
         }
-        return result.minBy { editor.currentFigureState.center.getDistanceToLineSegment(it) }
+        return result.minByOrNull { editor.currentFigureState.center.getDistanceToLineSegment(it) }
     }
 
     fun tryToHelp() {

@@ -177,18 +177,18 @@ class Graph(
     fun getClosestToPointVertexFigureOrNull(point: Point): VertexFigureNode? {
         if (figures.vertices.isEmpty()) return null
 
-        val bestDist = figures.vertices.minBy {
+        val bestDist = figures.vertices.minByOrNull {
             it.figure.getDistanceToPointOrZeroIfInside(point)
         }!!.figure.getDistanceToPointOrZeroIfInside(point)
 
         val lookFor = figures.vertices.partition {
             abs(it.figure.getDistanceToPointOrZeroIfInside(point) - bestDist) <= 0.0001
         }.first
-        return lookFor.maxBy { it.height }!!
+        return lookFor.maxByOrNull { it.height }!!
     }
 
     fun getClosestToPointEdgeFigureOrNull(point: Point): EdgeNode? {
-        return figures.edges.minBy {
+        return figures.edges.minByOrNull {
             it.figure.getDistanceToPoint(point)
         }
     }

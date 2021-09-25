@@ -4,7 +4,10 @@
     <option name="filePathToZoomLevelMap">
       <map>
         <entry key="app/src/main/res/drawable/default_button_background.xml" value="0.1" />
+        <entry key="app/src/main/res/drawable/igraph_view_background.xml" value="0.1" />
         <entry key="app/src/main/res/layout/activity_main.xml" value="0.16979166666666667" />
+        <entry key="app/src/main/res/layout/graph_fragment_view.xml" value="0.121875" />
+        <entry key="app/src/main/res/layout/main_acitvity_view.xml" value="0.17572463768115942" />
         <entry key="app/src/main/res/mipmap-anydpi-v26/ic_launcher.xml" value="0.1" />
         <entry key="app/src/main/res/mipmap-anydpi-v26/ic_launcher_round.xml" value="0.1" />
       </map>

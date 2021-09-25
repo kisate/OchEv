@@ -128,13 +128,13 @@ class Classifier(private val context: Context) {
     }
 
     private fun getOutputString(output: FloatArray): String {
-        val maxIndex = output.indices.maxBy { output[it] } ?: -1
+        val maxIndex = output.indices.maxByOrNull { output[it] } ?: -1
         return "Prediction Result: ${output.contentToString()}"
     }
 
     private fun getVertex(output: FloatArray): Vertexes? {
-        var maxIndex = output.indices.maxBy { output[it] } ?: -1
-        if (output.max()!! < THRESHOLD) maxIndex = -1
+        var maxIndex = output.indices.maxByOrNull { output[it] } ?: -1
+        if (output.maxOrNull()!! < THRESHOLD) maxIndex = -1
         return Vertexes.fromInt(maxIndex)
     }
 

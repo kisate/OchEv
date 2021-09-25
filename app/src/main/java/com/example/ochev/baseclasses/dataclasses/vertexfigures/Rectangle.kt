@@ -84,7 +84,7 @@ data class Rectangle(
         // rightDown -> leftDown
         val tillAD = point.getDistanceToLineSegment(LineSegment(rightDownCorner, leftDownCorner))
 
-        return listOf(tillAB, tillBC, tillCD, tillAD).min()!!
+        return listOf(tillAB, tillBC, tillCD, tillAD).minOrNull()!!
     }
 
     override fun checkIfPointIsInside(point: Point): Boolean {

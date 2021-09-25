@@ -38,7 +38,7 @@ data class FigureContainer(
 
     val maxHeight: Int
         get() {
-            return vertices.maxBy { it.height }?.height ?: 0
+            return vertices.maxByOrNull { it.height }?.height ?: 0
         }
 
     fun getHeight(figure: Figure): Int {

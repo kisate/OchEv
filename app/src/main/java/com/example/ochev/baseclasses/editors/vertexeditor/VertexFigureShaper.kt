@@ -8,7 +8,7 @@ class VertexFigureShaper(val editor: VertexFigureEditor) {
 
     fun shapingBegins(point: Point): Boolean {
         val movers = editor.currentFigureState.getPointMovers()
-        val bestMover = movers.minBy { it.point.getDistanceToPoint(point) }!!
+        val bestMover = movers.minByOrNull { it.point.getDistanceToPoint(point) }!!
 
         return if (bestMover.point.getDistanceToPoint(point) <= editor.currentFigureState.getDistanceToCountTouch()) {
             editor.graphEditor.history.saveState()

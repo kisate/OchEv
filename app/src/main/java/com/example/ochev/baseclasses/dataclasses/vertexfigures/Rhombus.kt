@@ -122,7 +122,7 @@ data class Rhombus(
 
         return MutableList(points.size) {
             point.getDistanceToLineSegment(LineSegment(points[it], points[(it + 1) % points.size]))
-        }.min()!!
+        }.minOrNull()!!
     }
 
     override fun getDistanceToCountTouch(): Float {

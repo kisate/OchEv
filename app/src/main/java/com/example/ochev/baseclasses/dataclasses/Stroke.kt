@@ -21,27 +21,27 @@ data class Stroke(val points: MutableList<Point> = ArrayList()) {
     }
 
     fun maxX(): Float {
-        return points.maxBy { it.x }!!.x
+        return points.maxByOrNull { it.x }!!.x
     }
 
     fun maxY(): Float {
-        return points.maxBy { it.y }!!.y
+        return points.maxByOrNull { it.y }!!.y
     }
 
     fun minX(): Float {
-        return points.minBy { it.x }!!.x
+        return points.maxByOrNull { it.x }!!.x
     }
 
     fun minY(): Float {
-        return points.minBy { it.y }!!.y
+        return points.maxByOrNull { it.y }!!.y
     }
 
     companion object {
         fun getStrokesRestrictions(strokes: MutableList<Stroke>): MutableList<Float> {
-            val maxX = strokes.maxBy { it.maxX() }!!.maxX()
-            val minX = strokes.minBy { it.minX() }!!.minX()
-            val maxY = strokes.maxBy { it.maxY() }!!.maxY()
-            val minY = strokes.minBy { it.minY() }!!.minY()
+            val maxX = strokes.maxByOrNull { it.maxX() }!!.maxX()
+            val minX = strokes.minByOrNull { it.minX() }!!.minX()
+            val maxY = strokes.maxByOrNull { it.maxY() }!!.maxY()
+            val minY = strokes.minByOrNull { it.minY() }!!.minY()
             return mutableListOf(maxX, maxY, minX, minY)
         }
 
