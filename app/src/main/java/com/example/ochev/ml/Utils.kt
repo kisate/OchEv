@@ -19,6 +19,9 @@ import java.io.File
 import java.io.FileOutputStream
 import java.io.IOException
 import java.util.concurrent.Callable
+import java.util.concurrent.Executor
+import java.util.concurrent.ExecutorService
+import java.util.concurrent.Executors
 
 
 class Utils {
@@ -104,7 +107,7 @@ class Utils {
                 val contentResolver = activity.contentResolver
 
                 Tasks.call(
-                    MainActivity.Executor.executorService,
+                    Executors.newCachedThreadPool(),
                     Callable {
                         writeBitmapToGallery(bitmap, contentResolver, values)
                     }

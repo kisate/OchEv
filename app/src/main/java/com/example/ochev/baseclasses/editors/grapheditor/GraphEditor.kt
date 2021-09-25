@@ -9,8 +9,6 @@ import com.example.ochev.baseclasses.editors.edgeeditor.EdgeEditor
 import com.example.ochev.baseclasses.editors.edgefigures.Edge
 import com.example.ochev.baseclasses.editors.vertexeditor.VertexFigureEditor
 import com.example.ochev.baseclasses.normalizers.FigureNormalizer
-import com.example.ochev.viewclasses.drawers.drawinginformations.DrawingInformation
-import com.example.ochev.viewclasses.drawers.drawinginformations.DrawingMode
 
 class GraphEditor(
     var graph: Graph = Graph(),
@@ -35,9 +33,7 @@ class GraphEditor(
     }
 
     fun setDrawInfoToDefault() {
-        graph.figures.figuresSortedByHeights.forEach {
-            it.drawingInformation.enterMode(DrawingMode.DEFAULT)
-        }
+
     }
 
     fun modifyByStrokes(information: InformationForNormalizer): Boolean {
@@ -51,7 +47,6 @@ class GraphEditor(
             is VertexFigure -> {
                 val nodeToAdd = VertexFigureNode(
                     id = figureCounter++,
-                    drawingInformation = DrawingInformation.getVertexDrawingInformation(result)!!,
                     height = graph.figures.maxHeight + 1,
                     figure = result
                 )
@@ -64,7 +59,6 @@ class GraphEditor(
             is Edge -> {
                 val nodeToAdd = EdgeNode(
                     id = figureCounter++,
-                    drawingInformation = DrawingInformation.getEdgeDrawingInformation()!!,
                     figure = result
                 )
                 graph.addEdgeNode(nodeToAdd)
@@ -101,8 +95,7 @@ class GraphEditor(
             VertexFigureNode(
                 id = figureCounter++,
                 height = graph.figures.maxHeight,
-                figure = vertexFigure,
-                drawingInformation = DrawingInformation.getVertexDrawingInformation(vertexFigure)!!
+                figure = vertexFigure
             )
         )
     }
@@ -111,8 +104,7 @@ class GraphEditor(
         graph.addEdgeNode(
             EdgeNode(
                 id = figureCounter++,
-                figure = edge,
-                drawingInformation = DrawingInformation.getEdgeDrawingInformation()!!
+                figure = edge
             )
         )
     }
