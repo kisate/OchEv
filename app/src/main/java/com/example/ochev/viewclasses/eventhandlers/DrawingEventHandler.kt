@@ -51,7 +51,11 @@ class DrawingEventHandler(
                 graphDrawer.modifyByStrokes(information)
             })
             .addOnSuccessListener {
-                if (!it) Toast.makeText(graphDrawer.graphView.context, "Could not recognize.", Toast.LENGTH_LONG).show()
+                if (!it) Toast.makeText(
+                    graphDrawer.graphView.context,
+                    "Could not recognize.",
+                    Toast.LENGTH_LONG
+                ).show()
                 graphDrawer.invalidate()
             }
             .addOnFailureListener { e -> Log.i("Modify", "Error modifying", e) }

@@ -2,7 +2,10 @@ package com.example.ochev.viewclasses.drawers
 
 import android.graphics.Canvas
 import android.graphics.Rect
-import android.text.*
+import android.text.Layout
+import android.text.StaticLayout
+import android.text.TextDirectionHeuristics
+import android.text.TextPaint
 import androidx.core.graphics.withTranslation
 import com.example.ochev.baseclasses.dataclasses.Figure
 import com.example.ochev.baseclasses.dataclasses.Point
@@ -52,7 +55,10 @@ abstract class Drawer {
                 if (abs(bounds.height()) > MIN_BOUNDS_HEIGHT) {
                     val staticLayout = generateStaticLayout(figure, drawingInformation)
 
-                    canvas?.withTranslation(min(bounds.right.toFloat(), bounds.left.toFloat()), min(bounds.top.toFloat(), bounds.bottom.toFloat())) {
+                    canvas?.withTranslation(
+                        min(bounds.right.toFloat(), bounds.left.toFloat()),
+                        min(bounds.top.toFloat(), bounds.bottom.toFloat())
+                    ) {
                         staticLayout.draw(canvas)
                     }
                 }
@@ -84,13 +90,15 @@ abstract class Drawer {
                 )
             }
             is Rhombus -> {
-                val points: MutableList<Point> = mutableListOf(Point.centre(mutableListOf(figure.leftCorner, figure.upCorner)),
+                val points: MutableList<Point> = mutableListOf(
+                    Point.centre(mutableListOf(figure.leftCorner, figure.upCorner)),
                     Point.centre(mutableListOf(figure.leftCorner, figure.downCorner)),
                     Point.centre(mutableListOf(figure.rightCorner, figure.downCorner)),
-                    Point.centre(mutableListOf(figure.rightCorner, figure.upCorner)))
+                    Point.centre(mutableListOf(figure.rightCorner, figure.upCorner))
+                )
 
                 return Rect(
-                    points.minBy { it.x}!!.x.toInt(),
+                    points.minBy { it.x }!!.x.toInt(),
                     points.maxBy { it.y }!!.y.toInt(),
                     points.maxBy { it.x }!!.x.toInt(),
                     points.minBy { it.y }!!.y.toInt()

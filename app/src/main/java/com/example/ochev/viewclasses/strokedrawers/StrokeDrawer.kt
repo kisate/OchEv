@@ -15,8 +15,7 @@ class StrokeDrawer(
         val point = Point(x, y)
         if (stroke.points.size == 0) {
             drawStrokeView.path.moveTo(x, y)
-        }
-        else {
+        } else {
             drawStrokeView.path.lineTo(x, y)
         }
         stroke.addPoint(point)

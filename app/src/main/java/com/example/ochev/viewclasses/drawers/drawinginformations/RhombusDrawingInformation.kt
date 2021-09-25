@@ -4,7 +4,7 @@ import android.graphics.Color
 import android.graphics.Paint
 import com.example.ochev.viewclasses.drawers.FigureStyle
 
-class RhombusDrawingInformation: VertexDrawingInformation {
+class RhombusDrawingInformation : VertexDrawingInformation {
     override var text: String = ""
     override var style: FigureStyle = FigureStyle()
     override var drawingMode: DrawingMode = DrawingMode.DEFAULT

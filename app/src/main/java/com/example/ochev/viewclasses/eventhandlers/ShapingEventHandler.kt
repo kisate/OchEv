@@ -18,7 +18,7 @@ class ShapingEventHandler(
 
     override fun handle(gesture: Gesture, event: MotionEvent) {
         if (firstPointerId != null && event.getPointerId(0) != firstPointerId) return
-        val point = event.let{ Point(it) }
+        val point = event.let { Point(it) }
         when (gesture.state) {
             GestureState.START -> {
                 firstPointerId = event.getPointerId(0)

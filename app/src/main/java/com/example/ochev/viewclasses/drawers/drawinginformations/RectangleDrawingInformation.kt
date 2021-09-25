@@ -4,10 +4,11 @@ import android.graphics.Color
 import android.graphics.Paint
 import com.example.ochev.viewclasses.drawers.FigureStyle
 
-class RectangleDrawingInformation: VertexDrawingInformation {
+class RectangleDrawingInformation : VertexDrawingInformation {
     override var text: String = ""
     override var style: FigureStyle = FigureStyle()
     override var drawingMode: DrawingMode = DrawingMode.DEFAULT
+
     init {
         enterMode(DrawingMode.DEFAULT)
     }

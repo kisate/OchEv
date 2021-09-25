@@ -8,14 +8,14 @@ import com.example.ochev.baseclasses.editors.vertexeditor.VertexFigureEditor
 import com.example.ochev.viewclasses.drawers.GraphDrawer
 import com.example.ochev.viewclasses.eventhandlers.GestureHandler
 
-class ButtonsHandler (
+class ButtonsHandler(
     private val buttonsContainer: ButtonsContainer,
     private val graphDrawer: GraphDrawer
 ) {
 
     lateinit var gestureHandler: GestureHandler
 
-    init{
+    init {
         buttonsContainer.clearButton.setOnClickListener {
             gestureHandler.exitAll()
             hideDeleteButton()
@@ -47,6 +47,7 @@ class ButtonsHandler (
     fun showDeleteButton() {
         buttonsContainer.deleteButton.visibility = View.VISIBLE
     }
+
     fun showCopyButton() {
         buttonsContainer.copyButton.visibility = View.VISIBLE
     }

@@ -41,7 +41,7 @@ class DrawLinesView(
     }
 
     private fun drawLine(segment: LineSegment?, canvas: Canvas?) {
-        if (segment == null)return
+        if (segment == null) return
         canvas?.drawLine(
             segment.A.x,
             segment.A.y,

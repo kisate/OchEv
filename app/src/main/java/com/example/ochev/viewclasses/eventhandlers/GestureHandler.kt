@@ -77,8 +77,7 @@ class GestureHandler(
         if (currentEdgeEditor != null && graphDrawer.graphEditor.graph.getEdgeNodeByIdOrNull(
                 currentEdgeEditor!!.figureId
             ) != null && gesture.type == GestureType.TAP
-        )
-        {
+        ) {
             val clickedEnd =
                 graphDrawer.graphEditor.graph.getEdgeNodeByIdOrNull(currentEdgeEditor!!.figureId)!!.figure.getIndexOfClosestEnd(
                     Point(event)
@@ -96,9 +95,12 @@ class GestureHandler(
 
         Log.d("Gestures", clickedFigureEditor?.figureId.toString())
 
-        if (clickedFigureEditor is VertexFigureEditor?) return handleVertexClick(gesture, event, clickedFigureEditor)
-        else if (clickedFigureEditor is EdgeEditor?)
-        {
+        if (clickedFigureEditor is VertexFigureEditor?) return handleVertexClick(
+            gesture,
+            event,
+            clickedFigureEditor
+        )
+        else if (clickedFigureEditor is EdgeEditor?) {
             handleEdgeClick(gesture, event, clickedFigureEditor)
         }
 
@@ -113,7 +115,7 @@ class GestureHandler(
 
         if (gesture.type == GestureType.TAP) {
 
-            if(clickedEdgeEditor == null) {
+            if (clickedEdgeEditor == null) {
                 exitAll()
                 return null
             }
@@ -277,8 +279,7 @@ class GestureHandler(
 
         Log.d("GEG", "Left edge")
 
-        if (currentEdgeEditor != null)
-        {
+        if (currentEdgeEditor != null) {
             buttonsHandler.hideDeleteButton()
             buttonsHandler.hideCopyButton()
 

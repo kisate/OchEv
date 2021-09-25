@@ -15,8 +15,8 @@ import java.util.concurrent.Callable
 import java.util.concurrent.ExecutorService
 
 
-class Classifier(private val context: Context){
-    private var interpreter : Interpreter? = null
+class Classifier(private val context: Context) {
+    private var interpreter: Interpreter? = null
     var isInitialized = false
         private set
 
@@ -24,7 +24,7 @@ class Classifier(private val context: Context){
     private var inputImageHeight: Int = 0 // will be inferred from TF Lite model
     private var modelInputSize: Int = 0 // will be inferred from TF Lite model
 
-    fun initialize(executorService: ExecutorService) : Task<Void> {
+    fun initialize(executorService: ExecutorService): Task<Void> {
         return call(
             executorService,
             Callable<Void> {
@@ -82,7 +82,11 @@ class Classifier(private val context: Context){
         return getVertex(result[0])
     }
 
-    fun classifyAsync(bitmap: Bitmap, stroke : Stroke, executorService: ExecutorService): Task<Vertexes?> {
+    fun classifyAsync(
+        bitmap: Bitmap,
+        stroke: Stroke,
+        executorService: ExecutorService
+    ): Task<Vertexes?> {
         return call(executorService, Callable<Vertexes?> { classify(bitmap, stroke) })
     }
 
@@ -92,7 +96,13 @@ class Classifier(private val context: Context){
         val maxX = stroke.maxX()
         val maxY = stroke.maxY()
 
-        val croppedBitmap = Bitmap.createBitmap(bitmap, minX.toInt(), minY.toInt(), (maxX - minX).toInt(), (maxY - minY).toInt())
+        val croppedBitmap = Bitmap.createBitmap(
+            bitmap,
+            minX.toInt(),
+            minY.toInt(),
+            (maxX - minX).toInt(),
+            (maxY - minY).toInt()
+        )
 
         return Bitmap.createScaledBitmap(croppedBitmap, inputImageWidth, inputImageHeight, true)
     }
@@ -122,7 +132,7 @@ class Classifier(private val context: Context){
         return "Prediction Result: ${output.contentToString()}"
     }
 
-    private fun getVertex(output: FloatArray) : Vertexes? {
+    private fun getVertex(output: FloatArray): Vertexes? {
         var maxIndex = output.indices.maxBy { output[it] } ?: -1
         if (output.max()!! < THRESHOLD) maxIndex = -1
         return Vertexes.fromInt(maxIndex)

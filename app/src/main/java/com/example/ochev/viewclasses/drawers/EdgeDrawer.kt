@@ -30,10 +30,14 @@ class EdgeDrawer : Drawer() {
         if (drawingInformation.types[1] == 1) {
             arrowheadDrawer.draw(from, to, canvas)
         }
-        if (drawingInformation.types[0] == 1){
+        if (drawingInformation.types[0] == 1) {
             arrowheadDrawer.draw(to, from, canvas)
         }
-        if (figure.realBeginPoint == null || figure.realEndPoint == null)return
-        drawEditingPoints(drawingInformation, mutableListOf(figure.realBeginPoint!!, figure.realEndPoint!!), canvas)
+        if (figure.realBeginPoint == null || figure.realEndPoint == null) return
+        drawEditingPoints(
+            drawingInformation,
+            mutableListOf(figure.realBeginPoint!!, figure.realEndPoint!!),
+            canvas
+        )
     }
 }

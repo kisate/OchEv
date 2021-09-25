@@ -6,9 +6,8 @@ import android.graphics.Path
 import com.example.ochev.baseclasses.dataclasses.Figure
 import com.example.ochev.baseclasses.dataclasses.vertexfigures.Rhombus
 import com.example.ochev.viewclasses.drawers.drawinginformations.DrawingInformation
-import com.example.ochev.viewclasses.drawers.drawinginformations.DrawingMode
 
-class RhombusDrawer: Drawer() {
+class RhombusDrawer : Drawer() {
 
     fun drawRhombus(rhombus: Rhombus, canvas: Canvas?, paint: Paint) {
         val path = Path()

@@ -1,7 +1,6 @@
 package com.example.ochev.ml
 
 import android.content.ContentResolver
-import android.content.ContentUris
 import android.content.ContentValues
 import android.content.Context
 import android.content.pm.PackageManager
@@ -19,9 +18,7 @@ import com.google.android.gms.tasks.Tasks
 import java.io.File
 import java.io.FileOutputStream
 import java.io.IOException
-import java.lang.Exception
 import java.util.concurrent.Callable
-import java.util.jar.Manifest
 
 
 class Utils {

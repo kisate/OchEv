@@ -25,13 +25,13 @@ class GraphDrawer(
         return graphView.width
     }
 
-    fun getCentre() : Point {
-        return Point(getWidth()/2f, getHeight()/2f)
+    fun getCentre(): Point {
+        return Point(getWidth() / 2f, getHeight() / 2f)
     }
 
     lateinit var graphView: DrawGraphView
 
-    fun modifyByStrokes(information: InformationForNormalizer) : Boolean {
+    fun modifyByStrokes(information: InformationForNormalizer): Boolean {
         return graphEditor.modifyByStrokes(information)
     }
 
@@ -45,8 +45,7 @@ class GraphDrawer(
 
     fun saveToPng() {
         val restrictions = graphEditor.graph.getGraphRestrictions()
-        if (restrictions != null)
-        {
+        if (restrictions != null) {
             val maxX = restrictions[0]
             val maxY = restrictions[1]
             val minX = restrictions[2]
@@ -54,8 +53,8 @@ class GraphDrawer(
 
             Log.d("Restrictions", restrictions.joinToString(" "))
 
-            val width = maxX - minX + PNG_BORDERS*2
-            val height = maxY - minY + PNG_BORDERS*2
+            val width = maxX - minX + PNG_BORDERS * 2
+            val height = maxY - minY + PNG_BORDERS * 2
 
             val bitmap = Bitmap.createBitmap(
                 width.toInt(),
@@ -65,11 +64,23 @@ class GraphDrawer(
 
             val canvas = Canvas(bitmap)
 
-            canvas.withTranslation (-minX + PNG_BORDERS, -minY + PNG_BORDERS) { drawGraphOnCanvas(graphEditor, this) }
+            canvas.withTranslation(-minX + PNG_BORDERS, -minY + PNG_BORDERS) {
+                drawGraphOnCanvas(
+                    graphEditor,
+                    this
+                )
+            }
 
-            val scale = max(1f, max(width/ MAX_WIDTH, height/ MAX_HEIGHT))
+            val scale = max(1f, max(width / MAX_WIDTH, height / MAX_HEIGHT))
 
-            Utils.saveBitmapToGallery(Bitmap.createScaledBitmap(bitmap, (width/scale).toInt(), (height/scale).toInt(), true), graphView.context as MainActivity, "graph.png")
+            Utils.saveBitmapToGallery(
+                Bitmap.createScaledBitmap(
+                    bitmap,
+                    (width / scale).toInt(),
+                    (height / scale).toInt(),
+                    true
+                ), graphView.context as MainActivity, "graph.png"
+            )
         }
     }
 

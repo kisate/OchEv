@@ -5,7 +5,6 @@ import com.example.ochev.baseclasses.dataclasses.Figure
 import com.example.ochev.baseclasses.dataclasses.vertexfigures.Circle
 import com.example.ochev.viewclasses.drawers.drawinginformations.CircleDrawingInformation
 import com.example.ochev.viewclasses.drawers.drawinginformations.DrawingInformation
-import com.example.ochev.viewclasses.drawers.drawinginformations.DrawingMode
 
 class CircleDrawer : Drawer() {
 

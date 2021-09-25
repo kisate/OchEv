@@ -36,7 +36,7 @@ class DrawGraphView(
         for (figure in graphEditor.graph.figures.figuresSortedByHeights) {
             Log.i("ClassifyDbg", figure.toString())
             figuresDrawer.draw(figure.figure, figure.drawingInformation, canvas)
-            if (figure.drawingInformation.drawingMode == DrawingMode.EDIT){
+            if (figure.drawingInformation.drawingMode == DrawingMode.EDIT) {
                 repeating.add(figure)
             }
         }

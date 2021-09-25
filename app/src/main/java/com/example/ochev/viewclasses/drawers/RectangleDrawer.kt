@@ -7,7 +7,6 @@ import android.util.Log
 import com.example.ochev.baseclasses.dataclasses.Figure
 import com.example.ochev.baseclasses.dataclasses.vertexfigures.Rectangle
 import com.example.ochev.viewclasses.drawers.drawinginformations.DrawingInformation
-import com.example.ochev.viewclasses.drawers.drawinginformations.DrawingMode
 
 class RectangleDrawer : Drawer() {
 

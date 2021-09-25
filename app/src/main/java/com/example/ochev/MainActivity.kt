@@ -4,22 +4,16 @@ import android.os.Bundle
 import android.util.Log
 import android.widget.FrameLayout
 import androidx.appcompat.app.AppCompatActivity
-import com.example.ochev.baseclasses.dataclasses.LineSegment
-import com.example.ochev.baseclasses.dataclasses.Point
-import com.example.ochev.baseclasses.dataclasses.Point.Companion.getOptimalSegment
 import com.example.ochev.ml.Classifier
-import com.example.ochev.viewclasses.drawers.GraphDrawer
-import kotlinx.android.synthetic.main.activity_main.*
 import com.example.ochev.viewclasses.StrokeInputView
 import com.example.ochev.viewclasses.buttonshandler.ButtonsContainer
 import com.example.ochev.viewclasses.buttonshandler.ButtonsHandler
+import com.example.ochev.viewclasses.drawers.GraphDrawer
 import com.example.ochev.viewclasses.drawers.LinesDrawer
 import com.example.ochev.viewclasses.strokedrawers.StrokeDrawer
-import com.google.android.gms.tasks.Task
-import java.util.*
+import kotlinx.android.synthetic.main.activity_main.*
 import java.util.concurrent.ExecutorService
 import java.util.concurrent.Executors
-import kotlin.collections.HashMap
 
 @Suppress("CAST_NEVER_SUCCEEDS")
 class MainActivity : AppCompatActivity() {
@@ -36,10 +30,28 @@ class MainActivity : AppCompatActivity() {
         graphDrawer.graphView = drawGraphId
         linesDrawer.linesView = drawLinesId
 
-        val buttonsHandler = ButtonsHandler(ButtonsContainer(clearButtonId, deleteButtonId, undoButtonId, forwardButtonId, saveButtonId, copyButtonId),graphDrawer)
+        val buttonsHandler = ButtonsHandler(
+            ButtonsContainer(
+                clearButtonId,
+                deleteButtonId,
+                undoButtonId,
+                forwardButtonId,
+                saveButtonId,
+                copyButtonId
+            ), graphDrawer
+        )
 
         if (strokeInput == null) {
-            strokeInput = StrokeInputView(this, null, strokeDrawer, graphDrawer, linesDrawer,buttonsHandler, findViewById(R.id.editText), classifier)
+            strokeInput = StrokeInputView(
+                this,
+                null,
+                strokeDrawer,
+                graphDrawer,
+                linesDrawer,
+                buttonsHandler,
+                findViewById(R.id.editText),
+                classifier
+            )
             strokeInput?.alpha = 0F
         }
 

@@ -10,7 +10,7 @@ class ArrowGetter {
         val base = 10f
 
         var reversed = Vector(to, from)
-        reversed = reversed.multipliedByFloat((height )/ reversed.length)
+        reversed = reversed.multipliedByFloat((height) / reversed.length)
         var side = Vector(reversed.y, -reversed.x)
         val result: MutableList<Point> = ArrayList()
         side = side.multipliedByFloat(base / side.length)

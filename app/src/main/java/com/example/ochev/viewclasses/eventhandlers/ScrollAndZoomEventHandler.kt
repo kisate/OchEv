@@ -41,8 +41,7 @@ class ScrollAndZoomEventHandler(
 
                     val factor = calcDistance(event) / lastDistance!!
 
-                    if (factor >= ZOOM_THRESHOLD && graphDrawer.scale*factor < MAX_SCALE)
-                    {
+                    if (factor >= ZOOM_THRESHOLD && graphDrawer.scale * factor < MAX_SCALE) {
                         graphDrawer.scale *= factor
                         graphDrawer.graphEditor.zoomByPointAndFactor(
                             calcCenter(event),
@@ -50,8 +49,7 @@ class ScrollAndZoomEventHandler(
                         )
                     }
 
-                    if (factor <= 1/ ZOOM_THRESHOLD && graphDrawer.scale*factor > MIN_SCALE)
-                    {
+                    if (factor <= 1 / ZOOM_THRESHOLD && graphDrawer.scale * factor > MIN_SCALE) {
                         graphDrawer.scale *= factor
                         graphDrawer.graphEditor.zoomByPointAndFactor(
                             calcCenter(event),
