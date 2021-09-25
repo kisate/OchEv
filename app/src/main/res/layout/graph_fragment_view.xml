@@ -5,4 +5,14 @@
     android:layout_height="match_parent"
     android:background="@drawable/igraph_view_background">
 
+    <com.example.ochev.ui.InputView
+        android:id="@+id/input_view"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" />
+
+    <com.example.ochev.ui.InputDrawView
+        android:id="@+id/input_draw_view"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" />
+
 </FrameLayout>
