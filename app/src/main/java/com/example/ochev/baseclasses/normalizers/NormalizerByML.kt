@@ -1,6 +1,8 @@
 package com.example.ochev.baseclasses.normalizers
 
+import android.graphics.Bitmap
 import com.example.ochev.baseclasses.dataclasses.InformationForNormalizer
+import com.example.ochev.baseclasses.dataclasses.Stroke
 import com.example.ochev.baseclasses.dataclasses.Stroke.Companion.getStrokesRestrictions
 import com.example.ochev.baseclasses.dataclasses.Stroke.Companion.joinListOfStrokes
 import com.example.ochev.baseclasses.dataclasses.vertexfigures.VertexFigure
@@ -24,7 +26,8 @@ class NormalizerByML {
         ) return null
 
         if (classifier.isInitialized) {
-            val type = classifier.classify(information.bitmap, stroke)
+            val bitmap = prepareBitmap(information.bitmap, stroke)
+            val type = classifier.classify(bitmap)
             val vertexFigureBuilder = VertexFigureBuilder()
 
             return if (type == null) null
@@ -33,5 +36,21 @@ class NormalizerByML {
 
         return null
     }
+
+    private fun prepareBitmap(bitmap: Bitmap, stroke: Stroke): Bitmap {
+        val minX = stroke.minX()
+        val minY = stroke.minY()
+        val maxX = stroke.maxX()
+        val maxY = stroke.maxY()
+
+        return Bitmap.createBitmap(
+            bitmap,
+            minX.toInt(),
+            minY.toInt(),
+            (maxX - minX).toInt(),
+            (maxY - minY).toInt()
+        )
+    }
+
 
 }
