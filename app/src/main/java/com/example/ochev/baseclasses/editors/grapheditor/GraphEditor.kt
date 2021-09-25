@@ -9,6 +9,7 @@ import com.example.ochev.baseclasses.editors.edgeeditor.EdgeEditor
 import com.example.ochev.baseclasses.editors.edgefigures.Edge
 import com.example.ochev.baseclasses.editors.vertexeditor.VertexFigureEditor
 import com.example.ochev.baseclasses.normalizers.FigureNormalizer
+import com.example.ochev.callbacks.UserMode
 
 class GraphEditor(
     var graph: Graph = Graph(),

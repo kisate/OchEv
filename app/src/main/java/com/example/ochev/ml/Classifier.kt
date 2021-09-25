@@ -56,7 +56,7 @@ class Classifier(private val context: Context) {
         isInitialized = true
     }
 
-    fun classify(bitmap: Bitmap, stroke: Stroke): Vertexes? {
+    fun classify(bitmap: Bitmap): Vertexes? {
         if (!isInitialized) {
             throw IllegalStateException("TF Lite Interpreter is not initialized yet.")
         }
@@ -66,8 +66,7 @@ class Classifier(private val context: Context) {
 
         // Preprocessing: resize the input
         startTime = System.nanoTime()
-        val resizedImage = prepareBitmap(bitmap, stroke)
-        val byteBuffer = convertBitmapToByteBuffer(resizedImage)
+        val byteBuffer = convertBitmapToByteBuffer(processBitmap(bitmap))
         elapsedTime = (System.nanoTime() - startTime) / 1000000
         Log.d(TAG, "Preprocessing time = " + elapsedTime + "ms")
 
@@ -80,31 +79,6 @@ class Classifier(private val context: Context) {
         Log.d(TAG, "Results : ${result[0].contentToString()}")
 
         return getVertex(result[0])
-    }
-
-    fun classifyAsync(
-        bitmap: Bitmap,
-        stroke: Stroke,
-        executorService: ExecutorService
-    ): Task<Vertexes?> {
-        return call(executorService, Callable<Vertexes?> { classify(bitmap, stroke) })
-    }
-
-    private fun prepareBitmap(bitmap: Bitmap, stroke: Stroke): Bitmap {
-        val minX = stroke.minX()
-        val minY = stroke.minY()
-        val maxX = stroke.maxX()
-        val maxY = stroke.maxY()
-
-        val croppedBitmap = Bitmap.createBitmap(
-            bitmap,
-            minX.toInt(),
-            minY.toInt(),
-            (maxX - minX).toInt(),
-            (maxY - minY).toInt()
-        )
-
-        return Bitmap.createScaledBitmap(croppedBitmap, inputImageWidth, inputImageHeight, true)
     }
 
     private fun convertBitmapToByteBuffer(bitmap: Bitmap): ByteBuffer {
@@ -125,6 +99,10 @@ class Classifier(private val context: Context) {
         }
 
         return byteBuffer
+    }
+
+    private fun processBitmap(bitmap: Bitmap): Bitmap {
+        return Bitmap.createScaledBitmap(bitmap, inputImageWidth, inputImageHeight, true)
     }
 
     private fun getOutputString(output: FloatArray): String {
