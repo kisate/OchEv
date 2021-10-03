@@ -18,8 +18,18 @@ object ViewerFactory {
     fun create(context: Context): BoardViewer = BoardViewerImpl(context)
 }
 
-class FiguresManipulatorImpl(private val id: Int, private val graphEditor: GraphEditor) : BoardManipulator {
+class FiguresManipulatorImpl(private val id: Int, private val graphEditor: GraphEditor) :
+    BoardManipulator {
     private var isActive = true;
+
+
+    override fun startEditing() {
+        TODO("Not yet implemented")
+    }
+
+    override fun cancelEditing() {
+        TODO("Not yet implemented")
+    }
 
     override fun putPoint(pt: Point): BoardManipulator? {
         val editor = graphEditor.getFigureEditorByTouch(pt)
@@ -27,11 +37,18 @@ class FiguresManipulatorImpl(private val id: Int, private val graphEditor: Graph
             isActive = false
             return null
         }
-        TODO()
-    }
+        if (editor.figureId != id) {
+            return FiguresManipulatorImpl(editor.figureId, graphEditor)
+        }
+        when (editor) {
+            is VertexFigureEditor -> {
 
-    override fun actionIsOver(): Boolean {
-        return isActive
+            }
+            is EdgeEditor -> {
+
+            }
+        }
+        TODO()
     }
 
     override fun currentEditingFigure(): Int {
@@ -46,8 +63,13 @@ class BoardViewerImpl(context: Context) : BoardViewer {
     private val boardChangesListeners = arrayListOf<BoardChangesListener>()
     private var currentUserMode = UserMode.DRAWING
 
+    override fun moveBoard(vector: Vector) {
+        graphEditor.moveGraphByVector(vector)
+        notifyBoardChanges()
+    }
+
     override fun createFigureByStrokes(bitmap: Bitmap, strokes: MutableList<Stroke>?): Boolean {
-        return graphEditor.modifyByStrokes(
+        val edited = graphEditor.modifyByStrokes(
             InformationForNormalizer(
                 classifier = classifier,
                 graphEditor = graphEditor,
@@ -55,24 +77,13 @@ class BoardViewerImpl(context: Context) : BoardViewer {
                 bitmap = bitmap
             )
         )
-    }
-
-    override fun moveBoard(vector: Vector) {
-        graphEditor.moveGraphByVector(vector)
-    }
-
-    private fun notifyUserModeChanges() {
-        userModeChangesListeners.forEach { it.onUserModeChanged(currentUserMode) }
-    }
-
-    private fun goToDrawingMode() {
-        currentUserMode = UserMode.DRAWING
-        notifyUserModeChanges()
-    }
-
-    private fun goToEditingMode() {
-        currentUserMode = UserMode.EDITING
-        notifyUserModeChanges()
+        return when (edited) {
+            true -> {
+                notifyBoardChanges()
+                true
+            }
+            false -> false
+        }
     }
 
     override fun selectFigureByPoint(point: Point): BoardManipulator? {
@@ -118,6 +129,7 @@ class BoardViewerImpl(context: Context) : BoardViewer {
         graphEditor.zoomByPointAndFactor(centre, scaleValue)
     }
 
+
     override fun addListener(userModeChangesListener: UserModeChangesListener) {
         userModeChangesListeners.add(userModeChangesListener)
     }
@@ -129,5 +141,25 @@ class BoardViewerImpl(context: Context) : BoardViewer {
     override fun addListenerAndNotify(userModeChangesListener: UserModeChangesListener) {
         addListener(userModeChangesListener)
         userModeChangesListener.onUserModeChanged(currentUserMode)
+    }
+
+    private fun notifyBoardChanges() {
+        boardChangesListeners.forEach {
+            it.onBoardChanged(graphEditor.allFiguresSortedByHeights)
+        }
+    }
+
+    private fun notifyUserModeChanges() {
+        userModeChangesListeners.forEach { it.onUserModeChanged(currentUserMode) }
+    }
+
+    private fun goToDrawingMode() {
+        currentUserMode = UserMode.DRAWING
+        notifyUserModeChanges()
+    }
+
+    private fun goToEditingMode() {
+        currentUserMode = UserMode.EDITING
+        notifyUserModeChanges()
     }
 }

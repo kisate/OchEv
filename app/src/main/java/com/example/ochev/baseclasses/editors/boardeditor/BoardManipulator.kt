@@ -5,7 +5,9 @@ import com.example.ochev.baseclasses.dataclasses.Point
 interface BoardManipulator {
     fun putPoint(pt: Point): BoardManipulator?
 
-    fun actionIsOver(): Boolean
-
     fun currentEditingFigure(): Int
+
+    fun startEditing()
+
+    fun cancelEditing()
 }
