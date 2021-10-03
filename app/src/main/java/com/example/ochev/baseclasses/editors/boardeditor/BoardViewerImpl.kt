@@ -5,7 +5,9 @@ import android.graphics.Bitmap
 import com.example.ochev.baseclasses.dataclasses.InformationForNormalizer
 import com.example.ochev.baseclasses.dataclasses.Point
 import com.example.ochev.baseclasses.dataclasses.Stroke
+import com.example.ochev.baseclasses.editors.edgeeditor.EdgeEditor
 import com.example.ochev.baseclasses.editors.grapheditor.GraphEditor
+import com.example.ochev.baseclasses.editors.vertexeditor.VertexFigureEditor
 import com.example.ochev.callbacks.BoardChangesListener
 import com.example.ochev.callbacks.UserMode
 import com.example.ochev.callbacks.UserModeChangesListener
@@ -18,8 +20,9 @@ object ViewerFactory {
 class BoardViewerImpl(context: Context) : BoardViewer {
     private val graphEditor = GraphEditor()
     private val classifier = Classifier(context)
-    private val listeners = arrayListOf<UserModeChangesListener>()
-    private val currentUserMode = UserMode.EDITING
+    private val userModeChangesListeners = arrayListOf<UserModeChangesListener>()
+    private val boardChangesListeners = arrayListOf<BoardChangesListener>()
+    private var currentUserMode = UserMode.DRAWING
 
     override fun createFigureByStrokes(bitmap: Bitmap, strokes: MutableList<Stroke>?): Boolean {
         return graphEditor.modifyByStrokes(
@@ -32,16 +35,29 @@ class BoardViewerImpl(context: Context) : BoardViewer {
         )
     }
 
-    override fun selectFigureByPoint(point: Point): BoardManipulator {
+
+
+    override fun selectFigureByPoint(point: Point): BoardManipulator? {
+        val editor = graphEditor.getFigureEditorByTouch(point)
+        if (editor == null) {
+            currentUserMode = UserMode.DRAWING;
+            return null
+        }
+        currentUserMode = UserMode.EDITING
         TODO()
     }
 
     override fun addBoardChangesListener(boardChangeListener: BoardChangesListener) {
-        TODO("Not yet implemented")
+        boardChangesListeners.add(boardChangeListener)
+    }
+
+    override fun removeBoardChangesListener(toDelete: BoardChangesListener) {
+        boardChangesListeners.remove(toDelete)
     }
 
     override fun addBoardChangesListenerAndNotify(boardChangeListener: BoardChangesListener) {
-        TODO("Not yet implemented")
+        addBoardChangesListener(boardChangeListener)
+        boardChangeListener.onBoardChanged(graphEditor.allFiguresSortedByHeights)
     }
 
     override fun clearBoard() {
@@ -65,7 +81,11 @@ class BoardViewerImpl(context: Context) : BoardViewer {
     }
 
     override fun addListener(userModeChangesListener: UserModeChangesListener) {
-        listeners.add(userModeChangesListener)
+        userModeChangesListeners.add(userModeChangesListener)
+    }
+
+    override fun removeListener(toDelete: UserModeChangesListener) {
+        userModeChangesListeners.remove(toDelete)
     }
 
     override fun addListenerAndNotify(userModeChangesListener: UserModeChangesListener) {

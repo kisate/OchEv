@@ -9,7 +9,7 @@ import com.example.ochev.callbacks.UserModeChangesListener
 interface BoardViewer {
     fun createFigureByStrokes(bitmap: Bitmap, strokes: MutableList<Stroke>?): Boolean
 
-    fun selectFigureByPoint(point: Point): BoardManipulator
+    fun selectFigureByPoint(point: Point): BoardManipulator?
 
     fun clearBoard()
 
@@ -23,9 +23,13 @@ interface BoardViewer {
 
     fun addListener(userModeChangesListener: UserModeChangesListener)
 
+    fun removeListener(toDelete: UserModeChangesListener)
+
     fun addListenerAndNotify(userModeChangesListener: UserModeChangesListener)
 
     fun addBoardChangesListener(boardChangeListener: BoardChangesListener)
+
+    fun removeBoardChangesListener(toDelete: BoardChangesListener)
 
     fun addBoardChangesListenerAndNotify(boardChangeListener: BoardChangesListener)
 }
