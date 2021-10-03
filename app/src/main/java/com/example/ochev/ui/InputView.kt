@@ -18,9 +18,6 @@ class InputView(
     }
 
     override fun onTouchEvent(event: MotionEvent): Boolean {
-        Log.d("kirill", "$event")
         return listener?.onTouchEvent(event) ?: false
     }
-
-
 }

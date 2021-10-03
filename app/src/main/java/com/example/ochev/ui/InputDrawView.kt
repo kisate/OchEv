@@ -15,11 +15,10 @@ class InputDrawView(
 ) : View(context, attributeSet) {
     private var path: Path = Path()
     var paint: Paint = Paint()
-    private var isActual = true
 
     fun clear() {
-        path = Path()
-        isActual = false
+        path.reset()
+        invalidate()
     }
 
     fun onStart(event: MotionEvent) {

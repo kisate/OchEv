@@ -3,14 +3,22 @@ package com.example.ochev.ui
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentActivity
 import androidx.viewpager2.adapter.FragmentStateAdapter
-import com.example.ochev.baseclasses.editors.grapheditor.GraphEditor
 
-class MordaViewPagerAdapter(activity: FragmentActivity) : FragmentStateAdapter(activity) {
+class MordaViewPagerAdapter(
+    private val activity: FragmentActivity,
+) : FragmentStateAdapter(activity) {
     override fun getItemCount(): Int {
-        return 5
+        return ApplicationComponent.viewersHolder.size()
     }
 
     override fun createFragment(p0: Int): Fragment {
-        return GraphFragment(GraphEditor())
+        ApplicationComponent.viewersHolder.createAndAddNewViewer(activity, p0.toString())
+        return GraphFragment.newInstance(p0.toString())
+    }
+
+    fun createAndAddNewFragment() {
+        val count = itemCount
+        ApplicationComponent.viewersHolder.createAndAddNewViewer(activity, count.toString())
+        notifyItemInserted(count)
     }
 }
