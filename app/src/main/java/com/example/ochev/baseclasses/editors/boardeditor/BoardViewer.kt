@@ -3,6 +3,7 @@ package com.example.ochev.baseclasses.editors.boardeditor
 import android.graphics.Bitmap
 import com.example.ochev.baseclasses.dataclasses.Point
 import com.example.ochev.baseclasses.dataclasses.Stroke
+import com.example.ochev.baseclasses.dataclasses.Vector
 import com.example.ochev.callbacks.BoardChangesListener
 import com.example.ochev.callbacks.UserModeChangesListener
 
@@ -20,6 +21,8 @@ interface BoardViewer {
     fun redoChange()
 
     fun scaleBoard(centre: Point, scaleValue: Float)
+
+    fun moveBoard(vector: Vector)
 
     fun addListener(userModeChangesListener: UserModeChangesListener)
 

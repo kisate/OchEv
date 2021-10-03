@@ -6,4 +6,6 @@ interface BoardManipulator {
     fun putPoint(pt: Point): BoardManipulator?
 
     fun actionIsOver(): Boolean
+
+    fun currentEditingFigure(): Int
 }
