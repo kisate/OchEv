@@ -8,13 +8,14 @@ import android.util.AttributeSet
 import android.util.Log
 import android.view.View
 import com.example.ochev.baseclasses.dataclasses.Figure
+import com.example.ochev.baseclasses.dataclasses.nodes.FigureNode
 import com.example.ochev.baseclasses.dataclasses.vertexfigures.Rectangle
 
 class FigureDrawingView(
     context: Context,
     attributeSet: AttributeSet
 ) : View(context, attributeSet) {
-    var figures: List<Figure> = emptyList()
+    var figures: List<FigureNode> = emptyList()
         set(value) {
             field = value
             invalidate()
@@ -24,7 +25,8 @@ class FigureDrawingView(
 
     override fun onDraw(canvas: Canvas?) {
         Log.e(TAG, "on draw with ${figures.size} figures")
-        for (figure in figures) {
+        for (figureNode in figures) {
+            val figure = figureNode.figure
             if (figure is Rectangle) {
                 val path = Path()
                 val points =
