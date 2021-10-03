@@ -6,9 +6,14 @@ import com.example.ochev.baseclasses.dataclasses.InformationForNormalizer
 import com.example.ochev.baseclasses.dataclasses.Point
 import com.example.ochev.baseclasses.dataclasses.Stroke
 import com.example.ochev.baseclasses.editors.grapheditor.GraphEditor
+import com.example.ochev.callbacks.BoardChangesListener
 import com.example.ochev.callbacks.UserMode
 import com.example.ochev.callbacks.UserModeChangesListener
 import com.example.ochev.ml.Classifier
+
+object ViewerFactory {
+    fun create(context: Context): BoardViewer = BoardViewerImpl(context)
+}
 
 class BoardViewerImpl(context: Context) : BoardViewer {
     private val graphEditor = GraphEditor()
@@ -29,6 +34,14 @@ class BoardViewerImpl(context: Context) : BoardViewer {
 
     override fun selectFigureByPoint(point: Point): BoardManipulator {
         TODO()
+    }
+
+    override fun addBoardChangesListener(boardChangeListener: BoardChangesListener) {
+        TODO("Not yet implemented")
+    }
+
+    override fun addBoardChangesListenerAndNotify(boardChangeListener: BoardChangesListener) {
+        TODO("Not yet implemented")
     }
 
     override fun clearBoard() {

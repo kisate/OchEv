@@ -3,8 +3,8 @@ package com.example.ochev.baseclasses.editors.boardeditor
 import android.graphics.Bitmap
 import com.example.ochev.baseclasses.dataclasses.Point
 import com.example.ochev.baseclasses.dataclasses.Stroke
+import com.example.ochev.callbacks.BoardChangesListener
 import com.example.ochev.callbacks.UserModeChangesListener
-import com.example.ochev.ml.Classifier
 
 interface BoardViewer {
     fun createFigureByStrokes(bitmap: Bitmap, strokes: MutableList<Stroke>?): Boolean
@@ -24,4 +24,8 @@ interface BoardViewer {
     fun addListener(userModeChangesListener: UserModeChangesListener)
 
     fun addListenerAndNotify(userModeChangesListener: UserModeChangesListener)
+
+    fun addBoardChangesListener(boardChangeListener: BoardChangesListener)
+
+    fun addBoardChangesListenerAndNotify(boardChangeListener: BoardChangesListener)
 }
