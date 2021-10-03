@@ -3,6 +3,7 @@ package com.example.ochev.ui
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentActivity
 import androidx.viewpager2.adapter.FragmentStateAdapter
+import com.example.ochev.baseclasses.editors.boardeditor.BoardViewer
 
 class MordaViewPagerAdapter(
     private val activity: FragmentActivity,

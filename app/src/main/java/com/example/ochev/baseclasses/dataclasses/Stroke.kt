@@ -29,11 +29,11 @@ data class Stroke(val points: MutableList<Point> = ArrayList()) {
     }
 
     fun minX(): Float {
-        return points.maxByOrNull { it.x }!!.x
+        return points.minByOrNull { it.x }!!.x
     }
 
     fun minY(): Float {
-        return points.maxByOrNull { it.y }!!.y
+        return points.minByOrNull { it.y }!!.y
     }
 
     companion object {

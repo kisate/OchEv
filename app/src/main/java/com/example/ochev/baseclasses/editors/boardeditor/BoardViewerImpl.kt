@@ -13,6 +13,8 @@ import com.example.ochev.callbacks.BoardChangesListener
 import com.example.ochev.callbacks.UserMode
 import com.example.ochev.callbacks.UserModeChangesListener
 import com.example.ochev.ml.Classifier
+import java.util.concurrent.ExecutorService
+import java.util.concurrent.Executors
 
 object ViewerFactory {
     fun create(context: Context): BoardViewer = BoardViewerImpl(context)
@@ -62,6 +64,10 @@ class BoardViewerImpl(context: Context) : BoardViewer {
     private val userModeChangesListeners = arrayListOf<UserModeChangesListener>()
     private val boardChangesListeners = arrayListOf<BoardChangesListener>()
     private var currentUserMode = UserMode.DRAWING
+
+    init {
+        classifier.initialize(Executors.newCachedThreadPool())
+    }
 
     override fun moveBoard(vector: Vector) {
         graphEditor.moveGraphByVector(vector)

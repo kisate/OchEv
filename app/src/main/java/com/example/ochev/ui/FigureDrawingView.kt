@@ -1,7 +1,6 @@
 package com.example.ochev.ui
 
 import android.content.Context
-import android.graphics.Bitmap
 import android.graphics.Canvas
 import android.graphics.Paint
 import android.graphics.Path
@@ -30,10 +29,16 @@ class FigureDrawingView(
             if (figure is Rectangle) {
                 val path = Path()
                 val points =
-                    listOf(figure.leftDownCorner, figure.rightDownCorner, figure.rightUpCorner)
-                path.moveTo(points[0].x, points[0].x)
-                for (i in 1..2) {
-                    path.moveTo(points[i].x, points[i].y)
+                    listOf(
+                        figure.leftDownCorner,
+                        figure.rightDownCorner,
+                        figure.rightUpCorner,
+                        figure.leftUpCorner,
+                    )
+                path.moveTo(points[0].x, points[0].y)
+                for (i in 1 until points.size) {
+                    val point = points[i]
+                    path.lineTo(point.x, point.y)
                 }
                 path.close()
                 canvas?.drawPath(path, paint)

@@ -59,7 +59,6 @@ class GraphFragment : Fragment() {
             it.strokeWidth = 3f
         }
         viewer.addBoardChangesListener {
-            inputDrawView?.clear()
             figureDrawingView?.figures = it
         }
     }
@@ -76,7 +75,7 @@ class GraphFragment : Fragment() {
         val detector = GestureDetector()
         inputView = container.findViewById(R.id.input_view)
         inputView?.setOnTouchEventListener { event ->
-            sideEnvironmentSettingsController?.hideSettings()
+            sideEnvironmentSettingsController?.hideSettings(true)
 
             Log.d(TAG, "touched: $event")
             val gesture = detector.detect(event)

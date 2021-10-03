@@ -22,4 +22,8 @@ class ViewersHolder {
     fun getViewer(id: String): BoardViewer? {
         return viewers[id]
     }
+
+    fun getViewers(): List<BoardViewer> {
+        return viewers.values.toList()
+    }
 }
