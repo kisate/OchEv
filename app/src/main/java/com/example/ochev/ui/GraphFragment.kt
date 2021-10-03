@@ -1,6 +1,7 @@
 package com.example.ochev.ui
 
 import android.annotation.SuppressLint
+import android.graphics.Bitmap
 import android.graphics.Paint
 import android.os.Bundle
 import android.util.Log
@@ -11,10 +12,14 @@ import android.view.ViewGroup
 import android.widget.FrameLayout
 import android.widget.LinearLayout
 import android.widget.RelativeLayout
+import androidx.core.view.drawToBitmap
 import androidx.fragment.app.Fragment
 import com.example.ochev.R
+import com.example.ochev.baseclasses.dataclasses.Stroke
 import com.example.ochev.baseclasses.editors.boardeditor.BoardViewer
 import com.example.ochev.ml.Utils
+import java.io.ByteArrayOutputStream
+import kotlin.concurrent.thread
 
 class GraphFragment : Fragment() {
     private var container: RelativeLayout? = null
@@ -54,6 +59,7 @@ class GraphFragment : Fragment() {
             it.strokeWidth = 3f
         }
         viewer.addBoardChangesListener {
+            inputDrawView?.clear()
             figureDrawingView?.figures = it
         }
     }
@@ -118,10 +124,11 @@ class GraphFragment : Fragment() {
             GestureState.END -> {
                 val inputDrawView = inputDrawView ?: return false
                 val handler = inputStrokeHandler ?: return false
-                val bitmap = Utils.loadBitmapFromView(inputDrawView) ?: return false
                 val viewer = viewer ?: return false
+                val bitmap = Utils.loadBitmapFromView(inputDrawView) ?: return false
+                val deepcopy = bitmap.copy(Bitmap.Config.ARGB_8888, true)
                 viewer.createFigureByStrokes(
-                    bitmap,
+                    deepcopy,
                     mutableListOf(handler.stroke)
                 )
                 inputDrawView.clear()

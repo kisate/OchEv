@@ -1,13 +1,13 @@
 package com.example.ochev.ui
 
 import android.content.Context
+import android.graphics.Bitmap
 import android.graphics.Canvas
 import android.graphics.Paint
 import android.graphics.Path
 import android.util.AttributeSet
 import android.util.Log
 import android.view.View
-import com.example.ochev.baseclasses.dataclasses.Figure
 import com.example.ochev.baseclasses.dataclasses.nodes.FigureNode
 import com.example.ochev.baseclasses.dataclasses.vertexfigures.Rectangle
 
@@ -31,7 +31,7 @@ class FigureDrawingView(
                 val path = Path()
                 val points =
                     listOf(figure.leftDownCorner, figure.rightDownCorner, figure.rightUpCorner)
-                path.moveTo(points[0].x, points[1].x)
+                path.moveTo(points[0].x, points[0].x)
                 for (i in 1..2) {
                     path.moveTo(points[i].x, points[i].y)
                 }
