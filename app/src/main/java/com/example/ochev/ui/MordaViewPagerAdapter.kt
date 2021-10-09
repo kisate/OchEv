@@ -3,7 +3,6 @@ package com.example.ochev.ui
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentActivity
 import androidx.viewpager2.adapter.FragmentStateAdapter
-import com.example.ochev.baseclasses.editors.boardeditor.BoardViewer
 
 class MordaViewPagerAdapter(
     private val activity: FragmentActivity,
@@ -12,14 +11,24 @@ class MordaViewPagerAdapter(
         return ApplicationComponent.viewersHolder.size()
     }
 
+    fun getIndex(id: String): Int {
+        return ApplicationComponent.viewersHolder.getIndex(id)
+    }
+
     override fun createFragment(p0: Int): Fragment {
-        ApplicationComponent.viewersHolder.createAndAddNewViewer(activity, p0.toString())
-        return GraphFragment.newInstance(p0.toString())
+        val id = ApplicationComponent.viewersHolder.pendingViewerInfo()?.id
+        if (id == null) {
+            ApplicationComponent.viewersHolder.createAndAddNewViewer(activity)
+            return createFragment(p0)
+        }
+        val fragment = GraphFragment.newInstance(id)
+        ApplicationComponent.viewersHolder.onPendingViewerAttached()
+        return fragment
     }
 
     fun createAndAddNewFragment() {
         val count = itemCount
-        ApplicationComponent.viewersHolder.createAndAddNewViewer(activity, count.toString())
+        ApplicationComponent.viewersHolder.createAndAddNewViewer(activity)
         notifyItemInserted(count)
     }
 }

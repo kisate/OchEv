@@ -1,15 +1,11 @@
 package com.example.ochev.ui
 
-import android.text.Layout
 import android.view.LayoutInflater
 import android.view.View
-import android.view.ViewGroup
 import android.widget.FrameLayout
 import android.widget.LinearLayout
 import androidx.constraintlayout.widget.ConstraintLayout
 import com.example.ochev.R
-import com.example.ochev.Utils.Utils
-import com.example.ochev.Utils.toPx
 
 class SideEnvironmentSettingsController(
     private val settingsView: LinearLayout,
@@ -31,7 +27,7 @@ class SideEnvironmentSettingsController(
         settingsView.addView(holder.item)
         holder.item.setOnClickListener {
             hideSettings(false)
-            ApplicationComponent.callbackToShowPopup?.run()
+            ApplicationComponent.callbackToShowChooserPopup?.run()
         }
 
         settingsView.visibility = View.GONE
