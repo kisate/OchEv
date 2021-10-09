@@ -7,11 +7,14 @@
         <entry key="app/src/main/res/drawable/black_button.xml" value="0.1" />
         <entry key="app/src/main/res/drawable/dark_background.xml" value="0.1578125" />
         <entry key="app/src/main/res/drawable/default_button_background.xml" value="0.1" />
+        <entry key="app/src/main/res/drawable/editing_button_background.xml" value="0.1546875" />
         <entry key="app/src/main/res/drawable/igraph_view_background.xml" value="0.1" />
         <entry key="app/src/main/res/drawable/settings_delim_background.xml" value="0.15104166666666666" />
         <entry key="app/src/main/res/drawable/side_enironment_settings_background.xml" value="0.16822916666666668" />
+        <entry key="app/src/main/res/drawable/side_environment_settings_background.xml" value="0.1546875" />
         <entry key="app/src/main/res/layout/activity_main.xml" value="0.16979166666666667" />
         <entry key="app/src/main/res/layout/delim_settings.xml" value="0.13802083333333334" />
+        <entry key="app/src/main/res/layout/editing_button.xml" value="0.13854166666666667" />
         <entry key="app/src/main/res/layout/environment_setting_button.xml" value="0.15208333333333332" />
         <entry key="app/src/main/res/layout/graph_chooser_popup.xml" value="0.13489583333333333" />
         <entry key="app/src/main/res/layout/graph_fragment_view.xml" value="0.121875" />

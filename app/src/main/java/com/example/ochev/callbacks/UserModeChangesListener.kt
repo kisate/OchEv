@@ -5,6 +5,6 @@ enum class UserMode {
     DRAWING,
 }
 
-interface UserModeChangesListener {
+fun interface UserModeChangesListener {
     fun onUserModeChanged(userMode: UserMode)
 }

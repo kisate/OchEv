@@ -9,26 +9,29 @@ import android.view.LayoutInflater
 import android.view.MotionEvent
 import android.view.View
 import android.view.ViewGroup
-import android.widget.FrameLayout
+import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.RelativeLayout
-import androidx.core.view.drawToBitmap
+import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.fragment.app.Fragment
 import com.example.ochev.R
-import com.example.ochev.baseclasses.dataclasses.Stroke
+import com.example.ochev.baseclasses.dataclasses.Point
+import com.example.ochev.baseclasses.editors.boardeditor.BoardManipulator
 import com.example.ochev.baseclasses.editors.boardeditor.BoardViewer
+import com.example.ochev.callbacks.UserMode
 import com.example.ochev.ml.Utils
-import java.io.ByteArrayOutputStream
-import kotlin.concurrent.thread
 
 class GraphFragment : Fragment() {
     private var container: RelativeLayout? = null
     private var inputView: InputView? = null
     private var inputDrawView: InputDrawView? = null
     private var figureDrawingView: FigureDrawingView? = null
+    private var currentManipulator: BoardManipulator? = null
 
     private var inputStrokeHandler: InputStrokeHandler? = null
     private var sideEnvironmentSettingsController: SideEnvironmentSettingsController? = null
+    private var editingButtonsController: EditingButtonsController? = null
+
     private val viewer: BoardViewer?
         get() {
             val args = arguments ?: return null
@@ -47,7 +50,22 @@ class GraphFragment : Fragment() {
         initializeInputViews()
         initializeSideEnvironmentSettings()
         initializeDrawers()
+        initializeEditingMode()
         return this.container
+    }
+
+    private fun initializeEditingMode() {
+        val container = this.container ?: return
+        val view = container.findViewById<ConstraintLayout>(R.id.editing_buttons_container)
+        editingButtonsController = EditingButtonsController(view) { currentManipulator }
+        viewer?.addListenerAndNotify {
+            if (it == UserMode.EDITING) {
+                editingButtonsController?.show()
+            } else {
+                currentManipulator = null
+                editingButtonsController?.hide()
+            }
+        }
     }
 
     private fun initializeDrawers() {
@@ -75,12 +93,13 @@ class GraphFragment : Fragment() {
         val detector = GestureDetector()
         inputView = container.findViewById(R.id.input_view)
         inputView?.setOnTouchEventListener { event ->
-            sideEnvironmentSettingsController?.hideSettings(true)
+
 
             Log.d(TAG, "touched: $event")
             val gesture = detector.detect(event)
             Log.d(TAG, "gesture is $gesture")
             return@setOnTouchEventListener when (gesture.type) {
+                GestureType.TAP -> handleTap(event, gesture)
                 GestureType.MOVE -> handleMove(event, gesture)
                 else -> true
             }
@@ -92,7 +111,7 @@ class GraphFragment : Fragment() {
         val settingsView =
             container.findViewById<LinearLayout>(R.id.side_environment_settings_container)
         val enterPoint =
-            container.findViewById<FrameLayout>(R.id.enter_side_environment_settings)
+            container.findViewById<ImageView>(R.id.enter_side_environment_settings)
 
         sideEnvironmentSettingsController = SideEnvironmentSettingsController(
             settingsView,
@@ -106,21 +125,56 @@ class GraphFragment : Fragment() {
         Log.d(TAG, "created")
     }
 
+    private fun handleTap(event: MotionEvent, gesture: Gesture): Boolean {
+        Log.d(TAG, "handling tap: $event $gesture")
+        return when (gesture.state) {
+            GestureState.NONE -> true
+            GestureState.START -> true
+            GestureState.IN_PROGRESS -> true
+            GestureState.END -> {
+                if (sideEnvironmentSettingsController?.isShown() == true &&
+                    currentManipulator != null
+                ) {
+                    sideEnvironmentSettingsController?.hideSettings(true)
+                    return true
+                }
+                currentManipulator = viewer?.selectFigureByPoint(Point(event))
+                true
+            }
+        }
+
+    }
+
     private fun handleMove(event: MotionEvent, gesture: Gesture): Boolean {
         Log.d(TAG, "handling move: $event $gesture")
+        val manipulator = currentManipulator
         return when (gesture.state) {
             GestureState.NONE -> true
             GestureState.START -> {
-                inputStrokeHandler = InputStrokeHandler(inputDrawView)
-                inputStrokeHandler?.onStart(event)
-
+                if (manipulator != null) {
+                    manipulator.startEditing()
+                    currentManipulator = manipulator.putPoint(Point(event))
+                } else {
+                    inputStrokeHandler = InputStrokeHandler(inputDrawView)
+                    inputStrokeHandler?.onStart(event)
+                }
                 true
             }
             GestureState.IN_PROGRESS -> {
-                inputStrokeHandler?.onContinue(event)
+                if (manipulator != null) {
+                    currentManipulator = manipulator.putPoint(Point(event))
+                } else {
+                    inputStrokeHandler?.onContinue(event)
+                }
                 true
             }
             GestureState.END -> {
+                if (manipulator != null) {
+                    currentManipulator = manipulator.putPoint(Point(event))
+                    currentManipulator?.cancelEditing()
+                    return true
+                }
+
                 val inputDrawView = inputDrawView ?: return false
                 val handler = inputStrokeHandler ?: return false
                 val viewer = viewer ?: return false
@@ -143,6 +197,8 @@ class GraphFragment : Fragment() {
         inputView = null
         inputDrawView = null
         figureDrawingView = null
+        currentManipulator = null
+        editingButtonsController = null
     }
 
     companion object {

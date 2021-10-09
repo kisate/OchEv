@@ -3,13 +3,14 @@ package com.example.ochev.ui
 import android.view.LayoutInflater
 import android.view.View
 import android.widget.FrameLayout
+import android.widget.ImageView
 import android.widget.LinearLayout
 import androidx.constraintlayout.widget.ConstraintLayout
 import com.example.ochev.R
 
 class SideEnvironmentSettingsController(
     private val settingsView: LinearLayout,
-    private val settingsEnterView: FrameLayout,
+    private val settingsEnterView: ImageView,
 ) {
     fun initialize() {
         var holder = EnvironmentSideSettingViewHolder(getItem())
@@ -35,6 +36,8 @@ class SideEnvironmentSettingsController(
         settingsEnterView.setOnClickListener {
             showSettings(true)
         }
+
+        settingsEnterView.setImageResource(R.drawable.menu_icon)
     }
 
     fun showSettings(animate: Boolean) {
@@ -45,6 +48,10 @@ class SideEnvironmentSettingsController(
     fun hideSettings(animate: Boolean) {
         settingsView.visibility = View.GONE
         settingsEnterView.visibility = View.VISIBLE
+    }
+
+    fun isShown(): Boolean {
+        return settingsView.visibility == View.VISIBLE
     }
 
     private fun getItem(): ConstraintLayout {
