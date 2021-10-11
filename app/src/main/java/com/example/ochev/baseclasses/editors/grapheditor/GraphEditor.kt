@@ -110,6 +110,12 @@ class GraphEditor(
         )
     }
 
+    fun copyFigure(id: Int) {
+        history.saveState()
+        val editor = VertexFigureEditor(InformationForVertexEditor(id, this))
+        editor.createCopy(editor.figureNode.figure.center)
+    }
+
     fun deleteFigure(id: Int) {
         history.saveState()
         graph = graph.withDeletedFigure(id)

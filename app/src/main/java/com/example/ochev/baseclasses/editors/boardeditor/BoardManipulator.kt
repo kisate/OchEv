@@ -7,7 +7,11 @@ interface BoardManipulator {
 
     fun currentEditingFigure(): Int
 
-    fun startEditing()
+    fun startEditing(pt: Point)
 
-    fun cancelEditing()
+    fun cancelEditing(pt: Point)
+
+    fun deleteSelected()
+
+    fun copySelected()
 }

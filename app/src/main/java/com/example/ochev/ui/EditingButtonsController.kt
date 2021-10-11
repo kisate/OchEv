@@ -19,14 +19,14 @@ class EditingButtonsController(
         deleteHolder.textView.text = "Удалить"
         settingsView.addView(deleteHolder.item)
         deleteHolder.item.setOnClickListener {
-
+            viewerProvider.get()?.deleteSelected()
         }
 
         val copyHolder = EditingButtonViewHolder(getItem())
         copyHolder.textView.text = "Копировать"
         settingsView.addView(copyHolder.item)
         copyHolder.item.setOnClickListener {
-
+            viewerProvider.get()?.copySelected()
         }
 
         copyHolder.item.id = R.id.copy_button_id

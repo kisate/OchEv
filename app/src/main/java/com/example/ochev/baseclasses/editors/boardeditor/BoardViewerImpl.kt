@@ -6,56 +6,20 @@ import com.example.ochev.baseclasses.dataclasses.InformationForNormalizer
 import com.example.ochev.baseclasses.dataclasses.Point
 import com.example.ochev.baseclasses.dataclasses.Stroke
 import com.example.ochev.baseclasses.dataclasses.Vector
+import com.example.ochev.baseclasses.editors.FigureEditor
 import com.example.ochev.baseclasses.editors.edgeeditor.EdgeEditor
 import com.example.ochev.baseclasses.editors.grapheditor.GraphEditor
 import com.example.ochev.baseclasses.editors.vertexeditor.VertexFigureEditor
+import com.example.ochev.baseclasses.editors.vertexeditor.VertexFigureMover
+import com.example.ochev.baseclasses.editors.vertexeditor.VertexFigureShaper
 import com.example.ochev.callbacks.BoardChangesListener
 import com.example.ochev.callbacks.UserMode
 import com.example.ochev.callbacks.UserModeChangesListener
 import com.example.ochev.ml.Classifier
-import java.util.concurrent.ExecutorService
 import java.util.concurrent.Executors
 
 object ViewerFactory {
     fun create(context: Context): BoardViewer = BoardViewerImpl(context)
-}
-
-class FiguresManipulatorImpl(private val id: Int, private val graphEditor: GraphEditor) :
-    BoardManipulator {
-    private var isActive = true;
-
-
-    override fun startEditing() {
-        TODO("Not yet implemented")
-    }
-
-    override fun cancelEditing() {
-        TODO("Not yet implemented")
-    }
-
-    override fun putPoint(pt: Point): BoardManipulator? {
-        val editor = graphEditor.getFigureEditorByTouch(pt)
-        if (editor == null) {
-            isActive = false
-            return null
-        }
-        if (editor.figureId != id) {
-            return FiguresManipulatorImpl(editor.figureId, graphEditor)
-        }
-        when (editor) {
-            is VertexFigureEditor -> {
-
-            }
-            is EdgeEditor -> {
-
-            }
-        }
-        TODO()
-    }
-
-    override fun currentEditingFigure(): Int {
-        return id
-    }
 }
 
 class BoardViewerImpl(context: Context) : BoardViewer {
@@ -92,6 +56,71 @@ class BoardViewerImpl(context: Context) : BoardViewer {
         }
     }
 
+    private inner class FiguresManipulatorImpl(private val id: Int) :
+        BoardManipulator {
+        private var figureEditor: FigureEditor? = null
+        private var shaper: VertexFigureShaper? = null
+        private var mover: VertexFigureMover? = null
+
+        override fun deleteSelected() {
+            graphEditor.deleteFigure(id)
+            goToDrawingMode()
+            notifyBoardChanges()
+            notifyUserModeChanges()
+        }
+
+        override fun copySelected() {
+            graphEditor.copyFigure(id)
+            goToDrawingMode()
+            notifyBoardChanges()
+            notifyUserModeChanges()
+        }
+
+        override fun startEditing(pt: Point) {
+            figureEditor = graphEditor.getFigureEditorByTouch(pt)
+            shaper = (figureEditor as? VertexFigureEditor)?.shaper
+            mover = (figureEditor as? VertexFigureEditor)?.mover
+            if (shaper?.shapingBegins(pt) == false) {
+                shaper = null
+            }
+            if (mover?.moveBegins(pt) == false) {
+                mover = null
+            }
+            if (shaper != null) {
+                mover = null
+            }
+        }
+
+        override fun cancelEditing(pt: Point) {
+            figureEditor = null
+            mover?.moveEnds()
+            shaper = null
+            mover = null
+        }
+
+        override fun putPoint(pt: Point): BoardManipulator? {
+            figureEditor ?: return null
+            when (figureEditor) {
+                is VertexFigureEditor -> {
+                    if (mover != null) {
+                        mover!!.nextPoint(pt)
+                    } else if (shaper != null) {
+                        shaper!!.nextPoint(pt)
+                    }
+                }
+                else -> {
+                    return this
+                }
+            }
+            notifyBoardChanges()
+            return this
+        }
+
+        override fun currentEditingFigure(): Int {
+            return id
+        }
+    }
+
     override fun selectFigureByPoint(point: Point): BoardManipulator? {
         val editor = graphEditor.getFigureEditorByTouch(point)
         if (editor == null) {
@@ -99,7 +128,7 @@ class BoardViewerImpl(context: Context) : BoardViewer {
             return null
         }
         goToEditingMode()
-        return FiguresManipulatorImpl(editor.figureId, graphEditor)
+        return FiguresManipulatorImpl(editor.figureId)
     }
 
     override fun addBoardChangesListener(boardChangeListener: BoardChangesListener) {

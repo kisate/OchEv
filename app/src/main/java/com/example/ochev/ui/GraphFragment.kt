@@ -152,7 +152,7 @@ class GraphFragment : Fragment() {
             GestureState.NONE -> true
             GestureState.START -> {
                 if (manipulator != null) {
-                    manipulator.startEditing()
+                    manipulator.startEditing(Point(event))
                     currentManipulator = manipulator.putPoint(Point(event))
                 } else {
                     inputStrokeHandler = InputStrokeHandler(inputDrawView)
@@ -171,7 +171,7 @@ class GraphFragment : Fragment() {
             GestureState.END -> {
                 if (manipulator != null) {
                     currentManipulator = manipulator.putPoint(Point(event))
-                    currentManipulator?.cancelEditing()
+                    currentManipulator?.cancelEditing(Point(event))
                     return true
                 }
 
