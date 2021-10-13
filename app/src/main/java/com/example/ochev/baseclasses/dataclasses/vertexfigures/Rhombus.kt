@@ -89,7 +89,8 @@ data class Rhombus(
     }
 
     override fun getPointMovers(): MutableList<PointMover> {
-        val points = getMovingPoints()
+//        TODO("IMPROVE")
+        val points = importantPoints
         val result: MutableList<PointMover> = ArrayList()
 
         for (i in 0 until 4) {
@@ -111,10 +112,6 @@ data class Rhombus(
         }
 
         return result
-    }
-
-    override fun getMovingPoints(): MutableList<Point> {
-        return importantPoints
     }
 
     override fun getDistanceToPoint(point: Point): Float {

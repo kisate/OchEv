@@ -9,7 +9,6 @@ import com.example.ochev.baseclasses.editors.vertexeditor.PointMover
 import kotlin.math.max
 import kotlin.math.min
 
-
 data class Rectangle(
     val leftDownCorner: Point = Point(),
     val rightUpCorner: Point = Point()
@@ -96,13 +95,23 @@ data class Rectangle(
         return (point.x in minX..maxX && point.y in minY..maxY)
     }
 
+    private fun getPoints(from: Point, to: Point): List<Point> {
+        val res = mutableListOf<Point>()
+        val vec = Vector(from, to)
+        var scaling = 0.05f
+        do {
+            res.add(from.movedByVector(vec.multipliedByFloat(scaling)))
+            scaling += 0.05f
+        } while (scaling < 1)
+        return res
+    }
+
     override fun getPointMovers(): MutableList<PointMover> {
         val result: MutableList<PointMover> = ArrayList()
-        val points = getMovingPoints()
 
         // add angle movers
         result.add(PointMover(
-            points[0]
+            importantPoints[0]
         )
         { point: Point ->
             this.copy(
@@ -111,7 +120,7 @@ data class Rectangle(
         })
 
         result.add(PointMover(
-            points[1]
+            importantPoints[1]
         )
         { point: Point ->
             this.copy(
@@ -121,7 +130,7 @@ data class Rectangle(
         })
 
         result.add(PointMover(
-            points[2]
+            importantPoints[2]
         )
         { point: Point ->
             this.copy(
@@ -130,7 +139,7 @@ data class Rectangle(
         })
 
         result.add(PointMover(
-            points[3]
+            importantPoints[3]
         )
         { point: Point ->
             this.copy(
@@ -139,56 +148,44 @@ data class Rectangle(
             )
         })
 
-        // add side points
-
-        result.add(PointMover(
-            points[4]
-        )
-        { point: Point ->
-            this.copy(
-                leftDownCorner = Point(point.x, leftDownCorner.y)
+        for (point in getPoints(leftDownCorner, leftUpCorner)) {
+            result.add(
+                PointMover(point)
+                { pt: Point ->
+                    this.copy(leftDownCorner = Point(pt.x, leftDownCorner.y))
+                }
             )
-        })
+        }
 
-        result.add(PointMover(
-            points[5]
-        )
-        { point: Point ->
-            this.copy(
-                rightUpCorner = Point(rightUpCorner.x, point.y)
+        for (point in getPoints(leftUpCorner, rightUpCorner)) {
+            result.add(
+                PointMover(point)
+                { pt: Point ->
+                    this.copy(rightUpCorner = Point(rightUpCorner.x, pt.y))
+                }
             )
-        })
+        }
 
-        result.add(PointMover(
-            points[6]
-        )
-        { point: Point ->
-            this.copy(
-                rightUpCorner = Point(point.x, rightUpCorner.y)
+        for (point in getPoints(rightUpCorner, rightDownCorner)) {
+            result.add(
+                PointMover(point)
+                { pt: Point ->
+                    this.copy(rightUpCorner = Point(pt.x, rightUpCorner.y))
+                }
             )
-        })
+        }
 
-        result.add(PointMover(
-            points[7]
-        )
-        { point: Point ->
-            this.copy(
-                leftDownCorner = Point(leftDownCorner.x, point.y)
+        for (point in getPoints(rightDownCorner, leftDownCorner)) {
+            result.add(
+                PointMover(point)
+                { pt: Point ->
+                    this.copy(leftDownCorner = Point(leftDownCorner.x, pt.y))
+                }
             )
-        })
+        }
 
         return result
     }
-
-    override fun getMovingPoints(): MutableList<Point> {
-        return (importantPoints + mutableListOf(
-            Point(leftDownCorner.x, (leftDownCorner.y + leftUpCorner.y) / 2),
-            Point((leftUpCorner.x + rightUpCorner.x) / 2, leftUpCorner.y),
-            Point(rightUpCorner.x, (rightUpCorner.y + rightDownCorner.y) / 2),
-            Point((leftDownCorner.x + rightDownCorner.x) / 2, rightDownCorner.y)
-        )).toMutableList()
-    }
-
 
     override fun getDistanceToCountTouch(): Float {
         val dX = kotlin.math.abs(leftDownCorner.x - rightDownCorner.x)

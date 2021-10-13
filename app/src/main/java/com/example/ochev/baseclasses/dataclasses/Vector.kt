@@ -11,6 +11,10 @@ data class Vector(val x: Float = 0f, val y: Float = 0f) {
         endPoint.y - beginPoint.y
     )
 
+    constructor(x: Double, y: Double) : this(
+        x.toFloat(), y.toFloat()
+    )
+
     fun scalarProduct(vector: Vector): Float {
         return x * vector.x + y * vector.y
     }

@@ -8,7 +8,9 @@ import com.example.ochev.baseclasses.dataclasses.Stroke.Companion.getStrokesRest
 import com.example.ochev.baseclasses.dataclasses.Vector
 import com.example.ochev.baseclasses.editors.vertexeditor.PointMover
 import kotlin.math.abs
+import kotlin.math.cos
 import kotlin.math.max
+import kotlin.math.sin
 
 data class Circle(
     override val center: Point = Point(),
@@ -106,8 +108,15 @@ data class Circle(
         return result
     }
 
-    override fun getMovingPoints(): MutableList<Point> {
-        return importantPoints
+    private fun getMovingPoints(): MutableList<Point> {
+        val res = mutableListOf<Point>()
+        var curAngle = 0.0
+        do {
+            val curVec = Vector(cos(curAngle), sin(curAngle)).multipliedByFloat(radius)
+            res.add(center.movedByVector(curVec))
+            curAngle += 0.05f
+        } while (curAngle < 2 * Math.PI)
+        return res
     }
 
     override fun getDistanceToCountTouch(): Float {
