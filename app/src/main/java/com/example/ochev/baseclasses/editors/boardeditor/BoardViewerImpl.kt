@@ -151,26 +151,26 @@ class BoardViewerImpl(private val classifier: Classifier) : BoardViewer {
     }
 
     private fun goToDrawingMode() {
+        val oldMode = currentUserMode
         currentUserMode = UserMode.DRAWING
-        notifyUserModeChanges()
+        if (oldMode != currentUserMode)
+            notifyUserModeChanges()
     }
 
     private fun goToEditingMode(isCopyable: Boolean) {
+        val oldMode = currentUserMode
         currentUserMode =
             if (isCopyable) {
                 UserMode.EDITING__COPY_ENABLED
             } else {
                 UserMode.EDITING__COPY_DISABLED
             }
-        notifyUserModeChanges()
+        if (oldMode != currentUserMode)
+            notifyUserModeChanges()
     }
 
-    private inner class FiguresManipulatorImpl(private val id: Int) :
+    private inner class FiguresManipulatorImpl(private var id: Int) :
         BoardManipulator {
-        init {
-            graphEditor.maximizeVertexHeightById(id)
-            notifyBoardChanges()
-        }
         private var figureEditor: FigureEditor? = null
         private var shaper: VertexFigureShaper? = null
         private var mover: VertexFigureMover? = null
@@ -199,6 +199,11 @@ class BoardViewerImpl(private val classifier: Classifier) : BoardViewer {
             if (shaper != null) {
                 mover = null
             }
+            val newId = (figureEditor as? VertexFigureEditor)?.figureId
+            if (newId != null) {
+                id = newId
+            }
+            graphEditor.maximizeVertexHeightById(id)
             notifyBoardChanges()
         }
 
@@ -229,10 +234,6 @@ class BoardViewerImpl(private val classifier: Classifier) : BoardViewer {
             }
             notifyBoardChanges()
             return this
-        }
-
-        override fun currentEditingFigure(): Int {
-            return id
         }
     }
 

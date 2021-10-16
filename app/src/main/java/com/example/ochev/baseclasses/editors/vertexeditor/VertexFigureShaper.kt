@@ -10,7 +10,9 @@ class VertexFigureShaper(val editor: VertexFigureEditor) {
         val movers = editor.currentFigureState.getPointMovers()
         val bestMover = movers.minByOrNull { it.point.getDistanceToPoint(point) }!!
 
-        return if (bestMover.point.getDistanceToPoint(point) <= editor.currentFigureState.getDistanceToCountTouch()) {
+        val distance = bestMover.point.getDistanceToPoint(point)
+        val newDistance = if (editor.currentFigureState.checkIfPointIsInside(point)) distance * 3 else distance
+        return if (newDistance <= editor.currentFigureState.getDistanceToCountTouch()) {
             editor.graphEditor.history.saveState()
             currentMover = bestMover
             true
@@ -18,6 +20,8 @@ class VertexFigureShaper(val editor: VertexFigureEditor) {
             false
         }
     }
+
+
 
     fun nextPoint(point: Point) {
         editor.changeFigure(currentMover.moveFun(point))
