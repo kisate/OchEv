@@ -5,6 +5,7 @@ import com.example.ochev.baseclasses.dataclasses.Point
 import com.example.ochev.baseclasses.dataclasses.Stroke
 import com.example.ochev.baseclasses.dataclasses.Vector
 import com.example.ochev.callbacks.BoardChangesListener
+import com.example.ochev.callbacks.SuggestLineChangesListener
 import com.example.ochev.callbacks.UserModeChangesListener
 
 interface BoardViewer {
@@ -13,8 +14,6 @@ interface BoardViewer {
     fun selectFigureByPoint(point: Point): BoardManipulator?
 
     fun clearBoard()
-
-    fun saveToGallery()
 
     fun undoChange()
 
@@ -35,4 +34,10 @@ interface BoardViewer {
     fun removeBoardChangesListener(toDelete: BoardChangesListener)
 
     fun addBoardChangesListenerAndNotify(boardChangeListener: BoardChangesListener)
+
+    fun addSuggestLineChangesListener(suggestLineChangesListener: SuggestLineChangesListener)
+
+    fun removeSuggestLineChangesListener(suggestLineChangesListener: SuggestLineChangesListener)
+
+    fun addSuggestLineChangesListenerAndNotify(suggestLineChangesListener: SuggestLineChangesListener)
 }
