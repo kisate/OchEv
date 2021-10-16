@@ -66,14 +66,12 @@ class BoardViewerImpl(context: Context) : BoardViewer {
             graphEditor.deleteFigure(id)
             goToDrawingMode()
             notifyBoardChanges()
-            notifyUserModeChanges()
         }
 
         override fun copySelected() {
             graphEditor.copyFigure(id)
             goToDrawingMode()
             notifyBoardChanges()
-            notifyUserModeChanges()
         }
 
         override fun startEditing(pt: Point) {
@@ -99,7 +97,10 @@ class BoardViewerImpl(context: Context) : BoardViewer {
         }
 
         override fun putPoint(pt: Point): BoardManipulator? {
-            figureEditor ?: return null
+            if (figureEditor == null) {
+                goToDrawingMode()
+                return null
+            }
             when (figureEditor) {
                 is VertexFigureEditor -> {
                     if (mover != null) {
@@ -113,6 +114,7 @@ class BoardViewerImpl(context: Context) : BoardViewer {
                 }
             }
             notifyBoardChanges()
+
             return this
         }
 
