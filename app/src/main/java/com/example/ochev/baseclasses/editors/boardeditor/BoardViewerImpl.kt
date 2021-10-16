@@ -31,7 +31,7 @@ class BoardViewerImpl(private val classifier: Classifier) : BoardViewer {
 
     private val userModeChangesListeners = arrayListOf<UserModeChangesListener>()
     private val boardChangesListeners = arrayListOf<BoardChangesListener>()
-    private val suggestLineChangesListener = arrayListOf<SuggestLineChangesListener>()
+    private val suggestLineChangesListeners = arrayListOf<SuggestLineChangesListener>()
 
     override fun moveBoard(vector: Vector) {
         goToDrawingMode()
@@ -127,15 +127,16 @@ class BoardViewerImpl(private val classifier: Classifier) : BoardViewer {
     }
 
     override fun addSuggestLineChangesListener(suggestLineChangesListener: SuggestLineChangesListener) {
-        TODO("Not yet implemented")
+        suggestLineChangesListeners.add(suggestLineChangesListener)
     }
 
     override fun removeSuggestLineChangesListener(suggestLineChangesListener: SuggestLineChangesListener) {
-        TODO("Not yet implemented")
+        suggestLineChangesListeners.remove(suggestLineChangesListener)
     }
 
     override fun addSuggestLineChangesListenerAndNotify(suggestLineChangesListener: SuggestLineChangesListener) {
-        TODO("Not yet implemented")
+        addSuggestLineChangesListener(suggestLineChangesListener)
+        suggestLineChangesListener.onSuggestLineChanged(TODO())
     }
 
 
@@ -166,6 +167,10 @@ class BoardViewerImpl(private val classifier: Classifier) : BoardViewer {
 
     private inner class FiguresManipulatorImpl(private val id: Int) :
         BoardManipulator {
+        init {
+            graphEditor.maximizeVertexHeightById(id)
+            notifyBoardChanges()
+        }
         private var figureEditor: FigureEditor? = null
         private var shaper: VertexFigureShaper? = null
         private var mover: VertexFigureMover? = null
