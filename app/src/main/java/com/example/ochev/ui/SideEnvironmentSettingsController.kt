@@ -7,10 +7,13 @@ import android.widget.ImageView
 import android.widget.LinearLayout
 import androidx.constraintlayout.widget.ConstraintLayout
 import com.example.ochev.R
+import com.example.ochev.Utils.Provider
+import com.example.ochev.baseclasses.editors.boardeditor.BoardViewer
 
 class SideEnvironmentSettingsController(
     private val settingsView: LinearLayout,
     private val settingsEnterView: ImageView,
+    private val viewerProvider: Provider<BoardViewer?>
 ) {
     fun initialize() {
         var holder = EnvironmentSideSettingViewHolder(getItem())
@@ -29,6 +32,16 @@ class SideEnvironmentSettingsController(
         holder.item.setOnClickListener {
             hideSettings(false)
             ApplicationComponent.callbackToShowChooserPopup?.run()
+        }
+
+        settingsView.addView(getDelim())
+
+        holder = EnvironmentSideSettingViewHolder(getItem())
+        holder.textView.text = "Очистить граф"
+        settingsView.addView(holder.item)
+        holder.item.setOnClickListener {
+            hideSettings(true)
+            viewerProvider.get()?.clearBoard()
         }
 
         settingsView.visibility = View.GONE

@@ -128,10 +128,7 @@ class GraphFragment : Fragment() {
         val enterPoint =
             container.findViewById<ImageView>(R.id.enter_side_environment_settings)
 
-        sideEnvironmentSettingsController = SideEnvironmentSettingsController(
-            settingsView,
-            enterPoint,
-        )
+        sideEnvironmentSettingsController = SideEnvironmentSettingsController(settingsView, enterPoint) { viewer }
         sideEnvironmentSettingsController?.initialize()
     }
 

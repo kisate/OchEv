@@ -10,7 +10,7 @@
         android:layout_height="40dp"
         android:textColor="@color/black"
         android:gravity="center"
-        android:textSize="20dp"
+        android:textSize="19dp"
         android:fontFamily="@font/roboto_normal"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
