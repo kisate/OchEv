@@ -7,8 +7,12 @@ import android.graphics.Path
 import android.util.AttributeSet
 import android.util.Log
 import android.view.View
+import com.example.ochev.baseclasses.dataclasses.Point
 import com.example.ochev.baseclasses.dataclasses.nodes.FigureNode
+import com.example.ochev.baseclasses.dataclasses.vertexfigures.Circle
 import com.example.ochev.baseclasses.dataclasses.vertexfigures.Rectangle
+import com.example.ochev.baseclasses.dataclasses.vertexfigures.Rhombus
+import com.example.ochev.baseclasses.editors.edgefigures.Edge
 
 class FigureDrawingView(
     context: Context,
@@ -20,31 +24,65 @@ class FigureDrawingView(
             invalidate()
         }
 
-    var paint: Paint = Paint()
+    var paintStroke: Paint = Paint()
+    var paintFill: Paint = Paint()
 
     override fun onDraw(canvas: Canvas?) {
         Log.e(TAG, "on draw with ${figures.size} figures")
         for (figureNode in figures) {
-            val figure = figureNode.figure
-            if (figure is Rectangle) {
-                val path = Path()
-                val points =
-                    listOf(
-                        figure.leftDownCorner,
-                        figure.rightDownCorner,
-                        figure.rightUpCorner,
-                        figure.leftUpCorner,
-                    )
-                path.moveTo(points[0].x, points[0].y)
-                for (i in 1 until points.size) {
-                    val point = points[i]
-                    path.lineTo(point.x, point.y)
-                }
-                path.close()
-                canvas?.drawPath(path, paint)
+            when (val figure = figureNode.figure) {
+                is Rectangle -> drawRectangle(canvas, figure)
+                is Rhombus -> drawRhombus(canvas, figure)
+                is Circle -> drawCircle(canvas, figure)
+                is Edge -> drawEdge(canvas, figure)
             }
-
         }
+    }
+
+    private fun drawEdge(canvas: Canvas?, figure: Edge) {
+        val points = listOf(
+            figure.beginFigureNode.figure.center,
+            figure.endFigureNode.figure.center
+        )
+        drawPoints(points, canvas)
+    }
+
+    private fun drawRhombus(canvas: Canvas?, figure: Rhombus) {
+        val points =
+            listOf(
+                figure.leftCorner,
+                figure.upCorner,
+                figure.rightCorner,
+                figure.downCorner,
+            )
+        drawPoints(points, canvas)
+    }
+
+    private fun drawRectangle(canvas: Canvas?, figure: Rectangle) {
+        val points =
+            listOf(
+                figure.leftDownCorner,
+                figure.rightDownCorner,
+                figure.rightUpCorner,
+                figure.leftUpCorner,
+            )
+        drawPoints(points, canvas)
+    }
+
+    private fun drawCircle(canvas: Canvas?, figure: Circle) {
+        canvas?.drawCircle(figure.center.x, figure.center.y, figure.radius, paintStroke)
+    }
+
+    private fun drawPoints(points: List<Point>, canvas: Canvas?) {
+        val path = Path()
+        path.moveTo(points[0].x, points[0].y)
+        for (i in 1 until points.size) {
+            val point = points[i]
+            path.lineTo(point.x, point.y)
+        }
+        path.close()
+        canvas?.drawPath(path, paintStroke)
+        canvas?.drawPath(path, paintFill)
     }
 
     companion object {

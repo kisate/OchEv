@@ -31,6 +31,7 @@ class GraphFragment : Fragment() {
     private var inputStrokeHandler: InputStrokeHandler? = null
     private var sideEnvironmentSettingsController: SideEnvironmentSettingsController? = null
     private var editingButtonsController: EditingButtonsController? = null
+    private var historyButtonsController: HistoryButtonsController? = null
 
     private val viewer: BoardViewer?
         get() {
@@ -51,7 +52,15 @@ class GraphFragment : Fragment() {
         initializeSideEnvironmentSettings()
         initializeDrawers()
         initializeEditingMode()
+        initializeHistory()
         return this.container
+    }
+
+    private fun initializeHistory() {
+        val container = this.container ?: return
+        val view = container.findViewById<ConstraintLayout>(R.id.history_buttons_container)
+        historyButtonsController = HistoryButtonsController(view) { viewer }
+
     }
 
     private fun initializeEditingMode() {
@@ -72,9 +81,15 @@ class GraphFragment : Fragment() {
         val container = container ?: return
         val viewer = viewer ?: return
         figureDrawingView = container.findViewById(R.id.figure_drawing_view)
-        figureDrawingView?.paint?.let {
+        figureDrawingView?.paintStroke?.let {
             it.style = Paint.Style.STROKE
             it.strokeWidth = 3f
+            it.isAntiAlias = true
+        }
+        figureDrawingView?.paintFill?.let {
+            it.style = Paint.Style.FILL
+            it.setColor(context?.getColor(R.color.white) ?: return)
+            it.isAntiAlias = true
         }
         viewer.addBoardChangesListener {
             figureDrawingView?.figures = it
@@ -132,17 +147,18 @@ class GraphFragment : Fragment() {
             GestureState.START -> true
             GestureState.IN_PROGRESS -> true
             GestureState.END -> {
-                if (sideEnvironmentSettingsController?.isShown() == true &&
+                if (
+                    sideEnvironmentSettingsController?.isShown() == true &&
                     currentManipulator != null
                 ) {
                     sideEnvironmentSettingsController?.hideSettings(true)
                     return true
                 }
                 currentManipulator = viewer?.selectFigureByPoint(Point(event))
+                sideEnvironmentSettingsController?.hideSettings(true)
                 true
             }
         }
-
     }
 
     private fun handleMove(event: MotionEvent, gesture: Gesture): Boolean {
@@ -151,6 +167,7 @@ class GraphFragment : Fragment() {
         return when (gesture.state) {
             GestureState.NONE -> true
             GestureState.START -> {
+                sideEnvironmentSettingsController?.hideSettings(true)
                 if (manipulator != null) {
                     manipulator.startEditing(Point(event))
                     currentManipulator = manipulator.putPoint(Point(event))
@@ -199,6 +216,7 @@ class GraphFragment : Fragment() {
         figureDrawingView = null
         currentManipulator = null
         editingButtonsController = null
+        historyButtonsController = null
     }
 
     companion object {

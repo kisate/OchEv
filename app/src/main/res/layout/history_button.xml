@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/history_button_container"
+    android:layout_width="0dp"
+    android:layout_height="0dp"
+    android:layout_gravity="center"
+    android:background="@drawable/editing_button_background"
+    android:elevation="50dp">
+
+    <ImageView
+        android:id="@+id/history_button_image"
+        android:layout_width="50dp"
+        android:layout_height="32dp"
+        android:layout_gravity="center" />
+
+</FrameLayout>

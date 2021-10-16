@@ -17,20 +17,24 @@ class EditingButtonsController(
     init {
         val deleteHolder = EditingButtonViewHolder(getItem())
         deleteHolder.textView.text = "Удалить"
-        settingsView.addView(deleteHolder.item)
         deleteHolder.item.setOnClickListener {
             viewerProvider.get()?.deleteSelected()
         }
 
         val copyHolder = EditingButtonViewHolder(getItem())
         copyHolder.textView.text = "Копировать"
-        settingsView.addView(copyHolder.item)
         copyHolder.item.setOnClickListener {
             viewerProvider.get()?.copySelected()
         }
 
         copyHolder.item.id = R.id.copy_button_id
         deleteHolder.item.id = R.id.delete_button_id
+
+        copyHolder.item.elevation = (50).toPx
+        deleteHolder.item.elevation = (50).toPx
+
+        settingsView.addView(copyHolder.item)
+        settingsView.addView(deleteHolder.item)
 
 
         val set = ConstraintSet()

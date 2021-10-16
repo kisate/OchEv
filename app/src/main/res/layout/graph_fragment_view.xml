@@ -27,10 +27,10 @@
         android:layout_alignParentTop="true"
         android:layout_alignParentEnd="true"
         android:layout_margin="16dp"
-        android:padding="8dp"
         android:background="@drawable/side_environment_settings_background"
         android:elevation="48dp"
-        android:orientation="vertical" />
+        android:orientation="vertical"
+        android:padding="8dp" />
 
     <ImageView
         android:id="@+id/enter_side_environment_settings"
@@ -38,13 +38,19 @@
         android:layout_height="60dp"
         android:layout_alignParentTop="true"
         android:layout_alignParentEnd="true"
-        android:padding="8dp"/>
+        android:padding="16dp" />
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/editing_buttons_container"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:visibility="gone" />
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/history_buttons_container"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:visibility="visible" />
 
 
 </RelativeLayout>
