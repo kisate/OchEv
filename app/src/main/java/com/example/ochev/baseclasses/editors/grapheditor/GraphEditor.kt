@@ -141,6 +141,7 @@ class GraphEditor(
     }
 
     fun maximizeVertexHeightById(id: Int) {
+        if (id == graph.figures.maxHeight) return
         val value = graph.figures.maxHeight + 1
         graph.figures.vertices.replaceAll {
             if (it.id != id) it
