@@ -1,5 +1,6 @@
 package com.example.ochev.baseclasses.editors.vertexeditor
 
+import android.util.Log
 import com.example.ochev.baseclasses.dataclasses.LineSegment
 import com.example.ochev.baseclasses.dataclasses.Point
 import com.example.ochev.baseclasses.dataclasses.Vector
@@ -28,7 +29,8 @@ class MoverHelper(
             )
             val direction = Vector(segmentToLine.A, segmentToLine.B)
             editor.changeFigure(editor.currentFigureState.movedByVector(direction))
-        }
+
+       }
 
     }
 }

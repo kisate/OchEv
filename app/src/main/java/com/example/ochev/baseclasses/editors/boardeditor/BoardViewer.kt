@@ -24,11 +24,11 @@ interface BoardViewer {
 
     fun moveBoard(vector: Vector)
 
-    fun addListener(userModeChangesListener: UserModeChangesListener)
+    fun addUserModeChangesListener(userModeChangesListener: UserModeChangesListener)
 
-    fun removeListener(toDelete: UserModeChangesListener)
+    fun removeUserModeChangesListener(toDelete: UserModeChangesListener)
 
-    fun addListenerAndNotify(userModeChangesListener: UserModeChangesListener)
+    fun addUserModeChangesListenerAndNotify(userModeChangesListener: UserModeChangesListener)
 
     fun addBoardChangesListener(boardChangeListener: BoardChangesListener)
 

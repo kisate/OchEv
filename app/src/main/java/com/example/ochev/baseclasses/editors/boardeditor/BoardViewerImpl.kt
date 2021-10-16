@@ -7,7 +7,6 @@ import com.example.ochev.baseclasses.dataclasses.Point
 import com.example.ochev.baseclasses.dataclasses.Stroke
 import com.example.ochev.baseclasses.dataclasses.Vector
 import com.example.ochev.baseclasses.editors.FigureEditor
-import com.example.ochev.baseclasses.editors.edgeeditor.EdgeEditor
 import com.example.ochev.baseclasses.editors.grapheditor.GraphEditor
 import com.example.ochev.baseclasses.editors.vertexeditor.VertexFigureEditor
 import com.example.ochev.baseclasses.editors.vertexeditor.VertexFigureMover
@@ -19,12 +18,12 @@ import com.example.ochev.ml.Classifier
 import java.util.concurrent.Executors
 
 object ViewerFactory {
-    fun create(context: Context): BoardViewer = BoardViewerImpl(context)
+    fun create(classifier: Classifier): BoardViewer = BoardViewerImpl(classifier)
 }
 
-class BoardViewerImpl(context: Context) : BoardViewer {
+class BoardViewerImpl(private val classifier: Classifier) : BoardViewer {
     private val graphEditor = GraphEditor()
-    private val classifier = Classifier(context)
+
     private val userModeChangesListeners = arrayListOf<UserModeChangesListener>()
     private val boardChangesListeners = arrayListOf<BoardChangesListener>()
     private var currentUserMode = UserMode.DRAWING
@@ -88,6 +87,7 @@ class BoardViewerImpl(context: Context) : BoardViewer {
             if (shaper != null) {
                 mover = null
             }
+            notifyBoardChanges()
         }
 
         override fun cancelEditing(pt: Point) {
@@ -95,6 +95,7 @@ class BoardViewerImpl(context: Context) : BoardViewer {
             mover?.moveEnds()
             shaper = null
             mover = null
+            notifyBoardChanges()
         }
 
         override fun putPoint(pt: Point): BoardManipulator? {
@@ -182,16 +183,16 @@ class BoardViewerImpl(context: Context) : BoardViewer {
     }
 
 
-    override fun addListener(userModeChangesListener: UserModeChangesListener) {
+    override fun addUserModeChangesListener(userModeChangesListener: UserModeChangesListener) {
         userModeChangesListeners.add(userModeChangesListener)
     }
 
-    override fun removeListener(toDelete: UserModeChangesListener) {
+    override fun removeUserModeChangesListener(toDelete: UserModeChangesListener) {
         userModeChangesListeners.remove(toDelete)
     }
 
-    override fun addListenerAndNotify(userModeChangesListener: UserModeChangesListener) {
-        addListener(userModeChangesListener)
+    override fun addUserModeChangesListenerAndNotify(userModeChangesListener: UserModeChangesListener) {
+        addUserModeChangesListener(userModeChangesListener)
         userModeChangesListener.onUserModeChanged(currentUserMode)
     }
 

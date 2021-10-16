@@ -3,6 +3,7 @@ package com.example.ochev.ui
 import android.content.Context
 import com.example.ochev.baseclasses.editors.boardeditor.BoardViewer
 import com.example.ochev.baseclasses.editors.boardeditor.ViewerFactory
+import com.example.ochev.ml.Classifier
 import java.util.*
 import kotlin.collections.HashMap
 
@@ -16,7 +17,7 @@ class ViewersHolder {
     private val viewers: HashMap<String, BoardViewer> = HashMap()
 
     fun createAndAddNewViewer(context: Context) {
-        val pendingViewer = ViewerFactory.create(context)
+        val pendingViewer = ViewerFactory.create(Classifier(context))
         val id = count.toString()
         viewers[id] = pendingViewer
         pendingViewerInfoList.add(PendingViewerInfo(pendingViewer, id))
