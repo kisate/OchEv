@@ -71,6 +71,7 @@ class FigureDrawingView(
 
     private fun drawCircle(canvas: Canvas?, figure: Circle) {
         canvas?.drawCircle(figure.center.x, figure.center.y, figure.radius, paintStroke)
+        canvas?.drawCircle(figure.center.x, figure.center.y, figure.radius, paintFill)
     }
 
     private fun drawPoints(points: List<Point>, canvas: Canvas?) {

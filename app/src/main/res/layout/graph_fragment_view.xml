@@ -10,13 +10,13 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent" />
 
-    <com.example.ochev.ui.InputDrawView
-        android:id="@+id/input_draw_view"
+    <com.example.ochev.ui.FigureDrawingView
+        android:id="@+id/figure_drawing_view"
         android:layout_width="match_parent"
         android:layout_height="match_parent" />
 
-    <com.example.ochev.ui.FigureDrawingView
-        android:id="@+id/figure_drawing_view"
+    <com.example.ochev.ui.InputDrawView
+        android:id="@+id/input_draw_view"
         android:layout_width="match_parent"
         android:layout_height="match_parent" />
 
