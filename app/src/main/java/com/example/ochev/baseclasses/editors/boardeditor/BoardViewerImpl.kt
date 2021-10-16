@@ -34,12 +34,13 @@ class BoardViewerImpl(context: Context) : BoardViewer {
     }
 
     override fun moveBoard(vector: Vector) {
-        graphEditor.moveGraphByVector(vector)
         goToDrawingMode()
+        graphEditor.moveGraphByVector(vector)
         notifyBoardChanges()
     }
 
     override fun createFigureByStrokes(bitmap: Bitmap, strokes: MutableList<Stroke>?): Boolean {
+        goToDrawingMode()
         val edited = graphEditor.modifyByStrokes(
             InformationForNormalizer(
                 classifier = classifier,
@@ -64,14 +65,13 @@ class BoardViewerImpl(context: Context) : BoardViewer {
         private var mover: VertexFigureMover? = null
 
         override fun deleteSelected() {
-            graphEditor.deleteFigure(id)
             goToDrawingMode()
+            graphEditor.deleteFigure(id)
             notifyBoardChanges()
         }
 
         override fun copySelected() {
             graphEditor.copyFigure(id)
-            goToDrawingMode()
             notifyBoardChanges()
         }
 
@@ -115,12 +115,18 @@ class BoardViewerImpl(context: Context) : BoardViewer {
                 }
             }
             notifyBoardChanges()
-
             return this
         }
 
         override fun currentEditingFigure(): Int {
             return id
+        }
+    }
+
+    private fun isEditorCopyable(figureEditor: FigureEditor): Boolean {
+        return when (figureEditor) {
+            is VertexFigureEditor -> true
+            else -> false
         }
     }
 
@@ -130,7 +136,7 @@ class BoardViewerImpl(context: Context) : BoardViewer {
             goToDrawingMode()
             return null
         }
-        goToEditingMode()
+        goToEditingMode(isEditorCopyable(editor))
         return FiguresManipulatorImpl(editor.figureId)
     }
 
@@ -148,30 +154,30 @@ class BoardViewerImpl(context: Context) : BoardViewer {
     }
 
     override fun clearBoard() {
-        graphEditor.clear()
         goToDrawingMode()
+        graphEditor.clear()
         notifyBoardChanges()
     }
 
     override fun saveToGallery() {
-        TODO()
+        TODO("don't call")
     }
 
     override fun undoChange() {
-        graphEditor.revertChange()
         goToDrawingMode()
+        graphEditor.revertChange()
         notifyBoardChanges()
     }
 
     override fun redoChange() {
-        graphEditor.undoRevertChange()
         goToDrawingMode()
+        graphEditor.undoRevertChange()
         notifyBoardChanges()
     }
 
     override fun scaleBoard(centre: Point, scaleValue: Float) {
-        graphEditor.zoomByPointAndFactor(centre, scaleValue)
         goToDrawingMode()
+        graphEditor.zoomByPointAndFactor(centre, scaleValue)
         notifyBoardChanges()
     }
 
@@ -204,8 +210,13 @@ class BoardViewerImpl(context: Context) : BoardViewer {
         notifyUserModeChanges()
     }
 
-    private fun goToEditingMode() {
-        currentUserMode = UserMode.EDITING
+    private fun goToEditingMode(isCopyable: Boolean) {
+        currentUserMode =
+            if (isCopyable) {
+                UserMode.EDITING__COPY_ENABLED
+            } else {
+                UserMode.EDITING__COPY_DISABLED
+            }
         notifyUserModeChanges()
     }
 }
