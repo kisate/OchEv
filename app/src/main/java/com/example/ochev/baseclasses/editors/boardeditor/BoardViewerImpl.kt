@@ -35,6 +35,7 @@ class BoardViewerImpl(context: Context) : BoardViewer {
 
     override fun moveBoard(vector: Vector) {
         graphEditor.moveGraphByVector(vector)
+        goToDrawingMode()
         notifyBoardChanges()
     }
 
@@ -148,6 +149,8 @@ class BoardViewerImpl(context: Context) : BoardViewer {
 
     override fun clearBoard() {
         graphEditor.clear()
+        goToDrawingMode()
+        notifyBoardChanges()
     }
 
     override fun saveToGallery() {
@@ -156,14 +159,20 @@ class BoardViewerImpl(context: Context) : BoardViewer {
 
     override fun undoChange() {
         graphEditor.revertChange()
+        goToDrawingMode()
+        notifyBoardChanges()
     }
 
     override fun redoChange() {
         graphEditor.undoRevertChange()
+        goToDrawingMode()
+        notifyBoardChanges()
     }
 
     override fun scaleBoard(centre: Point, scaleValue: Float) {
         graphEditor.zoomByPointAndFactor(centre, scaleValue)
+        goToDrawingMode()
+        notifyBoardChanges()
     }
 
 
