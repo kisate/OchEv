@@ -171,6 +171,10 @@ class BoardViewerImpl(private val classifier: Classifier) : BoardViewer {
 
     private inner class FiguresManipulatorImpl(private var id: Int) :
         BoardManipulator {
+        init {
+            graphEditor.maximizeVertexHeightById(id)
+            notifyBoardChanges()
+        }
         private var figureEditor: FigureEditor? = null
         private var shaper: VertexFigureShaper? = null
         private var mover: VertexFigureMover? = null
