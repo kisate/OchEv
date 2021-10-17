@@ -33,6 +33,17 @@ class RTVRedactorMainActivity : FragmentActivity() {
             adapter.createAndAddNewFragment()
             mPager.setCurrentItem(adapter.itemCount - 1, true)
         }
+        ApplicationComponent.callbackToDeleteFragment = CloseFragmentCallback {
+            ApplicationComponent.viewersHolder.deleteViewer(it)
+            mPager.adapter = null
+
+            if (adapter.itemCount == 0) {
+                ApplicationComponent.viewersHolder.createAndAddNewViewer(this)
+            }
+
+            mPager.adapter = adapter
+            adapter.notifyDataSetChanged()
+        }
         mPager.adapter = adapter
         adapter.notifyDataSetChanged()
         mPager.isUserInputEnabled = false
@@ -50,6 +61,7 @@ class RTVRedactorMainActivity : FragmentActivity() {
     override fun onDestroy() {
         ApplicationComponent.callbackToShowChooserPopup = null
         ApplicationComponent.callbackToCreateNewBoard = null
+        ApplicationComponent.callbackToDeleteFragment = null
         super.onDestroy()
     }
 }

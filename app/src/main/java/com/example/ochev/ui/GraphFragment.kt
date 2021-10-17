@@ -20,6 +20,7 @@ import com.example.ochev.baseclasses.editors.boardeditor.BoardManipulator
 import com.example.ochev.baseclasses.editors.boardeditor.BoardViewer
 import com.example.ochev.callbacks.UserMode
 import com.example.ochev.ml.Utils
+import com.example.ochev.viewclasses.eventhandlers.ScrollZoomController
 
 class GraphFragment : Fragment() {
     private var container: RelativeLayout? = null
@@ -32,11 +33,12 @@ class GraphFragment : Fragment() {
     private var sideEnvironmentSettingsController: SideEnvironmentSettingsController? = null
     private var editingButtonsController: EditingButtonsController? = null
     private var historyButtonsController: HistoryButtonsController? = null
+    private var scrollZoomController: ScrollZoomController? = null
 
     private val viewer: BoardViewer?
         get() {
-            val args = arguments ?: return null
-            return ApplicationComponent.viewersHolder.getViewer(args.getString("id", "-1"))
+            val id = getGraphId() ?: return null
+            return ApplicationComponent.viewersHolder.getViewer(id)
         }
 
     @SuppressLint("ClickableViewAccessibility")
@@ -53,7 +55,12 @@ class GraphFragment : Fragment() {
         initializeDrawers()
         initializeEditingMode()
         initializeHistory()
+        initializeScrollZoom()
         return this.container
+    }
+
+    private fun initializeScrollZoom() {
+        scrollZoomController = ScrollZoomController { viewer }
     }
 
     private fun initializeHistory() {
@@ -68,8 +75,8 @@ class GraphFragment : Fragment() {
         val view = container.findViewById<ConstraintLayout>(R.id.editing_buttons_container)
         editingButtonsController = EditingButtonsController(view) { currentManipulator }
         viewer?.addUserModeChangesListenerAndNotify {
-            if (it == UserMode.EDITING) {
-                editingButtonsController?.show()
+            if (it != UserMode.DRAWING) {
+                editingButtonsController?.show(it)
             } else {
                 currentManipulator = null
                 editingButtonsController?.hide()
@@ -91,7 +98,7 @@ class GraphFragment : Fragment() {
             it.setColor(context?.getColor(R.color.white) ?: return)
             it.isAntiAlias = true
         }
-        viewer.addBoardChangesListener {
+        viewer.addBoardChangesListenerAndNotify {
             figureDrawingView?.figures = it
         }
     }
@@ -116,6 +123,10 @@ class GraphFragment : Fragment() {
             return@setOnTouchEventListener when (gesture.type) {
                 GestureType.TAP -> handleTap(event, gesture)
                 GestureType.MOVE -> handleMove(event, gesture)
+                GestureType.SCROLL_AND_ZOOM -> {
+                    scrollZoomController?.handle(gesture, event)
+                    true
+                }
                 else -> true
             }
         }
@@ -128,7 +139,8 @@ class GraphFragment : Fragment() {
         val enterPoint =
             container.findViewById<ImageView>(R.id.enter_side_environment_settings)
 
-        sideEnvironmentSettingsController = SideEnvironmentSettingsController(settingsView, enterPoint) { viewer }
+        sideEnvironmentSettingsController =
+            SideEnvironmentSettingsController(settingsView, enterPoint, { viewer }, { getGraphId() })
         sideEnvironmentSettingsController?.initialize()
     }
 
@@ -158,6 +170,11 @@ class GraphFragment : Fragment() {
         }
     }
 
+    private fun getGraphId(): String? {
+        val args = arguments ?: return null
+        return args.getString("id")
+    }
+
     private fun handleMove(event: MotionEvent, gesture: Gesture): Boolean {
         Log.d(TAG, "handling move: $event $gesture")
         val manipulator = currentManipulator
@@ -168,6 +185,10 @@ class GraphFragment : Fragment() {
                 if (manipulator != null) {
                     manipulator.startEditing(Point(event))
                     currentManipulator = manipulator.putPoint(Point(event))
+                    if (currentManipulator == null) {
+                        inputStrokeHandler = InputStrokeHandler(inputDrawView)
+                        inputStrokeHandler?.onStart(event)
+                    }
                 } else {
                     inputStrokeHandler = InputStrokeHandler(inputDrawView)
                     inputStrokeHandler?.onStart(event)
@@ -214,6 +235,7 @@ class GraphFragment : Fragment() {
         currentManipulator = null
         editingButtonsController = null
         historyButtonsController = null
+        scrollZoomController = null
     }
 
     companion object {

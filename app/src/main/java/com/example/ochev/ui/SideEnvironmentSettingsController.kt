@@ -13,7 +13,8 @@ import com.example.ochev.baseclasses.editors.boardeditor.BoardViewer
 class SideEnvironmentSettingsController(
     private val settingsView: LinearLayout,
     private val settingsEnterView: ImageView,
-    private val viewerProvider: Provider<BoardViewer?>
+    private val viewerProvider: Provider<BoardViewer?>,
+    private val tagProvider: Provider<String?>
 ) {
     fun initialize() {
         var holder = EnvironmentSideSettingViewHolder(getItem())
@@ -42,6 +43,17 @@ class SideEnvironmentSettingsController(
         holder.item.setOnClickListener {
             hideSettings(true)
             viewerProvider.get()?.clearBoard()
+        }
+
+        settingsView.addView(getDelim())
+
+        holder = EnvironmentSideSettingViewHolder(getItem())
+        holder.textView.text = "Удалить граф"
+        settingsView.addView(holder.item)
+        holder.item.setOnClickListener {
+            hideSettings(false)
+            val tag = tagProvider.get() ?: return@setOnClickListener
+            ApplicationComponent.callbackToDeleteFragment?.close(tag)
         }
 
         settingsView.visibility = View.GONE

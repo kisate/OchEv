@@ -10,6 +10,8 @@ import kotlin.collections.HashMap
 class ViewersHolder {
     private var count = 0
 
+    private var currentMaxIndex = 0
+
     private val pendingViewerInfoList: Queue<PendingViewerInfo> = LinkedList()
 
     private var order: HashMap<String, Int> = LinkedHashMap()
@@ -21,8 +23,31 @@ class ViewersHolder {
         val id = count.toString()
         viewers[id] = pendingViewer
         pendingViewerInfoList.add(PendingViewerInfo(pendingViewer, id))
-        order[id] = count
+        order[id] = currentMaxIndex
+        currentMaxIndex++
         count++
+    }
+
+    fun getViewerTagByIndex(index: Int): String {
+        for (entry in order.entries) {
+            if (entry.value == index) {
+                return entry.key
+            }
+        }
+        return "-1"
+    }
+
+    fun deleteViewer(id: String) {
+        currentMaxIndex--
+        val index = order[id] ?: return
+        viewers.remove(id)
+        pendingViewerInfoList.removeIf { it.id == id }
+        order.remove(id)
+        for (entry in order.entries) {
+            if (entry.value > index) {
+                order[entry.key] = entry.value - 1
+            }
+        }
     }
 
     fun onPendingViewerAttached() {
@@ -34,7 +59,7 @@ class ViewersHolder {
     }
 
     fun getIndex(id: String): Int {
-        return order[id] ?: 0
+        return order[id] ?: -1
     }
 
     fun size(): Int {
