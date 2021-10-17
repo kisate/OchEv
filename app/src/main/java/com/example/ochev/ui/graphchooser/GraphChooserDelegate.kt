@@ -16,7 +16,7 @@ class GraphChooserDelegate(
     override fun onCreateViewHolder(parent: ViewGroup): RecyclerView.ViewHolder {
         return GraphChooserItemViewHolder(
             LayoutInflater.from(parent.context).inflate(
-                R.layout.graph_chooser_item,  null
+                R.layout.graph_chooser_item,  parent, false
             ) as ConstraintLayout
         )
     }

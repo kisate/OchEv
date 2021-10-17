@@ -7,12 +7,13 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.ochev.Utils.Delegate
 import com.example.ochev.Utils.Item
 import com.example.ochev.R
+import com.example.ochev.Utils.toPx
 
 class ChooserDelimDelegate: Delegate {
     override fun onCreateViewHolder(parent: ViewGroup): RecyclerView.ViewHolder {
         return ChooserDelimViewHolder(
             LayoutInflater.from(parent.context).inflate(
-                R.layout.delim_chooser,  null
+                R.layout.delim_chooser,  parent, false
             ) as FrameLayout
         )
     }

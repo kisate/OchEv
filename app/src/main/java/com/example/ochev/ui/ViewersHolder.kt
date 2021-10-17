@@ -14,9 +14,9 @@ class ViewersHolder {
 
     private val pendingViewerInfoList: Queue<PendingViewerInfo> = LinkedList()
 
-    private var order: HashMap<String, Int> = HashMap()
+    private var order: HashMap<String, Int> = LinkedHashMap()
 
-    private val viewers: HashMap<String, BoardViewer> = HashMap()
+    private val viewers: HashMap<String, BoardViewer> = LinkedHashMap()
 
     fun createAndAddNewViewer(context: Context) {
         val pendingViewer = ViewerFactory.create(Classifier(context))
