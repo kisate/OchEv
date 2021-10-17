@@ -13,9 +13,11 @@
         <entry key="app/src/main/res/drawable/side_enironment_settings_background.xml" value="0.16822916666666668" />
         <entry key="app/src/main/res/drawable/side_environment_settings_background.xml" value="0.1546875" />
         <entry key="app/src/main/res/layout/activity_main.xml" value="0.16979166666666667" />
+        <entry key="app/src/main/res/layout/delim_chooser.xml" value="0.1" />
         <entry key="app/src/main/res/layout/delim_settings.xml" value="0.13802083333333334" />
         <entry key="app/src/main/res/layout/editing_button.xml" value="0.13854166666666667" />
         <entry key="app/src/main/res/layout/environment_setting_button.xml" value="0.15208333333333332" />
+        <entry key="app/src/main/res/layout/graph_chooser_item.xml" value="0.1634963768115942" />
         <entry key="app/src/main/res/layout/graph_chooser_popup.xml" value="0.13489583333333333" />
         <entry key="app/src/main/res/layout/graph_fragment_view.xml" value="0.121875" />
         <entry key="app/src/main/res/layout/graph_icon.xml" value="0.1" />
@@ -27,7 +29,7 @@
       </map>
     </option>
   </component>
-  <component name="ProjectRootManager" version="2" languageLevel="JDK_11" project-jdk-name="11" project-jdk-type="JavaSDK">
+  <component name="ProjectRootManager" version="2" languageLevel="JDK_11" default="true" project-jdk-name="11" project-jdk-type="JavaSDK">
     <output url="file://$PROJECT_DIR$/build/classes" />
   </component>
   <component name="ProjectType">

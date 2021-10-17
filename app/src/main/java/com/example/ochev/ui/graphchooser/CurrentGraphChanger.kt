@@ -1,4 +1,4 @@
-package com.example.ochev.ui
+package com.example.ochev.ui.graphchooser
 
 import android.view.View
 import android.view.ViewGroup

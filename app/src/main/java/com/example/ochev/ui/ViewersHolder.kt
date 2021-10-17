@@ -14,7 +14,7 @@ class ViewersHolder {
 
     private val pendingViewerInfoList: Queue<PendingViewerInfo> = LinkedList()
 
-    private var order: HashMap<String, Int> = LinkedHashMap()
+    private var order: HashMap<String, Int> = HashMap()
 
     private val viewers: HashMap<String, BoardViewer> = HashMap()
 
@@ -23,8 +23,6 @@ class ViewersHolder {
         val id = count.toString()
         viewers[id] = pendingViewer
         pendingViewerInfoList.add(PendingViewerInfo(pendingViewer, id))
-        order[id] = currentMaxIndex
-        currentMaxIndex++
         count++
     }
 
@@ -51,7 +49,10 @@ class ViewersHolder {
     }
 
     fun onPendingViewerAttached() {
+        val info = pendingViewerInfoList.peek() ?: return
         pendingViewerInfoList.remove()
+        order[info.id] = currentMaxIndex
+        currentMaxIndex++
     }
 
     fun pendingViewerInfo(): PendingViewerInfo? {
@@ -78,11 +79,8 @@ class ViewersHolder {
         return viewers.entries
     }
 
-    fun getViewers(): List<BoardViewer> {
-        return viewers.values.toList()
-    }
-
     fun invalidate() {
+        currentMaxIndex = 0
         pendingViewerInfoList.clear()
         for (entry in viewers) {
             pendingViewerInfoList.add(PendingViewerInfo(entry.value, entry.key))
