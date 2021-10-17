@@ -98,11 +98,11 @@ data class Rectangle(
     private fun getPoints(from: Point, to: Point): List<Point> {
         val res = mutableListOf<Point>()
         val vec = Vector(from, to)
-        var scaling = 0.05f
+        var scaling = 0.1f
         do {
             res.add(from.movedByVector(vec.multipliedByFloat(scaling)))
             scaling += 0.05f
-        } while (scaling < 1)
+        } while (scaling < 0.95f)
         return res
     }
 

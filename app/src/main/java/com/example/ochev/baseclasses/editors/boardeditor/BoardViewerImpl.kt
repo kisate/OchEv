@@ -34,7 +34,6 @@ class BoardViewerImpl(private val classifier: Classifier) : BoardViewer {
     private val suggestLineChangesListeners = arrayListOf<SuggestLineChangesListener>()
 
     override fun moveBoard(vector: Vector) {
-        goToDrawingMode()
         graphEditor.moveGraphByVector(vector)
         notifyBoardChanges()
     }
@@ -95,7 +94,6 @@ class BoardViewerImpl(private val classifier: Classifier) : BoardViewer {
     }
 
     override fun scaleBoard(centre: Point, scaleValue: Float) {
-        goToDrawingMode()
         graphEditor.zoomByPointAndFactor(centre, scaleValue)
         notifyBoardChanges()
     }
