@@ -1,6 +1,7 @@
 package com.example.ochev.baseclasses.editors.boardeditor
 
 import android.graphics.Bitmap
+import com.example.ochev.baseclasses.cacheparser.CacheParser
 import com.example.ochev.baseclasses.dataclasses.InformationForNormalizer
 import com.example.ochev.baseclasses.dataclasses.Point
 import com.example.ochev.baseclasses.dataclasses.Stroke
@@ -16,9 +17,11 @@ import java.util.concurrent.Executors
 
 object ViewerFactory {
     fun create(classifier: Classifier): BoardViewer = BoardViewerImpl(classifier)
+
+    fun create(classifier: Classifier, cacheParser: CacheParser): BoardViewer = BoardViewerImpl(classifier, cacheParser)
 }
 
-class BoardViewerImpl(private val classifier: Classifier) : BoardViewer {
+class BoardViewerImpl(private val classifier: Classifier, private val cacheParser: CacheParser? = null) : BoardViewer {
     init {
         classifier.initialize(Executors.newCachedThreadPool())
     }
@@ -168,7 +171,6 @@ class BoardViewerImpl(private val classifier: Classifier) : BoardViewer {
     override fun addRedoChangeShowButtonListenerAndNotify(redoChangeShowButtonListener: RedoChangeShowButtonListener) {
         TODO("Not yet implemented")
     }
-
 
     private fun notifyBoardChanges() {
         boardChangesListeners.forEach {

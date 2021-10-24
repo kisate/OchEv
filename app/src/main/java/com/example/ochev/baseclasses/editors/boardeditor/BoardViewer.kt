@@ -1,6 +1,7 @@
 package com.example.ochev.baseclasses.editors.boardeditor
 
 import android.graphics.Bitmap
+import com.example.ochev.baseclasses.cacheparser.CacheParser
 import com.example.ochev.baseclasses.dataclasses.Point
 import com.example.ochev.baseclasses.dataclasses.Stroke
 import com.example.ochev.baseclasses.dataclasses.Vector
@@ -22,6 +23,8 @@ interface BoardViewer {
     fun undoChange()
 
     fun redoChange()
+
+    fun saveInCache(cacheParser: CacheParser)
 
     fun scaleBoard(centre: Point, scaleValue: Float)
 
