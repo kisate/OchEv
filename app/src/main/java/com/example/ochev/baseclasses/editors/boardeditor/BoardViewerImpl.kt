@@ -10,10 +10,7 @@ import com.example.ochev.baseclasses.editors.grapheditor.GraphEditor
 import com.example.ochev.baseclasses.editors.vertexeditor.VertexFigureEditor
 import com.example.ochev.baseclasses.editors.vertexeditor.VertexFigureMover
 import com.example.ochev.baseclasses.editors.vertexeditor.VertexFigureShaper
-import com.example.ochev.callbacks.BoardChangesListener
-import com.example.ochev.callbacks.SuggestLineChangesListener
-import com.example.ochev.callbacks.UserMode
-import com.example.ochev.callbacks.UserModeChangesListener
+import com.example.ochev.callbacks.*
 import com.example.ochev.ml.Classifier
 import java.util.concurrent.Executors
 
@@ -74,6 +71,17 @@ class BoardViewerImpl(private val classifier: Classifier) : BoardViewer {
         return FiguresManipulatorImpl(editor.figureId)
     }
 
+    override fun setLastEnterTimeMs(millis: Long) {
+        TODO("Not yet implemented")
+    }
+
+    override fun getLastEnterTimeMs(): Long {
+        TODO("Not yet implemented")
+    }
+
+    override fun setWindowParams(height: Int, width: Int) {
+        TODO("Not yet implemented")
+    }
 
     override fun clearBoard() {
         goToDrawingMode()
@@ -135,6 +143,30 @@ class BoardViewerImpl(private val classifier: Classifier) : BoardViewer {
     override fun addSuggestLineChangesListenerAndNotify(suggestLineChangesListener: SuggestLineChangesListener) {
         addSuggestLineChangesListener(suggestLineChangesListener)
         suggestLineChangesListener.onSuggestLineChanged(TODO())
+    }
+
+    override fun addUndoChangeShowButtonListener(undoChangeShowButtonListener: UndoChangeShowButtonListener) {
+        TODO("Not yet implemented")
+    }
+
+    override fun removeUndoChangeShowButtonListener(undoChangeShowButtonListener: UndoChangeShowButtonListener) {
+        TODO("Not yet implemented")
+    }
+
+    override fun addUndoChangeShowButtonListenerAndNotify(undoChangeShowButtonListener: UndoChangeShowButtonListener) {
+        TODO("Not yet implemented")
+    }
+
+    override fun addRedoChangeShowButtonListener(redoChangeShowButtonListener: RedoChangeShowButtonListener) {
+        TODO("Not yet implemented")
+    }
+
+    override fun removeRedoChangeShowButtonListener(redoChangeShowButtonListener: RedoChangeShowButtonListener) {
+        TODO("Not yet implemented")
+    }
+
+    override fun addRedoChangeShowButtonListenerAndNotify(redoChangeShowButtonListener: RedoChangeShowButtonListener) {
+        TODO("Not yet implemented")
     }
 
 

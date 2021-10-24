@@ -1,5 +1,6 @@
 package com.example.ochev.baseclasses.dataclasses.vertexfigures
 
+import android.util.Log
 import com.example.ochev.baseclasses.dataclasses.LineSegment
 import com.example.ochev.baseclasses.dataclasses.Point
 import com.example.ochev.baseclasses.dataclasses.Stroke
@@ -190,7 +191,7 @@ data class Rectangle(
     override fun getDistanceToCountTouch(): Float {
         val dX = kotlin.math.abs(leftDownCorner.x - rightDownCorner.x)
         val dY = kotlin.math.abs(leftDownCorner.y - leftUpCorner.y)
-
+        Log.d("ainur check metrica", (min(dX, dY) / 3.33f).toString())
         return max(min(dX, dY) / 3.33f, 27f)
     }
 

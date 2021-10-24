@@ -4,14 +4,18 @@ import android.graphics.Bitmap
 import com.example.ochev.baseclasses.dataclasses.Point
 import com.example.ochev.baseclasses.dataclasses.Stroke
 import com.example.ochev.baseclasses.dataclasses.Vector
-import com.example.ochev.callbacks.BoardChangesListener
-import com.example.ochev.callbacks.SuggestLineChangesListener
-import com.example.ochev.callbacks.UserModeChangesListener
+import com.example.ochev.callbacks.*
 
 interface BoardViewer {
     fun createFigureByStrokes(bitmap: Bitmap, strokes: MutableList<Stroke>?): Boolean
 
     fun selectFigureByPoint(point: Point): BoardManipulator?
+
+    fun setLastEnterTimeMs(millis: Long)
+
+    fun getLastEnterTimeMs(): Long
+
+    fun setWindowParams(height: Int, width: Int)
 
     fun clearBoard()
 
@@ -40,4 +44,16 @@ interface BoardViewer {
     fun removeSuggestLineChangesListener(suggestLineChangesListener: SuggestLineChangesListener)
 
     fun addSuggestLineChangesListenerAndNotify(suggestLineChangesListener: SuggestLineChangesListener)
+
+    fun addUndoChangeShowButtonListener(undoChangeShowButtonListener: UndoChangeShowButtonListener)
+
+    fun removeUndoChangeShowButtonListener(undoChangeShowButtonListener: UndoChangeShowButtonListener)
+
+    fun addUndoChangeShowButtonListenerAndNotify(undoChangeShowButtonListener: UndoChangeShowButtonListener)
+
+    fun addRedoChangeShowButtonListener(redoChangeShowButtonListener: RedoChangeShowButtonListener)
+
+    fun removeRedoChangeShowButtonListener(redoChangeShowButtonListener: RedoChangeShowButtonListener)
+
+    fun addRedoChangeShowButtonListenerAndNotify(redoChangeShowButtonListener: RedoChangeShowButtonListener)
 }
