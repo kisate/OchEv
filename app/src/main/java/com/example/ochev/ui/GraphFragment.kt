@@ -4,6 +4,7 @@ import android.annotation.SuppressLint
 import android.graphics.Bitmap
 import android.graphics.Paint
 import android.os.Bundle
+import android.util.DisplayMetrics
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.MotionEvent
@@ -50,13 +51,24 @@ class GraphFragment : Fragment() {
         Log.d(TAG, "view created")
         this.container = inflater.inflate(R.layout.graph_fragment_view, container, true)
             .findViewById(R.id.graph_fragment_view)
+
         initializeInputViews()
         initializeSideEnvironmentSettings()
         initializeDrawers()
         initializeEditingMode()
         initializeHistory()
         initializeScrollZoom()
+        initializeViewer()
         return this.container
+    }
+
+    private fun initializeViewer() {
+        val checkedViewer = viewer ?: return
+        checkedViewer.setLastEnterTimeMs(System.currentTimeMillis())
+
+        val displayMetrics = DisplayMetrics()
+        activity?.windowManager?.defaultDisplay?.getMetrics(displayMetrics)
+        checkedViewer.setWindowParams(displayMetrics.heightPixels, displayMetrics.widthPixels)
     }
 
     private fun initializeScrollZoom() {
@@ -76,10 +88,10 @@ class GraphFragment : Fragment() {
         editingButtonsController = EditingButtonsController(view) { currentManipulator }
         viewer?.addUserModeChangesListenerAndNotify {
             if (it != UserMode.DRAWING) {
-                editingButtonsController?.show(it)
+                editingButtonsController?.show(it, true)
             } else {
                 currentManipulator = null
-                editingButtonsController?.hide()
+                editingButtonsController?.hide(true)
             }
         }
     }
@@ -140,7 +152,11 @@ class GraphFragment : Fragment() {
             container.findViewById<ImageView>(R.id.enter_side_environment_settings)
 
         sideEnvironmentSettingsController =
-            SideEnvironmentSettingsController(settingsView, enterPoint, { viewer }, { getGraphId() })
+            SideEnvironmentSettingsController(
+                settingsView,
+                enterPoint,
+                { viewer },
+                { getGraphId() })
         sideEnvironmentSettingsController?.initialize()
     }
 
@@ -233,7 +249,10 @@ class GraphFragment : Fragment() {
         inputDrawView = null
         figureDrawingView = null
         currentManipulator = null
+        editingButtonsController?.onDestroy()
         editingButtonsController = null
+        sideEnvironmentSettingsController?.onDestroy()
+        sideEnvironmentSettingsController = null
         historyButtonsController = null
         scrollZoomController = null
     }

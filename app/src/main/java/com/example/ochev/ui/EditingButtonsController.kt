@@ -1,5 +1,7 @@
 package com.example.ochev.ui
 
+import android.animation.Animator
+import android.animation.ValueAnimator
 import android.view.LayoutInflater
 import android.view.View
 import android.widget.FrameLayout
@@ -17,6 +19,10 @@ class EditingButtonsController(
 ) {
     private val deleteHolder: EditingButtonViewHolder
     private val copyHolder: EditingButtonViewHolder
+
+    private var currentAnimator: Animator? = null
+
+    private val length = (160).toPx.toFloat()
 
     init {
         deleteHolder = EditingButtonViewHolder(getItem())
@@ -38,8 +44,7 @@ class EditingButtonsController(
         deleteHolder.item.elevation = (50).toPx
     }
 
-    fun show(userMode: UserMode) {
-        settingsView.visibility = View.VISIBLE
+    fun show(userMode: UserMode, animate: Boolean) {
         when (userMode) {
             UserMode.EDITING__COPY_DISABLED -> {
                 processHolder(listOf(deleteHolder))
@@ -49,6 +54,63 @@ class EditingButtonsController(
                 processHolder(listOf(deleteHolder, copyHolder))
             }
         }
+        if (animate) {
+            animate(settingsView.translationX, 0.0f)
+        } else {
+            settingsView.translationX = 0.0f
+            settingsView.visibility = View.VISIBLE
+        }
+
+    }
+
+    fun hide(animate: Boolean) {
+        if (animate) {
+            animate(settingsView.translationX, length)
+        } else {
+            settingsView.visibility = View.GONE
+            settingsView.translationX = length
+        }
+
+    }
+
+    fun onDestroy() {
+        currentAnimator?.cancel()
+    }
+
+    private fun animate(from: Float, to: Float) {
+        currentAnimator?.cancel()
+        currentAnimator = null
+        val animator = ValueAnimator.ofFloat(from, to)
+
+        animator.duration = (kotlin.math.abs(from - to) / length * 300).toLong()
+
+        animator.addUpdateListener {
+            val value = it.animatedValue as Float
+            settingsView.translationX = value
+            settingsView.alpha = 1 - value / length
+        }
+
+        animator.addListener(object : Animator.AnimatorListener {
+            override fun onAnimationStart(p0: Animator?) {
+                if (to == 0.0f) {
+                    settingsView.visibility = View.VISIBLE
+                }
+            }
+
+            override fun onAnimationEnd(p0: Animator?) {
+                if (to == length) {
+                    settingsView.visibility = View.INVISIBLE
+                }
+            }
+
+            override fun onAnimationCancel(p0: Animator?) = Unit
+
+            override fun onAnimationRepeat(p0: Animator?) = Unit
+        })
+
+        currentAnimator = animator
+
+        animator.start()
     }
 
     private fun processHolder(holders: List<EditingButtonViewHolder>) {
@@ -86,12 +148,8 @@ class EditingButtonsController(
         set.applyTo(settingsView)
     }
 
-    fun hide() {
-        settingsView.visibility = View.GONE
-    }
-
     private fun getItem(): FrameLayout {
         return LayoutInflater.from(settingsView.context)
-            .inflate(R.layout.editing_button, null) as FrameLayout
+            .inflate(R.layout.editing_button, settingsView, false) as FrameLayout
     }
 }

@@ -75,15 +75,15 @@ class BoardViewerImpl(private val classifier: Classifier, private val cacheParse
     }
 
     override fun setLastEnterTimeMs(millis: Long) {
-        TODO("Not yet implemented")
+
     }
 
     override fun getLastEnterTimeMs(): Long {
-        TODO("Not yet implemented")
+        return 0
     }
 
     override fun setWindowParams(height: Int, width: Int) {
-        TODO("Not yet implemented")
+
     }
 
     override fun clearBoard() {
@@ -102,6 +102,10 @@ class BoardViewerImpl(private val classifier: Classifier, private val cacheParse
         goToDrawingMode()
         graphEditor.undoRevertChange()
         notifyBoardChanges()
+    }
+
+    override fun saveInCache(cacheParser: CacheParser) {
+
     }
 
     override fun scaleBoard(centre: Point, scaleValue: Float) {
