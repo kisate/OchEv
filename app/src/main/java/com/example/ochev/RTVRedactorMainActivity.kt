@@ -1,13 +1,11 @@
 package com.example.ochev
 
 import android.annotation.SuppressLint
+import android.content.SharedPreferences
 import android.os.Bundle
 import androidx.fragment.app.FragmentActivity
 import androidx.viewpager2.widget.ViewPager2
-import com.example.ochev.ui.ApplicationComponent
-import com.example.ochev.ui.CloseFragmentCallback
-import com.example.ochev.ui.MordaViewPagerAdapter
-import com.example.ochev.ui.PopupController
+import com.example.ochev.ui.*
 import com.example.ochev.ui.graphchooser.CurrentGraphChangerImpl
 import com.example.ochev.ui.graphchooser.GraphChooserController
 
@@ -30,11 +28,7 @@ class RTVRedactorMainActivity : FragmentActivity() {
 
     @SuppressLint("NotifyDataSetChanged")
     private fun initPager() {
-        if (ApplicationComponent.viewersHolder.isEmpty()) {
-            ApplicationComponent.viewersHolder.createAndAddNewViewer(this)
-        } else {
-            ApplicationComponent.viewersHolder.invalidate()
-        }
+        ApplicationComponent.viewersHolder.invalidate()
         val adapter = MordaViewPagerAdapter(this)
         ApplicationComponent.callbackToCreateNewBoard = Runnable {
             adapter.createAndAddNewFragment()
@@ -45,7 +39,7 @@ class RTVRedactorMainActivity : FragmentActivity() {
             mPager.adapter = null
 
             if (adapter.itemCount == 0) {
-                ApplicationComponent.viewersHolder.createAndAddNewViewer(this)
+                ApplicationComponent.viewersHolder.createAndAddNewViewer(applicationContext)
             }
 
             mPager.adapter = adapter
@@ -71,9 +65,27 @@ class RTVRedactorMainActivity : FragmentActivity() {
         ApplicationComponent.callbackToDeleteFragment = null
         if (!isChangingConfigurations) {
             popupController.dismissPopup()
+            writeCaches()
         } else {
             popupController.endAnim()
         }
         super.onDestroy()
+    }
+
+    private fun writeCaches() {
+        var current = 1
+        for (entry in ApplicationComponent.viewersHolder.entries()) {
+            val sp = getSp(current)
+            sp.edit().clear().apply()
+            entry.value.saveInCache(CacheParserImpl(sp))
+            sp.edit().putBoolean("present", true).apply()
+            current++
+        }
+        getSp(current).edit().clear().apply()
+
+    }
+
+    private fun getSp(index: Int): SharedPreferences {
+        return getSharedPreferences("viewer$index", MODE_PRIVATE)
     }
 }

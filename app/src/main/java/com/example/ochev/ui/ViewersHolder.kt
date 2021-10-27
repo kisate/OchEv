@@ -1,6 +1,7 @@
 package com.example.ochev.ui
 
 import android.content.Context
+import com.example.ochev.baseclasses.cacheparser.CacheParser
 import com.example.ochev.baseclasses.editors.boardeditor.BoardViewer
 import com.example.ochev.baseclasses.editors.boardeditor.ViewerFactory
 import com.example.ochev.ml.Classifier
@@ -18,8 +19,12 @@ class ViewersHolder {
 
     private val viewers: HashMap<String, BoardViewer> = LinkedHashMap()
 
-    fun createAndAddNewViewer(context: Context) {
-        val pendingViewer = ViewerFactory.create(Classifier(context))
+    fun createAndAddNewViewer(context: Context, parser: CacheParser? = null) {
+        val pendingViewer = if (parser == null) {
+            ViewerFactory.create(Classifier(context))
+        } else {
+            ViewerFactory.create(Classifier(context), parser)
+        }
         val id = count.toString()
         viewers[id] = pendingViewer
         pendingViewerInfoList.add(PendingViewerInfo(pendingViewer, id))
