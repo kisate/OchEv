@@ -1,11 +1,8 @@
 package com.example.ochev.baseclasses.dataclasses.vertexfigures
 
 import android.util.Log
-import com.example.ochev.baseclasses.dataclasses.LineSegment
-import com.example.ochev.baseclasses.dataclasses.Point
-import com.example.ochev.baseclasses.dataclasses.Stroke
+import com.example.ochev.baseclasses.dataclasses.*
 import com.example.ochev.baseclasses.dataclasses.Stroke.Companion.getStrokesRestrictions
-import com.example.ochev.baseclasses.dataclasses.Vector
 import com.example.ochev.baseclasses.editors.vertexeditor.PointMover
 import kotlin.math.max
 import kotlin.math.min
@@ -193,6 +190,10 @@ data class Rectangle(
         val dY = kotlin.math.abs(leftDownCorner.y - leftUpCorner.y)
         Log.d("ainur check metrica", (min(dX, dY) / 3.33f).toString())
         return max(min(dX, dY) / 3.33f, 27f)
+    }
+
+    override fun getFigureId(): FIGURE_ID {
+        return FIGURE_ID.RECTANGLE
     }
 
 

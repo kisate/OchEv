@@ -43,4 +43,8 @@ class CacheParserImpl(private val sp: SharedPreferences) : CacheParser {
         return sp.getFloat(currentReading.toString(), 0.0f).also { currentReading++ }
     }
 
+    override fun getFieldCount(): Int {
+        return 0
+    }
+
 }
