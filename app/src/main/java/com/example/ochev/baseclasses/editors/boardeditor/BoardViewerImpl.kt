@@ -13,15 +13,23 @@ import com.example.ochev.baseclasses.editors.vertexeditor.VertexFigureMover
 import com.example.ochev.baseclasses.editors.vertexeditor.VertexFigureShaper
 import com.example.ochev.callbacks.*
 import com.example.ochev.ml.Classifier
+import java.util.concurrent.ExecutorService
 import java.util.concurrent.Executors
 
 object ViewerFactory {
-    fun create(classifier: Classifier): BoardViewer = BoardViewerImpl(classifier)
+    private val executorService: ExecutorService = Executors.newCachedThreadPool()
 
-    fun create(classifier: Classifier, cacheParser: CacheParser): BoardViewer = BoardViewerImpl(classifier, cacheParser)
+    fun create(classifier: Classifier): BoardViewer = BoardViewerImpl(classifier, executorService)
+
+    fun create(classifier: Classifier, cacheParser: CacheParser): BoardViewer =
+        BoardViewerImpl(classifier, executorService, cacheParser)
 }
 
-class BoardViewerImpl(private val classifier: Classifier, private val cacheParser: CacheParser? = null) : BoardViewer {
+class BoardViewerImpl(
+    private val classifier: Classifier,
+    private val executorService: ExecutorService,
+    private val cacheParser: CacheParser? = null
+) : BoardViewer {
     init {
         classifier.initialize(Executors.newCachedThreadPool())
 
@@ -106,13 +114,13 @@ class BoardViewerImpl(private val classifier: Classifier, private val cacheParse
     }
 
     override fun saveInCache(cacheParser: CacheParser) {
+        executorService.submit {
+            cacheParser.writeInt(graphEditor.allFiguresSortedByHeights.size)
+            graphEditor.allFiguresSortedByHeights.forEach { figure ->
+                cacheParser.writeInt(figure.figure.getFigureId().order)
 
-        cacheParser.writeInt(graphEditor.allFiguresSortedByHeights.size)
-        graphEditor.allFiguresSortedByHeights.forEach { figure ->
-
-
+            }
         }
-
     }
 
     override fun scaleBoard(centre: Point, scaleValue: Float) {
@@ -218,6 +226,7 @@ class BoardViewerImpl(private val classifier: Classifier, private val cacheParse
             graphEditor.maximizeVertexHeightById(id)
             notifyBoardChanges()
         }
+
         private var figureEditor: FigureEditor? = null
         private var shaper: VertexFigureShaper? = null
         private var mover: VertexFigureMover? = null

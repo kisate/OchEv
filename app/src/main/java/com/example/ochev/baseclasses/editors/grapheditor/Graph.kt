@@ -34,9 +34,8 @@ class Graph(
             newGraph.figures.edges.add(
                 it.copy(
                     figure = Edge(
-                        linker[it.figure.beginFigureNode.id]!!.id,
-                        linker[it.figure.endFigureNode.id]!!.id,
-                        newGraph
+                        linker[it.figure.from.id]!!,
+                        linker[it.figure.to.id]!!
                     )
                 )
             )
@@ -105,7 +104,7 @@ class Graph(
         }
 
         figures.edges.forEach {
-            if (it.figure.beginFigureNode.id != id && it.figure.endFigureNode.id != id) {
+            if (it.figure.from.id != id && it.figure.to.id != id) {
                 newGraph.figures.edges.add(
                     it.copy(
                         figure = it.figure.withNewGraph(newGraph)
