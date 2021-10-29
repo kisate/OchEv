@@ -20,7 +20,8 @@ class EditingButtonsController(
     private val deleteHolder: EditingButtonViewHolder
     private val copyHolder: EditingButtonViewHolder
 
-    private var currentAnimator: Animator? = null
+    private var animators: HashMap<EditingButtonViewHolder, Animator?> = HashMap()
+    private var activeSettingsList: List<EditingButtonViewHolder> = listOf()
 
     private val length = (160).toPx.toFloat()
 
@@ -42,64 +43,90 @@ class EditingButtonsController(
 
         copyHolder.item.elevation = (50).toPx
         deleteHolder.item.elevation = (50).toPx
+
+        processHolder(listOf(deleteHolder, copyHolder))
     }
 
     fun show(userMode: UserMode, animate: Boolean) {
         when (userMode) {
             UserMode.EDITING__COPY_DISABLED -> {
-                processHolder(listOf(deleteHolder))
+                showSettings(listOf(deleteHolder), animate)
             }
 
             UserMode.EDITING__COPY_ENABLED -> {
-                processHolder(listOf(deleteHolder, copyHolder))
+                showSettings(listOf(deleteHolder, copyHolder), animate)
             }
         }
-        if (animate) {
-            animate(settingsView.translationX, 0.0f)
-        } else {
-            settingsView.translationX = 0.0f
-            settingsView.visibility = View.VISIBLE
-        }
-
     }
 
     fun hide(animate: Boolean) {
         if (animate) {
-            animate(settingsView.translationX, length)
+            activeSettingsList.forEach {
+                animate(it.item.translationX, length, it)
+            }
         } else {
-            settingsView.visibility = View.GONE
-            settingsView.translationX = length
+            activeSettingsList.forEach {
+                it.item.translationX = length
+                it.item.visibility = View.GONE
+            }
         }
 
+        activeSettingsList = listOf()
+    }
+
+    private fun showSettings(settings: List<EditingButtonViewHolder>, animate: Boolean) {
+        if (animate) {
+            val diff = activeSettingsList.minus(settings)
+            diff.forEach {
+                animate(it.item.translationX, length, it)
+            }
+
+            settings.forEach {
+                animate(it.item.translationX, 0.0f, it)
+            }
+        } else {
+            val diff = activeSettingsList.minus(settings)
+            diff.forEach {
+                it.item.translationX = length
+                it.item.visibility = View.GONE
+            }
+
+            settings.forEach {
+                it.item.translationX = 0.0f
+                it.item.visibility = View.VISIBLE
+            }
+        }
+
+        activeSettingsList = settings
     }
 
     fun onDestroy() {
-        currentAnimator?.cancel()
+        animators.forEach { it.value?.end() }
     }
 
-    private fun animate(from: Float, to: Float) {
-        currentAnimator?.cancel()
-        currentAnimator = null
+    private fun animate(from: Float, to: Float, viewHolder: EditingButtonViewHolder) {
+        animators[viewHolder]?.cancel()
+        animators[viewHolder] = null
         val animator = ValueAnimator.ofFloat(from, to)
 
         animator.duration = (kotlin.math.abs(from - to) / length * 300).toLong()
 
         animator.addUpdateListener {
             val value = it.animatedValue as Float
-            settingsView.translationX = value
-            settingsView.alpha = 1 - value / length
+            viewHolder.item.translationX = value
+            viewHolder.item.alpha = 1 - value / length
         }
 
         animator.addListener(object : Animator.AnimatorListener {
             override fun onAnimationStart(p0: Animator?) {
                 if (to == 0.0f) {
-                    settingsView.visibility = View.VISIBLE
+                    viewHolder.item.visibility = View.VISIBLE
                 }
             }
 
             override fun onAnimationEnd(p0: Animator?) {
                 if (to == length) {
-                    settingsView.visibility = View.INVISIBLE
+                    viewHolder.item.visibility = View.INVISIBLE
                 }
             }
 
@@ -108,14 +135,17 @@ class EditingButtonsController(
             override fun onAnimationRepeat(p0: Animator?) = Unit
         })
 
-        currentAnimator = animator
+        animators[viewHolder] = animator
 
         animator.start()
     }
 
     private fun processHolder(holders: List<EditingButtonViewHolder>) {
-        settingsView.removeAllViews()
-        holders.forEach { settingsView.addView(it.item) }
+        holders.forEach {
+            settingsView.addView(it.item)
+            it.item.translationX = length
+        }
+        settingsView.visibility = View.VISIBLE
         val set = ConstraintSet()
         set.clone(settingsView)
         for (i in holders.indices) {
