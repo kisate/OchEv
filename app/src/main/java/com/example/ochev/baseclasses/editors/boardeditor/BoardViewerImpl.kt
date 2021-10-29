@@ -66,7 +66,7 @@ class BoardViewerImpl(
         }
     }
 
-    private fun isEditorCopyable(figureEditor: FigureEditor): Boolean {
+    private fun isEditorCopyable(figureEditor: FigureEditor?): Boolean {
         return when (figureEditor) {
             is VertexFigureEditor -> true
             else -> false
@@ -259,6 +259,7 @@ class BoardViewerImpl(
             if (newId != null) {
                 id = newId
             }
+            goToEditingMode(isEditorCopyable(figureEditor))
             graphEditor.maximizeVertexHeightById(id)
             notifyBoardChanges()
         }
