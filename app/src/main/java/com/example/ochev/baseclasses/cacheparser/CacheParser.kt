@@ -16,4 +16,6 @@ interface CacheParser {
     fun readString(): String
 
     fun readFloat(): Float
+
+    fun getFieldCount(): Int
 }

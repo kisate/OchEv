@@ -24,6 +24,7 @@ object ViewerFactory {
 class BoardViewerImpl(private val classifier: Classifier, private val cacheParser: CacheParser? = null) : BoardViewer {
     init {
         classifier.initialize(Executors.newCachedThreadPool())
+
     }
 
     private val graphEditor = GraphEditor()
@@ -106,6 +107,12 @@ class BoardViewerImpl(private val classifier: Classifier, private val cacheParse
 
     override fun saveInCache(cacheParser: CacheParser) {
 
+        cacheParser.writeInt(graphEditor.allFiguresSortedByHeights.size)
+        graphEditor.allFiguresSortedByHeights.forEach { figure ->
+
+
+        }
+
     }
 
     override fun scaleBoard(centre: Point, scaleValue: Float) {
@@ -149,31 +156,31 @@ class BoardViewerImpl(private val classifier: Classifier, private val cacheParse
 
     override fun addSuggestLineChangesListenerAndNotify(suggestLineChangesListener: SuggestLineChangesListener) {
         addSuggestLineChangesListener(suggestLineChangesListener)
-        suggestLineChangesListener.onSuggestLineChanged(TODO())
+//        suggestLineChangesListener.onSuggestLineChanged(TODO())
     }
 
     override fun addUndoChangeShowButtonListener(undoChangeShowButtonListener: UndoChangeShowButtonListener) {
-        TODO("Not yet implemented")
+//        TODO("Not yet implemented")
     }
 
     override fun removeUndoChangeShowButtonListener(undoChangeShowButtonListener: UndoChangeShowButtonListener) {
-        TODO("Not yet implemented")
+//        TODO("Not yet implemented")
     }
 
     override fun addUndoChangeShowButtonListenerAndNotify(undoChangeShowButtonListener: UndoChangeShowButtonListener) {
-        TODO("Not yet implemented")
+//        TODO("Not yet implemented")
     }
 
     override fun addRedoChangeShowButtonListener(redoChangeShowButtonListener: RedoChangeShowButtonListener) {
-        TODO("Not yet implemented")
+//        TODO("Not yet implemented")
     }
 
     override fun removeRedoChangeShowButtonListener(redoChangeShowButtonListener: RedoChangeShowButtonListener) {
-        TODO("Not yet implemented")
+//        TODO("Not yet implemented")
     }
 
     override fun addRedoChangeShowButtonListenerAndNotify(redoChangeShowButtonListener: RedoChangeShowButtonListener) {
-        TODO("Not yet implemented")
+//        TODO("Not yet implemented")
     }
 
     private fun notifyBoardChanges() {

@@ -1,6 +1,7 @@
 package com.example.ochev.baseclasses.editors.edgefigures
 
 import android.util.Log
+import com.example.ochev.baseclasses.dataclasses.FIGURE_ID
 import com.example.ochev.baseclasses.dataclasses.Figure
 import com.example.ochev.baseclasses.dataclasses.LineSegment
 import com.example.ochev.baseclasses.dataclasses.Point
@@ -56,6 +57,10 @@ data class Edge(
 
     override fun checkIfFigureIsCloseEnough(point: Point): Boolean {
         return getDistanceToPoint(point) <= getDistanceToCountTouch()
+    }
+
+    override fun getFigureId(): FIGURE_ID {
+        return FIGURE_ID.EDGE
     }
 
     override fun getDistanceToPoint(point: Point): Float {

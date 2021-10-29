@@ -1,10 +1,7 @@
 package com.example.ochev.baseclasses.dataclasses.vertexfigures
 
-import com.example.ochev.baseclasses.dataclasses.LineSegment
-import com.example.ochev.baseclasses.dataclasses.Point
-import com.example.ochev.baseclasses.dataclasses.Stroke
+import com.example.ochev.baseclasses.dataclasses.*
 import com.example.ochev.baseclasses.dataclasses.Stroke.Companion.getStrokesRestrictions
-import com.example.ochev.baseclasses.dataclasses.Vector
 import com.example.ochev.baseclasses.editors.vertexeditor.PointMover
 import java.lang.Float.min
 import kotlin.math.abs
@@ -129,6 +126,10 @@ data class Rhombus(
                 upCorner.getDistanceToPoint(downCorner)
             ) / 3.33f, 27f
         )
+    }
+
+    override fun getFigureId(): FIGURE_ID {
+        return FIGURE_ID.RHOMBUS
     }
 }
 
