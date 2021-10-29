@@ -18,4 +18,6 @@ interface CacheParser {
     fun readFloat(): Float
 
     fun getFieldCount(): Int
+
+    fun closeTransaction()
 }

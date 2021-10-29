@@ -45,7 +45,11 @@ class CacheParserImpl(spLazy: Lazy<SharedPreferences>) : CacheParser {
     }
 
     override fun getFieldCount(): Int {
-        return 0
+        return sp.getInt("cnt", 0)
+    }
+
+    override fun closeTransaction() {
+        sp.edit().putInt("cnt", currentWriting - 1).apply()
     }
 
 }
