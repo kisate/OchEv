@@ -77,15 +77,18 @@ class RTVRedactorMainActivity : FragmentActivity() {
         for (entry in ApplicationComponent.viewersHolder.entries()) {
             val sp = getSp(current)
             sp.edit().clear().apply()
-            entry.value.saveInCache(CacheParserImpl(sp))
+            entry.value.saveInCache(CacheParserImpl(lazy { sp }))
             sp.edit().putBoolean("present", true).apply()
             current++
         }
-        getSp(current).edit().clear().apply()
-
+        getAppSp().edit().putInt("graph count", current - 1).apply()
     }
 
     private fun getSp(index: Int): SharedPreferences {
         return getSharedPreferences("viewer$index", MODE_PRIVATE)
+    }
+
+    private fun getAppSp(): SharedPreferences {
+        return getSharedPreferences("app", MODE_PRIVATE)
     }
 }

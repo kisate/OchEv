@@ -16,19 +16,20 @@ class RTVRedactorApp : Application() {
             ApplicationComponent.viewersHolder.createAndAddNewViewer(this)
         }
 
-        var current = 1
-        while(true) {
-            val sp = getGraphSp(current)
-            if (!sp.contains("present")) {
-                break
-            }
-            current++
-
-            ApplicationComponent.viewersHolder.createAndAddNewViewer(applicationContext, CacheParserImpl(sp))
+        val cnt = getAppSp().getInt("graph count", 0)
+        for (current in 1..cnt) {
+            ApplicationComponent.viewersHolder.createAndAddNewViewer(
+                applicationContext, CacheParserImpl(
+                    lazy { getGraphSp(current) })
+            )
         }
     }
 
     private fun getGraphSp(index: Int): SharedPreferences {
         return getSharedPreferences("viewer$index", MODE_PRIVATE)
+    }
+
+    private fun getAppSp(): SharedPreferences {
+        return getSharedPreferences("app", MODE_PRIVATE)
     }
 }

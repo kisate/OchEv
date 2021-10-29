@@ -3,7 +3,8 @@ package com.example.ochev.ui
 import android.content.SharedPreferences
 import com.example.ochev.baseclasses.cacheparser.CacheParser
 
-class CacheParserImpl(private val sp: SharedPreferences) : CacheParser {
+class CacheParserImpl(spLazy: Lazy<SharedPreferences>) : CacheParser {
+    private val sp by spLazy
     private var currentReading: Int = 1
     private var currentWriting: Int = 1
 
