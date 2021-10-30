@@ -2,6 +2,7 @@ package com.example.ochev.baseclasses.editors.grapheditor
 
 import com.example.ochev.baseclasses.dataclasses.*
 import com.example.ochev.baseclasses.dataclasses.nodes.EdgeNode
+import com.example.ochev.baseclasses.dataclasses.nodes.FigureNode
 import com.example.ochev.baseclasses.dataclasses.nodes.VertexFigureNode
 import com.example.ochev.baseclasses.dataclasses.vertexfigures.VertexFigure
 import com.example.ochev.baseclasses.editors.FigureEditor
@@ -35,6 +36,10 @@ class GraphEditor(
 
     fun setDrawInfoToDefault() {
 
+    }
+
+    fun getFigureNodeByIdOrNull(id: Int): FigureNode? {
+        return graph.getFigureNodeByIdOrNull(id)
     }
 
     fun modifyByStrokes(information: InformationForNormalizer): Boolean {

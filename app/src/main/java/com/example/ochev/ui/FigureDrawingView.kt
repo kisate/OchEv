@@ -41,8 +41,8 @@ class FigureDrawingView(
 
     private fun drawEdge(canvas: Canvas?, figure: Edge) {
         val points = listOf(
-            figure.beginFigureNode.figure.center,
-            figure.endFigureNode.figure.center
+            figure.from.figure.center,
+            figure.to.figure.center
         )
         drawPoints(points, canvas)
     }

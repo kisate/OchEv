@@ -1,11 +1,10 @@
 package com.example.ochev.baseclasses.editors.boardeditor
 
 import android.graphics.Bitmap
+import android.util.Log
 import com.example.ochev.baseclasses.cacheparser.CacheParser
-import com.example.ochev.baseclasses.dataclasses.InformationForNormalizer
-import com.example.ochev.baseclasses.dataclasses.Point
-import com.example.ochev.baseclasses.dataclasses.Stroke
-import com.example.ochev.baseclasses.dataclasses.Vector
+import com.example.ochev.baseclasses.cacheparser.GraphWriter
+import com.example.ochev.baseclasses.dataclasses.*
 import com.example.ochev.baseclasses.editors.FigureEditor
 import com.example.ochev.baseclasses.editors.grapheditor.GraphEditor
 import com.example.ochev.baseclasses.editors.vertexeditor.VertexFigureEditor
@@ -13,18 +12,29 @@ import com.example.ochev.baseclasses.editors.vertexeditor.VertexFigureMover
 import com.example.ochev.baseclasses.editors.vertexeditor.VertexFigureShaper
 import com.example.ochev.callbacks.*
 import com.example.ochev.ml.Classifier
+import java.util.concurrent.ExecutorService
 import java.util.concurrent.Executors
 
 object ViewerFactory {
-    fun create(classifier: Classifier): BoardViewer = BoardViewerImpl(classifier)
+    private val executorService: ExecutorService = Executors.newCachedThreadPool()
 
-    fun create(classifier: Classifier, cacheParser: CacheParser): BoardViewer = BoardViewerImpl(classifier, cacheParser)
+    fun create(classifier: Classifier): BoardViewer = BoardViewerImpl(classifier, executorService)
+
+    fun create(classifier: Classifier, cacheParser: CacheParser): BoardViewer =
+        BoardViewerImpl(classifier, executorService, cacheParser)
 }
 
-class BoardViewerImpl(private val classifier: Classifier, private val cacheParser: CacheParser? = null) : BoardViewer {
+class BoardViewerImpl(
+    private val classifier: Classifier,
+    private val executorService: ExecutorService,
+    private val cacheParser: CacheParser? = null
+) : BoardViewer {
     init {
         classifier.initialize(Executors.newCachedThreadPool())
-
+        if (cacheParser != null) {
+            assert(false)
+            Log.d("ainur cache", cacheParser.readInt().toString())
+        }
     }
 
     private val graphEditor = GraphEditor()
@@ -58,7 +68,7 @@ class BoardViewerImpl(private val classifier: Classifier, private val cacheParse
         }
     }
 
-    private fun isEditorCopyable(figureEditor: FigureEditor): Boolean {
+    private fun isEditorCopyable(figureEditor: FigureEditor?): Boolean {
         return when (figureEditor) {
             is VertexFigureEditor -> true
             else -> false
@@ -106,13 +116,10 @@ class BoardViewerImpl(private val classifier: Classifier, private val cacheParse
     }
 
     override fun saveInCache(cacheParser: CacheParser) {
-
-        cacheParser.writeInt(graphEditor.allFiguresSortedByHeights.size)
-        graphEditor.allFiguresSortedByHeights.forEach { figure ->
-
-
+        Log.d("ainur cache", "START SAVING")
+        executorService.submit {
+            GraphWriter.write(graphEditor, cacheParser)
         }
-
     }
 
     override fun scaleBoard(centre: Point, scaleValue: Float) {
@@ -218,6 +225,7 @@ class BoardViewerImpl(private val classifier: Classifier, private val cacheParse
             graphEditor.maximizeVertexHeightById(id)
             notifyBoardChanges()
         }
+
         private var figureEditor: FigureEditor? = null
         private var shaper: VertexFigureShaper? = null
         private var mover: VertexFigureMover? = null
@@ -250,6 +258,7 @@ class BoardViewerImpl(private val classifier: Classifier, private val cacheParse
             if (newId != null) {
                 id = newId
             }
+            goToEditingMode(isEditorCopyable(figureEditor))
             graphEditor.maximizeVertexHeightById(id)
             notifyBoardChanges()
         }
