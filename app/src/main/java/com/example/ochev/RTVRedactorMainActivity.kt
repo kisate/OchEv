@@ -3,6 +3,7 @@ package com.example.ochev
 import android.annotation.SuppressLint
 import android.content.SharedPreferences
 import android.os.Bundle
+import android.util.Log
 import androidx.fragment.app.FragmentActivity
 import androidx.viewpager2.widget.ViewPager2
 import com.example.ochev.ui.*
@@ -59,17 +60,24 @@ class RTVRedactorMainActivity : FragmentActivity() {
         }
     }
 
+    override fun onStop() {
+        super.onStop()
+        Log.e(TAG, "on stop")
+        writeCaches()
+    }
+
     override fun onDestroy() {
+        super.onDestroy()
+        Log.e(TAG, "on destroy")
         ApplicationComponent.callbackToShowChooserPopup = null
         ApplicationComponent.callbackToCreateNewBoard = null
         ApplicationComponent.callbackToDeleteFragment = null
+
         if (!isChangingConfigurations) {
             popupController.dismissPopup()
-            writeCaches()
         } else {
             popupController.endAnim()
         }
-        super.onDestroy()
     }
 
     private fun writeCaches() {
@@ -90,5 +98,9 @@ class RTVRedactorMainActivity : FragmentActivity() {
 
     private fun getAppSp(): SharedPreferences {
         return getSharedPreferences("app", MODE_PRIVATE)
+    }
+
+    companion object {
+        private val TAG = "RTVRedactorMainActivity"
     }
 }

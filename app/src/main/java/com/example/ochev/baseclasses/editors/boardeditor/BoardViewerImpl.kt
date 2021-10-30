@@ -32,7 +32,6 @@ class BoardViewerImpl(
     init {
         classifier.initialize(Executors.newCachedThreadPool())
         if (cacheParser != null) {
-            assert(false)
             Log.d("ainur cache", cacheParser.readInt().toString())
         }
     }

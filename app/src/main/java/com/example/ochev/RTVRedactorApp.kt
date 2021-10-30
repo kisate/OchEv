@@ -12,16 +12,16 @@ class RTVRedactorApp : Application() {
     }
 
     private fun raiseCache() {
-        if (ApplicationComponent.viewersHolder.isEmpty()) {
-            ApplicationComponent.viewersHolder.createAndAddNewViewer(this)
-        }
-
         val cnt = getAppSp().getInt("graph count", 0)
         for (current in 1..cnt) {
             ApplicationComponent.viewersHolder.createAndAddNewViewer(
                 applicationContext, CacheParserImpl(
                     lazy { getGraphSp(current) })
             )
+        }
+
+        if (ApplicationComponent.viewersHolder.isEmpty()) {
+            ApplicationComponent.viewersHolder.createAndAddNewViewer(this)
         }
     }
 
