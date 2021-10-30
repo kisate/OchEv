@@ -1,11 +1,10 @@
 package com.example.ochev.baseclasses.editors.boardeditor
 
 import android.graphics.Bitmap
+import android.util.Log
 import com.example.ochev.baseclasses.cacheparser.CacheParser
-import com.example.ochev.baseclasses.dataclasses.InformationForNormalizer
-import com.example.ochev.baseclasses.dataclasses.Point
-import com.example.ochev.baseclasses.dataclasses.Stroke
-import com.example.ochev.baseclasses.dataclasses.Vector
+import com.example.ochev.baseclasses.cacheparser.GraphWriter
+import com.example.ochev.baseclasses.dataclasses.*
 import com.example.ochev.baseclasses.editors.FigureEditor
 import com.example.ochev.baseclasses.editors.grapheditor.GraphEditor
 import com.example.ochev.baseclasses.editors.vertexeditor.VertexFigureEditor
@@ -32,7 +31,10 @@ class BoardViewerImpl(
 ) : BoardViewer {
     init {
         classifier.initialize(Executors.newCachedThreadPool())
-
+        if (cacheParser != null) {
+            assert(false)
+            Log.d("ainur cache", cacheParser.readInt().toString())
+        }
     }
 
     private val graphEditor = GraphEditor()
@@ -114,12 +116,9 @@ class BoardViewerImpl(
     }
 
     override fun saveInCache(cacheParser: CacheParser) {
+        Log.d("ainur cache", "START SAVING")
         executorService.submit {
-            cacheParser.writeInt(graphEditor.allFiguresSortedByHeights.size)
-            graphEditor.allFiguresSortedByHeights.forEach { figure ->
-                cacheParser.writeInt(figure.figure.getFigureId().order)
-
-            }
+            GraphWriter.write(graphEditor, cacheParser)
         }
     }
 
