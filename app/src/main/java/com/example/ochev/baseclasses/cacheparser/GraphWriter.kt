@@ -10,8 +10,8 @@ import com.example.ochev.baseclasses.editors.grapheditor.GraphEditor
 
 /*
     сначала записываем количество фигур и счетчик, затем описание каждой фигуры.
-    <edge> : FIGURE_ID.EDGE.ordinal, <vertex>, <vertex>
-    <vertex> : FIGURE_ID._.ordinal, height, center, <circle> | <rectangle> | <rhombus>
+    <edge> : FIGURE_ID.EDGE.ordinal, id, <vertex>, <vertex>
+    <vertex> : FIGURE_ID._.ordinal, id, height, center, <circle> | <rectangle> | <rhombus>
     <circle> : radius
     <rentable> : leftDownCorner, rightUpCorner
     <rhombus> : leftCorner, upCorner
@@ -43,6 +43,7 @@ object GraphWriter {
 
     private fun writeVertexFigure(figureNode: VertexFigureNode, cacheParser: CacheParser) {
         cacheParser.writeInt(figureNode.figure.getFigureId().order)
+        cacheParser.writeInt(figureNode.id)
         cacheParser.writeInt(figureNode.height)
         writePoint(figureNode.figure.center, cacheParser)
         when (val figure = figureNode.figure) {
@@ -62,6 +63,7 @@ object GraphWriter {
 
     private fun writeEdgeFigure(figureNode: EdgeNode, cacheParser: CacheParser) {
         cacheParser.writeInt(figureNode.figure.getFigureId().order)
+        cacheParser.writeInt(figureNode.id)
         writeVertexFigure(figureNode.figure.from, cacheParser)
         writeVertexFigure(figureNode.figure.to, cacheParser)
     }

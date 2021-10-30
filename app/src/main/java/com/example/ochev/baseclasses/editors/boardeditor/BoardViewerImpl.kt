@@ -3,6 +3,7 @@ package com.example.ochev.baseclasses.editors.boardeditor
 import android.graphics.Bitmap
 import android.util.Log
 import com.example.ochev.baseclasses.cacheparser.CacheParser
+import com.example.ochev.baseclasses.cacheparser.GraphReader
 import com.example.ochev.baseclasses.cacheparser.GraphWriter
 import com.example.ochev.baseclasses.dataclasses.*
 import com.example.ochev.baseclasses.editors.FigureEditor
@@ -27,16 +28,19 @@ object ViewerFactory {
 class BoardViewerImpl(
     private val classifier: Classifier,
     private val executorService: ExecutorService,
-    private val cacheParser: CacheParser? = null
+    cacheParser: CacheParser? = null
 ) : BoardViewer {
+    private val graphEditor: GraphEditor
     init {
         classifier.initialize(Executors.newCachedThreadPool())
         if (cacheParser != null) {
-            Log.d("ainur cache", cacheParser.readInt().toString())
+            graphEditor = GraphReader.readGraph(cacheParser)
+        } else {
+            graphEditor = GraphEditor()
         }
     }
 
-    private val graphEditor = GraphEditor()
+
     private var currentUserMode = UserMode.DRAWING
 
     private val userModeChangesListeners = arrayListOf<UserModeChangesListener>()
