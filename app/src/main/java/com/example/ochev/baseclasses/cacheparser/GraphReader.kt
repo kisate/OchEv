@@ -14,6 +14,7 @@ import com.example.ochev.baseclasses.editors.grapheditor.Graph
 import com.example.ochev.baseclasses.editors.grapheditor.GraphEditor
 
 object GraphReader {
+
     fun readGraph(cacheParser: CacheParser): GraphEditor {
         val figureContainer = FigureContainer()
         val countOfFigures = cacheParser.readInt()
