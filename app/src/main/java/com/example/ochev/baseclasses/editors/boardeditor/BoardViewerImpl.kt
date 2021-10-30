@@ -13,6 +13,7 @@ import com.example.ochev.baseclasses.editors.vertexeditor.VertexFigureMover
 import com.example.ochev.baseclasses.editors.vertexeditor.VertexFigureShaper
 import com.example.ochev.callbacks.*
 import com.example.ochev.ml.Classifier
+import java.util.concurrent.Callable
 import java.util.concurrent.ExecutorService
 import java.util.concurrent.Executors
 
@@ -33,13 +34,18 @@ class BoardViewerImpl(
     private val graphEditor: GraphEditor
     init {
         classifier.initialize(Executors.newCachedThreadPool())
-        if (cacheParser != null) {
-            graphEditor = GraphReader.readGraph(cacheParser)
+        graphEditor = if (cacheParser != null) {
+            executorService.submit(
+                MyJob(cacheParser)
+            ).get()
         } else {
-            graphEditor = GraphEditor()
+            GraphEditor()
         }
     }
 
+    private inner class MyJob(private val cacheParser: CacheParser) : Callable<GraphEditor> {
+        override fun call() = GraphReader.readGraph(cacheParser)
+    }
 
     private var currentUserMode = UserMode.DRAWING
 
