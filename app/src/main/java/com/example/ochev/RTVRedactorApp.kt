@@ -7,8 +7,8 @@ import com.example.ochev.ui.CacheParserImpl
 
 class RTVRedactorApp : Application() {
     override fun onCreate() {
-        super.onCreate()
         raiseCache()
+        super.onCreate()
     }
 
     private fun raiseCache() {
