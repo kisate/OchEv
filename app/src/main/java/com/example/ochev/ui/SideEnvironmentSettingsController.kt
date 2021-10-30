@@ -98,7 +98,7 @@ class SideEnvironmentSettingsController(
         currentAnimator = null
         val animator = ValueAnimator.ofFloat(from, to)
 
-        animator.duration = (kotlin.math.abs(from - to) * 300).toLong()
+        animator.duration = (kotlin.math.abs(from - to) * 150).toLong()
 
         animator.addUpdateListener {
             val value = it.animatedValue as Float
