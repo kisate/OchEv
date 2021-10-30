@@ -34,6 +34,7 @@ object GraphWriter {
                 }
             }
         }
+        cacheParser.closeTransaction()
     }
 
     private fun writePoint(pt: Point, cacheParser: CacheParser) {
