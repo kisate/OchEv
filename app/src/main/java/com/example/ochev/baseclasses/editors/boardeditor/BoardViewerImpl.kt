@@ -31,6 +31,7 @@ class BoardViewerImpl(
     cacheParser: CacheParser? = null
 ) : BoardViewer {
     private var graphEditor = GraphEditor()
+
     init {
         classifier.initialize(Executors.newCachedThreadPool())
         if (cacheParser != null) {
@@ -48,6 +49,10 @@ class BoardViewerImpl(
     private val suggestLineChangesListeners = arrayListOf<SuggestLineChangesListener>()
     private val undoChangeShowButtonListeners = arrayListOf<UndoChangeShowButtonListener>()
     private val redoChangeShowButtonListeners = arrayListOf<RedoChangeShowButtonListener>()
+
+    private var height: Int = 0
+    private var width: Int = 0
+    private var lastEnterTime: Long = 0L
 
     override fun moveBoard(vector: Vector) {
         graphEditor.moveGraphByVector(vector)
@@ -91,15 +96,16 @@ class BoardViewerImpl(
     }
 
     override fun setLastEnterTimeMs(millis: Long) {
-
+        lastEnterTime = millis
     }
 
     override fun getLastEnterTimeMs(): Long {
-        return 0
+        return lastEnterTime
     }
 
     override fun setWindowParams(height: Int, width: Int) {
-
+        this.height = height
+        this.width = width
     }
 
     override fun clearBoard() {
