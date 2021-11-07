@@ -29,22 +29,22 @@ class RTVRedactorMainActivity : FragmentActivity() {
 
     @SuppressLint("NotifyDataSetChanged")
     private fun initPager() {
-        ApplicationComponent.viewersHolder.invalidate()
         val adapter = MordaViewPagerAdapter(this)
         ApplicationComponent.callbackToCreateNewBoard = Runnable {
+            val count = adapter.itemCount
             adapter.createAndAddNewFragment()
+            adapter.notifyItemInserted(count)
             mPager.setCurrentItem(adapter.itemCount - 1, true)
         }
         ApplicationComponent.callbackToDeleteFragment = CloseFragmentCallback {
-            ApplicationComponent.viewersHolder.deleteViewer(it)
-            mPager.adapter = null
-
+            val cnt = ApplicationComponent.viewersHolder.deleteViewer(it)
+            if (cnt != null) {
+                adapter.notifyItemRemoved(cnt)
+            }
             if (adapter.itemCount == 0) {
                 ApplicationComponent.viewersHolder.createAndAddNewViewer(applicationContext)
             }
-
-            mPager.adapter = adapter
-            adapter.notifyDataSetChanged()
+            adapter.notifyItemInserted(0)
         }
         mPager.adapter = adapter
         adapter.notifyDataSetChanged()

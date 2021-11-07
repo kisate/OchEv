@@ -17,14 +17,9 @@ class MordaViewPagerAdapter(
     }
 
     override fun createFragment(p0: Int): Fragment {
-        val id = ApplicationComponent.viewersHolder.pendingViewerInfo()?.id
-        if (id == null) {
-            val intendedId = ApplicationComponent.viewersHolder.getViewerTagByIndex(p0)
-            return GraphFragment.newInstance(intendedId)
-        }
-        val fragment = GraphFragment.newInstance(id)
-        ApplicationComponent.viewersHolder.onPendingViewerAttached()
-        return fragment
+        val id = ApplicationComponent.viewersHolder.getId(p0)
+            ?: return GraphFragment.newInstance(p0.toString())
+        return GraphFragment.newInstance(id)
     }
 
     @SuppressLint("NotifyDataSetChanged")
