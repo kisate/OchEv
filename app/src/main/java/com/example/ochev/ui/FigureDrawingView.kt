@@ -7,6 +7,7 @@ import android.graphics.Path
 import android.util.AttributeSet
 import android.util.Log
 import android.view.View
+import com.example.ochev.baseclasses.dataclasses.LineSegment
 import com.example.ochev.baseclasses.dataclasses.Point
 import com.example.ochev.baseclasses.dataclasses.nodes.FigureNode
 import com.example.ochev.baseclasses.dataclasses.vertexfigures.Circle
@@ -24,11 +25,26 @@ class FigureDrawingView(
             invalidate()
         }
 
+    var suggests: List<LineSegment> = emptyList()
+        set(value) {
+            field = value
+            invalidate()
+        }
+
     var paintStroke: Paint = Paint()
     var paintFill: Paint = Paint()
+    var paintSuggests: Paint = Paint()
 
     override fun onDraw(canvas: Canvas?) {
         Log.e(TAG, "on draw with ${figures.size} figures")
+
+        for (segment in suggests) {
+            val path = Path()
+            path.moveTo(segment.A.x, segment.A.y)
+            path.lineTo(segment.B.x, segment.B.y)
+            canvas?.drawPath(path, paintSuggests)
+        }
+
         for (figureNode in figures) {
             when (val figure = figureNode.figure) {
                 is Rectangle -> drawRectangle(canvas, figure)

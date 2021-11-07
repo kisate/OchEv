@@ -2,6 +2,7 @@ package com.example.ochev.ui
 
 import android.annotation.SuppressLint
 import android.graphics.Bitmap
+import android.graphics.Color
 import android.graphics.Paint
 import android.os.Bundle
 import android.util.DisplayMetrics
@@ -59,7 +60,20 @@ class GraphFragment : Fragment() {
         initializeHistory()
         initializeScrollZoom()
         initializeViewer()
+        initializeHelpers()
         return this.container
+    }
+
+    private fun initializeHelpers() {
+        viewer?.addSuggestLineChangesListenerAndNotify {
+            figureDrawingView?.suggests = it
+        }
+        figureDrawingView?.paintSuggests?.let {
+            it.style = Paint.Style.STROKE
+            it.color = Color.parseColor("#FFD300")
+            it.strokeWidth = 3f
+            it.isAntiAlias = true
+        }
     }
 
     private fun initializeViewer() {
@@ -79,7 +93,20 @@ class GraphFragment : Fragment() {
         val container = this.container ?: return
         val view = container.findViewById<ConstraintLayout>(R.id.history_buttons_container)
         historyButtonsController = HistoryButtonsController(view) { viewer }
-
+        viewer?.addRedoChangeShowButtonListenerAndNotify {
+            if (it) {
+                historyButtonsController?.showForward(true)
+            } else {
+                historyButtonsController?.hideForward(true)
+            }
+        }
+        viewer?.addUndoChangeShowButtonListenerAndNotify {
+            if (it) {
+                historyButtonsController?.showUndo(true)
+            } else {
+                historyButtonsController?.hideUndo(true)
+            }
+        }
     }
 
     private fun initializeEditingMode() {

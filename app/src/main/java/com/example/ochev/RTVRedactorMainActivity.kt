@@ -9,6 +9,7 @@ import androidx.viewpager2.widget.ViewPager2
 import com.example.ochev.ui.*
 import com.example.ochev.ui.graphchooser.CurrentGraphChangerImpl
 import com.example.ochev.ui.graphchooser.GraphChooserController
+import java.lang.Integer.max
 
 
 class RTVRedactorMainActivity : FragmentActivity() {
@@ -37,14 +38,12 @@ class RTVRedactorMainActivity : FragmentActivity() {
             mPager.setCurrentItem(adapter.itemCount - 1, true)
         }
         ApplicationComponent.callbackToDeleteFragment = CloseFragmentCallback {
-            val cnt = ApplicationComponent.viewersHolder.deleteViewer(it)
-            if (cnt != null) {
-                adapter.notifyItemRemoved(cnt)
-            }
+            ApplicationComponent.viewersHolder.deleteViewer(it) ?: return@CloseFragmentCallback
             if (adapter.itemCount == 0) {
                 ApplicationComponent.viewersHolder.createAndAddNewViewer(applicationContext)
             }
-            adapter.notifyItemInserted(0)
+            mPager.adapter = adapter
+            adapter.notifyDataSetChanged()
         }
         mPager.adapter = adapter
         adapter.notifyDataSetChanged()

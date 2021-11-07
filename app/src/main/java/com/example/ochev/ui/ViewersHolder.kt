@@ -24,22 +24,19 @@ class ViewersHolder {
     }
 
     fun deleteViewer(id: String): Int? {
-        var indx = 0
-        for (viewer in viewers.entries) {
+        for ((indx, viewer) in viewers.entries.withIndex()) {
             if (viewer.key == id) {
                 viewers.remove(id)
                 return indx
             }
-            indx++
         }
         viewers.remove(id)
         return null
     }
 
     fun getId(index: Int): String? {
-        var indx = 0
-        for (viewer in viewers.entries) {
-            if (indx == index) {
+        for ((indx, viewer) in viewers.entries.withIndex()) {
+            if (index == indx) {
                 return viewer.key
             }
         }
@@ -48,12 +45,10 @@ class ViewersHolder {
 
 
     fun getIndex(id: String): Int {
-        var indx = 0
-        for (viewer in viewers.entries) {
+        for ((indx, viewer) in viewers.entries.withIndex()) {
             if (viewer.key == id) {
                 return indx
             }
-            indx++
         }
         return -1
     }

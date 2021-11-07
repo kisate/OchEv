@@ -1,6 +1,7 @@
 package com.example.ochev.ui
 
-import android.util.Log
+import android.animation.Animator
+import android.animation.ValueAnimator
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -17,15 +18,22 @@ class HistoryButtonsController(
     private val viewerProvider: Provider<BoardViewer?>,
 ) {
 
+    private var backHolder: HistoryButtonViewHolder
+    private var forwardHolder: HistoryButtonViewHolder
+
+    private val animators: HashMap<HistoryButtonViewHolder, Animator?> = HashMap()
+
+    val height = (50).toPx
+
     init {
-        val backHolder = HistoryButtonViewHolder(getItem())
+        backHolder = HistoryButtonViewHolder(getItem())
         backHolder.image.setImageResource(R.drawable.arrow_left)
         backHolder.item.elevation = (50).toPx
         backHolder.item.setOnClickListener {
             viewerProvider.get()?.undoChange()
         }
 
-        val forwardHolder = HistoryButtonViewHolder(getItem())
+        forwardHolder = HistoryButtonViewHolder(getItem())
         forwardHolder.image.setImageResource(R.drawable.arrow_right)
         forwardHolder.item.elevation = (50).toPx
         forwardHolder.item.setOnClickListener {
@@ -77,14 +85,79 @@ class HistoryButtonsController(
             (32).toPx.toInt()
         )
         set.applyTo(settingsView)
+
+        backHolder.item.translationY = this.height
+        backHolder.item.translationY = this.height
     }
 
-    fun show() {
-        settingsView.visibility = View.VISIBLE
+    fun showForward(animate: Boolean) {
+        show(animate, forwardHolder)
     }
 
-    fun hide() {
-        settingsView.visibility = View.GONE
+    fun hideForward(animate: Boolean) {
+        hide(animate, forwardHolder)
+    }
+
+    fun showUndo(animate: Boolean) {
+        show(animate, backHolder)
+    }
+
+    fun hideUndo(animate: Boolean) {
+        hide(animate, backHolder)
+    }
+
+    private fun show(animate: Boolean, holder: HistoryButtonViewHolder) {
+        if (animate) {
+            animate(holder.item.translationY, 0.0f, holder)
+        } else {
+            holder.item.translationY = 0.0f
+            holder.item.visibility = View.VISIBLE
+        }
+    }
+
+    private fun hide(animate: Boolean, holder: HistoryButtonViewHolder) {
+        if (animate) {
+            animate(holder.item.translationY, height, holder)
+        } else {
+            holder.item.translationY = height
+            holder.item.visibility = View.GONE
+        }
+    }
+
+    private fun animate(from: Float, to: Float, viewHolder: HistoryButtonViewHolder) {
+        animators[viewHolder]?.cancel()
+        animators[viewHolder] = null
+        val animator = ValueAnimator.ofFloat(from, to)
+
+        animator.duration = (kotlin.math.abs(from - to) / height * 300).toLong()
+
+        animator.addUpdateListener {
+            val value = it.animatedValue as Float
+            viewHolder.item.translationY = value
+            viewHolder.item.alpha = 1 - value / height
+        }
+
+        animator.addListener(object : Animator.AnimatorListener {
+            override fun onAnimationStart(p0: Animator?) {
+                if (to == 0.0f) {
+                    viewHolder.item.visibility = View.VISIBLE
+                }
+            }
+
+            override fun onAnimationEnd(p0: Animator?) {
+                if (to == height) {
+                    viewHolder.item.visibility = View.INVISIBLE
+                }
+            }
+
+            override fun onAnimationCancel(p0: Animator?) = Unit
+
+            override fun onAnimationRepeat(p0: Animator?) = Unit
+        })
+
+        animators[viewHolder] = animator
+
+        animator.start()
     }
 
     private fun getItem(): FrameLayout {
