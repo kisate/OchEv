@@ -26,16 +26,18 @@ class GraphEditor(
 
     fun revertChange() {
         graph = history.revert()
-        setDrawInfoToDefault()
     }
 
     fun undoRevertChange() {
         graph = history.undoRevert()
-        setDrawInfoToDefault()
     }
 
-    fun setDrawInfoToDefault() {
+    fun isRevertible(): Boolean {
+        return history.isRevertible()
+    }
 
+    fun isUndoRevertible(): Boolean {
+        return history.isUndoRevertible()
     }
 
     fun getFigureNodeByIdOrNull(id: Int): FigureNode? {
@@ -59,7 +61,7 @@ class GraphEditor(
                 graph.addVertexNode(nodeToAdd)
                 val vertexFigureEditor =
                     VertexFigureEditor(InformationForVertexEditor(nodeToAdd.id, this))
-                vertexFigureEditor.mover.helper.tryToHelp()
+                vertexFigureEditor.mover.helper.correct()
 
             }
             is Edge -> {

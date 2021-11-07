@@ -20,7 +20,7 @@ class MoverHelper(
         return result.minByOrNull { editor.currentFigureState.center.getDistanceToLineSegment(it) }
     }
 
-    fun tryToHelp() {
+    fun correct(): LineSegment? {
         val bestLine = getPossibleLines()
         if (bestLine != null) {
             val segmentToLine = Point.getOptimalSegment(
@@ -29,8 +29,7 @@ class MoverHelper(
             )
             val direction = Vector(segmentToLine.A, segmentToLine.B)
             editor.changeFigure(editor.currentFigureState.movedByVector(direction))
-
        }
-
+        return bestLine
     }
 }

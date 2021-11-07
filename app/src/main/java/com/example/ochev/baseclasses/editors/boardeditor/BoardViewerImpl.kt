@@ -13,7 +13,6 @@ import com.example.ochev.baseclasses.editors.vertexeditor.VertexFigureMover
 import com.example.ochev.baseclasses.editors.vertexeditor.VertexFigureShaper
 import com.example.ochev.callbacks.*
 import com.example.ochev.ml.Classifier
-import java.util.concurrent.Callable
 import java.util.concurrent.ExecutorService
 import java.util.concurrent.Executors
 
@@ -31,27 +30,29 @@ class BoardViewerImpl(
     private val executorService: ExecutorService,
     cacheParser: CacheParser? = null
 ) : BoardViewer {
-    private val graphEditor: GraphEditor
+    private var graphEditor = GraphEditor()
+
     init {
         classifier.initialize(Executors.newCachedThreadPool())
-        graphEditor = if (cacheParser != null) {
-            executorService.submit(
-                MyJob(cacheParser)
-            ).get()
-        } else {
-            GraphEditor()
+        if (cacheParser != null) {
+            executorService.submit {
+                graphEditor = GraphReader.readGraph(cacheParser)
+            }
         }
     }
 
-    private inner class MyJob(private val cacheParser: CacheParser) : Callable<GraphEditor> {
-        override fun call() = GraphReader.readGraph(cacheParser)
-    }
 
     private var currentUserMode = UserMode.DRAWING
 
     private val userModeChangesListeners = arrayListOf<UserModeChangesListener>()
     private val boardChangesListeners = arrayListOf<BoardChangesListener>()
     private val suggestLineChangesListeners = arrayListOf<SuggestLineChangesListener>()
+    private val undoChangeShowButtonListeners = arrayListOf<UndoChangeShowButtonListener>()
+    private val redoChangeShowButtonListeners = arrayListOf<RedoChangeShowButtonListener>()
+
+    private var height: Int = 0
+    private var width: Int = 0
+    private var lastEnterTime: Long = 0L
 
     override fun moveBoard(vector: Vector) {
         graphEditor.moveGraphByVector(vector)
@@ -95,15 +96,16 @@ class BoardViewerImpl(
     }
 
     override fun setLastEnterTimeMs(millis: Long) {
-
+        lastEnterTime = millis
     }
 
     override fun getLastEnterTimeMs(): Long {
-        return 0
+        return lastEnterTime
     }
 
     override fun setWindowParams(height: Int, width: Int) {
-
+        this.height = height
+        this.width = width
     }
 
     override fun clearBoard() {
@@ -172,36 +174,58 @@ class BoardViewerImpl(
 
     override fun addSuggestLineChangesListenerAndNotify(suggestLineChangesListener: SuggestLineChangesListener) {
         addSuggestLineChangesListener(suggestLineChangesListener)
-//        suggestLineChangesListener.onSuggestLineChanged(TODO())
+//      TODO("is this function needed?")
     }
 
     override fun addUndoChangeShowButtonListener(undoChangeShowButtonListener: UndoChangeShowButtonListener) {
-//        TODO("Not yet implemented")
+        undoChangeShowButtonListeners.add(undoChangeShowButtonListener)
     }
 
     override fun removeUndoChangeShowButtonListener(undoChangeShowButtonListener: UndoChangeShowButtonListener) {
-//        TODO("Not yet implemented")
+        undoChangeShowButtonListeners.remove(undoChangeShowButtonListener)
     }
 
     override fun addUndoChangeShowButtonListenerAndNotify(undoChangeShowButtonListener: UndoChangeShowButtonListener) {
-//        TODO("Not yet implemented")
+        addUndoChangeShowButtonListener(undoChangeShowButtonListener)
+        undoChangeShowButtonListener.onUndoChangeShowButtonChanged(graphEditor.isRevertible())
     }
 
     override fun addRedoChangeShowButtonListener(redoChangeShowButtonListener: RedoChangeShowButtonListener) {
-//        TODO("Not yet implemented")
+        redoChangeShowButtonListeners.add(redoChangeShowButtonListener)
     }
 
     override fun removeRedoChangeShowButtonListener(redoChangeShowButtonListener: RedoChangeShowButtonListener) {
-//        TODO("Not yet implemented")
+        redoChangeShowButtonListeners.remove(redoChangeShowButtonListener)
     }
 
     override fun addRedoChangeShowButtonListenerAndNotify(redoChangeShowButtonListener: RedoChangeShowButtonListener) {
-//        TODO("Not yet implemented")
+        addRedoChangeShowButtonListener(redoChangeShowButtonListener)
+        redoChangeShowButtonListener.onRedoChangeShowButtonListener(graphEditor.isUndoRevertible())
     }
 
     private fun notifyBoardChanges() {
         boardChangesListeners.forEach {
             it.onBoardChanged(graphEditor.allFiguresSortedByHeights)
+        }
+        notifyRedoShowButtonChanges()
+        notifyUndoShowButtonChanges()
+    }
+
+    private fun notifyUndoShowButtonChanges() {
+        undoChangeShowButtonListeners.forEach {
+            it.onUndoChangeShowButtonChanged(graphEditor.isRevertible())
+        }
+    }
+
+    private fun notifySuggestLineChanges(lines: List<LineSegment>) {
+        suggestLineChangesListeners.forEach {
+            it.onSuggestLineChanged(lines)
+        }
+    }
+
+    private fun notifyRedoShowButtonChanges() {
+        redoChangeShowButtonListeners.forEach {
+            it.onRedoChangeShowButtonListener(graphEditor.isUndoRevertible())
         }
     }
 
@@ -274,7 +298,9 @@ class BoardViewerImpl(
 
         override fun cancelEditing(pt: Point) {
             figureEditor = null
-            mover?.moveEnds()
+            if (mover != null) {
+                notifySuggestLineChanges(mover!!.moveEnds())
+            }
             shaper = null
             mover = null
             notifyBoardChanges()
