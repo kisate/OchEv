@@ -298,11 +298,10 @@ class BoardViewerImpl(
 
         override fun cancelEditing(pt: Point) {
             figureEditor = null
-            if (mover != null) {
-                notifySuggestLineChanges(mover!!.moveEnds())
-            }
+            mover?.moveEnds()
             shaper = null
             mover = null
+            notifySuggestLineChanges(listOf())
             notifyBoardChanges()
         }
 
@@ -314,7 +313,7 @@ class BoardViewerImpl(
             when (figureEditor) {
                 is VertexFigureEditor -> {
                     if (mover != null) {
-                        mover!!.nextPoint(pt)
+                        notifySuggestLineChanges(mover!!.nextPoint(pt))
                     } else if (shaper != null) {
                         shaper!!.nextPoint(pt)
                     }

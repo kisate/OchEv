@@ -1,6 +1,5 @@
 package com.example.ochev.baseclasses.editors.vertexeditor
 
-import android.util.Log
 import com.example.ochev.baseclasses.dataclasses.LineSegment
 import com.example.ochev.baseclasses.dataclasses.Point
 import com.example.ochev.baseclasses.dataclasses.Vector
@@ -20,8 +19,12 @@ class MoverHelper(
         return result.minByOrNull { editor.currentFigureState.center.getDistanceToLineSegment(it) }
     }
 
-    fun correct(): LineSegment? {
-        val bestLine = getPossibleLines()
+    fun correctingSegment(): LineSegment? {
+        return getPossibleLines()
+    }
+
+    fun correct() {
+        val bestLine = correctingSegment()
         if (bestLine != null) {
             val segmentToLine = Point.getOptimalSegment(
                 bestLine,
@@ -30,6 +33,5 @@ class MoverHelper(
             val direction = Vector(segmentToLine.A, segmentToLine.B)
             editor.changeFigure(editor.currentFigureState.movedByVector(direction))
        }
-        return bestLine
     }
 }

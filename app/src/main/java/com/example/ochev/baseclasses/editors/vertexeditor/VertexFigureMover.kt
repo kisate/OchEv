@@ -20,15 +20,15 @@ class VertexFigureMover(val editor: VertexFigureEditor) {
         }
     }
 
-    fun nextPoint(point: Point) {
+    fun nextPoint(point: Point): List<LineSegment> {
         val move = Vector(lastPoint, point)
         lastPoint = point
-
         editor.changeFigure(editor.currentFigureState.movedByVector(move))
+        return listOfNotNull(helper.correctingSegment())
     }
 
-    fun moveEnds(): List<LineSegment> {
-        return listOfNotNull(helper.correct())
+    fun moveEnds() {
+        helper.correct()
     }
 
 }
