@@ -8,6 +8,8 @@ import com.example.ochev.baseclasses.dataclasses.Vector
 import com.example.ochev.callbacks.*
 
 interface BoardViewer {
+    fun onDestroy()
+
     fun createFigureByStrokes(bitmap: Bitmap, strokes: MutableList<Stroke>?): Boolean
 
     fun selectFigureByPoint(point: Point): BoardManipulator?

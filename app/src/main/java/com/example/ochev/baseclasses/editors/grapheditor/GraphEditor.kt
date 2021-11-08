@@ -59,10 +59,6 @@ class GraphEditor(
                     figure = result
                 )
                 graph.addVertexNode(nodeToAdd)
-                val vertexFigureEditor =
-                    VertexFigureEditor(InformationForVertexEditor(nodeToAdd.id, this))
-                vertexFigureEditor.mover.helper.correct()
-
             }
             is Edge -> {
                 val nodeToAdd = EdgeNode(

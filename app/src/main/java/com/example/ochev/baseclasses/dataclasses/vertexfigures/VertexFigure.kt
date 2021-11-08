@@ -33,7 +33,7 @@ abstract class VertexFigure : Figure() {
     fun getLinesToHelpMoving(): MutableList<LineSegment> {
         return mutableListOf(
             LineSegment(Point(center.x, -5000f), Point(center.x, 5000f)),
-            LineSegment(Point(-5000f, center.y), Point(5000f, center.y))
+            LineSegment(Point(-5000f, center.y), Point(5000f, center.y)),
         )
     }
 }

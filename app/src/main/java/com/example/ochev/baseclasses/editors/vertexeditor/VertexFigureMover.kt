@@ -27,8 +27,8 @@ class VertexFigureMover(val editor: VertexFigureEditor) {
         return listOfNotNull(helper.correctingSegment())
     }
 
-    fun moveEnds() {
-        helper.correct()
+    fun moveEndsAt(): Vector? {
+        return helper.getCorrector()
     }
 
 }

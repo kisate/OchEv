@@ -15,6 +15,10 @@ data class Vector(val x: Float = 0f, val y: Float = 0f) {
         x.toFloat(), y.toFloat()
     )
 
+    fun addOtherVector(vector: Vector): Vector {
+        return Vector(x + vector.x, y + vector.y)
+    }
+
     fun scalarProduct(vector: Vector): Float {
         return x * vector.x + y * vector.y
     }

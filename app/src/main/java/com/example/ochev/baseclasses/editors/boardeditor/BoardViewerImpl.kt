@@ -1,6 +1,7 @@
 package com.example.ochev.baseclasses.editors.boardeditor
 
 import android.graphics.Bitmap
+import android.os.SystemClock.sleep
 import android.util.Log
 import com.example.ochev.baseclasses.cacheparser.CacheParser
 import com.example.ochev.baseclasses.cacheparser.GraphReader
@@ -13,6 +14,7 @@ import com.example.ochev.baseclasses.editors.vertexeditor.VertexFigureMover
 import com.example.ochev.baseclasses.editors.vertexeditor.VertexFigureShaper
 import com.example.ochev.callbacks.*
 import com.example.ochev.ml.Classifier
+import java.lang.Thread.sleep
 import java.util.concurrent.ExecutorService
 import java.util.concurrent.Executors
 
@@ -57,6 +59,14 @@ class BoardViewerImpl(
     override fun moveBoard(vector: Vector) {
         graphEditor.moveGraphByVector(vector)
         notifyBoardChanges()
+    }
+
+    override fun onDestroy() {
+        userModeChangesListeners.clear()
+        boardChangesListeners.clear()
+        suggestLineChangesListeners.clear()
+        redoChangeShowButtonListeners.clear()
+        undoChangeShowButtonListeners.clear()
     }
 
     override fun createFigureByStrokes(bitmap: Bitmap, strokes: MutableList<Stroke>?): Boolean {
@@ -298,11 +308,18 @@ class BoardViewerImpl(
 
         override fun cancelEditing(pt: Point) {
             figureEditor = null
-            mover?.moveEnds()
+            val direction = mover?.moveEndsAt()
             shaper = null
-            mover = null
             notifySuggestLineChanges(listOf())
+            if (mover != null && direction != null) {
+                mover!!.helper.editor.changeFigure(
+                    mover!!.helper.editor.currentFigureState.movedByVector(
+                        direction
+                    )
+                )
+            }
             notifyBoardChanges()
+            mover = null
         }
 
         override fun putPoint(pt: Point): BoardManipulator? {
