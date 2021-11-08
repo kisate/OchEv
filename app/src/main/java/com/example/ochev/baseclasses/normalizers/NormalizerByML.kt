@@ -38,11 +38,18 @@ class NormalizerByML {
     }
 
     private fun prepareBitmap(bitmap: Bitmap, stroke: Stroke): Bitmap {
-        val minX = stroke.minX()
-        val minY = stroke.minY()
-        val maxX = stroke.maxX()
-        val maxY = stroke.maxY()
-
+        var minX = stroke.minX()
+        var minY = stroke.minY()
+        var maxX = stroke.maxX()
+        var maxY = stroke.maxY()
+        if (minX < 0) {
+            maxX -= minX
+            minX = 0f
+        }
+        if (minY < 0) {
+            maxY -= minY
+            minY = 0f
+        }
         return Bitmap.createBitmap(
             bitmap,
             minX.toInt(),
