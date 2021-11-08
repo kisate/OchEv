@@ -7,6 +7,7 @@ import com.example.ochev.baseclasses.cacheparser.CacheParser
 import com.example.ochev.baseclasses.cacheparser.GraphReader
 import com.example.ochev.baseclasses.cacheparser.GraphWriter
 import com.example.ochev.baseclasses.dataclasses.*
+import com.example.ochev.baseclasses.dataclasses.nodes.FigureNode
 import com.example.ochev.baseclasses.editors.FigureEditor
 import com.example.ochev.baseclasses.editors.grapheditor.GraphEditor
 import com.example.ochev.baseclasses.editors.vertexeditor.VertexFigureEditor
@@ -213,34 +214,54 @@ class BoardViewerImpl(
         redoChangeShowButtonListener.onRedoChangeShowButtonListener(graphEditor.isUndoRevertible())
     }
 
+    private var lastNotifyBoardChange: MutableList<FigureNode> = mutableListOf()
     private fun notifyBoardChanges() {
+        notifyRedoShowButtonChanges()
+        notifyUndoShowButtonChanges()
+        if (lastNotifyBoardChange == graphEditor.allFiguresSortedByHeights)
+            return
         boardChangesListeners.forEach {
             it.onBoardChanged(graphEditor.allFiguresSortedByHeights)
         }
-        notifyRedoShowButtonChanges()
-        notifyUndoShowButtonChanges()
+        lastNotifyBoardChange = graphEditor.allFiguresSortedByHeights
     }
 
+    private var lastNotifyUndoShowButtonChange: Boolean? = null
     private fun notifyUndoShowButtonChanges() {
+        if (graphEditor.isRevertible() == lastNotifyUndoShowButtonChange)
+            return
         undoChangeShowButtonListeners.forEach {
             it.onUndoChangeShowButtonChanged(graphEditor.isRevertible())
         }
+        lastNotifyUndoShowButtonChange = graphEditor.isRevertible()
     }
 
+    private var lastNotifySuggestLineChange: List<LineSegment> = listOf()
     private fun notifySuggestLineChanges(lines: List<LineSegment>) {
+        if (lines == lastNotifySuggestLineChange)
+            return
         suggestLineChangesListeners.forEach {
             it.onSuggestLineChanged(lines)
         }
+        lastNotifySuggestLineChange = lines
     }
 
+    private var lastNotifyRedoShowButtonChange: Boolean? = null
     private fun notifyRedoShowButtonChanges() {
+        if (lastNotifyRedoShowButtonChange == graphEditor.isUndoRevertible())
+            return
         redoChangeShowButtonListeners.forEach {
             it.onRedoChangeShowButtonListener(graphEditor.isUndoRevertible())
         }
+        lastNotifyRedoShowButtonChange = graphEditor.isUndoRevertible()
     }
 
+    private var lastUserModeChange: UserMode = currentUserMode
     private fun notifyUserModeChanges() {
+        if (lastUserModeChange == currentUserMode)
+            return
         userModeChangesListeners.forEach { it.onUserModeChanged(currentUserMode) }
+        lastUserModeChange = currentUserMode
     }
 
     private fun goToDrawingMode() {
