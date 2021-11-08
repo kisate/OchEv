@@ -66,6 +66,7 @@ class GraphFragment : Fragment() {
 
     private fun initializeHelpers() {
         viewer?.addSuggestLineChangesListenerAndNotify {
+            Log.d(TAG, "receive ${it.size} suggests for draw")
             figureDrawingView?.suggests = it
         }
         figureDrawingView?.paintSuggests?.let {
