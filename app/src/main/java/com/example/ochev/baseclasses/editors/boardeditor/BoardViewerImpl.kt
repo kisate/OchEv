@@ -1,7 +1,6 @@
 package com.example.ochev.baseclasses.editors.boardeditor
 
 import android.graphics.Bitmap
-import android.os.SystemClock.sleep
 import android.util.Log
 import com.example.ochev.baseclasses.cacheparser.CacheParser
 import com.example.ochev.baseclasses.cacheparser.GraphReader
@@ -15,7 +14,6 @@ import com.example.ochev.baseclasses.editors.vertexeditor.VertexFigureMover
 import com.example.ochev.baseclasses.editors.vertexeditor.VertexFigureShaper
 import com.example.ochev.callbacks.*
 import com.example.ochev.ml.Classifier
-import java.lang.Thread.sleep
 import java.util.concurrent.ExecutorService
 import java.util.concurrent.Executors
 
@@ -34,12 +32,15 @@ class BoardViewerImpl(
     cacheParser: CacheParser? = null
 ) : BoardViewer {
     private var graphEditor = GraphEditor()
+    private var graphBitmap: Bitmap? = null
 
     init {
         classifier.initialize(Executors.newCachedThreadPool())
         if (cacheParser != null) {
             executorService.submit {
-                graphEditor = GraphReader.readGraph(cacheParser)
+                val pair = GraphReader.readGraph(cacheParser)
+                graphBitmap = pair.first
+                graphEditor = pair.second
             }
         }
     }
@@ -56,7 +57,6 @@ class BoardViewerImpl(
     private var height: Int = 0
     private var width: Int = 0
     private var lastEnterTime: Long = 0L
-    private var graphBitmap: Bitmap? = null
 
     override fun moveBoard(vector: Vector) {
         graphEditor.moveGraphByVector(vector)
@@ -149,7 +149,7 @@ class BoardViewerImpl(
     override fun saveInCache(cacheParser: CacheParser) {
         Log.d("ainur cache", "START SAVING")
         executorService.submit {
-            GraphWriter.write(graphEditor, cacheParser)
+            GraphWriter.write(graphEditor, graphBitmap, cacheParser)
         }
     }
 

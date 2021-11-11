@@ -1,5 +1,6 @@
 package com.example.ochev.baseclasses.cacheparser
 
+import android.graphics.Bitmap
 import com.example.ochev.baseclasses.dataclasses.FIGURE_ID
 import com.example.ochev.baseclasses.dataclasses.FigureContainer
 import com.example.ochev.baseclasses.dataclasses.Point
@@ -12,11 +13,17 @@ import com.example.ochev.baseclasses.dataclasses.vertexfigures.VertexFigure
 import com.example.ochev.baseclasses.editors.edgefigures.Edge
 import com.example.ochev.baseclasses.editors.grapheditor.Graph
 import com.example.ochev.baseclasses.editors.grapheditor.GraphEditor
+import java.lang.reflect.Type
 
 object GraphReader {
 
-    fun readGraph(cacheParser: CacheParser): GraphEditor {
+    fun readGraph(cacheParser: CacheParser): Pair<Bitmap?, GraphEditor> {
         val figureContainer = FigureContainer()
+        var bitmap: Bitmap? = null
+        if (cacheParser.readInt() == 1) {
+            val clazz = Bitmap::class.java
+            bitmap = cacheParser.getParcelable(clazz) as Bitmap?
+        }
         val countOfFigures = cacheParser.readInt()
         val counter = cacheParser.readInt()
         repeat(countOfFigures) {
@@ -31,7 +38,7 @@ object GraphReader {
             }
         }
         val graph = Graph(figureContainer)
-        return GraphEditor(graph, counter)
+        return Pair(bitmap, GraphEditor(graph, counter))
     }
 
     private fun readFigureType(cacheParser: CacheParser): FIGURE_ID {
