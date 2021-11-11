@@ -13,16 +13,26 @@ import com.example.ochev.baseclasses.dataclasses.vertexfigures.VertexFigure
 import com.example.ochev.baseclasses.editors.edgefigures.Edge
 import com.example.ochev.baseclasses.editors.grapheditor.Graph
 import com.example.ochev.baseclasses.editors.grapheditor.GraphEditor
-import java.lang.reflect.Type
+import android.graphics.BitmapFactory
+import android.util.Base64
+
 
 object GraphReader {
+    fun stringToBitmap(encodedString: String?): Bitmap? {
+        return try {
+            val encodeByte: ByteArray = Base64.decode(encodedString, Base64.DEFAULT)
+            BitmapFactory.decodeByteArray(encodeByte, 0, encodeByte.size)
+        } catch (e: java.lang.Exception) {
+            e.message
+            null
+        }
+    }
 
     fun readGraph(cacheParser: CacheParser): Pair<Bitmap?, GraphEditor> {
         val figureContainer = FigureContainer()
         var bitmap: Bitmap? = null
         if (cacheParser.readInt() == 1) {
-            val clazz = Bitmap::class.java
-            bitmap = cacheParser.getParcelable(clazz) as Bitmap?
+            bitmap = stringToBitmap(cacheParser.readString())
         }
         val countOfFigures = cacheParser.readInt()
         val counter = cacheParser.readInt()
@@ -60,7 +70,7 @@ object GraphReader {
         val id = cacheParser.readInt()
         val height = cacheParser.readInt()
         val center = readPoint(cacheParser)
-        var figure: VertexFigure
+        val figure: VertexFigure
         when (figureType) {
             FIGURE_ID.CIRCLE -> {
                 val radius = cacheParser.readFloat()

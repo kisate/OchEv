@@ -1,6 +1,7 @@
 package com.example.ochev.baseclasses.cacheparser
 
 import android.graphics.Bitmap
+import android.util.Base64
 import com.example.ochev.baseclasses.dataclasses.Point
 import com.example.ochev.baseclasses.dataclasses.nodes.EdgeNode
 import com.example.ochev.baseclasses.dataclasses.nodes.VertexFigureNode
@@ -8,6 +9,7 @@ import com.example.ochev.baseclasses.dataclasses.vertexfigures.Circle
 import com.example.ochev.baseclasses.dataclasses.vertexfigures.Rectangle
 import com.example.ochev.baseclasses.dataclasses.vertexfigures.Rhombus
 import com.example.ochev.baseclasses.editors.grapheditor.GraphEditor
+import java.io.ByteArrayOutputStream
 
 /*
     записываем существование битмапы 0 | 1, битмапу если существует, количество фигур и счетчик, затем описание каждой фигуры.
@@ -20,13 +22,22 @@ import com.example.ochev.baseclasses.editors.grapheditor.GraphEditor
 //        TODO(add texts?)
 */
 object GraphWriter {
+    fun bitmapToString(bitmap: Bitmap?): String? {
+        if (bitmap == null)
+            return null
+        val baos = ByteArrayOutputStream()
+        bitmap.compress(Bitmap.CompressFormat.PNG, 100, baos)
+        val b: ByteArray = baos.toByteArray()
+        return Base64.encodeToString(b, Base64.DEFAULT)
+    }
 
     fun write(graphEditor: GraphEditor, bitmap: Bitmap?, cacheParser: CacheParser) {
-        if (bitmap == null) {
+        val str: String? = bitmapToString(bitmap)
+        if (bitmap == null || str == null) {
             cacheParser.writeInt(0)
         } else {
             cacheParser.writeInt(1)
-            cacheParser.writeParcelable(bitmap)
+            cacheParser.writeString(str)
         }
         cacheParser.writeInt(graphEditor.allFiguresSortedByHeights.size)
         cacheParser.writeInt(graphEditor.figureCounter)
