@@ -60,6 +60,7 @@ class CacheParserImpl(spLazy: Lazy<SharedPreferences>) : CacheParser {
 
     override fun getParcelable(cl: Class<Parcelable>): Parcelable? {
         val json = sp.getString(currentReading.toString(), null)
+        currentReading++
         json ?: return null
         return Gson().fromJson(json, cl)
     }
