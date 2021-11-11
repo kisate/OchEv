@@ -16,7 +16,8 @@ class SideEnvironmentSettingsController(
     private val settingsView: LinearLayout,
     private val settingsEnterView: ImageView,
     private val viewerProvider: Provider<BoardViewer?>,
-    private val tagProvider: Provider<String?>
+    private val tagProvider: Provider<String?>,
+    private val saveBitmap: Runnable,
 ) {
     private var currentAnimator: Animator? = null
 
@@ -36,6 +37,7 @@ class SideEnvironmentSettingsController(
         settingsView.addView(holder.item)
         holder.item.setOnClickListener {
             hideSettings(false)
+            saveBitmap.run()
             ApplicationComponent.callbackToShowChooserPopup?.run()
         }
 

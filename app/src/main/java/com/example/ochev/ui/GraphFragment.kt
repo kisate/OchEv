@@ -184,13 +184,23 @@ class GraphFragment : Fragment() {
                 settingsView,
                 enterPoint,
                 { viewer },
-                { getGraphId() })
+                { getGraphId() },
+                { saveBitmap() })
         sideEnvironmentSettingsController?.initialize()
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         Log.d(TAG, "created")
+    }
+
+    override fun onPause() {
+        super.onPause()
+        saveBitmap()
+    }
+
+    private fun saveBitmap() {
+        viewer?.setGraphBitmap(Utils.loadBitmapFromView(figureDrawingView ?: return) ?: return)
     }
 
     private fun handleTap(event: MotionEvent, gesture: Gesture): Boolean {

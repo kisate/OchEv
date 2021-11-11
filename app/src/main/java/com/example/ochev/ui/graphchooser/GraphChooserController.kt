@@ -28,11 +28,11 @@ class GraphChooserController(
         )
         val items: ArrayList<Item> = arrayListOf()
 
+        items.add(ChooserDelimItem())
         for (entry in ApplicationComponent.viewersHolder.entries()) {
             items.add(GraphChooserItem(entry.key))
             items.add(ChooserDelimItem())
         }
-        items.removeLast()
         val adapter = RecyclerViewAdapterWithDelegates(
             items,
             listOf(ChooserDelimDelegate(), GraphChooserDelegate(popupController, changer))

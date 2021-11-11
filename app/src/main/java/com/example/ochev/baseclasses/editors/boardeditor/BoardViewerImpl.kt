@@ -56,6 +56,7 @@ class BoardViewerImpl(
     private var height: Int = 0
     private var width: Int = 0
     private var lastEnterTime: Long = 0L
+    private var graphBitmap: Bitmap? = null
 
     override fun moveBoard(vector: Vector) {
         graphEditor.moveGraphByVector(vector)
@@ -68,6 +69,14 @@ class BoardViewerImpl(
         suggestLineChangesListeners.clear()
         redoChangeShowButtonListeners.clear()
         undoChangeShowButtonListeners.clear()
+    }
+
+    override fun setGraphBitmap(bitmap: Bitmap) {
+        graphBitmap = bitmap
+    }
+
+    override fun getGraphBitmap(): Bitmap? {
+        return graphBitmap
     }
 
     override fun createFigureByStrokes(bitmap: Bitmap, strokes: MutableList<Stroke>?): Boolean {

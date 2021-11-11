@@ -1,5 +1,8 @@
 package com.example.ochev.baseclasses.cacheparser
 
+import android.os.Parcelable
+import kotlin.reflect.KClass
+
 interface CacheParser {
     fun writeInt(int: Int)
 
@@ -8,6 +11,8 @@ interface CacheParser {
     fun writeString(string: String)
 
     fun writeFloat(float: Float)
+
+    fun writeParcelable(parcel: Parcelable)
 
     fun readInt(): Int
 
@@ -18,6 +23,8 @@ interface CacheParser {
     fun readFloat(): Float
 
     fun getFieldCount(): Int
+
+    fun getParcelable(cl: Class<Parcelable>): Parcelable?
 
     fun closeTransaction()
 }

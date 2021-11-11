@@ -38,13 +38,6 @@ class FigureDrawingView(
     override fun onDraw(canvas: Canvas?) {
         Log.e(TAG, "on draw with ${figures.size} figures")
 
-        for (segment in suggests) {
-            val path = Path()
-            path.moveTo(segment.A.x, segment.A.y)
-            path.lineTo(segment.B.x, segment.B.y)
-            canvas?.drawPath(path, paintSuggests)
-        }
-
         for (figureNode in figures) {
             when (val figure = figureNode.figure) {
                 is Rectangle -> drawRectangle(canvas, figure)
@@ -52,6 +45,13 @@ class FigureDrawingView(
                 is Circle -> drawCircle(canvas, figure)
                 is Edge -> drawEdge(canvas, figure)
             }
+        }
+
+         for (segment in suggests) {
+            val path = Path()
+            path.moveTo(segment.A.x, segment.A.y)
+            path.lineTo(segment.B.x, segment.B.y)
+            canvas?.drawPath(path, paintSuggests)
         }
     }
 

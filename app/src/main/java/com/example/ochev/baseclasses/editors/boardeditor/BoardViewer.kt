@@ -10,6 +10,10 @@ import com.example.ochev.callbacks.*
 interface BoardViewer {
     fun onDestroy()
 
+    fun setGraphBitmap(bitmap: Bitmap)
+
+    fun getGraphBitmap(): Bitmap?
+
     fun createFigureByStrokes(bitmap: Bitmap, strokes: MutableList<Stroke>?): Boolean
 
     fun selectFigureByPoint(point: Point): BoardManipulator?

@@ -7,6 +7,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.ochev.Utils.Delegate
 import com.example.ochev.Utils.Item
 import com.example.ochev.R
+import com.example.ochev.ui.ApplicationComponent
 import com.example.ochev.ui.PopupController
 
 class GraphChooserDelegate(
@@ -29,7 +30,7 @@ class GraphChooserDelegate(
             popupController.dismissPopup()
             currentGraphChanger.changeTo(data.id)
         }
-        itemHolder.text.text = data.id
+        itemHolder.img.setImageBitmap(ApplicationComponent.viewersHolder.getViewer(data.id)?.getGraphBitmap() ?: return)
     }
 
     override fun match(item: Item): Boolean {
