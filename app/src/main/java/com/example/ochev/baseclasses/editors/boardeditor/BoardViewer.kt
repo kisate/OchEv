@@ -10,6 +10,8 @@ import com.example.ochev.callbacks.*
 interface BoardViewer {
     fun onDestroy()
 
+    fun getLastManipulator(): BoardManipulator?
+
     fun setGraphBitmap(bitmap: Bitmap)
 
     fun getGraphBitmap(): Bitmap?
