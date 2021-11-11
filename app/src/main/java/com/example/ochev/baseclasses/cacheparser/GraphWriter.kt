@@ -1,5 +1,6 @@
 package com.example.ochev.baseclasses.cacheparser
 
+import android.graphics.Bitmap
 import com.example.ochev.baseclasses.dataclasses.Point
 import com.example.ochev.baseclasses.dataclasses.nodes.EdgeNode
 import com.example.ochev.baseclasses.dataclasses.nodes.VertexFigureNode
@@ -9,7 +10,7 @@ import com.example.ochev.baseclasses.dataclasses.vertexfigures.Rhombus
 import com.example.ochev.baseclasses.editors.grapheditor.GraphEditor
 
 /*
-    сначала записываем количество фигур и счетчик, затем описание каждой фигуры.
+    записываем существование битмапы 0 | 1, битмапу если существует, количество фигур и счетчик, затем описание каждой фигуры.
     <edge> : FIGURE_ID.EDGE.ordinal, id, <vertex>, <vertex>
     <vertex> : FIGURE_ID._.ordinal, id, height, center, <circle> | <rectangle> | <rhombus>
     <circle> : radius
@@ -20,7 +21,13 @@ import com.example.ochev.baseclasses.editors.grapheditor.GraphEditor
 */
 object GraphWriter {
 
-    fun write(graphEditor: GraphEditor, cacheParser: CacheParser) {
+    fun write(graphEditor: GraphEditor, bitmap: Bitmap?, cacheParser: CacheParser) {
+        if (bitmap == null) {
+            cacheParser.writeInt(0)
+        } else {
+            cacheParser.writeInt(1)
+            cacheParser.writeParcelable(bitmap)
+        }
         cacheParser.writeInt(graphEditor.allFiguresSortedByHeights.size)
         cacheParser.writeInt(graphEditor.figureCounter)
         graphEditor.allFiguresSortedByHeights.forEach { figureNode ->

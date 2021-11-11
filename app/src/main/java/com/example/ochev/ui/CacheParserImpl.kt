@@ -1,11 +1,9 @@
 package com.example.ochev.ui
 
 import android.content.SharedPreferences
-import android.graphics.Bitmap
 import android.os.Parcelable
 import com.example.ochev.baseclasses.cacheparser.CacheParser
 import com.google.gson.Gson
-import kotlin.reflect.KClass
 
 class CacheParserImpl(spLazy: Lazy<SharedPreferences>) : CacheParser {
     private val sp by spLazy
@@ -58,7 +56,7 @@ class CacheParserImpl(spLazy: Lazy<SharedPreferences>) : CacheParser {
         return sp.getInt("cnt", 0)
     }
 
-    override fun getParcelable(cl: Class<Parcelable>): Parcelable? {
+    override fun getParcelable(cl: Class<out Parcelable>): Parcelable? {
         val json = sp.getString(currentReading.toString(), null)
         currentReading++
         json ?: return null

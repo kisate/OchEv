@@ -23,7 +23,7 @@ interface CacheParser {
 
     fun getFieldCount(): Int
 
-    fun getParcelable(cl: Class<Parcelable>): Parcelable?
+    fun getParcelable(cl: Class<out Parcelable>): Parcelable?
 
     fun closeTransaction()
 }
