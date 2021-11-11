@@ -32,7 +32,7 @@ class CacheParserImpl(spLazy: Lazy<SharedPreferences>) : CacheParser {
         currentWriting++
     }
 
-    override fun writeParcelable(parcel: Parcelable) {
+    override fun <T : Parcelable> writeParcelable(parcel: T) {
         val json = Gson().toJson(parcel)
         sp.edit().putString(currentWriting.toString(), json).apply()
         currentWriting++
