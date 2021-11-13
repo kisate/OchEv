@@ -87,7 +87,10 @@ class HistoryButtonsController(
         set.applyTo(settingsView)
 
         backHolder.item.translationY = this.height
-        backHolder.item.translationY = this.height
+        forwardHolder.item.translationY = this.height
+
+        backHolder.item.visibility = View.GONE
+        forwardHolder.item.visibility = View.GONE
     }
 
     fun showForward(animate: Boolean) {
