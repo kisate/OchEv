@@ -45,7 +45,7 @@ class BoardViewerImpl(
         }
     }
 
-
+    private var lastManipulator: BoardManipulator? = null
     private var currentUserMode = UserMode.DRAWING
 
     private val userModeChangesListeners = arrayListOf<UserModeChangesListener>()
@@ -69,6 +69,10 @@ class BoardViewerImpl(
         suggestLineChangesListeners.clear()
         redoChangeShowButtonListeners.clear()
         undoChangeShowButtonListeners.clear()
+    }
+
+    override fun getLastManipulator(): BoardManipulator? {
+        return lastManipulator
     }
 
     override fun setGraphBitmap(bitmap: Bitmap) {
@@ -112,7 +116,8 @@ class BoardViewerImpl(
             return null
         }
         goToEditingMode(isEditorCopyable(editor))
-        return FiguresManipulatorImpl(editor.figureId)
+        lastManipulator = FiguresManipulatorImpl(editor.figureId)
+        return lastManipulator
     }
 
     override fun setLastEnterTimeMs(millis: Long) {
@@ -276,6 +281,7 @@ class BoardViewerImpl(
     private fun goToDrawingMode() {
         val oldMode = currentUserMode
         currentUserMode = UserMode.DRAWING
+        lastManipulator = null
         if (oldMode != currentUserMode)
             notifyUserModeChanges()
     }
