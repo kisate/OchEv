@@ -309,6 +309,10 @@ class BoardViewerImpl(
         private var shaper: VertexFigureShaper? = null
         private var mover: VertexFigureMover? = null
 
+        override fun getId(): Int {
+            return id
+        }
+
         override fun deleteSelected() {
             goToDrawingMode()
             graphEditor.deleteFigure(id)

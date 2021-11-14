@@ -12,4 +12,6 @@ interface BoardManipulator {
     fun deleteSelected()
 
     fun copySelected()
+
+    fun getId(): Int
 }
