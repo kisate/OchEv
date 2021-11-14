@@ -24,7 +24,7 @@ class VertexFigureMover(val editor: VertexFigureEditor) {
         val move = Vector(lastPoint, point)
         lastPoint = point
         editor.changeFigure(editor.currentFigureState.movedByVector(move))
-        return listOfNotNull(helper.correctingSegment())
+        return helper.correctingSegments()
     }
 
     fun moveEndsAt(): Vector? {
