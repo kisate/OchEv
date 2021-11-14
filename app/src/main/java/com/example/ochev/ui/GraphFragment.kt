@@ -141,6 +141,9 @@ class GraphFragment : Fragment() {
         viewer.addBoardChangesListenerAndNotify {
             figureDrawingView?.figures = it
         }
+        figureDrawingView?.setProvider {
+            currentManipulator?.getId()
+        }
     }
 
     private fun initializeInputViews() {
