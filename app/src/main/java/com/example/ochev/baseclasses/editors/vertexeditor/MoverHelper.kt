@@ -9,25 +9,43 @@ class MoverHelper(
 ) {
     fun correctingSegments(): List<LineSegment> {
         val result: MutableList<LineSegment> = ArrayList()
+        val curCenter = editor.currentFigureState.center
         editor.graphEditor.allVertexes.forEach {
             if (it.figure != editor.currentFigureState)
                 result += it.figure.getLinesToHelpMoving()
         }
         result.removeIf {
-            editor.currentFigureState.center.getDistanceToLineSegment(it) > 50f
+            curCenter.getDistanceToLineSegment(it) > 50f
         }
-        for (i in result.indices) {
-            for (j in i + 1 until result.size) {
-                if (result[i].toVector().scalarProduct(result[j].toVector()) <= 1e-5) {
-                    return listOf(result[i], result[j])
-                }
-            }
+        val intersectionResult = getCorrectingIntersection(result, curCenter)
+        if (intersectionResult.isNotEmpty()) {
+            return intersectionResult
         }
         return listOfNotNull(result.minByOrNull {
-            editor.currentFigureState.center.getDistanceToLineSegment(
+            curCenter.getDistanceToLineSegment(
                 it
             )
         })
+    }
+
+    private fun getCorrectingIntersection(
+        segments: List<LineSegment>,
+        curCenter: Point
+    ): List<LineSegment> {
+        var lastDiff = Float.MAX_VALUE
+        var ans = listOf<LineSegment>()
+        for (i in segments.indices) {
+            for (j in i + 1 until segments.size) {
+                if (segments[i].toVector().scalarProduct(segments[j].toVector()) <= 1e-5) {
+                    val pt: Point? = Point.intersectTwoSegments(segments[i], segments[j])
+                    if (lastDiff > curCenter.getDistanceToPoint(pt!!)) {
+                        lastDiff = curCenter.getDistanceToPoint(pt)
+                        ans = listOf(segments[i], segments[j])
+                    }
+                }
+            }
+        }
+        return ans
     }
 
     fun getCorrector(): Vector? {
