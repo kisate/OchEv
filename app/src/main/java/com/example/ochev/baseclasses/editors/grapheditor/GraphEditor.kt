@@ -2,6 +2,7 @@ package com.example.ochev.baseclasses.editors.grapheditor
 
 import com.example.ochev.baseclasses.dataclasses.*
 import com.example.ochev.baseclasses.dataclasses.nodes.EdgeNode
+import com.example.ochev.baseclasses.dataclasses.nodes.FigureNode
 import com.example.ochev.baseclasses.dataclasses.nodes.VertexFigureNode
 import com.example.ochev.baseclasses.dataclasses.vertexfigures.VertexFigure
 import com.example.ochev.baseclasses.editors.FigureEditor
@@ -9,8 +10,7 @@ import com.example.ochev.baseclasses.editors.edgeeditor.EdgeEditor
 import com.example.ochev.baseclasses.editors.edgefigures.Edge
 import com.example.ochev.baseclasses.editors.vertexeditor.VertexFigureEditor
 import com.example.ochev.baseclasses.normalizers.FigureNormalizer
-import com.example.ochev.viewclasses.drawers.drawinginformations.DrawingInformation
-import com.example.ochev.viewclasses.drawers.drawinginformations.DrawingMode
+import com.example.ochev.callbacks.UserMode
 
 class GraphEditor(
     var graph: Graph = Graph(),
@@ -26,18 +26,22 @@ class GraphEditor(
 
     fun revertChange() {
         graph = history.revert()
-        setDrawInfoToDefault()
     }
 
     fun undoRevertChange() {
         graph = history.undoRevert()
-        setDrawInfoToDefault()
     }
 
-    fun setDrawInfoToDefault() {
-        graph.figures.figuresSortedByHeights.forEach {
-            it.drawingInformation.enterMode(DrawingMode.DEFAULT)
-        }
+    fun isRevertible(): Boolean {
+        return history.isRevertible()
+    }
+
+    fun isUndoRevertible(): Boolean {
+        return history.isUndoRevertible()
+    }
+
+    fun getFigureNodeByIdOrNull(id: Int): FigureNode? {
+        return graph.getFigureNodeByIdOrNull(id)
     }
 
     fun modifyByStrokes(information: InformationForNormalizer): Boolean {
@@ -51,20 +55,14 @@ class GraphEditor(
             is VertexFigure -> {
                 val nodeToAdd = VertexFigureNode(
                     id = figureCounter++,
-                    drawingInformation = DrawingInformation.getVertexDrawingInformation(result)!!,
                     height = graph.figures.maxHeight + 1,
                     figure = result
                 )
                 graph.addVertexNode(nodeToAdd)
-                val vertexFigureEditor =
-                    VertexFigureEditor(InformationForVertexEditor(nodeToAdd.id, this))
-                vertexFigureEditor.mover.helper.tryToHelp()
-
             }
             is Edge -> {
                 val nodeToAdd = EdgeNode(
                     id = figureCounter++,
-                    drawingInformation = DrawingInformation.getEdgeDrawingInformation()!!,
                     figure = result
                 )
                 graph.addEdgeNode(nodeToAdd)
@@ -101,8 +99,7 @@ class GraphEditor(
             VertexFigureNode(
                 id = figureCounter++,
                 height = graph.figures.maxHeight,
-                figure = vertexFigure,
-                drawingInformation = DrawingInformation.getVertexDrawingInformation(vertexFigure)!!
+                figure = vertexFigure
             )
         )
     }
@@ -111,10 +108,15 @@ class GraphEditor(
         graph.addEdgeNode(
             EdgeNode(
                 id = figureCounter++,
-                figure = edge,
-                drawingInformation = DrawingInformation.getEdgeDrawingInformation()!!
+                figure = edge
             )
         )
+    }
+
+    fun copyFigure(id: Int) {
+        history.saveState()
+        val editor = VertexFigureEditor(InformationForVertexEditor(id, this))
+        editor.createCopy(editor.figureNode.figure.center)
     }
 
     fun deleteFigure(id: Int) {
@@ -142,6 +144,7 @@ class GraphEditor(
     }
 
     fun maximizeVertexHeightById(id: Int) {
+        if (id == graph.figures.maxHeight) return
         val value = graph.figures.maxHeight + 1
         graph.figures.vertices.replaceAll {
             if (it.id != id) it

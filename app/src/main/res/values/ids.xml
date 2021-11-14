@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <item name="copy_button_id" type="id" />
+    <item name="delete_button_id" type="id" />
+    <item name="back_button_id" type="id" />
+    <item name="forward_button_id" type="id" />
+</resources>

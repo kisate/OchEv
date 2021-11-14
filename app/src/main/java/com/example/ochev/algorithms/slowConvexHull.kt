@@ -12,7 +12,7 @@ fun ConvexHullMaker.slowConvexHull(strokes: MutableList<Stroke>): Stroke {
     val result = Stroke()
 
     val usedPoints: HashMap<Point, Boolean> = HashMap()
-    var currentPoint = uniquePoints.points.maxBy { it.y }!!
+    var currentPoint = uniquePoints.points.maxByOrNull { it.y }!!
 
     class ComparatorByPolarAngle(val mainPoint: Point) : Comparator<Point> {
         override fun compare(A: Point?, B: Point?): Int {

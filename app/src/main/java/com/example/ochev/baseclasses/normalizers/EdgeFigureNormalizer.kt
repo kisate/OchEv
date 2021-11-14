@@ -32,17 +32,16 @@ class EdgeFigureNormalizer {
 
         if (beginFigure.id == endFigure.id) return null
         for (edge in graphEditor.allEdges) {
-            if ((edge.figure.beginFigureNode.figure == beginFigure.figure &&
-                        edge.figure.endFigureNode.figure == endFigure.figure) ||
-                (edge.figure.beginFigureNode.figure == endFigure.figure &&
-                        edge.figure.endFigureNode.figure == beginFigure.figure)
+            if ((edge.figure.from.figure == beginFigure.figure &&
+                        edge.figure.to.figure == endFigure.figure) ||
+                (edge.figure.from.figure == endFigure.figure &&
+                        edge.figure.to.figure == beginFigure.figure)
             ) return null
         }
 
         return Edge(
-            beginFigure.id,
-            endFigure.id,
-            graphEditor.graph
+            beginFigure,
+            endFigure,
         )
     }
 }

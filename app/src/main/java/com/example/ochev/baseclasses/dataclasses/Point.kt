@@ -100,7 +100,7 @@ data class Point(val x: Float = 0f, val y: Float = 0f) {
             val p3 = secondSegment.A
             val p4 = secondSegment.B
             val interestingPoint = intersectTwoLines(firstSegment, secondSegment)
-            if (interestingPoint == null)return null
+            if (interestingPoint == null) return null
             if (abs(
                     p1.getDistanceToPoint(p2) - interestingPoint.getDistanceToPoint(p1) - interestingPoint.getDistanceToPoint(
                         p2

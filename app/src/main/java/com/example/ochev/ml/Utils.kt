@@ -1,7 +1,6 @@
 package com.example.ochev.ml
 
 import android.content.ContentResolver
-import android.content.ContentUris
 import android.content.ContentValues
 import android.content.Context
 import android.content.pm.PackageManager
@@ -14,14 +13,13 @@ import android.view.View
 import android.widget.Toast
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
-import com.example.ochev.MainActivity
+import com.example.ochev.RTVRedactorMainActivity
 import com.google.android.gms.tasks.Tasks
 import java.io.File
 import java.io.FileOutputStream
 import java.io.IOException
-import java.lang.Exception
 import java.util.concurrent.Callable
-import java.util.jar.Manifest
+import java.util.concurrent.Executors
 
 
 class Utils {
@@ -83,15 +81,15 @@ class Utils {
             }
         }
 
-        fun saveBitmapToGallery(bitmap: Bitmap, activity: MainActivity, title: String) {
+        fun saveBitmapToGallery(bitmap: Bitmap, activityRTVRedactor: RTVRedactorMainActivity, title: String) {
 
             if (ContextCompat.checkSelfPermission(
-                    activity,
+                    activityRTVRedactor,
                     android.Manifest.permission.WRITE_EXTERNAL_STORAGE
                 ) != PackageManager.PERMISSION_GRANTED
             ) {
                 ActivityCompat.requestPermissions(
-                    activity,
+                    activityRTVRedactor,
                     arrayOf(android.Manifest.permission.WRITE_EXTERNAL_STORAGE),
                     0
                 )
@@ -104,16 +102,16 @@ class Utils {
                 values.put(MediaStore.Images.Media.DATE_ADDED, System.currentTimeMillis())
                 values.put(MediaStore.Images.Media.DATE_TAKEN, System.currentTimeMillis())
 
-                val contentResolver = activity.contentResolver
+                val contentResolver = activityRTVRedactor.contentResolver
 
                 Tasks.call(
-                    MainActivity.Executor.executorService,
+                    Executors.newCachedThreadPool(),
                     Callable {
                         writeBitmapToGallery(bitmap, contentResolver, values)
                     }
                 )
                     .addOnSuccessListener {
-                        if (it) Toast.makeText(activity, "Saved to gallery", Toast.LENGTH_LONG)
+                        if (it) Toast.makeText(activityRTVRedactor, "Saved to gallery", Toast.LENGTH_LONG)
                             .show()
                     }
             }

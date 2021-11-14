@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="140dp"
+    android:layout_height="40dp"
+    android:background="@drawable/editing_button_background"
+    android:elevation="100dp">
+
+    <TextView
+        android:id="@+id/editing_button_text"
+        android:layout_width="140dp"
+        android:layout_height="40dp"
+        android:layout_gravity="center"
+        android:fontFamily="@font/roboto_normal"
+        android:gravity="center"
+        android:textColor="#000000"
+        android:textSize="20dp" />
+
+</FrameLayout>

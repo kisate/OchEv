@@ -1,5 +1,6 @@
 package com.example.ochev.baseclasses.editors.vertexeditor
 
+import com.example.ochev.baseclasses.dataclasses.LineSegment
 import com.example.ochev.baseclasses.dataclasses.Point
 import com.example.ochev.baseclasses.dataclasses.Vector
 
@@ -19,15 +20,15 @@ class VertexFigureMover(val editor: VertexFigureEditor) {
         }
     }
 
-    fun nextPoint(point: Point) {
+    fun nextPoint(point: Point): List<LineSegment> {
         val move = Vector(lastPoint, point)
         lastPoint = point
-
         editor.changeFigure(editor.currentFigureState.movedByVector(move))
+        return helper.correctingSegments()
     }
 
-    fun moveEnds() {
-        helper.tryToHelp()
+    fun moveEndsAt(): Vector? {
+        return helper.getCorrector()
     }
 
 }

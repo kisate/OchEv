@@ -1,10 +1,7 @@
 package com.example.ochev.baseclasses.dataclasses.vertexfigures
 
-import com.example.ochev.baseclasses.dataclasses.LineSegment
-import com.example.ochev.baseclasses.dataclasses.Point
-import com.example.ochev.baseclasses.dataclasses.Stroke
+import com.example.ochev.baseclasses.dataclasses.*
 import com.example.ochev.baseclasses.dataclasses.Stroke.Companion.getStrokesRestrictions
-import com.example.ochev.baseclasses.dataclasses.Vector
 import com.example.ochev.baseclasses.editors.vertexeditor.PointMover
 import java.lang.Float.min
 import kotlin.math.abs
@@ -89,7 +86,8 @@ data class Rhombus(
     }
 
     override fun getPointMovers(): MutableList<PointMover> {
-        val points = getMovingPoints()
+//        TODO("IMPROVE")
+        val points = importantPoints
         val result: MutableList<PointMover> = ArrayList()
 
         for (i in 0 until 4) {
@@ -113,16 +111,12 @@ data class Rhombus(
         return result
     }
 
-    override fun getMovingPoints(): MutableList<Point> {
-        return importantPoints
-    }
-
     override fun getDistanceToPoint(point: Point): Float {
         val points = importantPoints
 
         return MutableList(points.size) {
             point.getDistanceToLineSegment(LineSegment(points[it], points[(it + 1) % points.size]))
-        }.min()!!
+        }.minOrNull()!!
     }
 
     override fun getDistanceToCountTouch(): Float {
@@ -132,6 +126,10 @@ data class Rhombus(
                 upCorner.getDistanceToPoint(downCorner)
             ) / 3.33f, 27f
         )
+    }
+
+    override fun getFigureId(): FIGURE_ID {
+        return FIGURE_ID.RHOMBUS
     }
 }
 

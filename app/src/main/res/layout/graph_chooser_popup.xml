@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/graph_icons_container"
+    android:layout_width="360dp"
+    android:layout_height="620dp"
+    android:layout_gravity="center_horizontal|center_vertical"
+    android:background="@drawable/editing_button_background">
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/graphs_viewer"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginHorizontal="30dp"
+        android:layout_marginVertical="50dp" />
+</FrameLayout>

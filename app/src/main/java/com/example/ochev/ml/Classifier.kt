@@ -15,8 +15,8 @@ import java.util.concurrent.Callable
 import java.util.concurrent.ExecutorService
 
 
-class Classifier(private val context: Context){
-    private var interpreter : Interpreter? = null
+class Classifier(private val context: Context) {
+    private var interpreter: Interpreter? = null
     var isInitialized = false
         private set
 
@@ -24,7 +24,7 @@ class Classifier(private val context: Context){
     private var inputImageHeight: Int = 0 // will be inferred from TF Lite model
     private var modelInputSize: Int = 0 // will be inferred from TF Lite model
 
-    fun initialize(executorService: ExecutorService) : Task<Void> {
+    fun initialize(executorService: ExecutorService): Task<Void> {
         return call(
             executorService,
             Callable<Void> {
@@ -56,7 +56,7 @@ class Classifier(private val context: Context){
         isInitialized = true
     }
 
-    fun classify(bitmap: Bitmap, stroke: Stroke): Vertexes? {
+    fun classify(bitmap: Bitmap): Vertexes? {
         if (!isInitialized) {
             throw IllegalStateException("TF Lite Interpreter is not initialized yet.")
         }
@@ -66,8 +66,7 @@ class Classifier(private val context: Context){
 
         // Preprocessing: resize the input
         startTime = System.nanoTime()
-        val resizedImage = prepareBitmap(bitmap, stroke)
-        val byteBuffer = convertBitmapToByteBuffer(resizedImage)
+        val byteBuffer = convertBitmapToByteBuffer(processBitmap(bitmap))
         elapsedTime = (System.nanoTime() - startTime) / 1000000
         Log.d(TAG, "Preprocessing time = " + elapsedTime + "ms")
 
@@ -80,21 +79,6 @@ class Classifier(private val context: Context){
         Log.d(TAG, "Results : ${result[0].contentToString()}")
 
         return getVertex(result[0])
-    }
-
-    fun classifyAsync(bitmap: Bitmap, stroke : Stroke, executorService: ExecutorService): Task<Vertexes?> {
-        return call(executorService, Callable<Vertexes?> { classify(bitmap, stroke) })
-    }
-
-    private fun prepareBitmap(bitmap: Bitmap, stroke: Stroke): Bitmap {
-        val minX = stroke.minX()
-        val minY = stroke.minY()
-        val maxX = stroke.maxX()
-        val maxY = stroke.maxY()
-
-        val croppedBitmap = Bitmap.createBitmap(bitmap, minX.toInt(), minY.toInt(), (maxX - minX).toInt(), (maxY - minY).toInt())
-
-        return Bitmap.createScaledBitmap(croppedBitmap, inputImageWidth, inputImageHeight, true)
     }
 
     private fun convertBitmapToByteBuffer(bitmap: Bitmap): ByteBuffer {
@@ -117,14 +101,18 @@ class Classifier(private val context: Context){
         return byteBuffer
     }
 
+    private fun processBitmap(bitmap: Bitmap): Bitmap {
+        return Bitmap.createScaledBitmap(bitmap, inputImageWidth, inputImageHeight, true)
+    }
+
     private fun getOutputString(output: FloatArray): String {
-        val maxIndex = output.indices.maxBy { output[it] } ?: -1
+        val maxIndex = output.indices.maxByOrNull { output[it] } ?: -1
         return "Prediction Result: ${output.contentToString()}"
     }
 
-    private fun getVertex(output: FloatArray) : Vertexes? {
-        var maxIndex = output.indices.maxBy { output[it] } ?: -1
-        if (output.max()!! < THRESHOLD) maxIndex = -1
+    private fun getVertex(output: FloatArray): Vertexes? {
+        var maxIndex = output.indices.maxByOrNull { output[it] } ?: -1
+        if (output.maxOrNull()!! < THRESHOLD) maxIndex = -1
         return Vertexes.fromInt(maxIndex)
     }
 

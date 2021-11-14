@@ -34,9 +34,8 @@ class Graph(
             newGraph.figures.edges.add(
                 it.copy(
                     figure = Edge(
-                        linker[it.figure.beginFigureNode.id]!!.id,
-                        linker[it.figure.endFigureNode.id]!!.id,
-                        newGraph
+                        linker[it.figure.from.id]!!,
+                        linker[it.figure.to.id]!!
                     )
                 )
             )
@@ -105,7 +104,7 @@ class Graph(
         }
 
         figures.edges.forEach {
-            if (it.figure.beginFigureNode.id != id && it.figure.endFigureNode.id != id) {
+            if (it.figure.from.id != id && it.figure.to.id != id) {
                 newGraph.figures.edges.add(
                     it.copy(
                         figure = it.figure.withNewGraph(newGraph)
@@ -177,18 +176,18 @@ class Graph(
     fun getClosestToPointVertexFigureOrNull(point: Point): VertexFigureNode? {
         if (figures.vertices.isEmpty()) return null
 
-        val bestDist = figures.vertices.minBy {
+        val bestDist = figures.vertices.minByOrNull {
             it.figure.getDistanceToPointOrZeroIfInside(point)
         }!!.figure.getDistanceToPointOrZeroIfInside(point)
 
         val lookFor = figures.vertices.partition {
             abs(it.figure.getDistanceToPointOrZeroIfInside(point) - bestDist) <= 0.0001
         }.first
-        return lookFor.maxBy { it.height }!!
+        return lookFor.maxByOrNull { it.height }!!
     }
 
     fun getClosestToPointEdgeFigureOrNull(point: Point): EdgeNode? {
-        return figures.edges.minBy {
+        return figures.edges.minByOrNull {
             it.figure.getDistanceToPoint(point)
         }
     }

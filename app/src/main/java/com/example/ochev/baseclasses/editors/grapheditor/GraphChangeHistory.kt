@@ -8,8 +8,16 @@ class GraphChangeHistory(
     val future: MutableList<Graph> = ArrayList(),
     val graphEditor: GraphEditor
 ) {
+    fun isRevertible(): Boolean {
+        return past.isNotEmpty()
+    }
+
+    fun isUndoRevertible(): Boolean {
+        return future.isNotEmpty()
+    }
+
     fun revert(): Graph {
-        return if (past.isNotEmpty()) {
+        return if (isRevertible()) {
             if (future.isNotEmpty()) {
                 future.add(graphEditor.graph.copy())
                 val value = past.last()
@@ -25,7 +33,7 @@ class GraphChangeHistory(
     }
 
     fun undoRevert(): Graph {
-        return if (future.isNotEmpty()) {
+        return if (isUndoRevertible()) {
             past.add(graphEditor.graph.copy())
             val value = future.last()
             future.removeAt(future.lastIndex)

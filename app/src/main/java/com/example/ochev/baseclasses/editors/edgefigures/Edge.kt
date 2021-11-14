@@ -1,29 +1,26 @@
 package com.example.ochev.baseclasses.editors.edgefigures
 
 import android.util.Log
+import com.example.ochev.baseclasses.dataclasses.FIGURE_ID
 import com.example.ochev.baseclasses.dataclasses.Figure
 import com.example.ochev.baseclasses.dataclasses.LineSegment
 import com.example.ochev.baseclasses.dataclasses.Point
+import com.example.ochev.baseclasses.dataclasses.nodes.VertexFigureNode
 import com.example.ochev.baseclasses.editors.grapheditor.Graph
 
 
 // Figure that connects information blocks
 
 data class Edge(
-    val beginId: Int,
-    val endId: Int,
-    val graph: Graph
+    val from: VertexFigureNode,
+    val to: VertexFigureNode,
 ) : Figure() {
-    val beginFigureNode
-        get() = graph.getVertexFigureNodeByIdOrNull(beginId)!!
-    val endFigureNode
-        get() = graph.getVertexFigureNodeByIdOrNull(endId)!!
     val realBeginPoint: Point?
         get() {
-            beginFigureNode.figure.getIntersectionWithLineSegment(
+            from.figure.getIntersectionWithLineSegment(
                 LineSegment(
-                    beginFigureNode.figure.center,
-                    endFigureNode.figure.center
+                    from.figure.center,
+                    to.figure.center
                 )
             ).let {
                 Log.i("EdgeDebugBegin", it.toString())
@@ -34,8 +31,8 @@ data class Edge(
 
     val realEndPoint: Point?
         get() {
-            endFigureNode.figure.getIntersectionWithLineSegment(
-                LineSegment(beginFigureNode.figure.center, endFigureNode.figure.center)
+            to.figure.getIntersectionWithLineSegment(
+                LineSegment(from.figure.center, to.figure.center)
             ).let {
                 Log.i("EdgeDebugEnd", it.toString())
                 return if (it.size >= 1) it.first()
@@ -46,21 +43,25 @@ data class Edge(
 
     override val center: Point
         get() = Point(
-            (beginFigureNode.figure.center.x + endFigureNode.figure.center.x) / 2,
-            (beginFigureNode.figure.center.y + endFigureNode.figure.center.y) / 2
+            (from.figure.center.x + to.figure.center.x) / 2,
+            (from.figure.center.y + to.figure.center.y) / 2
         )
 
     fun withNewGraph(graph: Graph): Edge {
-        return this.copy(graph = graph)
+        return this.copy(from = graph.getVertexFigureNodeByIdOrNull(from.id)!!, to = graph.getVertexFigureNodeByIdOrNull(to.id)!!)
     }
 
     override fun checkIfFigureIsCloseEnough(point: Point): Boolean {
         return getDistanceToPoint(point) <= getDistanceToCountTouch()
     }
 
+    override fun getFigureId(): FIGURE_ID {
+        return FIGURE_ID.EDGE
+    }
+
     override fun getDistanceToPoint(point: Point): Float {
         return point.getDistanceToLineSegment(
-            LineSegment(beginFigureNode.figure.center, endFigureNode.figure.center)
+            LineSegment(from.figure.center, to.figure.center)
         )
     }
 

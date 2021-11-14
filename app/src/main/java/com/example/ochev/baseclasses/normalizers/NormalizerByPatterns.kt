@@ -22,7 +22,7 @@ class NormalizerByPatterns {
             results.add(vertexFigureNormalizer.buildFigure(strokes, type))
         }
 
-        return results.minBy { vertexFigure ->
+        return results.minByOrNull { vertexFigure ->
             getPenalty(strokes, vertexFigure)
         }!!
     }
