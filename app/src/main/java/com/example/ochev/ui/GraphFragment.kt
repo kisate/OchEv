@@ -30,6 +30,10 @@ class GraphFragment : Fragment() {
     private var inputDrawView: InputDrawView? = null
     private var figureDrawingView: FigureDrawingView? = null
     private var currentManipulator: BoardManipulator? = null
+        set(value) {
+            field = value
+            figureDrawingView?.invalidate()
+        }
 
     private var inputStrokeHandler: InputStrokeHandler? = null
     private var sideEnvironmentSettingsController: SideEnvironmentSettingsController? = null
