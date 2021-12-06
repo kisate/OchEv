@@ -7,6 +7,7 @@ import com.example.ochev.baseclasses.cacheparser.GraphReader
 import com.example.ochev.baseclasses.cacheparser.GraphWriter
 import com.example.ochev.baseclasses.dataclasses.*
 import com.example.ochev.baseclasses.dataclasses.nodes.FigureNode
+import com.example.ochev.baseclasses.dataclasses.nodes.VertexFigureNode
 import com.example.ochev.baseclasses.editors.FigureEditor
 import com.example.ochev.baseclasses.editors.grapheditor.GraphEditor
 import com.example.ochev.baseclasses.editors.vertexeditor.VertexFigureEditor
@@ -53,6 +54,7 @@ class BoardViewerImpl(
     private val suggestLineChangesListeners = arrayListOf<SuggestLineChangesListener>()
     private val undoChangeShowButtonListeners = arrayListOf<UndoChangeShowButtonListener>()
     private val redoChangeShowButtonListeners = arrayListOf<RedoChangeShowButtonListener>()
+    private val textUpdateListeners = arrayListOf<TextUpdateListener>()
 
     private var height: Int = 0
     private var width: Int = 0
@@ -69,6 +71,7 @@ class BoardViewerImpl(
         suggestLineChangesListeners.clear()
         redoChangeShowButtonListeners.clear()
         undoChangeShowButtonListeners.clear()
+        textUpdateListeners.clear()
     }
 
     override fun getLastManipulator(): BoardManipulator? {
@@ -228,6 +231,19 @@ class BoardViewerImpl(
         redoChangeShowButtonListener.onRedoChangeShowButtonListener(graphEditor.isUndoRevertible())
     }
 
+    override fun addTextUpdateListener(addTextUpdateListener: TextUpdateListener) {
+        textUpdateListeners.add(addTextUpdateListener)
+    }
+
+    override fun removeTextUpdateListener(addTextUpdateListener: TextUpdateListener) {
+        textUpdateListeners.remove(addTextUpdateListener)
+    }
+
+    override fun addTextUpdateListenerAndNotify(addTextUpdateListener: TextUpdateListener) {
+        addTextUpdateListener(addTextUpdateListener)
+        addTextUpdateListener.onTextUpdateListener(lastManipulator?.getId())
+    }
+
     private var lastNotifyBoardChange: MutableList<FigureNode> = mutableListOf()
     private fun notifyBoardChanges() {
         notifyRedoShowButtonChanges()
@@ -278,6 +294,16 @@ class BoardViewerImpl(
         lastUserModeChange = currentUserMode
     }
 
+    private fun notifyTextUpdate(id: Int) {
+        textUpdateListeners.forEach { it.onTextUpdateListener(id) }
+        notifyBoardChanges()
+    }
+
+    private fun notifyTextCancel() {
+        textUpdateListeners.forEach { it.onTextCancel() }
+        notifyBoardChanges()
+    }
+
     private fun goToDrawingMode() {
         val oldMode = currentUserMode
         currentUserMode = UserMode.DRAWING
@@ -311,6 +337,15 @@ class BoardViewerImpl(
 
         override fun getId(): Int {
             return id
+        }
+
+        override fun putText(text: String) {
+            val vertex = graphEditor.getFigureNodeByIdOrNull(id)
+            assert(vertex is VertexFigureNode)
+            assert(vertex != null)
+            vertex as VertexFigureNode
+            vertex.textInfo.text = text
+            notifyTextUpdate(id)
         }
 
         override fun deleteSelected() {
@@ -360,6 +395,7 @@ class BoardViewerImpl(
             }
             notifyBoardChanges()
             mover = null
+            notifyTextCancel()
         }
 
         override fun putPoint(pt: Point): BoardManipulator? {
