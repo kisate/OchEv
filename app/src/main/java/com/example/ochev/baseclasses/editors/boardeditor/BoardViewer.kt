@@ -16,6 +16,8 @@ interface BoardViewer {
 
     fun getGraphBitmap(): Bitmap?
 
+    fun toSvg(): String
+
     fun createFigureByStrokes(bitmap: Bitmap, strokes: MutableList<Stroke>?): Boolean
 
     fun selectFigureByPoint(point: Point): BoardManipulator?

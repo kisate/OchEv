@@ -13,6 +13,7 @@ import com.example.ochev.baseclasses.editors.grapheditor.GraphEditor
 import com.example.ochev.baseclasses.editors.vertexeditor.VertexFigureEditor
 import com.example.ochev.baseclasses.editors.vertexeditor.VertexFigureMover
 import com.example.ochev.baseclasses.editors.vertexeditor.VertexFigureShaper
+import com.example.ochev.baseclasses.svgexporter.SvgExporter
 import com.example.ochev.callbacks.*
 import com.example.ochev.ml.Classifier
 import java.util.concurrent.ExecutorService
@@ -84,6 +85,10 @@ class BoardViewerImpl(
 
     override fun getGraphBitmap(): Bitmap? {
         return graphBitmap
+    }
+
+    override fun toSvg(): String {
+        return SvgExporter.toSvg(graphEditor, height, width)
     }
 
     override fun createFigureByStrokes(bitmap: Bitmap, strokes: MutableList<Stroke>?): Boolean {
