@@ -370,6 +370,7 @@ class BoardViewerImpl(
                 id,
                 vertex.copy(textInfo = vertex.textInfo.update(vertex.figure).copy(text = text))
             )
+            goToEditingMode(true, text.isNotBlank())
             notifyBoardChanges()
         }
 
@@ -425,7 +426,6 @@ class BoardViewerImpl(
                 id,
                 vertex.copy(textInfo = vertex.textInfo.update(vertex.figure).copy(fontSize = fontSize))
             )
-            notifyUserModeChanges()
             notifyBoardChanges()
         }
 
