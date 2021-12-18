@@ -18,6 +18,10 @@ import com.example.ochev.baseclasses.dataclasses.vertexfigures.Rectangle
 import com.example.ochev.baseclasses.dataclasses.vertexfigures.Rhombus
 import com.example.ochev.baseclasses.editors.boardeditor.BoardManipulator
 import com.example.ochev.baseclasses.editors.edgefigures.Edge
+import android.view.Gravity
+
+
+
 
 class FigureDrawingView(
     context: Context,
@@ -195,7 +199,7 @@ class FigureDrawingView(
         pull.add(view)
         view.typeface = Typeface.create("open_sans_bold", Typeface.BOLD)
         view.setTextColor(Color.BLACK)
-        view.gravity = TEXT_ALIGNMENT_CENTER
+        view.gravity = Gravity.CENTER_VERTICAL or Gravity.CENTER_HORIZONTAL
         addView(view)
     }
 
