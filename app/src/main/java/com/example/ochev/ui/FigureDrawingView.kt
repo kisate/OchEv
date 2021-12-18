@@ -25,7 +25,7 @@ class FigureDrawingView(
     context: Context,
     attributeSet: AttributeSet,
 ) : FrameLayout(context, attributeSet) {
-    private val mapper: HashMap<Int, TextView> = HashMap()
+    private var mapper: HashMap<Int, TextView> = HashMap()
     private val pull: ArrayList<TextView> = ArrayList()
 
     init {
@@ -63,6 +63,26 @@ class FigureDrawingView(
     @SuppressLint("DrawAllocation")
     override fun onDraw(canvas: Canvas?) {
         Log.e(TAG, "on draw with ${figures.size} figures")
+        val binded = HashMap<Int, TextView>()
+        figures.forEach { figureNode ->
+            if (figureNode is VertexFigureNode) {
+                mapper[figureNode.id]?.let { binded[figureNode.id] = it }
+            }
+        }
+        for (child in children) {
+            if (child !in binded.values) {
+                child as TextView
+                child.text = ""
+                child.visibility = GONE
+                if (child !in pull) {
+                    pull.add(child)
+                }
+            }
+        }
+        mapper = binded
+
+
+
 
         for (figureNode in figures) {
             val currentWidth = paintStroke.strokeWidth
@@ -99,6 +119,7 @@ class FigureDrawingView(
                 )
                 view.layoutParams = lp
                 view.text = figureNode.textInfo.text
+                view.visibility = VISIBLE
                 mapper[figureNode.id] = view
             }
         }
@@ -176,6 +197,7 @@ class FigureDrawingView(
         pull.add(view)
         view.typeface = Typeface.create("open_sans_bold", Typeface.BOLD)
         view.setTextColor(Color.BLACK)
+        view.gravity = TEXT_ALIGNMENT_CENTER
         addView(view)
     }
 

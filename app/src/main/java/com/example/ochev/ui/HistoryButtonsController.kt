@@ -82,7 +82,7 @@ class HistoryButtonsController(
             ConstraintSet.LEFT,
             R.id.back_button_id,
             ConstraintSet.RIGHT,
-            (32).toPx.toInt()
+            (24).toPx.toInt()
         )
         set.applyTo(settingsView)
 

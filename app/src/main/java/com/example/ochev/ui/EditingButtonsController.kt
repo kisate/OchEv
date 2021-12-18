@@ -5,6 +5,7 @@ import android.animation.ValueAnimator
 import android.view.LayoutInflater
 import android.view.View
 import android.widget.FrameLayout
+import android.widget.SeekBar
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.constraintlayout.widget.ConstraintSet
 import com.example.ochev.R
@@ -15,28 +16,31 @@ import com.example.ochev.callbacks.UserMode
 
 class EditingButtonsController(
     private val settingsView: ConstraintLayout,
-    private val viewerProvider: Provider<BoardManipulator?>
+    private val manipulator: Provider<BoardManipulator?>,
 ) {
     private val deleteHolder: EditingButtonViewHolder
     private val copyHolder: EditingButtonViewHolder
+    private val seekBarHolder: EditingSeekBarViewHolder
 
-    private var animators: HashMap<EditingButtonViewHolder, Animator?> = HashMap()
-    private var activeSettingsList: List<EditingButtonViewHolder> = listOf()
-
-    private val length = (160).toPx.toFloat()
+    private var animators: HashMap<EditingButtonHolder, Animator?> = HashMap()
+    private var activeSettingsList: List<EditingButtonHolder> = listOf()
 
     init {
-        deleteHolder = EditingButtonViewHolder(getItem())
+        deleteHolder = EditingButtonViewHolder(getItem(), (160).toPx.toInt())
         deleteHolder.textView.text = "Удалить"
         deleteHolder.item.setOnClickListener {
-            viewerProvider.get()?.deleteSelected()
+            manipulator.get()?.deleteSelected()
         }
 
-        copyHolder = EditingButtonViewHolder(getItem())
+        copyHolder = EditingButtonViewHolder(getItem(), (160).toPx.toInt())
         copyHolder.textView.text = "Копировать"
         copyHolder.item.setOnClickListener {
-            viewerProvider.get()?.copySelected()
+            manipulator.get()?.copySelected()
         }
+
+        seekBarHolder = EditingSeekBarViewHolder(getSeekBard(), (200).toPx.toInt())
+        seekBarHolder.item.max = 48
+        seekBarHolder.item.progress = 10
 
         copyHolder.item.id = R.id.copy_button_id
         deleteHolder.item.id = R.id.delete_button_id
@@ -44,7 +48,7 @@ class EditingButtonsController(
         copyHolder.item.elevation = (50).toPx
         deleteHolder.item.elevation = (50).toPx
 
-        processHolder(listOf(deleteHolder, copyHolder))
+        processHolder(listOf(seekBarHolder, deleteHolder, copyHolder))
     }
 
     fun show(userMode: UserMode, animate: Boolean) {
@@ -54,7 +58,7 @@ class EditingButtonsController(
             }
 
             UserMode.EDITING__COPY_ENABLED -> {
-                showSettings(listOf(deleteHolder, copyHolder), animate)
+                showSettings(listOf(seekBarHolder, deleteHolder, copyHolder), animate)
             }
         }
     }
@@ -62,11 +66,11 @@ class EditingButtonsController(
     fun hide(animate: Boolean) {
         if (animate) {
             activeSettingsList.forEach {
-                animate(it.item.translationX, length, it)
+                animate(it.item.translationX, it.length.toFloat(), it)
             }
         } else {
             activeSettingsList.forEach {
-                it.item.translationX = length
+                it.item.translationX = it.length.toFloat()
                 it.item.visibility = View.GONE
             }
         }
@@ -74,11 +78,11 @@ class EditingButtonsController(
         activeSettingsList = listOf()
     }
 
-    private fun showSettings(settings: List<EditingButtonViewHolder>, animate: Boolean) {
+    private fun showSettings(settings: List<EditingButtonHolder>, animate: Boolean) {
         if (animate) {
             val diff = activeSettingsList.minus(settings)
             diff.forEach {
-                animate(it.item.translationX, length, it)
+                animate(it.item.translationX, it.length.toFloat(), it)
             }
 
             settings.forEach {
@@ -87,7 +91,7 @@ class EditingButtonsController(
         } else {
             val diff = activeSettingsList.minus(settings)
             diff.forEach {
-                it.item.translationX = length
+                it.item.translationX = it.length.toFloat()
                 it.item.visibility = View.GONE
             }
 
@@ -104,17 +108,17 @@ class EditingButtonsController(
         animators.forEach { it.value?.end() }
     }
 
-    private fun animate(from: Float, to: Float, viewHolder: EditingButtonViewHolder) {
+    private fun animate(from: Float, to: Float, viewHolder: EditingButtonHolder) {
         animators[viewHolder]?.cancel()
         animators[viewHolder] = null
         val animator = ValueAnimator.ofFloat(from, to)
 
-        animator.duration = (kotlin.math.abs(from - to) / length * 300).toLong()
+        animator.duration = (kotlin.math.abs(from - to) / viewHolder.length * 300).toLong()
 
         animator.addUpdateListener {
             val value = it.animatedValue as Float
             viewHolder.item.translationX = value
-            viewHolder.item.alpha = 1 - value / length
+            viewHolder.item.alpha = 1 - value / viewHolder.length
         }
 
         animator.addListener(object : Animator.AnimatorListener {
@@ -125,7 +129,7 @@ class EditingButtonsController(
             }
 
             override fun onAnimationEnd(p0: Animator?) {
-                if (to == length) {
+                if (to == viewHolder.length.toFloat()) {
                     viewHolder.item.visibility = View.INVISIBLE
                 }
             }
@@ -140,10 +144,10 @@ class EditingButtonsController(
         animator.start()
     }
 
-    private fun processHolder(holders: List<EditingButtonViewHolder>) {
+    private fun processHolder(holders: List<EditingButtonHolder>) {
         holders.forEach {
             settingsView.addView(it.item)
-            it.item.translationX = length
+            it.item.translationX = it.length.toFloat()
         }
         settingsView.visibility = View.VISIBLE
         val set = ConstraintSet()
@@ -181,5 +185,10 @@ class EditingButtonsController(
     private fun getItem(): FrameLayout {
         return LayoutInflater.from(settingsView.context)
             .inflate(R.layout.editing_button, settingsView, false) as FrameLayout
+    }
+
+    private fun getSeekBard(): SeekBar {
+        return LayoutInflater.from(settingsView.context)
+            .inflate(R.layout.seek_bar, settingsView, false) as SeekBar
     }
 }
