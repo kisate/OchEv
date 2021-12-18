@@ -126,6 +126,9 @@ class GraphEditor(
     fun replaceVertex(id: Int, new: VertexFigure) {
         graph = graph.replacedVertex(id, new)
     }
+    fun replaceVertex(id: Int, new: VertexFigureNode) {
+        graph = graph.replacedVertex(id, new)
+    }
 
     fun moveGraphByVector(vector: Vector) {
         history.moveByVector(vector)

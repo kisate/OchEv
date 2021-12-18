@@ -6,7 +6,6 @@ import android.graphics.*
 import android.util.AttributeSet
 import android.util.Log
 import android.widget.FrameLayout
-import android.widget.LinearLayout
 import android.widget.TextView
 import androidx.core.view.children
 import com.example.ochev.Utils.Provider
@@ -18,7 +17,6 @@ import com.example.ochev.baseclasses.dataclasses.vertexfigures.Circle
 import com.example.ochev.baseclasses.dataclasses.vertexfigures.Rectangle
 import com.example.ochev.baseclasses.dataclasses.vertexfigures.Rhombus
 import com.example.ochev.baseclasses.editors.boardeditor.BoardManipulator
-import com.example.ochev.baseclasses.editors.boardeditor.BoardViewer
 import com.example.ochev.baseclasses.editors.edgefigures.Edge
 
 class FigureDrawingView(
@@ -131,7 +129,7 @@ class FigureDrawingView(
             canvas?.drawPath(path, paintSuggests)
         }
 
-        manipulator?.get()?.textEditingClosed()
+        manipulator?.get()?.figureDrawn()
     }
 
     fun setProvider(provider: Provider<Int?>) {

@@ -320,8 +320,7 @@ class BoardViewerImpl(
             assert(vertex is VertexFigureNode)
             assert(vertex != null)
             vertex as VertexFigureNode
-            vertex.textInfo.text = text
-            vertex.textInfo.changed = true
+            graphEditor.replaceVertex(id, vertex.copy(textInfo = vertex.textInfo.copy(text = text, changed = true)))
             notifyBoardChanges()
         }
 
@@ -358,12 +357,12 @@ class BoardViewerImpl(
             notifyBoardChanges()
         }
 
-        override fun textEditingClosed() {
+        override fun figureDrawn() {
             val vertex = graphEditor.getFigureNodeByIdOrNull(id)
             assert(vertex is VertexFigureNode)
             assert(vertex != null)
             vertex as VertexFigureNode
-            vertex.textInfo.changed = false
+            graphEditor.replaceVertex(id, vertex.copy(textInfo = vertex.textInfo.copy(changed = false)))
         }
 
         override fun cancelEditing(pt: Point) {

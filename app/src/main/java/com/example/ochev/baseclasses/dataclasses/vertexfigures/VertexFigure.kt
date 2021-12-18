@@ -13,6 +13,7 @@ A figure, that represents an information block in our scheme
 abstract class VertexFigure : Figure() {
 
     abstract val importantPoints: MutableList<Point>
+    abstract val drawingPoints: MutableList<Point>
 
     abstract fun clone(): VertexFigure
     abstract fun getIntersectionWithLineSegment(segment: LineSegment): MutableList<Point>
