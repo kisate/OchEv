@@ -354,6 +354,7 @@ class BoardViewerImpl(
         }
 
         override fun putText(text: String) {
+            graphEditor.history.saveState()
             val vertex = graphEditor.getFigureNodeByIdOrNull(id)
             assert(vertex is VertexFigureNode)
             assert(vertex != null)
@@ -408,6 +409,7 @@ class BoardViewerImpl(
         }
 
         override fun setFontSize(fontSize: Int) {
+            graphEditor.history.saveState()
             val vertex = graphEditor.getFigureNodeByIdOrNull(id)
             assert(vertex is VertexFigureNode)
             assert(vertex != null)
