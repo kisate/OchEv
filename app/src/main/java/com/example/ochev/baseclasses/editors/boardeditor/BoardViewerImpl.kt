@@ -323,7 +323,6 @@ class BoardViewerImpl(
             vertex.textInfo.text = text
             vertex.textInfo.changed = true
             notifyBoardChanges()
-            vertex.textInfo.changed = false
         }
 
         override fun deleteSelected() {
@@ -357,6 +356,14 @@ class BoardViewerImpl(
             goToEditingMode(isEditorCopyable(figureEditor))
             graphEditor.maximizeVertexHeightById(id)
             notifyBoardChanges()
+        }
+
+        fun textEditingClosed() {
+            val vertex = graphEditor.getFigureNodeByIdOrNull(id)
+            assert(vertex is VertexFigureNode)
+            assert(vertex != null)
+            vertex as VertexFigureNode
+            vertex.textInfo.changed = false
         }
 
         override fun cancelEditing(pt: Point) {
