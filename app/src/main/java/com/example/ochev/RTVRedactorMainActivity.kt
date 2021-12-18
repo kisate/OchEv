@@ -10,7 +10,6 @@ import androidx.viewpager2.widget.ViewPager2
 import com.example.ochev.ui.*
 import com.example.ochev.ui.graphchooser.CurrentGraphChangerImpl
 import com.example.ochev.ui.graphchooser.GraphChooserController
-import java.lang.Integer.max
 
 
 class RTVRedactorMainActivity : FragmentActivity() {
@@ -89,7 +88,14 @@ class RTVRedactorMainActivity : FragmentActivity() {
             sp.edit().putBoolean("present", true).apply()
             current++
         }
+        joinAll()
         getAppSp().edit().putInt("graph count", current - 1).apply()
+    }
+
+    private fun joinAll() {
+        ApplicationComponent.viewersHolder.entries().stream().map {
+            it.value.join()
+        }
     }
 
     private fun getSp(index: Int): SharedPreferences {
@@ -103,6 +109,7 @@ class RTVRedactorMainActivity : FragmentActivity() {
     override fun onConfigurationChanged(newConfig: Configuration) {
         super.onConfigurationChanged(newConfig)
     }
+
     companion object {
         private val TAG = "RTVRedactorMainActivity"
     }

@@ -6,7 +6,6 @@ import com.example.ochev.baseclasses.cacheparser.CacheParser
 import com.example.ochev.baseclasses.cacheparser.GraphReader
 import com.example.ochev.baseclasses.cacheparser.GraphWriter
 import com.example.ochev.baseclasses.dataclasses.*
-import com.example.ochev.baseclasses.dataclasses.nodes.FigureNode
 import com.example.ochev.baseclasses.dataclasses.nodes.VertexFigureNode
 import com.example.ochev.baseclasses.editors.FigureEditor
 import com.example.ochev.baseclasses.editors.edgeeditor.EdgeEditor
@@ -19,6 +18,7 @@ import com.example.ochev.callbacks.*
 import com.example.ochev.ml.Classifier
 import java.util.concurrent.ExecutorService
 import java.util.concurrent.Executors
+import java.util.concurrent.TimeUnit
 
 object ViewerFactory {
     private val executorService: ExecutorService = Executors.newCachedThreadPool()
@@ -39,13 +39,14 @@ class BoardViewerImpl(
 
     init {
         classifier.initialize(Executors.newCachedThreadPool())
-//        if (cacheParser != null) {
-//            executorService.submit {
-//                val pair = GraphReader.readGraph(cacheParser)
-//                graphBitmap = pair.first
-//                graphEditor = pair.second
-//            }
-//        }
+        if (cacheParser != null) {
+            executorService.submit {
+                val pair = GraphReader.readGraph(cacheParser)
+                graphBitmap = pair.first
+                graphEditor = pair.second
+                notifyBoardChanges()
+            }
+        }
     }
 
     private var lastManipulator: BoardManipulator? = null
@@ -61,6 +62,10 @@ class BoardViewerImpl(
     private var height: Int = 0
     private var width: Int = 0
     private var lastEnterTime: Long = 0L
+
+    companion object {
+        private const val TIMEOUT = 50L
+    }
 
     override fun moveBoard(vector: Vector) {
         graphEditor.moveGraphByVector(vector)
@@ -134,7 +139,7 @@ class BoardViewerImpl(
         if (editor == null) return false
         if (editor is EdgeEditor) return false
         editor as VertexFigureEditor
-        return !editor.figureNode.textInfo.text.isBlank()
+        return editor.figureNode.textInfo.text.isNotBlank()
     }
 
     override fun setLastEnterTimeMs(millis: Long) {
@@ -171,10 +176,16 @@ class BoardViewerImpl(
     }
 
     override fun saveInCache(cacheParser: CacheParser) {
-        Log.d("ainur cache", "START SAVING")
-//        executorService.submit {
-//            GraphWriter.write(graphEditor, graphBitmap, cacheParser)
-//        }
+        Log.d("ainur19cache", "START SAVING")
+        executorService.submit {
+//            TODO(debug)
+            GraphWriter.write(graphEditor, graphBitmap, cacheParser)
+        }
+    }
+
+    override fun join() {
+        while (!executorService.awaitTermination(TIMEOUT, TimeUnit.SECONDS)) {
+        }
     }
 
     override fun scaleBoard(centre: Point, scaleValue: Float) {

@@ -15,10 +15,12 @@ import com.example.ochev.baseclasses.editors.grapheditor.Graph
 import com.example.ochev.baseclasses.editors.grapheditor.GraphEditor
 import android.graphics.BitmapFactory
 import android.util.Base64
+import android.util.Log
+import com.example.ochev.baseclasses.dataclasses.nodes.TextInfo
 
 
 object GraphReader {
-    fun stringToBitmap(encodedString: String?): Bitmap? {
+    private fun stringToBitmap(encodedString: String?): Bitmap? {
         return try {
             val encodeByte: ByteArray = Base64.decode(encodedString, Base64.DEFAULT)
             BitmapFactory.decodeByteArray(encodeByte, 0, encodeByte.size)
@@ -36,6 +38,7 @@ object GraphReader {
         }
         val countOfFigures = cacheParser.readInt()
         val counter = cacheParser.readInt()
+        Log.d("ainur19cache", "START READING: ${countOfFigures}, $counter")
         repeat(countOfFigures) {
             val figureType = readFigureType(cacheParser)
             when (figureType) {
@@ -70,6 +73,8 @@ object GraphReader {
         val id = cacheParser.readInt()
         val height = cacheParser.readInt()
         val center = readPoint(cacheParser)
+        val text = cacheParser.readString()
+        val fontSize = cacheParser.readInt()
         val figure: VertexFigure
         when (figureType) {
             FIGURE_ID.CIRCLE -> {
@@ -90,7 +95,7 @@ object GraphReader {
                 throw Exception("vertex reading went wrong")
             }
         }
-        return VertexFigureNode(id, figure, height)
+        return VertexFigureNode(id, figure, height, TextInfo().update(figure).copy(text = text, fontSize = fontSize))
     }
 
     private fun readVertex(cacheParser: CacheParser): VertexFigureNode {

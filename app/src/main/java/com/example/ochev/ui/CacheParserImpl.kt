@@ -2,6 +2,7 @@ package com.example.ochev.ui
 
 import android.content.SharedPreferences
 import android.os.Parcelable
+import android.util.Log
 import com.example.ochev.baseclasses.cacheparser.CacheParser
 import com.google.gson.Gson
 

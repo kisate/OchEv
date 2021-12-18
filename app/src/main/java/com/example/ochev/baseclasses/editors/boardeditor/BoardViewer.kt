@@ -36,6 +36,8 @@ interface BoardViewer {
 
     fun saveInCache(cacheParser: CacheParser)
 
+    fun join()
+
     fun scaleBoard(centre: Point, scaleValue: Float)
 
     fun moveBoard(vector: Vector)
