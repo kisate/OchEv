@@ -26,19 +26,19 @@ class EditingButtonsController(
     private var activeSettingsList: List<EditingButtonHolder> = listOf()
 
     init {
-        deleteHolder = EditingButtonViewHolder(getItem(), (160).toPx.toInt())
+        deleteHolder = EditingButtonViewHolder(getItem(), (176).toPx.toInt())
         deleteHolder.textView.text = "Удалить"
         deleteHolder.item.setOnClickListener {
             manipulator.get()?.deleteSelected()
         }
 
-        copyHolder = EditingButtonViewHolder(getItem(), (160).toPx.toInt())
+        copyHolder = EditingButtonViewHolder(getItem(), (176).toPx.toInt())
         copyHolder.textView.text = "Копировать"
         copyHolder.item.setOnClickListener {
             manipulator.get()?.copySelected()
         }
 
-        seekBarHolder = EditingSeekBarViewHolder(getSeekBard(), (200).toPx.toInt())
+        seekBarHolder = EditingSeekBarViewHolder(getSeekBard(), (216).toPx.toInt())
         seekBarHolder.item.max = 120
         seekBarHolder.item.progress = 10
         setListener()
@@ -155,7 +155,7 @@ class EditingButtonsController(
     private fun processHolder(holders: List<EditingButtonHolder>) {
         holders.forEach {
             settingsView.addView(it.item)
-            it.item.translationX = it.length.toFloat() + (16).toPx
+            it.item.translationX = it.length.toFloat()
         }
         settingsView.visibility = View.VISIBLE
         val set = ConstraintSet()
