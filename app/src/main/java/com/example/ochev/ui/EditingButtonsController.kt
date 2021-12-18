@@ -49,19 +49,20 @@ class EditingButtonsController(
         copyHolder.item.elevation = (50).toPx
         deleteHolder.item.elevation = (50).toPx
 
-        processHolder(listOf(seekBarHolder, deleteHolder, copyHolder))
+        processHolder(listOf(deleteHolder, copyHolder, seekBarHolder))
     }
 
     fun show(userMode: UserMode, animate: Boolean) {
-        when (userMode) {
-            UserMode.EDITING__COPY_DISABLED -> {
-                showSettings(listOf(deleteHolder), animate)
-            }
-
-            UserMode.EDITING__COPY_ENABLED -> {
-                showSettings(listOf(seekBarHolder, deleteHolder, copyHolder), animate)
-            }
+        val holders = mutableListOf<EditingButtonHolder>()
+        if (userMode.isFontChangeEnabled) {
+            holders.add(seekBarHolder)
         }
+        if (userMode.isCopyEnabled) {
+            holders.addAll(listOf(deleteHolder, copyHolder))
+        } else {
+            holders.add(deleteHolder)
+        }
+        showSettings(holders, animate)
     }
 
     fun hide(animate: Boolean) {

@@ -9,6 +9,7 @@ import com.example.ochev.baseclasses.dataclasses.*
 import com.example.ochev.baseclasses.dataclasses.nodes.FigureNode
 import com.example.ochev.baseclasses.dataclasses.nodes.VertexFigureNode
 import com.example.ochev.baseclasses.editors.FigureEditor
+import com.example.ochev.baseclasses.editors.edgeeditor.EdgeEditor
 import com.example.ochev.baseclasses.editors.grapheditor.GraphEditor
 import com.example.ochev.baseclasses.editors.vertexeditor.VertexFigureEditor
 import com.example.ochev.baseclasses.editors.vertexeditor.VertexFigureMover
@@ -48,7 +49,7 @@ class BoardViewerImpl(
     }
 
     private var lastManipulator: BoardManipulator? = null
-    private var currentUserMode = UserMode.DRAWING
+    private var currentUserMode = UserMode()
 
     private val userModeChangesListeners = arrayListOf<UserModeChangesListener>()
     private val boardChangesListeners = arrayListOf<BoardChangesListener>()
@@ -124,9 +125,16 @@ class BoardViewerImpl(
             goToDrawingMode()
             return null
         }
-        goToEditingMode(isEditorCopyable(editor))
+        goToEditingMode(isEditorCopyable(editor), isFontChangeAllowed(editor))
         lastManipulator = FiguresManipulatorImpl(editor.figureId)
         return lastManipulator
+    }
+
+    private fun isFontChangeAllowed(editor: FigureEditor?): Boolean {
+        if (editor == null) return false
+        if (editor is EdgeEditor) return false
+        editor as VertexFigureEditor
+        return !editor.figureNode.textInfo.text.isBlank()
     }
 
     override fun setLastEnterTimeMs(millis: Long) {
@@ -286,12 +294,12 @@ class BoardViewerImpl(
         lastNotifyRedoShowButtonChange = graphEditor.isUndoRevertible()
     }
 
-    private var lastUserModeChange: UserMode = currentUserMode
+    private var lastUserModeChange: UserMode = currentUserMode.copy()
     private fun notifyUserModeChanges() {
         if (lastUserModeChange == currentUserMode)
             return
         userModeChangesListeners.forEach { it.onUserModeChanged(currentUserMode) }
-        lastUserModeChange = currentUserMode
+        lastUserModeChange = currentUserMode.copy()
     }
 
     private fun notifyInitialFont(fontSize: Int?) {
@@ -318,21 +326,20 @@ class BoardViewerImpl(
     }
 
     private fun goToDrawingMode() {
-        val oldMode = currentUserMode
-        currentUserMode = UserMode.DRAWING
+        val oldMode = currentUserMode.copy()
+        currentUserMode.isEditing = false
+        currentUserMode.isCopyEnabled = false
+        currentUserMode.isFontChangeEnabled = false
         lastManipulator = null
         if (oldMode != currentUserMode)
             notifyUserModeChanges()
     }
 
-    private fun goToEditingMode(isCopyable: Boolean) {
-        val oldMode = currentUserMode
-        currentUserMode =
-            if (isCopyable) {
-                UserMode.EDITING__COPY_ENABLED
-            } else {
-                UserMode.EDITING__COPY_DISABLED
-            }
+    private fun goToEditingMode(isCopyEnabled: Boolean, isFontChangeEnabled: Boolean) {
+        val oldMode = currentUserMode.copy()
+        currentUserMode.isEditing = true
+        currentUserMode.isCopyEnabled = isCopyEnabled
+        currentUserMode.isFontChangeEnabled = isFontChangeEnabled
         if (oldMode != currentUserMode)
             notifyUserModeChanges()
     }
@@ -394,7 +401,7 @@ class BoardViewerImpl(
             if (newId != null) {
                 id = newId
             }
-            goToEditingMode(isEditorCopyable(figureEditor))
+            goToEditingMode(isEditorCopyable(figureEditor), isFontChangeAllowed(figureEditor))
             graphEditor.maximizeVertexHeightById(id)
             notifyBoardChanges()
         }
@@ -418,6 +425,7 @@ class BoardViewerImpl(
                 id,
                 vertex.copy(textInfo = vertex.textInfo.update(vertex.figure).copy(fontSize = fontSize))
             )
+            notifyUserModeChanges()
             notifyBoardChanges()
         }
 
@@ -427,6 +435,14 @@ class BoardViewerImpl(
             assert(vertex != null)
             vertex as VertexFigureNode
             return vertex.textInfo.text
+        }
+
+        override fun startFontSizeChanging() {
+            TODO("Not yet implemented")
+        }
+
+        override fun finishFontSizeChanging() {
+            TODO("Not yet implemented")
         }
 
         override fun cancelEditing(pt: Point) {
