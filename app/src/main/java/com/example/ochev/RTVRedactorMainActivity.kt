@@ -2,6 +2,7 @@ package com.example.ochev
 
 import android.annotation.SuppressLint
 import android.content.SharedPreferences
+import android.content.res.Configuration
 import android.os.Bundle
 import android.util.Log
 import androidx.fragment.app.FragmentActivity
@@ -99,6 +100,9 @@ class RTVRedactorMainActivity : FragmentActivity() {
         return getSharedPreferences("app", MODE_PRIVATE)
     }
 
+    override fun onConfigurationChanged(newConfig: Configuration) {
+        super.onConfigurationChanged(newConfig)
+    }
     companion object {
         private val TAG = "RTVRedactorMainActivity"
     }
