@@ -7,7 +7,8 @@ data class TextInfo(
     val leftDownCorner: Point = Point(),
     val rightUpCorner: Point = Point(),
     val changed: Boolean = false,
-    val text: String = ""
+    val text: String = "",
+    val fontSize: Int = 10,
 ) {
     fun update(newFigure: VertexFigure): TextInfo {
         return copy(

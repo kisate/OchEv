@@ -69,4 +69,8 @@ interface BoardViewer {
     fun removeRedoChangeShowButtonListener(redoChangeShowButtonListener: RedoChangeShowButtonListener)
 
     fun addRedoChangeShowButtonListenerAndNotify(redoChangeShowButtonListener: RedoChangeShowButtonListener)
+
+    fun addFontSizeListener(fontSizeListener: FontSizeListener)
+
+    fun removeFondSizeListener(fontSizeListener: FontSizeListener)
 }

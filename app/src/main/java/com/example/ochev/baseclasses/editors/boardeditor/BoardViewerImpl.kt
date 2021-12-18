@@ -55,6 +55,7 @@ class BoardViewerImpl(
     private val suggestLineChangesListeners = arrayListOf<SuggestLineChangesListener>()
     private val undoChangeShowButtonListeners = arrayListOf<UndoChangeShowButtonListener>()
     private val redoChangeShowButtonListeners = arrayListOf<RedoChangeShowButtonListener>()
+    private val fontSizeListeners = arrayListOf<FontSizeListener>()
 
     private var height: Int = 0
     private var width: Int = 0
@@ -71,6 +72,7 @@ class BoardViewerImpl(
         suggestLineChangesListeners.clear()
         redoChangeShowButtonListeners.clear()
         undoChangeShowButtonListeners.clear()
+        fontSizeListeners.clear()
     }
 
     override fun getLastManipulator(): BoardManipulator? {
@@ -234,6 +236,14 @@ class BoardViewerImpl(
         redoChangeShowButtonListener.onRedoChangeShowButtonListener(graphEditor.isUndoRevertible())
     }
 
+    override fun addFontSizeListener(fontSizeListener: FontSizeListener) {
+        fontSizeListeners.add(fontSizeListener)
+    }
+
+    override fun removeFondSizeListener(fontSizeListener: FontSizeListener) {
+        fontSizeListeners.remove(fontSizeListener)
+    }
+
     private fun notifyBoardChanges() {
         notifyRedoShowButtonChanges()
         notifyUndoShowButtonChanges()
@@ -280,6 +290,14 @@ class BoardViewerImpl(
         lastUserModeChange = currentUserMode
     }
 
+    private fun notifyInitialFont(fontSize: Int?) {
+        if (fontSize == null) return
+        fontSizeListeners.forEach {
+            it.onInitialFontChanged(fontSize)
+        }
+    }
+
+
     private fun goToDrawingMode() {
         val oldMode = currentUserMode
         currentUserMode = UserMode.DRAWING
@@ -320,7 +338,10 @@ class BoardViewerImpl(
             assert(vertex is VertexFigureNode)
             assert(vertex != null)
             vertex as VertexFigureNode
-            graphEditor.replaceVertex(id, vertex.copy(textInfo = vertex.textInfo.copy(text = text, changed = true)))
+            graphEditor.replaceVertex(
+                id,
+                vertex.copy(textInfo = vertex.textInfo.copy(text = text, changed = true))
+            )
             notifyBoardChanges()
         }
 
@@ -337,6 +358,7 @@ class BoardViewerImpl(
 
         override fun startEditing(pt: Point) {
             figureEditor = graphEditor.getFigureEditorByTouch(pt)
+            notifyInitialFont((figureEditor as? VertexFigureEditor)?.figureNode?.textInfo?.fontSize)
             shaper = (figureEditor as? VertexFigureEditor)?.shaper
             mover = (figureEditor as? VertexFigureEditor)?.mover
             if (shaper?.shapingBegins(pt) == false) {
@@ -362,7 +384,21 @@ class BoardViewerImpl(
             assert(vertex is VertexFigureNode)
             assert(vertex != null)
             vertex as VertexFigureNode
-            graphEditor.replaceVertex(id, vertex.copy(textInfo = vertex.textInfo.copy(changed = false)))
+            graphEditor.replaceVertex(
+                id,
+                vertex.copy(textInfo = vertex.textInfo.copy(changed = false))
+            )
+        }
+
+        override fun setFontSize(fontSize: Int) {
+            val vertex = graphEditor.getFigureNodeByIdOrNull(id)
+            assert(vertex is VertexFigureNode)
+            assert(vertex != null)
+            vertex as VertexFigureNode
+            graphEditor.replaceVertex(
+                id,
+                vertex.copy(textInfo = vertex.textInfo.copy(changed = true, fontSize = fontSize))
+            )
         }
 
         override fun cancelEditing(pt: Point) {
@@ -380,6 +416,7 @@ class BoardViewerImpl(
             notifyBoardChanges()
             mover = null
         }
+
 
         override fun putPoint(pt: Point): BoardManipulator? {
             if (figureEditor == null) {
