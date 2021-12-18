@@ -22,4 +22,9 @@ interface BoardManipulator {
     fun setFontSize(fontSize: Int)
 
     fun getCurrentText(): String
+
+    fun startFontSizeChanging()
+
+    fun finishFontSizeChanging()
+
 }
