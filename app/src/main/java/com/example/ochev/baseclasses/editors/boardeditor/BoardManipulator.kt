@@ -18,4 +18,6 @@ interface BoardManipulator {
     fun putText(text: String)
 
     fun figureDrawn()
+
+    fun setFontSize(fontSize: Int)
 }
