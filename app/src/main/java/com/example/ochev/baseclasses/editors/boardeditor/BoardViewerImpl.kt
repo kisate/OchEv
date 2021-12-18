@@ -399,6 +399,7 @@ class BoardViewerImpl(
                 id,
                 vertex.copy(textInfo = vertex.textInfo.copy(changed = true, fontSize = fontSize))
             )
+            notifyBoardChanges()
         }
 
         override fun cancelEditing(pt: Point) {
