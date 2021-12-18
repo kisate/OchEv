@@ -144,7 +144,7 @@ class GraphFragment : Fragment() {
         val view = container.findViewById<ConstraintLayout>(R.id.editing_buttons_container)
         editingButtonsController = EditingButtonsController(view) { currentManipulator }
         viewer?.addUserModeChangesListenerAndNotify {
-            if (it != UserMode.DRAWING) {
+            if (it.isEditing) {
                 editingButtonsController?.show(it, true)
             } else {
                 currentManipulator = null
