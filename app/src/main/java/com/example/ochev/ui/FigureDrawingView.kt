@@ -3,6 +3,7 @@ package com.example.ochev.ui
 import android.annotation.SuppressLint
 import android.content.Context
 import android.graphics.Canvas
+import android.graphics.Color
 import android.graphics.Paint
 import android.graphics.Path
 import android.util.AttributeSet
@@ -84,7 +85,7 @@ class FigureDrawingView(
                     view = pull.removeLast()
                 }
                 if (!figureNode.textInfo.changed) {
-                    return
+                    continue
                 }
                 val lp = LinearLayout.LayoutParams(
                     (figureNode.textInfo.rightUpCorner.x - figureNode.textInfo.leftDownCorner.x).toInt(),
@@ -98,6 +99,9 @@ class FigureDrawingView(
                 )
                 view.layoutParams = lp
                 view.text = figureNode.textInfo.text
+                if (view !in children) {
+                    addView(view)
+                }
                 mapper[figureNode.id] = view
             }
         }
@@ -163,7 +167,9 @@ class FigureDrawingView(
 
     private fun inflateToPull() {
         val view = TextView(context)
-        this.addView(view)
+        view.isClickable = false
+        view.isFocusable = false
+        view.setBackgroundColor(Color.TRANSPARENT)
         pull.add(view)
     }
 
