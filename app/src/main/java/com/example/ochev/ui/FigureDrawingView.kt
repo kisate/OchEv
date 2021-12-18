@@ -20,6 +20,7 @@ import com.example.ochev.baseclasses.dataclasses.nodes.VertexFigureNode
 import com.example.ochev.baseclasses.dataclasses.vertexfigures.Circle
 import com.example.ochev.baseclasses.dataclasses.vertexfigures.Rectangle
 import com.example.ochev.baseclasses.dataclasses.vertexfigures.Rhombus
+import com.example.ochev.baseclasses.editors.boardeditor.BoardManipulator
 import com.example.ochev.baseclasses.editors.boardeditor.BoardViewer
 import com.example.ochev.baseclasses.editors.edgefigures.Edge
 
@@ -60,7 +61,7 @@ class FigureDrawingView(
     var paintSuggests: Paint = Paint()
 
     private var idProvider: Provider<Int?>? = null
-    private var viewer: Provider<BoardViewer?>? = null
+    private var manipulator: Provider<BoardManipulator?>? = null
 
     @SuppressLint("DrawAllocation")
     override fun onDraw(canvas: Canvas?) {
@@ -120,8 +121,8 @@ class FigureDrawingView(
         idProvider = provider
     }
 
-    fun setViewerProvider(provider: Provider<BoardViewer?>) {
-        this.viewer = provider
+    fun setManipulatorProvider(provider: Provider<BoardManipulator?>) {
+        this.manipulator = provider
     }
 
     private fun drawEdge(canvas: Canvas?, figure: Edge) {
