@@ -150,12 +150,14 @@ class BoardViewerImpl(
     override fun undoChange() {
         goToDrawingMode()
         graphEditor.revertChange()
+        makeAllChanged()
         notifyBoardChanges()
     }
 
     override fun redoChange() {
         goToDrawingMode()
         graphEditor.undoRevertChange()
+        makeAllChanged()
         notifyBoardChanges()
     }
 
@@ -297,6 +299,21 @@ class BoardViewerImpl(
         }
     }
 
+    private fun makeAllChanged() {
+        val ids = graphEditor.allVertexes.map {
+            it.id
+        }
+        ids.forEach { id ->
+            val vertex = graphEditor.getFigureNodeByIdOrNull(id)
+            assert(vertex is VertexFigureNode)
+            assert(vertex != null)
+            vertex as VertexFigureNode
+            graphEditor.replaceVertex(
+                id,
+                vertex.copy(textInfo = vertex.textInfo.copy(changed = true))
+            )
+        }
+    }
 
     private fun goToDrawingMode() {
         val oldMode = currentUserMode
@@ -322,6 +339,7 @@ class BoardViewerImpl(
         BoardManipulator {
         init {
             graphEditor.maximizeVertexHeightById(id)
+            notifyInitialFont((graphEditor.getFigureNodeByIdOrNull(id) as? VertexFigureNode)?.textInfo?.fontSize)
             notifyBoardChanges()
         }
 
@@ -358,7 +376,6 @@ class BoardViewerImpl(
 
         override fun startEditing(pt: Point) {
             figureEditor = graphEditor.getFigureEditorByTouch(pt)
-            notifyInitialFont((figureEditor as? VertexFigureEditor)?.figureNode?.textInfo?.fontSize)
             shaper = (figureEditor as? VertexFigureEditor)?.shaper
             mover = (figureEditor as? VertexFigureEditor)?.mover
             if (shaper?.shapingBegins(pt) == false) {
@@ -400,6 +417,14 @@ class BoardViewerImpl(
                 vertex.copy(textInfo = vertex.textInfo.copy(changed = true, fontSize = fontSize))
             )
             notifyBoardChanges()
+        }
+
+        override fun getCurrentText(): String {
+            val vertex = graphEditor.getFigureNodeByIdOrNull(id)
+            assert(vertex is VertexFigureNode)
+            assert(vertex != null)
+            vertex as VertexFigureNode
+            return vertex.textInfo.text
         }
 
         override fun cancelEditing(pt: Point) {
