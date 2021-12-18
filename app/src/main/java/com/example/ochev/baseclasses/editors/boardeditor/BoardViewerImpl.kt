@@ -300,7 +300,9 @@ class BoardViewerImpl(
     }
 
     private fun notifyTextUpdate(id: Int) {
-        textUpdateListeners.forEach { it.onTextUpdateListener(id) }
+        textUpdateListeners.forEach {
+            it.onTextUpdateListener(id)
+        }
         notifyBoardChanges()
     }
 
@@ -350,7 +352,9 @@ class BoardViewerImpl(
             assert(vertex != null)
             vertex as VertexFigureNode
             vertex.textInfo.text = text
+            vertex.textInfo.changed = true
             notifyTextUpdate(id)
+            vertex.textInfo.changed = false
         }
 
         override fun deleteSelected() {

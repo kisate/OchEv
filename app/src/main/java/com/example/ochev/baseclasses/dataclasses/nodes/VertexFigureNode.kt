@@ -7,7 +7,7 @@ import com.example.ochev.baseclasses.dataclasses.vertexfigures.VertexFigure
 data class TextInfo(
     val leftDownCorner: Point = Point(0f, 300f),
     val rightUpCorner: Point = Point(300f, 0f),
-    val changed: Boolean = true,
+    var changed: Boolean = false,
     var text: String = ""
 )
 
