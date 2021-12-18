@@ -38,6 +38,7 @@ class FigureDrawingView(
         while (pull.size < 5) {
             inflateToPull()
         }
+        setWillNotDraw(false)
     }
 
     var figures: List<FigureNode> = emptyList()
@@ -89,9 +90,15 @@ class FigureDrawingView(
                     (figureNode.textInfo.rightUpCorner.x - figureNode.textInfo.leftDownCorner.x).toInt(),
                     (figureNode.textInfo.leftDownCorner.y - figureNode.textInfo.rightUpCorner.y).toInt()
                 )
-                lp.setMargins(50, 50, 0, 0)
+                lp.setMargins(
+                    figureNode.textInfo.leftDownCorner.x.toInt(),
+                    figureNode.textInfo.rightUpCorner.y.toInt(),
+                    0,
+                    0
+                )
                 view.layoutParams = lp
                 view.text = figureNode.textInfo.text
+                mapper[figureNode.id] = view
             }
         }
 
