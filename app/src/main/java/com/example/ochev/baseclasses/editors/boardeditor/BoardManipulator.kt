@@ -16,4 +16,6 @@ interface BoardManipulator {
     fun getId(): Int
 
     fun putText(text: String)
+
+    fun textEditingClosed()
 }

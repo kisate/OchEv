@@ -358,7 +358,7 @@ class BoardViewerImpl(
             notifyBoardChanges()
         }
 
-        fun textEditingClosed() {
+        override fun textEditingClosed() {
             val vertex = graphEditor.getFigureNodeByIdOrNull(id)
             assert(vertex is VertexFigureNode)
             assert(vertex != null)
