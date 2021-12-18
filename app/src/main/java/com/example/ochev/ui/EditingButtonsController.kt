@@ -154,7 +154,7 @@ class EditingButtonsController(
     private fun processHolder(holders: List<EditingButtonHolder>) {
         holders.forEach {
             settingsView.addView(it.item)
-            it.item.translationX = it.length.toFloat()
+            it.item.translationX = it.length.toFloat() + (16).toPx
         }
         settingsView.visibility = View.VISIBLE
         val set = ConstraintSet()
