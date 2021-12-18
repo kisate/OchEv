@@ -1,16 +1,21 @@
 package com.example.ochev.ui
 
+import android.annotation.SuppressLint
 import android.content.Context
 import android.graphics.Canvas
 import android.graphics.Paint
 import android.graphics.Path
 import android.util.AttributeSet
 import android.util.Log
-import android.view.View
+import android.widget.FrameLayout
+import android.widget.LinearLayout
+import android.widget.TextView
+import androidx.core.view.children
 import com.example.ochev.Utils.Provider
 import com.example.ochev.baseclasses.dataclasses.LineSegment
 import com.example.ochev.baseclasses.dataclasses.Point
 import com.example.ochev.baseclasses.dataclasses.nodes.FigureNode
+import com.example.ochev.baseclasses.dataclasses.nodes.VertexFigureNode
 import com.example.ochev.baseclasses.dataclasses.vertexfigures.Circle
 import com.example.ochev.baseclasses.dataclasses.vertexfigures.Rectangle
 import com.example.ochev.baseclasses.dataclasses.vertexfigures.Rhombus
@@ -19,7 +24,22 @@ import com.example.ochev.baseclasses.editors.edgefigures.Edge
 class FigureDrawingView(
     context: Context,
     attributeSet: AttributeSet,
-) : View(context, attributeSet) {
+) : FrameLayout(context, attributeSet) {
+    private val mapper: HashMap<Int, TextView> = HashMap()
+    private val pull: ArrayList<TextView> = ArrayList()
+
+    init {
+        for (child in children) {
+            pull.add(child as TextView)
+        }
+        pull.forEach {
+            it.text = ""
+        }
+        while (pull.size < 5) {
+            inflateToPull()
+        }
+    }
+
     var figures: List<FigureNode> = emptyList()
         set(value) {
             field = value
@@ -38,6 +58,7 @@ class FigureDrawingView(
 
     private var idProvider: Provider<Int?>? = null
 
+    @SuppressLint("DrawAllocation")
     override fun onDraw(canvas: Canvas?) {
         Log.e(TAG, "on draw with ${figures.size} figures")
 
@@ -53,6 +74,25 @@ class FigureDrawingView(
                 is Edge -> drawEdge(canvas, figure)
             }
             paintStroke.strokeWidth = currentWidth
+            if (figureNode is VertexFigureNode) {
+                var view = mapper[figureNode.id]
+                if (view == null) {
+                    if (pull.isEmpty()) {
+                        inflateToPull()
+                    }
+                    view = pull.removeLast()
+                }
+                if (!figureNode.textInfo.changed) {
+                    return
+                }
+                val lp = LinearLayout.LayoutParams(
+                    (figureNode.textInfo.rightUpCorner.x - figureNode.textInfo.leftDownCorner.x).toInt(),
+                    (figureNode.textInfo.leftDownCorner.y - figureNode.textInfo.rightUpCorner.y).toInt()
+                )
+                lp.setMargins(50, 50, 0, 0)
+                view.layoutParams = lp
+                view.text = figureNode.textInfo.text
+            }
         }
 
         for (segment in suggests) {
@@ -112,6 +152,12 @@ class FigureDrawingView(
         path.close()
         canvas?.drawPath(path, paintStroke)
         canvas?.drawPath(path, paintFill)
+    }
+
+    private fun inflateToPull() {
+        val view = TextView(context)
+        this.addView(view)
+        pull.add(view)
     }
 
     companion object {

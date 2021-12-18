@@ -1,16 +1,19 @@
 package com.example.ochev.ui
 
 import android.annotation.SuppressLint
+import android.app.AlertDialog
 import android.graphics.Bitmap
 import android.graphics.Color
 import android.graphics.Paint
 import android.os.Bundle
+import android.text.InputType
 import android.util.DisplayMetrics
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.MotionEvent
 import android.view.View
 import android.view.ViewGroup
+import android.widget.EditText
 import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.RelativeLayout
@@ -23,6 +26,7 @@ import com.example.ochev.baseclasses.editors.boardeditor.BoardViewer
 import com.example.ochev.callbacks.UserMode
 import com.example.ochev.ml.Utils
 import com.example.ochev.viewclasses.eventhandlers.ScrollZoomController
+
 
 class GraphFragment : Fragment() {
     private var container: RelativeLayout? = null
@@ -66,6 +70,20 @@ class GraphFragment : Fragment() {
         initializeViewer()
         initializeHelpers()
         return this.container
+    }
+
+    private fun showEditText() {
+        val builder: AlertDialog.Builder = AlertDialog.Builder(context)
+        val input = EditText(context)
+        input.inputType = InputType.TYPE_CLASS_TEXT
+        builder.setView(input)
+        builder.setPositiveButton("Save") { dialog, which ->
+            currentManipulator?.putText(input.text.toString())
+            dialog.cancel()
+        }
+        builder.setNegativeButton("Cancel") { dialog, which -> dialog.cancel() }
+
+        builder.show()
     }
 
     private fun initializeHelpers() {
@@ -174,6 +192,7 @@ class GraphFragment : Fragment() {
                     scrollZoomController?.handle(gesture, event)
                     true
                 }
+                GestureType.LONG_TAP -> handleLongTap(event, gesture)
                 else -> true
             }
         }
@@ -227,6 +246,19 @@ class GraphFragment : Fragment() {
                 currentManipulator = viewer?.selectFigureByPoint(Point(event))
                 sideEnvironmentSettingsController?.hideSettings(true)
                 true
+            }
+        }
+    }
+
+    private fun handleLongTap(event: MotionEvent, gesture: Gesture): Boolean {
+        return when (gesture.state) {
+            GestureState.NONE -> true
+            GestureState.IN_PROGRESS -> true
+            GestureState.START -> true
+            GestureState.END -> {
+                currentManipulator = viewer?.selectFigureByPoint(Point(event))
+                showEditText()
+                return true
             }
         }
     }
