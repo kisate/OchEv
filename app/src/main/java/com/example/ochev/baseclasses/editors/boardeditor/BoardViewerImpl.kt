@@ -38,13 +38,13 @@ class BoardViewerImpl(
 
     init {
         classifier.initialize(Executors.newCachedThreadPool())
-        if (cacheParser != null) {
-            executorService.submit {
-                val pair = GraphReader.readGraph(cacheParser)
-                graphBitmap = pair.first
-                graphEditor = pair.second
-            }
-        }
+//        if (cacheParser != null) {
+//            executorService.submit {
+//                val pair = GraphReader.readGraph(cacheParser)
+//                graphBitmap = pair.first
+//                graphEditor = pair.second
+//            }
+//        }
     }
 
     private var lastManipulator: BoardManipulator? = null
@@ -55,7 +55,6 @@ class BoardViewerImpl(
     private val suggestLineChangesListeners = arrayListOf<SuggestLineChangesListener>()
     private val undoChangeShowButtonListeners = arrayListOf<UndoChangeShowButtonListener>()
     private val redoChangeShowButtonListeners = arrayListOf<RedoChangeShowButtonListener>()
-    private val textUpdateListeners = arrayListOf<TextUpdateListener>()
 
     private var height: Int = 0
     private var width: Int = 0
@@ -72,7 +71,6 @@ class BoardViewerImpl(
         suggestLineChangesListeners.clear()
         redoChangeShowButtonListeners.clear()
         undoChangeShowButtonListeners.clear()
-        textUpdateListeners.clear()
     }
 
     override fun getLastManipulator(): BoardManipulator? {
@@ -161,9 +159,9 @@ class BoardViewerImpl(
 
     override fun saveInCache(cacheParser: CacheParser) {
         Log.d("ainur cache", "START SAVING")
-        executorService.submit {
-            GraphWriter.write(graphEditor, graphBitmap, cacheParser)
-        }
+//        executorService.submit {
+//            GraphWriter.write(graphEditor, graphBitmap, cacheParser)
+//        }
     }
 
     override fun scaleBoard(centre: Point, scaleValue: Float) {
@@ -236,29 +234,12 @@ class BoardViewerImpl(
         redoChangeShowButtonListener.onRedoChangeShowButtonListener(graphEditor.isUndoRevertible())
     }
 
-    override fun addTextUpdateListener(addTextUpdateListener: TextUpdateListener) {
-        textUpdateListeners.add(addTextUpdateListener)
-    }
-
-    override fun removeTextUpdateListener(addTextUpdateListener: TextUpdateListener) {
-        textUpdateListeners.remove(addTextUpdateListener)
-    }
-
-    override fun addTextUpdateListenerAndNotify(addTextUpdateListener: TextUpdateListener) {
-        addTextUpdateListener(addTextUpdateListener)
-        addTextUpdateListener.onTextUpdateListener(lastManipulator?.getId())
-    }
-
-    private var lastNotifyBoardChange: MutableList<FigureNode> = mutableListOf()
     private fun notifyBoardChanges() {
         notifyRedoShowButtonChanges()
         notifyUndoShowButtonChanges()
-        if (lastNotifyBoardChange == graphEditor.allFiguresSortedByHeights)
-            return
         boardChangesListeners.forEach {
             it.onBoardChanged(graphEditor.allFiguresSortedByHeights)
         }
-        lastNotifyBoardChange = graphEditor.allFiguresSortedByHeights
     }
 
     private var lastNotifyUndoShowButtonChange: Boolean? = null
@@ -297,18 +278,6 @@ class BoardViewerImpl(
             return
         userModeChangesListeners.forEach { it.onUserModeChanged(currentUserMode) }
         lastUserModeChange = currentUserMode
-    }
-
-    private fun notifyTextUpdate(id: Int) {
-        textUpdateListeners.forEach {
-            it.onTextUpdateListener(id)
-        }
-        notifyBoardChanges()
-    }
-
-    private fun notifyTextCancel() {
-        textUpdateListeners.forEach { it.onTextCancel() }
-        notifyBoardChanges()
     }
 
     private fun goToDrawingMode() {
@@ -353,7 +322,7 @@ class BoardViewerImpl(
             vertex as VertexFigureNode
             vertex.textInfo.text = text
             vertex.textInfo.changed = true
-            notifyTextUpdate(id)
+            notifyBoardChanges()
             vertex.textInfo.changed = false
         }
 
@@ -404,7 +373,6 @@ class BoardViewerImpl(
             }
             notifyBoardChanges()
             mover = null
-            notifyTextCancel()
         }
 
         override fun putPoint(pt: Point): BoardManipulator? {
