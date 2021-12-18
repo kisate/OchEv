@@ -115,6 +115,8 @@ class FigureDrawingView(
             path.lineTo(segment.B.x, segment.B.y)
             canvas?.drawPath(path, paintSuggests)
         }
+
+        manipulator?.get()?.textEditingClosed()
     }
 
     fun setProvider(provider: Provider<Int?>) {
