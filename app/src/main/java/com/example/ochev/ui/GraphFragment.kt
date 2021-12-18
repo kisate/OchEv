@@ -69,7 +69,14 @@ class GraphFragment : Fragment() {
         initializeScrollZoom()
         initializeViewer()
         initializeHelpers()
+        initializeFontListener()
         return this.container
+    }
+
+    private fun initializeFontListener() {
+        viewer?.addFontSizeListener {
+            editingButtonsController?.setSeekBarProgress(it)
+        }
     }
 
     private fun showEditText() {

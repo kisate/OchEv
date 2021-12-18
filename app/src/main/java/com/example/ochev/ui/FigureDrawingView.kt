@@ -83,9 +83,6 @@ class FigureDrawingView(
         }
         mapper = binded
 
-
-
-
         for (figureNode in figures) {
             val currentWidth = paintStroke.strokeWidth
             if (figureNode.id == idProvider?.get()) {
@@ -122,6 +119,7 @@ class FigureDrawingView(
                 view.layoutParams = lp
                 view.text = figureNode.textInfo.text
                 view.visibility = VISIBLE
+                view.textSize = figureNode.textInfo.fontSize.toFloat()
                 mapper[figureNode.id] = view
             }
         }

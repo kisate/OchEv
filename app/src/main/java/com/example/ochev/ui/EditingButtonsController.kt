@@ -41,6 +41,16 @@ class EditingButtonsController(
         seekBarHolder = EditingSeekBarViewHolder(getSeekBard(), (200).toPx.toInt())
         seekBarHolder.item.max = 48
         seekBarHolder.item.progress = 10
+        seekBarHolder.item.setOnSeekBarChangeListener(object : SeekBar.OnSeekBarChangeListener {
+            override fun onProgressChanged(seekBar: SeekBar?, progress: Int, fromUser: Boolean) {
+                manipulator.get()?.setFontSize(progress)
+            }
+
+            override fun onStartTrackingTouch(seekBar: SeekBar?) = Unit
+
+            override fun onStopTrackingTouch(seekBar: SeekBar?) = Unit
+        })
+
 
         copyHolder.item.id = R.id.copy_button_id
         deleteHolder.item.id = R.id.delete_button_id
@@ -106,6 +116,10 @@ class EditingButtonsController(
 
     fun onDestroy() {
         animators.forEach { it.value?.end() }
+    }
+
+    fun setSeekBarProgress(progress: Int) {
+        seekBarHolder.item.progress = progress
     }
 
     private fun animate(from: Float, to: Float, viewHolder: EditingButtonHolder) {
