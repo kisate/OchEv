@@ -2,10 +2,7 @@ package com.example.ochev.ui
 
 import android.annotation.SuppressLint
 import android.content.Context
-import android.graphics.Canvas
-import android.graphics.Color
-import android.graphics.Paint
-import android.graphics.Path
+import android.graphics.*
 import android.util.AttributeSet
 import android.util.Log
 import android.widget.FrameLayout
@@ -90,7 +87,7 @@ class FigureDrawingView(
                 if (!figureNode.textInfo.changed) {
                     continue
                 }
-                val lp = LinearLayout.LayoutParams(
+                val lp = LayoutParams(
                     (figureNode.textInfo.rightUpCorner.x - figureNode.textInfo.leftDownCorner.x).toInt(),
                     (figureNode.textInfo.leftDownCorner.y - figureNode.textInfo.rightUpCorner.y).toInt()
                 )
@@ -102,9 +99,6 @@ class FigureDrawingView(
                 )
                 view.layoutParams = lp
                 view.text = figureNode.textInfo.text
-                if (view !in children) {
-                    addView(view)
-                }
                 mapper[figureNode.id] = view
             }
         }
@@ -180,6 +174,9 @@ class FigureDrawingView(
         view.isFocusable = false
         view.setBackgroundColor(Color.TRANSPARENT)
         pull.add(view)
+        view.typeface = Typeface.create("open_sans_bold", Typeface.BOLD)
+        view.setTextColor(Color.BLACK)
+        addView(view)
     }
 
     companion object {
