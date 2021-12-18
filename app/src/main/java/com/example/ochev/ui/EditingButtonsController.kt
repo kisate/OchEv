@@ -39,18 +39,9 @@ class EditingButtonsController(
         }
 
         seekBarHolder = EditingSeekBarViewHolder(getSeekBard(), (200).toPx.toInt())
-        seekBarHolder.item.max = 48
+        seekBarHolder.item.max = 120
         seekBarHolder.item.progress = 10
-        seekBarHolder.item.setOnSeekBarChangeListener(object : SeekBar.OnSeekBarChangeListener {
-            override fun onProgressChanged(seekBar: SeekBar?, progress: Int, fromUser: Boolean) {
-                manipulator.get()?.setFontSize(progress)
-            }
-
-            override fun onStartTrackingTouch(seekBar: SeekBar?) = Unit
-
-            override fun onStopTrackingTouch(seekBar: SeekBar?) = Unit
-        })
-
+        setListener()
 
         copyHolder.item.id = R.id.copy_button_id
         deleteHolder.item.id = R.id.delete_button_id
@@ -119,7 +110,9 @@ class EditingButtonsController(
     }
 
     fun setSeekBarProgress(progress: Int) {
+        seekBarHolder.item.setOnSeekBarChangeListener(null)
         seekBarHolder.item.progress = progress
+        setListener()
     }
 
     private fun animate(from: Float, to: Float, viewHolder: EditingButtonHolder) {
@@ -194,6 +187,18 @@ class EditingButtonsController(
         }
 
         set.applyTo(settingsView)
+    }
+
+    private fun setListener() {
+        seekBarHolder.item.setOnSeekBarChangeListener(object : SeekBar.OnSeekBarChangeListener {
+            override fun onProgressChanged(seekBar: SeekBar?, progress: Int, fromUser: Boolean) {
+                manipulator.get()?.setFontSize(progress)
+            }
+
+            override fun onStartTrackingTouch(seekBar: SeekBar?) = Unit
+
+            override fun onStopTrackingTouch(seekBar: SeekBar?) = Unit
+        })
     }
 
     private fun getItem(): FrameLayout {

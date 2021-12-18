@@ -120,6 +120,7 @@ class FigureDrawingView(
                 view.text = figureNode.textInfo.text
                 view.visibility = VISIBLE
                 view.textSize = figureNode.textInfo.fontSize.toFloat()
+                view.setLineSpacing(0f, 0.55f)
                 mapper[figureNode.id] = view
             }
         }
