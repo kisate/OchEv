@@ -312,7 +312,7 @@ class BoardViewerImpl(
             vertex as VertexFigureNode
             graphEditor.replaceVertex(
                 id,
-                vertex.copy(textInfo = vertex.textInfo.copy(changed = true))
+                vertex.copy(textInfo = vertex.textInfo.update(vertex.figure))
             )
         }
     }
@@ -360,7 +360,7 @@ class BoardViewerImpl(
             vertex as VertexFigureNode
             graphEditor.replaceVertex(
                 id,
-                vertex.copy(textInfo = vertex.textInfo.copy(text = text, changed = true))
+                vertex.copy(textInfo = vertex.textInfo.update(vertex.figure).copy(text = text))
             )
             notifyBoardChanges()
         }
@@ -414,7 +414,7 @@ class BoardViewerImpl(
             vertex as VertexFigureNode
             graphEditor.replaceVertex(
                 id,
-                vertex.copy(textInfo = vertex.textInfo.copy(changed = true, fontSize = fontSize))
+                vertex.copy(textInfo = vertex.textInfo.update(vertex.figure).copy(fontSize = fontSize))
             )
             notifyBoardChanges()
         }
