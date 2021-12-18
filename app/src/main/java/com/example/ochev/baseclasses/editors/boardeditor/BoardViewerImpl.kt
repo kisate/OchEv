@@ -63,6 +63,7 @@ class BoardViewerImpl(
 
     override fun moveBoard(vector: Vector) {
         graphEditor.moveGraphByVector(vector)
+        makeAllChanged()
         notifyBoardChanges()
     }
 
@@ -170,6 +171,7 @@ class BoardViewerImpl(
 
     override fun scaleBoard(centre: Point, scaleValue: Float) {
         graphEditor.zoomByPointAndFactor(centre, scaleValue)
+        makeAllChanged()
         notifyBoardChanges()
     }
 
@@ -398,9 +400,7 @@ class BoardViewerImpl(
 
         override fun figureDrawn() {
             val vertex = graphEditor.getFigureNodeByIdOrNull(id)
-            assert(vertex is VertexFigureNode)
-            assert(vertex != null)
-            vertex as VertexFigureNode
+            if (vertex !is VertexFigureNode) return
             graphEditor.replaceVertex(
                 id,
                 vertex.copy(textInfo = vertex.textInfo.copy(changed = false))
