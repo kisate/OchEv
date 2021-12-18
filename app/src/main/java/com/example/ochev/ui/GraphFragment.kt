@@ -166,6 +166,9 @@ class GraphFragment : Fragment() {
         figureDrawingView?.setProvider {
             currentManipulator?.getId()
         }
+        figureDrawingView?.setViewerProvider {
+            viewer
+        }
     }
 
     private fun initializeInputViews() {
