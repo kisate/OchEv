@@ -32,6 +32,11 @@ data class Rhombus(
             return mutableListOf(leftCorner, upCorner, rightCorner, downCorner)
         }
 
+    override val drawingPoints: MutableList<Point>
+        get() = mutableListOf(Point(leftCorner.x, upCorner.y), Point(rightCorner.x, downCorner.y))
+
+
+
     override fun clone(): VertexFigure {
         return this.copy()
     }

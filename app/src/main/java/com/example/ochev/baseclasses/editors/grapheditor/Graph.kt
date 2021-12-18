@@ -72,6 +72,25 @@ class Graph(
     }
 
 
+    fun replacedVertex(id: Int, new: VertexFigureNode): Graph {
+        val newGraph = Graph()
+        val linker = getLinker {
+            if (it.id != id) it
+            else new
+        }
+
+
+        reconnectEdges(newGraph, linker)
+
+        figures.vertices.forEach {
+            if (it.id == id) newGraph.figures.vertices.add(
+                new
+            )
+            else newGraph.figures.vertices.add(it)
+        }
+        return newGraph
+    }
+
     fun withDeletedFigure(id: Int): Graph {
         return when (getFigureNodeByIdOrNull(id)) {
             is VertexFigureNode -> withDeletedVertex(id)

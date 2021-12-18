@@ -22,6 +22,9 @@ data class Rectangle(
             return mutableListOf(leftDownCorner, leftUpCorner, rightUpCorner, rightDownCorner)
         }
 
+    override val drawingPoints: MutableList<Point>
+        get() = mutableListOf(leftUpCorner, rightDownCorner)
+
     override fun clone(): VertexFigure {
         return this.copy()
     }

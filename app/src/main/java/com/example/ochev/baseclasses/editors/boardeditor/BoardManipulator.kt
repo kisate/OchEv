@@ -17,5 +17,5 @@ interface BoardManipulator {
 
     fun putText(text: String)
 
-    fun textEditingClosed()
+    fun figureDrawn()
 }

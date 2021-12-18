@@ -11,7 +11,7 @@ import kotlin.math.sin
 
 data class Circle(
     override val center: Point = Point(),
-    val radius: Float = 0f
+    val radius: Float = 0f,
 ) : VertexFigure() {
     val leftPoint: Point
         get() = Point(center.x - radius, center.y)
@@ -26,6 +26,10 @@ data class Circle(
         get() {
             return mutableListOf(leftPoint, upPoint, rightPoint, downPoint)
         }
+
+    override val drawingPoints: MutableList<Point>
+        get() = mutableListOf(Point(leftPoint.x, upPoint.y), Point(rightPoint.x, downPoint.y))
+
 
     override fun clone(): VertexFigure {
         return this.copy()
