@@ -79,6 +79,7 @@ class RTVRedactorMainActivity : FragmentActivity() {
     override fun onStop() {
         super.onStop()
         writeCaches()
+        joinAll()
     }
 
     private fun writeCaches() {
@@ -90,7 +91,6 @@ class RTVRedactorMainActivity : FragmentActivity() {
             sp.edit().putBoolean("present", true).apply()
             current++
         }
-        joinAll()
         getAppSp().edit().putInt("graph count", current - 1).apply()
     }
 

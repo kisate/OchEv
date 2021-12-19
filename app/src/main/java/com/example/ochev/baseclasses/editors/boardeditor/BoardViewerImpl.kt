@@ -16,6 +16,8 @@ import com.example.ochev.baseclasses.editors.vertexeditor.VertexFigureShaper
 import com.example.ochev.baseclasses.svgexporter.SvgExporter
 import com.example.ochev.callbacks.*
 import com.example.ochev.ml.Classifier
+import java.lang.Exception
+import java.sql.Time
 import java.util.concurrent.ExecutorService
 import java.util.concurrent.Executors
 import java.util.concurrent.TimeUnit
@@ -40,12 +42,12 @@ class BoardViewerImpl(
     init {
         classifier.initialize(Executors.newCachedThreadPool())
         if (cacheParser != null) {
-            executorService.submit {
+//            executorService.submit {
                 val pair = GraphReader.readGraph(cacheParser)
                 graphBitmap = pair.first
                 graphEditor = pair.second
-                notifyBoardChanges()
-            }
+//                notifyBoardChanges()
+//            }
         }
     }
 
@@ -178,15 +180,19 @@ class BoardViewerImpl(
     }
 
     override fun saveInCache(cacheParser: CacheParser) {
-        Log.d("ainur19cache", "START SAVING")
-        executorService.submit {
+//        executorService.execute {
+            Log.d("ainur19cache", "thread ${Thread.currentThread().id}: start saving in cache")
             GraphWriter.write(graphEditor, graphBitmap, cacheParser)
-        }
+            Log.d("ainur19cache", "thread ${Thread.currentThread().id}: finish saving in cache")
+//        }
     }
 
     override fun join() {
-        while (!executorService.awaitTermination(TIMEOUT, TimeUnit.SECONDS)) {
-        }
+//        executorService.shutdown()
+//        try {
+//            executorService.awaitTermination(Long.MAX_VALUE, TimeUnit.NANOSECONDS)
+//        } catch (e: Exception) {
+//        }
     }
 
     override fun scaleBoard(centre: Point, scaleValue: Float) {
