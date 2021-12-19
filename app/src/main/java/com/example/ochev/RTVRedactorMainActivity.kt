@@ -29,7 +29,6 @@ class RTVRedactorMainActivity : FragmentActivity() {
 
         initPager()
         initPopups()
-        startParallelCacheWriting()
     }
 
     @SuppressLint("NotifyDataSetChanged")
@@ -63,12 +62,6 @@ class RTVRedactorMainActivity : FragmentActivity() {
         }
     }
 
-    override fun onStop() {
-        super.onStop()
-        Log.e(TAG, "on stop")
-//        writeCaches()
-    }
-
     override fun onDestroy() {
         super.onDestroy()
         Log.e(TAG, "on destroy")
@@ -83,10 +76,9 @@ class RTVRedactorMainActivity : FragmentActivity() {
         }
     }
 
-    private fun startParallelCacheWriting() {
-        val cacheWriter = Runnable { writeCaches() }
-        val executor: ScheduledExecutorService = Executors.newScheduledThreadPool(1)
-        executor.scheduleAtFixedRate(cacheWriter, 0, 1, TimeUnit.SECONDS)
+    override fun onStop() {
+        super.onStop()
+        writeCaches()
     }
 
     private fun writeCaches() {
@@ -103,9 +95,7 @@ class RTVRedactorMainActivity : FragmentActivity() {
     }
 
     private fun joinAll() {
-        ApplicationComponent.viewersHolder.entries().stream().map {
-            it.value.join()
-        }
+        ApplicationComponent.viewersHolder.entries().forEach { it.value.join() }
     }
 
     private fun getSp(index: Int): SharedPreferences {
@@ -114,10 +104,6 @@ class RTVRedactorMainActivity : FragmentActivity() {
 
     private fun getAppSp(): SharedPreferences {
         return getSharedPreferences("app", MODE_PRIVATE)
-    }
-
-    override fun onConfigurationChanged(newConfig: Configuration) {
-        super.onConfigurationChanged(newConfig)
     }
 
     companion object {

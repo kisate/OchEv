@@ -74,6 +74,7 @@ class GraphFragment : Fragment() {
 
     private fun initializeEditTextDialog() {
         viewer?.addStartTextEditingListener {
+            val context = figureDrawingView?.context ?: return@addStartTextEditingListener
             val builder: AlertDialog.Builder = AlertDialog.Builder(context)
             val input = EditText(context)
             val beginText = currentManipulator?.getCurrentText() ?: ""
