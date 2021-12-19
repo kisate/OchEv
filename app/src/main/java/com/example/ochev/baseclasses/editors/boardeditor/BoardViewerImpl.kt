@@ -7,6 +7,7 @@ import com.example.ochev.baseclasses.cacheparser.GraphReader
 import com.example.ochev.baseclasses.cacheparser.GraphWriter
 import com.example.ochev.baseclasses.dataclasses.*
 import com.example.ochev.baseclasses.dataclasses.nodes.VertexFigureNode
+import com.example.ochev.baseclasses.dataclasses.vertexfigures.VertexFigure
 import com.example.ochev.baseclasses.editors.FigureEditor
 import com.example.ochev.baseclasses.editors.edgeeditor.EdgeEditor
 import com.example.ochev.baseclasses.editors.grapheditor.GraphEditor
@@ -58,6 +59,7 @@ class BoardViewerImpl(
     private val undoChangeShowButtonListeners = arrayListOf<UndoChangeShowButtonListener>()
     private val redoChangeShowButtonListeners = arrayListOf<RedoChangeShowButtonListener>()
     private val fontSizeListeners = arrayListOf<FontSizeListener>()
+    private val startTextEditingListeners = arrayListOf<StartTextEditingListener>()
 
     private var height: Int = 0
     private var width: Int = 0
@@ -80,6 +82,7 @@ class BoardViewerImpl(
         redoChangeShowButtonListeners.clear()
         undoChangeShowButtonListeners.clear()
         fontSizeListeners.clear()
+        startTextEditingListeners.clear()
     }
 
     override fun getLastManipulator(): BoardManipulator? {
@@ -267,11 +270,25 @@ class BoardViewerImpl(
         fontSizeListeners.remove(fontSizeListener)
     }
 
+    override fun addStartTextEditingListener(startTextEditingListener: StartTextEditingListener) {
+        startTextEditingListeners.add(startTextEditingListener)
+    }
+
+    override fun removeStartTextEditingListener(startTextEditingListener: StartTextEditingListener) {
+        startTextEditingListeners.remove(startTextEditingListener)
+    }
+
     private fun notifyBoardChanges() {
         notifyRedoShowButtonChanges()
         notifyUndoShowButtonChanges()
         boardChangesListeners.forEach {
             it.onBoardChanged(graphEditor.allFiguresSortedByHeights)
+        }
+    }
+
+    private fun notifyStartTextEditing() {
+        startTextEditingListeners.forEach {
+            it.onStartTextEditing()
         }
     }
 
@@ -454,6 +471,12 @@ class BoardViewerImpl(
 
         override fun finishFontSizeChanging() {
             TODO("Not yet implemented")
+        }
+
+        override fun startEditingText() {
+            if (graphEditor.getFigureNodeByIdOrNull(id) is VertexFigureNode) {
+                notifyStartTextEditing()
+            }
         }
 
         override fun cancelEditing(pt: Point) {

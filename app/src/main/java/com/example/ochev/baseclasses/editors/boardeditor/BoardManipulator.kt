@@ -27,4 +27,5 @@ interface BoardManipulator {
 
     fun finishFontSizeChanging()
 
+    fun startEditingText()
 }

@@ -75,4 +75,8 @@ interface BoardViewer {
     fun addFontSizeListener(fontSizeListener: FontSizeListener)
 
     fun removeFondSizeListener(fontSizeListener: FontSizeListener)
+
+    fun addStartTextEditingListener(startTextEditingListener: StartTextEditingListener)
+
+    fun removeStartTextEditingListener(startTextEditingListener: StartTextEditingListener)
 }
