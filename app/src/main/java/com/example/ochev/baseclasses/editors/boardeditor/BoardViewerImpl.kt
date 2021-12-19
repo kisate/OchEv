@@ -23,17 +23,14 @@ import java.util.concurrent.Executors
 import java.util.concurrent.TimeUnit
 
 object ViewerFactory {
-    private val executorService: ExecutorService = Executors.newCachedThreadPool()
-
-    fun create(classifier: Classifier): BoardViewer = BoardViewerImpl(classifier, executorService)
+    fun create(classifier: Classifier): BoardViewer = BoardViewerImpl(classifier)
 
     fun create(classifier: Classifier, cacheParser: CacheParser): BoardViewer =
-        BoardViewerImpl(classifier, executorService, cacheParser)
+        BoardViewerImpl(classifier, cacheParser)
 }
 
 class BoardViewerImpl(
     private val classifier: Classifier,
-    private val executorService: ExecutorService,
     cacheParser: CacheParser? = null
 ) : BoardViewer {
     private var graphEditor = GraphEditor()
@@ -42,12 +39,9 @@ class BoardViewerImpl(
     init {
         classifier.initialize(Executors.newCachedThreadPool())
         if (cacheParser != null) {
-//            executorService.submit {
-                val pair = GraphReader.readGraph(cacheParser)
-                graphBitmap = pair.first
-                graphEditor = pair.second
-//                notifyBoardChanges()
-//            }
+            val pair = GraphReader.readGraph(cacheParser)
+            graphBitmap = pair.first
+            graphEditor = pair.second
         }
     }
 
@@ -180,19 +174,9 @@ class BoardViewerImpl(
     }
 
     override fun saveInCache(cacheParser: CacheParser) {
-//        executorService.execute {
-            Log.d("ainur19cache", "thread ${Thread.currentThread().id}: start saving in cache")
-            GraphWriter.write(graphEditor, graphBitmap, cacheParser)
-            Log.d("ainur19cache", "thread ${Thread.currentThread().id}: finish saving in cache")
-//        }
-    }
-
-    override fun join() {
-//        executorService.shutdown()
-//        try {
-//            executorService.awaitTermination(Long.MAX_VALUE, TimeUnit.NANOSECONDS)
-//        } catch (e: Exception) {
-//        }
+        Log.d("ainur19cache", "thread ${Thread.currentThread().id}: start saving in cache")
+        GraphWriter.write(graphEditor, graphBitmap, cacheParser)
+        Log.d("ainur19cache", "thread ${Thread.currentThread().id}: finish saving in cache")
     }
 
     override fun scaleBoard(centre: Point, scaleValue: Float) {

@@ -93,10 +93,6 @@ class RTVRedactorMainActivity : FragmentActivity() {
         getAppSp().edit().putInt("graph count", current - 1).apply()
     }
 
-    private fun joinAll() {
-        ApplicationComponent.viewersHolder.entries().forEach { it.value.join() }
-    }
-
     private fun getSp(index: Int): SharedPreferences {
         return getSharedPreferences("viewer$index", MODE_PRIVATE)
     }
