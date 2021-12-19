@@ -196,9 +196,13 @@ class EditingButtonsController(
                 manipulator.get()?.setFontSize(progress)
             }
 
-            override fun onStartTrackingTouch(seekBar: SeekBar?) = Unit
+            override fun onStartTrackingTouch(seekBar: SeekBar?) {
+                manipulator.get()?.startFontSizeChanging()
+            }
 
-            override fun onStopTrackingTouch(seekBar: SeekBar?) = Unit
+            override fun onStopTrackingTouch(seekBar: SeekBar?) {
+                manipulator.get()?.finishFontSizeChanging()
+            }
         })
     }
 
