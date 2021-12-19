@@ -6,24 +6,22 @@ import android.graphics.Bitmap
 import android.graphics.Color
 import android.graphics.Paint
 import android.os.Bundle
+import android.text.Editable
 import android.text.InputType
+import android.text.TextWatcher
 import android.util.DisplayMetrics
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.MotionEvent
 import android.view.View
 import android.view.ViewGroup
-import android.widget.EditText
-import android.widget.ImageView
-import android.widget.LinearLayout
-import android.widget.RelativeLayout
+import android.widget.*
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.fragment.app.Fragment
 import com.example.ochev.R
 import com.example.ochev.baseclasses.dataclasses.Point
 import com.example.ochev.baseclasses.editors.boardeditor.BoardManipulator
 import com.example.ochev.baseclasses.editors.boardeditor.BoardViewer
-import com.example.ochev.callbacks.UserMode
 import com.example.ochev.ml.Utils
 import com.example.ochev.viewclasses.eventhandlers.ScrollZoomController
 
@@ -70,27 +68,46 @@ class GraphFragment : Fragment() {
         initializeViewer()
         initializeHelpers()
         initializeFontListener()
+        initializeEditTextDialog()
         return this.container
+    }
+
+    private fun initializeEditTextDialog() {
+        viewer?.addStartTextEditingListener {
+            val builder: AlertDialog.Builder = AlertDialog.Builder(context)
+            val input = EditText(context)
+            val beginText = currentManipulator?.getCurrentText() ?: ""
+            input.inputType = InputType.TYPE_CLASS_TEXT
+            input.setText(beginText, TextView.BufferType.EDITABLE)
+            input.addTextChangedListener(
+                object : TextWatcher {
+                    override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) = Unit
+
+                    override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
+                        s?.let { currentManipulator?.putText(it.toString()) }
+                    }
+
+                    override fun afterTextChanged(s: Editable?) = Unit
+                }
+            )
+            builder.setView(input)
+            builder.setPositiveButton("Save") { dialog, which ->
+                currentManipulator?.putText(input.text.toString())
+                dialog.cancel()
+            }
+            builder.setNegativeButton("Cancel") { dialog, which ->
+                currentManipulator?.putText(beginText)
+                dialog.cancel()
+            }
+
+            builder.show()
+        }
     }
 
     private fun initializeFontListener() {
         viewer?.addFontSizeListener {
             editingButtonsController?.setSeekBarProgress(it)
         }
-    }
-
-    private fun showEditText() {
-        val builder: AlertDialog.Builder = AlertDialog.Builder(context)
-        val input = EditText(context)
-        input.inputType = InputType.TYPE_CLASS_TEXT
-        builder.setView(input)
-        builder.setPositiveButton("Save") { dialog, which ->
-            currentManipulator?.putText(input.text.toString())
-            dialog.cancel()
-        }
-        builder.setNegativeButton("Cancel") { dialog, which -> dialog.cancel() }
-
-        builder.show()
     }
 
     private fun initializeHelpers() {
@@ -267,7 +284,7 @@ class GraphFragment : Fragment() {
             GestureState.START -> true
             GestureState.END -> {
                 currentManipulator = viewer?.selectFigureByPoint(Point(event))
-                showEditText()
+                currentManipulator?.startEditingText()
                 return true
             }
         }
