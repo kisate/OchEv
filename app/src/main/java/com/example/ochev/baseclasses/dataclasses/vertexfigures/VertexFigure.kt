@@ -37,6 +37,17 @@ abstract class VertexFigure : Figure() {
             LineSegment(Point(-5000f, center.y), Point(5000f, center.y)),
         )
     }
+
+    fun getLeftDownDrawingCorner(): Point {
+        val x = drawingPoints.map {it.x}.minOrNull()
+        val y = drawingPoints.map {it.y}.maxOrNull()
+        return Point(x!!, y!!)
+    }
+    fun getRightUpDrawingCorner(): Point {
+        val x = drawingPoints.map {it.x}.maxOrNull()
+        val y = drawingPoints.map {it.y}.minOrNull()
+        return Point(x!!, y!!)
+    }
 }
 
 

@@ -81,33 +81,34 @@ class GraphEditor(
         }
     }
 
-    fun addFigure(figure: Figure) {
+    fun addFigure(figure: FigureNode) {
         history.saveState()
         when (figure) {
-            is VertexFigure -> {
+            is VertexFigureNode -> {
                 addVertexFigure(figure)
             }
-            is Edge -> {
+            is EdgeNode -> {
                 addEdge(figure)
             }
         }
     }
 
-    private fun addVertexFigure(vertexFigure: VertexFigure) {
+    private fun addVertexFigure(vertexFigure: VertexFigureNode) {
         graph.addVertexNode(
             VertexFigureNode(
                 id = figureCounter++,
                 height = graph.figures.maxHeight,
-                figure = vertexFigure
+                figure = vertexFigure.figure,
+                textInfo = vertexFigure.textInfo
             )
         )
     }
 
-    private fun addEdge(edge: Edge) {
+    private fun addEdge(edge: EdgeNode) {
         graph.addEdgeNode(
             EdgeNode(
                 id = figureCounter++,
-                figure = edge
+                figure = edge.figure
             )
         )
     }

@@ -12,8 +12,8 @@ data class TextInfo(
 ) {
     fun update(newFigure: VertexFigure): TextInfo {
         return copy(
-            leftDownCorner = newFigure.drawingPoints[0],
-            rightUpCorner = newFigure.drawingPoints[1],
+            leftDownCorner = newFigure.getLeftDownDrawingCorner(),
+            rightUpCorner = newFigure.getRightUpDrawingCorner(),
             changed = true
         )
     }
