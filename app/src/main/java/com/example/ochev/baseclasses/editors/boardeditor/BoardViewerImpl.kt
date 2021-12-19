@@ -7,7 +7,6 @@ import com.example.ochev.baseclasses.cacheparser.GraphReader
 import com.example.ochev.baseclasses.cacheparser.GraphWriter
 import com.example.ochev.baseclasses.dataclasses.*
 import com.example.ochev.baseclasses.dataclasses.nodes.VertexFigureNode
-import com.example.ochev.baseclasses.dataclasses.vertexfigures.VertexFigure
 import com.example.ochev.baseclasses.editors.FigureEditor
 import com.example.ochev.baseclasses.editors.edgeeditor.EdgeEditor
 import com.example.ochev.baseclasses.editors.grapheditor.GraphEditor
@@ -181,7 +180,6 @@ class BoardViewerImpl(
     override fun saveInCache(cacheParser: CacheParser) {
         Log.d("ainur19cache", "START SAVING")
         executorService.submit {
-//            TODO(debug)
             GraphWriter.write(graphEditor, graphBitmap, cacheParser)
         }
     }
@@ -233,7 +231,6 @@ class BoardViewerImpl(
 
     override fun addSuggestLineChangesListenerAndNotify(suggestLineChangesListener: SuggestLineChangesListener) {
         addSuggestLineChangesListener(suggestLineChangesListener)
-//      TODO("is this function needed?")
     }
 
     override fun addUndoChangeShowButtonListener(undoChangeShowButtonListener: UndoChangeShowButtonListener) {
@@ -469,7 +466,6 @@ class BoardViewerImpl(
         }
 
         override fun finishFontSizeChanging() {
-            graphEditor.history.saveState()
         }
 
         override fun startEditingText() {
