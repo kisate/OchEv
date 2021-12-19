@@ -76,10 +76,9 @@ class RTVRedactorMainActivity : FragmentActivity() {
         }
     }
 
-    override fun onStop() {
-        super.onStop()
+    override fun onPause() {
+        super.onPause()
         writeCaches()
-        joinAll()
     }
 
     private fun writeCaches() {
