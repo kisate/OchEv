@@ -1,10 +1,14 @@
 package com.example.ochev.baseclasses.cacheparser
 
 import android.graphics.Bitmap
+import android.graphics.BitmapFactory
+import android.util.Base64
+import android.util.Log
 import com.example.ochev.baseclasses.dataclasses.FIGURE_ID
 import com.example.ochev.baseclasses.dataclasses.FigureContainer
 import com.example.ochev.baseclasses.dataclasses.Point
 import com.example.ochev.baseclasses.dataclasses.nodes.EdgeNode
+import com.example.ochev.baseclasses.dataclasses.nodes.TextInfo
 import com.example.ochev.baseclasses.dataclasses.nodes.VertexFigureNode
 import com.example.ochev.baseclasses.dataclasses.vertexfigures.Circle
 import com.example.ochev.baseclasses.dataclasses.vertexfigures.Rectangle
@@ -13,13 +17,11 @@ import com.example.ochev.baseclasses.dataclasses.vertexfigures.VertexFigure
 import com.example.ochev.baseclasses.editors.edgefigures.Edge
 import com.example.ochev.baseclasses.editors.grapheditor.Graph
 import com.example.ochev.baseclasses.editors.grapheditor.GraphEditor
-import android.graphics.BitmapFactory
-import android.util.Base64
-import android.util.Log
-import com.example.ochev.baseclasses.dataclasses.nodes.TextInfo
 
 
 object GraphReader {
+
+
     private fun stringToBitmap(encodedString: String?): Bitmap? {
         return try {
             val encodeByte: ByteArray = Base64.decode(encodedString, Base64.DEFAULT)

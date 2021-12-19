@@ -10,6 +10,9 @@ import androidx.viewpager2.widget.ViewPager2
 import com.example.ochev.ui.*
 import com.example.ochev.ui.graphchooser.CurrentGraphChangerImpl
 import com.example.ochev.ui.graphchooser.GraphChooserController
+import java.util.concurrent.Executors
+import java.util.concurrent.ScheduledExecutorService
+import java.util.concurrent.TimeUnit
 
 
 class RTVRedactorMainActivity : FragmentActivity() {
@@ -26,6 +29,7 @@ class RTVRedactorMainActivity : FragmentActivity() {
 
         initPager()
         initPopups()
+        startParallelCacheWriting()
     }
 
     @SuppressLint("NotifyDataSetChanged")
@@ -62,7 +66,7 @@ class RTVRedactorMainActivity : FragmentActivity() {
     override fun onStop() {
         super.onStop()
         Log.e(TAG, "on stop")
-        writeCaches()
+//        writeCaches()
     }
 
     override fun onDestroy() {
@@ -77,6 +81,12 @@ class RTVRedactorMainActivity : FragmentActivity() {
         } else {
             popupController.endAnim()
         }
+    }
+
+    private fun startParallelCacheWriting() {
+        val cacheWriter = Runnable { writeCaches() }
+        val executor: ScheduledExecutorService = Executors.newScheduledThreadPool(1)
+        executor.scheduleAtFixedRate(cacheWriter, 0, 1, TimeUnit.SECONDS)
     }
 
     private fun writeCaches() {
