@@ -74,7 +74,7 @@ object GraphReader {
         val height = cacheParser.readInt()
         val center = readPoint(cacheParser)
         val text = cacheParser.readString()
-        val fontSize = cacheParser.readInt()
+        val fontSize = cacheParser.readFloat()
         val figure: VertexFigure
         when (figureType) {
             FIGURE_ID.CIRCLE -> {

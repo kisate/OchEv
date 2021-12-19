@@ -19,7 +19,7 @@ interface BoardManipulator {
 
     fun figureDrawn()
 
-    fun setFontSize(fontSize: Int)
+    fun setFontSize(fontSize: Float)
 
     fun getCurrentText(): String
 

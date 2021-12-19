@@ -80,7 +80,7 @@ object GraphWriter {
         writePoint(figureNode.figure.center, cacheParser)
         Log.d("ainur19cache", figureNode.textInfo.text)
         cacheParser.writeString(figureNode.textInfo.text)
-        cacheParser.writeInt(figureNode.textInfo.fontSize)
+        cacheParser.writeFloat(figureNode.textInfo.fontSize)
         when (val figure = figureNode.figure) {
             is Circle -> {
                 cacheParser.writeFloat(figure.radius)

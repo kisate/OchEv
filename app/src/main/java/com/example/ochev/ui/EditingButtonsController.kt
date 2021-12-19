@@ -193,7 +193,7 @@ class EditingButtonsController(
     private fun setListener() {
         seekBarHolder.item.setOnSeekBarChangeListener(object : SeekBar.OnSeekBarChangeListener {
             override fun onProgressChanged(seekBar: SeekBar?, progress: Int, fromUser: Boolean) {
-                manipulator.get()?.setFontSize(progress)
+                manipulator.get()?.setFontSize(progress.toFloat())
             }
 
             override fun onStartTrackingTouch(seekBar: SeekBar?) {

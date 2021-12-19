@@ -1,5 +1,6 @@
 package com.example.ochev.baseclasses.editors.grapheditor
 
+import android.util.Log
 import com.example.ochev.baseclasses.dataclasses.FigureContainer
 import com.example.ochev.baseclasses.dataclasses.Point
 import com.example.ochev.baseclasses.dataclasses.Stroke
@@ -149,11 +150,13 @@ class Graph(
         val newGraph = Graph()
 
         val linker = getLinker {
+            val tmpFigure = it.figure.movedByVector(
+                Vector(point, it.figure.center).multipliedByFloat(factor - 1f)
+            ).rescaledByFactor(factor)
+            Log.d("ainur19dota2", factor.toString())
             it.copy(
-                figure = it.figure.movedByVector(
-                    Vector(point, it.figure.center).multipliedByFloat(factor - 1f)
-                )
-                    .rescaledByFactor(factor)
+                figure = tmpFigure,
+                textInfo = it.textInfo.update(tmpFigure).copy(fontSize = it.textInfo.fontSize * (factor))
             )
         }
 

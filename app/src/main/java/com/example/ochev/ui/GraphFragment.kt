@@ -106,7 +106,7 @@ class GraphFragment : Fragment() {
 
     private fun initializeFontListener() {
         viewer?.addFontSizeListener {
-            editingButtonsController?.setSeekBarProgress(it)
+            editingButtonsController?.setSeekBarProgress(it.toInt())
         }
     }
 

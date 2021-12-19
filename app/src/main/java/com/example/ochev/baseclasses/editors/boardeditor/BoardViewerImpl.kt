@@ -330,7 +330,7 @@ class BoardViewerImpl(
         lastUserModeChange = currentUserMode.copy()
     }
 
-    private fun notifyInitialFont(fontSize: Int?) {
+    private fun notifyInitialFont(fontSize: Float?) {
         if (fontSize == null) return
         fontSizeListeners.forEach {
             it.onInitialFontChanged(fontSize)
@@ -444,8 +444,7 @@ class BoardViewerImpl(
             )
         }
 
-        override fun setFontSize(fontSize: Int) {
-            graphEditor.history.saveState()
+        override fun setFontSize(fontSize: Float) {
             val vertex = graphEditor.getFigureNodeByIdOrNull(id)
             assert(vertex is VertexFigureNode)
             assert(vertex != null)
@@ -466,11 +465,11 @@ class BoardViewerImpl(
         }
 
         override fun startFontSizeChanging() {
-            TODO("Not yet implemented")
+            graphEditor.history.saveState()
         }
 
         override fun finishFontSizeChanging() {
-            TODO("Not yet implemented")
+            graphEditor.history.saveState()
         }
 
         override fun startEditingText() {
