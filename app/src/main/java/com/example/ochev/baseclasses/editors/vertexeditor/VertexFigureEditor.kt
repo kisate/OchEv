@@ -20,13 +20,24 @@ class VertexFigureEditor(
         get() = graphEditor.graph.getVertexFigureNodeByIdOrNull(figureId)!!
 
     fun changeFigure(newFigure: VertexFigure) {
-        graphEditor.replaceVertex(figureId, figureNode.copy(figure = newFigure, textInfo = figureNode.textInfo.update(newFigure)))
+        graphEditor.replaceVertex(
+            figureId,
+            figureNode.copy(figure = newFigure, textInfo = figureNode.textInfo.update(newFigure))
+        )
     }
 
     fun createCopy(canvasCenter: Point = Point()) {
+        val tmpFigure = currentFigureState.movedByVector(
+            Vector(
+                currentFigureState.center,
+                canvasCenter
+            )
+        )
         graphEditor.addFigure(
-            currentFigureState.clone()
-                .movedByVector(Vector(currentFigureState.center, canvasCenter))
+            figureNode.copy(
+                figure = tmpFigure,
+                textInfo = figureNode.textInfo.update(tmpFigure)
+            )
         )
         Log.i("CopyDBG", graphEditor.allVertexes.toString())
     }
